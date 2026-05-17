@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة محمد زايد | تعليم العربية - جميع المستويات A1 إلى C2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(145deg, #0f2b3d 0%, #1a4a6f 100%);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: auto; }
+        .main-header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+            border-radius: 60px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,215,0,0.4);
+        }
+        .main-header h1 { font-size: 1.6rem; background: linear-gradient(135deg, #f9d423, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stats-panel {
+            background: rgba(30,60,114,0.9);
+            border-radius: 50px;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .stat-item { background: rgba(0,0,0,0.3); padding: 6px 18px; border-radius: 40px; }
+        .level-badge { background: linear-gradient(135deg, #f39c12, #e67e22); color: #1e2a3a; padding: 6px 18px; border-radius: 40px; font-weight: bold; }
+        .score-badge { background: #2ecc71; padding: 6px 18px; border-radius: 40px; font-weight: bold; }
+        .reset-btn { background: #e74c3c; border: none; padding: 6px 20px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; }
+        
+        .level-selector {
+            background: rgba(0,0,0,0.3);
+            border-radius: 50px;
+            padding: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .level-selector button {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .level-selector button:hover { background: rgba(243,156,18,0.5); }
+        .level-selector button.active-level { background: #f39c12; color: #1e2a3a; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 25px; justify-content: center; flex-wrap: wrap; }
+        .tab-btn { background: rgba(255,255,255,0.1); border: none; padding: 10px 28px; border-radius: 50px; color: white; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .tab-content { display: none; background: rgba(255,255,255,0.08); border-radius: 40px; padding: 30px; }
+        .tab-content.active-tab { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .question-card { background: rgba(0,0,0,0.4); border-radius: 25px; padding: 20px; margin-bottom: 15px; border-right: 4px solid #f39c12; }
+        .question-text { font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; }
+        .options { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .option { background: rgba(255,255,255,0.1); padding: 6px 18px; border-radius: 40px; cursor: pointer; transition: 0.2s; }
+        .option:hover { background: rgba(243,156,18,0.5); }
+        .option.selected { background: #f39c12; color: #1e2a3a; }
+        .btn { background: linear-gradient(135deg, #f39c12, #e67e22); border: none; padding: 10px 35px; border-radius: 50px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .btn:hover { transform: scale(1.02); }
+        
+        .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; margin-top: 20px; }
+        .lesson-card { background: rgba(0,0,0,0.4); border-radius: 25px; padding: 20px; border-right: 4px solid #f39c12; transition: 0.3s; }
+        .lesson-card.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.15); }
+        .lesson-title { color: #f9d423; font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; }
+        .lesson-content { font-size: 0.9rem; margin: 10px 0; line-height: 1.5; }
+        .exercises { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 15px; margin-top: 12px; }
+        .exercise-item { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .exercise-question { font-weight: bold; margin-bottom: 8px; }
+        .lesson-status { margin-top: 12px; font-size: 0.85rem; }
+        
+        .certificate-container { background: #1a3a2a; border-radius: 50px; padding: 30px; text-align: center; }
+        .certificate {
+            background: linear-gradient(135deg, #fff, #fef9e6);
+            color: #1e2a3a;
+            padding: 40px;
+            border-radius: 30px;
+            margin: 20px 0;
+            display: none;
+            border: 6px double #b8860b;
+        }
+        .certificate.show { display: block; animation: fadeIn 0.8s; }
+        .certificate .student-name { font-size: 1.4rem; font-weight: bold; border-bottom: 2px solid #b8860b; display: inline-block; margin: 15px 0; padding: 0 15px; }
+        .signature-line { margin-top: 25px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        @media print { .stats-panel, .tabs, .level-selector, .certificate-container button, .reset-btn { display: none; } .certificate { margin: 0; } }
+        @media (max-width: 700px) { .lessons-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="main-header">
+        <h1>🏆 منصة محمد زايد للتكنولوجيات الحاسوبية 🏆</h1>
+        <p>قسم تعليم اللغة العربية - تونس | المستويات A1 - A2 - B1 - B2 - C1 - C2</p>
+    </div>
+
+    <div class="stats-panel">
+        <div class="stat-item">👤 <strong id="studentNameDisplay">طالب جديد</strong></div>
+        <div class="stat-item level-badge" id="levelDisplay">المستوى: غير محدد</div>
+        <div class="stat-item score-badge" id="scoreDisplay">⭐ 0</div>
+        <button class="reset-btn" id="resetAllDataBtn">🗑️ اختبار جديد - مسح كامل</button>
+    </div>
+
+    <div class="level-selector" id="levelSelector">
+        <button data-level="A1" class="level-btn">🔤 A1 - مبتدئ</button>
+        <button data-level="A2" class="level-btn">📖 A2 - أساسي</button>
+        <button data-level="B1" class="level-btn">📚 B1 - متوسط</button>
+        <button data-level="B2" class="level-btn">🏛️ B2 - فوق متوسط</button>
+        <button data-level="C1" class="level-btn">🎓 C1 - متقدم</button>
+        <button data-level="C2" class="level-btn">👨‍🎓 C2 - متقن</button>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="placementTabBtn">📝 اختبار تحديد المستوى</button>
+        <button class="tab-btn" id="lessonsTabBtn">📚 الدروس والتمارين</button>
+        <button class="tab-btn" id="certificateTabBtn">🎓 الشهادة</button>
+    </div>
+
+    <div id="placementTab" class="tab-content active-tab">
+        <h2>📝 اختبار تحديد المستوى (A1 إلى C2)</h2>
+        <p>أجب عن جميع الأسئلة لتحديد مستواك الحقيقي</p>
+        <div id="placementQuestions"></div>
+        <button class="btn" id="submitPlacementBtn">🎯 احسب مستواي واحصل على نقاطي</button>
+        <div id="placementFeedback" style="margin-top:15px; padding:15px; background:rgba(0,0,0,0.3); border-radius:30px; display:none;"></div>
+    </div>
+
+    <div id="lessonsTab" class="tab-content">
+        <h2 id="lessonsTitle">📚 الدروس والتمارين</h2>
+        <div id="lessonsContainer"></div>
+        <button class="btn" id="checkCompletionBtn">🏆 تحقق من جاهزيتي للشهادة</button>
+        <div id="levelFeedback" style="margin-top:15px; padding:15px; background:rgba(0,0,0,0.3); border-radius:30px; display:none;"></div>
+    </div>
+
+    <div id="certificateTab" class="tab-content">
+        <div class="certificate-container">
+            <div id="certificatePreview" class="certificate">
+                <div style="font-size:1rem;">منصة محمد زايد للتكنولوجيات الحاسوبية</div>
+                <h3>قسم تعليم اللغة العربية - تونس</h3>
+                <h3>شهادة إتقان اللغة العربية</h3>
+                <div class="student-name" id="certStudentName">............</div>
+                <p>قد أتم بنجاح مستوى <strong id="certLevel">...</strong></p>
+                <p>وفق المعايير الأوروبية المرجعية المشتركة للغات (CEFR)</p>
+                <p>مجموع النقاط: <strong id="certPoints">0</strong></p>
+                <div id="certMotivation" style="background:#f0f0f0; padding:10px; border-radius:15px; margin:15px 0;"></div>
+                <div>التاريخ: <span id="certDate"></span></div>
+                <div class="signature-line"><div>المدير والمشرف: <strong>محمد زايد</strong></div><div>الختم الرسمي: _________</div></div>
+            </div>
+            <button class="btn" id="generateCertBtn">🎓 إصدار الشهادة</button>
+            <button class="btn" id="printCertBtn" style="background:#2ecc71;">🖨️ طباعة الشهادة</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ======================= أسئلة تحديد المستوى =======================
+    const placementQuestions = [
+        { text: "ما معنى كلمة 'بيت'؟", options: ["مدرسة", "منزل", "مسجد"], level: "A1", correct: 1 },
+        { text: "أكمل الجملة: أنا ... إلى المدرسة.", options: ["يذهب", "أذهب", "ذهبت"], level: "A1", correct: 1 },
+        { text: "جمع كلمة 'كتاب'؟", options: ["كتب", "كتابات", "كتابين"], level: "A2", correct: 0 },
+        { text: "ما معنى 'الطائر يغرد'؟", options: ["يطير", "يصوت", "يأكل"], level: "A2", correct: 1 },
+        { text: "مرادف 'جميل'؟", options: ["قبيح", "رائع", "سيء"], level: "B1", correct: 1 },
+        { text: "ضد كلمة 'النهار'؟", options: ["الليل", "الصباح", "المساء"], level: "A1", correct: 0 },
+        { text: "معنى 'يُسافر' في الماضي؟", options: ["يسافر", "سافر", "سيسافر"], level: "B1", correct: 1 },
+        { text: "الجملة الصحيحة: ... الكتاب على المكتب", options: ["إن", "أن", "إذ"], level: "B1", correct: 0 },
+        { text: "ما معنى 'استقبل'؟", options: ["ودع", "رحب", "غادر"], level: "B2", correct: 1 },
+        { text: "مرادف 'يتألق'؟", options: ["يخفت", "يسطع", "يختفي"], level: "B2", correct: 1 },
+        { text: "ما معنى 'تباين'؟", options: ["اتفاق", "اختلاف", "تشابه"], level: "C1", correct: 1 },
+        { text: "مرادف 'ازدهار'؟", options: ["تراجع", "تقدم", "انهيار"], level: "C1", correct: 1 },
+        { text: "ما معنى 'استنباط'؟", options: ["استنتاج", "إهمال", "تجاهل"], level: "C2", correct: 0 },
+        { text: "مرادف 'متألق'؟", options: ["خافت", "لامع", "مظلم"], level: "C2", correct: 1 }
+    ];
+
+    // ======================= جميع المستويات مع الدروس الكاملة =======================
+    const allLevelsData = {
+        A1: { name: "المبتدئ (A1)", required: 6, pointsPerLesson: 10, levelPoints: 60,
+            lessons: [
+                { title: "الحروف الأبجدية", content: "تعلم الحروف من أ إلى ي مع النطق الصحيح", exercises: [{ q: "كم عدد الحروف العربية؟", opts: ["28","29","30"], correct:0 }] },
+                { title: "التحيات والتعارف", content: "السلام عليكم، كيف حالك؟ اسمي...", exercises: [{ q: "كيف تقال التحية الإسلامية؟", opts: ["مرحباً","السلام عليكم","أهلاً"], correct:1 }] },
+                { title: "الألوان والأرقام", content: "أحمر، أزرق، أصفر - واحد، اثنان، ثلاثة", exercises: [{ q: "ما لون التفاح الأحمر؟", opts: ["أحمر","أزرق","أصفر"], correct:0 }] },
+                { title: "أفراد الأسرة", content: "أب، أم، أخ، أخت، جد، جدة", exercises: [{ q: "من هو والد الأب؟", opts: ["الجد","العم","الخال"], correct:0 }] },
+                { title: "الأكل والشراب", content: "خبز، ماء، تفاح، قهوة، شاي", exercises: [{ q: "ما هو المشروب الساخن؟", opts: ["عصير","ماء","قهوة"], correct:2 }] },
+                { title: "المنزل", content: "غرفة، باب، نافذة، كرسي، طاولة", exercises: [{ q: "ما الذي يطل علينا الضوء؟", opts: ["باب","نافذة","جدار"], correct:1 }] }
+            ]},
+        A2: { name: "الأساسي (A2)", required: 6, pointsPerLesson: 10, levelPoints: 60,
+            lessons: [
+                { title: "وصف الأشخاص", content: "طويل، قصير، جميل، كبير، صغير", exercises: [{ q: "ضد كلمة 'طويل'؟", opts: ["جميل","قصير","كبير"], correct:1 }] },
+                { title: "التسوق", content: "كم سعر هذا؟ أريد شراء...", exercises: [{ q: "ماذا تقول عندما تريد شراء شيء؟", opts: ["أريد شراء","أنا آكل","أنا أنام"], correct:0 }] },
+                { title: "الوقت", content: "الساعة الثالثة، يوم الاثنين", exercises: [{ q: "كم شهراً في السنة؟", opts: ["12","10","8"], correct:0 }] },
+                { title: "الصحة", content: "رأس، يد، قدم، عين، أنف", exercises: [{ q: "بماذا نرى؟", opts: ["بالأذن","بالعين","بالأنف"], correct:1 }] },
+                { title: "الطقس", content: "مشمس، ممطر، بارد، حار", exercises: [{ q: "أي فصل يكون فيه الجو حاراً؟", opts: ["الشتاء","الربيع","الصيف"], correct:2 }] },
+                { title: "المواصلات", content: "سيارة، طائرة، قطار، حافلة", exercises: [{ q: "أين نركب الطائرة؟", opts: ["مطار","محطة","ميناء"], correct:0 }] }
+            ]},
+        B1: { name: "المتوسط (B1)", required: 6, pointsPerLesson: 15, levelPoints: 90,
+            lessons: [
+                { title: "السفر", content: "تذكرة، مطار، قطار، حجز فندق", exercises: [{ q: "أين تصعد الطائرة؟", opts: ["المطار","محطة القطار","محطة الباص"], correct:0 }] },
+                { title: "العمل", content: "طبيب، مهندس، معلم، شركة، اجتماع", exercises: [{ q: "من يعالج المرضى؟", opts: ["المهندس","المعلم","الطبيب"], correct:2 }] },
+                { title: "التعبير عن الرأي", content: "أعتقد أن...، من وجهة نظري...", exercises: [{ q: "أي عبارة تعبر عن الرأي؟", opts: ["أنا آكل","أعتقد أن","أنا أنام"], correct:1 }] },
+                { title: "وصف الأحداث الماضية", content: "الأسبوع الماضي، قبل سنة", exercises: [{ q: "كيف نقول 'أكلت' في الماضي؟", opts: ["آكل","أكل","سآكل"], correct:1 }] },
+                { title: "الثقافة والتقاليد", content: "الأعياد، المناسبات، العادات العربية", exercises: [{ q: "ما هو العيد الأكبر عند المسلمين؟", opts: ["عيد الفطر","عيد الأضحى","رأس السنة"], correct:1 }] },
+                { title: "البيئة", content: "غابة، نهر، جبل، بحر، صحراء", exercises: [{ q: "أين نجد الأسماك؟", opts: ["بحر","جبل","صحراء"], correct:0 }] }
+            ]},
+        B2: { name: "فوق المتوسط (B2)", required: 6, pointsPerLesson: 15, levelPoints: 90,
+            lessons: [
+                { title: "المواضيع الاجتماعية", content: "التكنولوجيا، البيئة، الصحة، التعليم", exercises: [{ q: "ما هي مشكلة البيئة الرئيسية؟", opts: ["تلوث","تعليم","صحة"], correct:0 }] },
+                { title: "الكتابة الرسمية", content: "البريد الإلكتروني الرسمي، الخطاب", exercises: [{ q: "كيف تبدأ بريداً رسمياً؟", opts: ["مرحباً","عزيزي","السلام عليكم"], correct:1 }] },
+                { title: "فهم الأخبار", content: "السياسة، الاقتصاد، الرياضة، الثقافة", exercises: [{ q: "أين نتابع الأخبار؟", opts: ["قناة إخبارية","فيلم","مسلسل"], correct:0 }] },
+                { title: "الحوار والنقاش", content: "المناظرة، الإقناع، عرض الآراء", exercises: [{ q: "ما هو فن إقناع الآخرين؟", opts: ["جدال","مناظرة","شجار"], correct:1 }] },
+                { title: "الأدب", content: "شعر، رواية، قصة قصيرة، نقد أدبي", exercises: [{ q: "من يكتب الشعر؟", opts: ["شاعر","روائي","قاص"], correct:0 }] },
+                { title: "الفلسفة", content: "فكر، منطق، جدل، حكمة", exercises: [{ q: "من يهتم بالحكمة؟", opts: ["فيلسوف","طبيب","مهندس"], correct:0 }] }
+            ]},
+        C1: { name: "المتقدم (C1)", required: 6, pointsPerLesson: 20, levelPoints: 120,
+            lessons: [
+                { title: "التحليل الأدبي", content: "نقد أدبي، تحليل نصوص، بلاغة", exercises: [{ q: "ما هو علم البلاغة؟", opts: ["تحسين الكلام","علم الأرقام","علم النبات"], correct:0 }] },
+                { title: "العلوم اللغوية", content: "صرف، نحو، اشتقاق، دلالة", exercises: [{ q: "ما هو علم النحو؟", opts: ["قواعد اللغة","مفردات اللغة","أصوات اللغة"], correct:0 }] },
+                { title: "البلاغة المتقدمة", content: "تشبيه، استعارة، كناية، مجاز", exercises: [{ q: "ما هي الاستعارة؟", opts: ["تشبيه بليغ","تعبير حقيقي","تعبير مجازي"], correct:0 }] },
+                { title: "النقد الأدبي", content: "اتجاهات نقدية، مدارس أدبية", exercises: [{ q: "ما هي المدرسة الكلاسيكية؟", opts: ["تتبع القدماء","تهتم بالجديد","ترفض القواعد"], correct:0 }] },
+                { title: "علم العروض", content: "بحر، تفعيلة، قافية، وزن شعري", exercises: [{ q: "ما هو البحر في الشعر؟", opts: ["وزن شعري","مكان مائي","لون أزرق"], correct:0 }] },
+                { title: "اللسانيات", content: "صوت، صرف، نحو، دلالة", exercises: [{ q: "ما هو علم الأصوات؟", opts: ["دراسة الأصوات","دراسة الكلمات","دراسة الجمل"], correct:0 }] }
+            ]},
+        C2: { name: "المتقن (C2)", required: 6, pointsPerLesson: 20, levelPoints: 120,
+            lessons: [
+                { title: "الإبداع الأدبي", content: "كتابة إبداعية، إنتاج أدبي", exercises: [{ q: "ما هو الإبداع الأدبي؟", opts: ["كتابة أصلية","نسخ النصوص","ترجمة النصوص"], correct:0 }] },
+                { title: "النقد المتقدم", content: "نقد ثقافي، نقد ما بعد حداثي", exercises: [{ q: "ما هو النقد الثقافي؟", opts: ["تحليل الظواهر الثقافية","تحليل القصائد","تحليل الروايات"], correct:0 }] },
+                { title: "البحث العلمي", content: "منهجية البحث، توثيق، استشهاد", exercises: [{ q: "ما هو المنهج العلمي؟", opts: ["خطوات منظمة","عشوائية","اجتهاد شخصي"], correct:0 }] },
+                { title: "الخطابة والإلقاء", content: "فن الخطابة، إلقاء الخطب", exercises: [{ q: "ما هو فن الخطابة؟", opts: ["إلقاء الخطب","كتابة الشعر","سرد القصص"], correct:0 }] },
+                { title: "فقه اللغة", content: "تطور اللغة، اشتقاق، دلالة", exercises: [{ q: "ما هو فقه اللغة؟", opts: ["دراسة تطور اللغة","دراسة النحو","دراسة الصرف"], correct:0 }] },
+                { title: "التدقيق اللغوي", content: "مراجعة النصوص، تدقيق", exercises: [{ q: "ما هو التدقيق اللغوي؟", opts: ["مراجعة دقيقة","قراءة سريعة","ترجمة"], correct:0 }] }
+            ]}
+    };
+
+    // بيانات الطالب
+    let student = JSON.parse(localStorage.getItem('arabicStudentFull')) || {
+        name: "", level: null, placementAnswers: new Array(placementQuestions.length).fill(null), completedLessons: [], points: 50
+    };
+
+    let currentSelectedLevel = "A1";
+
+    // عرض أسئلة الاختبار
+    function renderPlacement() {
+        const container = document.getElementById('placementQuestions');
+        if (!container) return;
+        container.innerHTML = '';
+        placementQuestions.forEach((q, i) => {
+            container.innerHTML += `
+                <div class="question-card">
+                    <div class="question-text">${i+1}. ${q.text}</div>
+                    <div class="options">
+                        ${q.options.map((opt, oi) => `<div class="option ${student.placementAnswers[i] === oi ? 'selected' : ''}" onclick="selectAnswer(${i}, ${oi})">${opt}</div>`).join('')}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    window.selectAnswer = function(q, opt) {
+        student.placementAnswers[q] = opt;
+        localStorage.setItem('arabicStudentFull', JSON.stringify(student));
+        renderPlacement();
+    };
+
+    // حساب المستوى
+    function calculateLevel() {
+        let scores = { A1: 0, A2: 0, B1: 0, B2: 0, C1: 0, C2: 0 };
+        placementQuestions.forEach((q, i) => {
+            if (student.placementAnswers[i] !== null && student.placementAnswers[i] === q.correct) scores[q.level]++;
+        });
+        if (scores.C2 >= 3) return "C2";
+        if (scores.C1 >= 3) return "C1";
+        if (scores.B2 >= 3) return "B2";
+        if (scores.B1 >= 3) return "B1";
+        if (scores.A2 >= 3) return "A2";
+        return "A1";
+    }
+
+    // تقديم الاختبار
+    window.submitPlacementTest = function() {
+        if (student.placementAnswers.some(a => a === null)) { alert("⚠️ يرجى الإجابة على جميع الأسئلة أولاً!"); return; }
+        let level = calculateLevel();
+        student.level = level;
+        student.points = 50;
+        let name = prompt("أدخل اسمك الثلاثي للشهادة:", student.name || "................");
+        if (name) student.name = name;
+        localStorage.setItem('arabicStudentFull', JSON.stringify(student));
+        document.getElementById('levelDisplay').innerHTML = `المستوى: ${allLevelsData[level].name}`;
+        document.getElementById('studentNameDisplay').innerText = student.name;
+        document.getElementById('scoreDisplay').innerHTML = `⭐ ${student.points}`;
+        document.getElementById('placementFeedback').style.display = 'block';
+        document.getElementById('placementFeedback').innerHTML = `🎯 <strong>نتيجة اختبار تحديد المستوى:</strong><br>📊 المستوى: ${allLevelsData[level].name}<br>⭐ نقاط الاختبار: 50/50 نقطة<br>✨ الآن انتقل إلى تبويب "الدروس والتمارين" لبدء رحلتك التعليمية!`;
+        setTimeout(() => { showTab('lessons'); renderLessons(level); }, 1500);
+    };
+
+    // عرض الدروس
+    function renderLessons(level) {
+        currentSelectedLevel = level;
+        const data = allLevelsData[level];
+        const completedCount = student.completedLessons.filter(k => k.startsWith(level)).length;
+        document.getElementById('lessonsTitle').innerHTML = `📚 ${data.name} - أكمل ${data.required} دروساً للحصول على الشهادة`;
+        const container = document.getElementById('lessonsContainer');
+        container.innerHTML = '<div class="lessons-grid"></div>';
+        const grid = container.querySelector('.lessons-grid');
+        data.lessons.forEach((lesson, idx) => {
+            const key = `${level}-${idx}`;
+            const done = student.completedLessons.includes(key);
+            let exHtml = '';
+            lesson.exercises.forEach((ex, exi) => {
+                exHtml += `<div class="exercise-item"><div class="exercise-question">❓ ${ex.q}</div><div class="options">${ex.opts.map((opt, oi) => `<div class="option" onclick="answerExercise('${key}', ${exi}, ${oi}, ${ex.correct}, ${data.pointsPerLesson})">${opt}</div>`).join('')}</div><div id="exfb-${key}-${exi}" style="font-size:0.8rem;"></div></div>`;
+            });
+            grid.innerHTML += `<div class="lesson-card ${done ? 'completed' : ''}" id="lesson-${key}"><div class="lesson-title">📖 ${lesson.title}</div><div class="lesson-content">${lesson.content}</div><div class="exercises">${exHtml}</div><div class="lesson-status">${done ? `✅ مكتمل +${data.pointsPerLesson}` : '⏳ لم يكتمل بعد'}</div></div>`;
+        });
+        let totalPoints = student.points + (student.completedLessons.filter(k => k.startsWith(level)).length * data.pointsPerLesson);
+        document.getElementById('scoreDisplay').innerHTML = `⭐ ${totalPoints}`;
+    }
+
+    // إجابة تمرين الدرس
+    window.answerExercise = function(key, exIdx, selected, correct, points) {
+        if (student.completedLessons.includes(key)) { alert("✅ هذا الدرس مكتمل بالفعل!"); return; }
+        if (selected === correct) {
+            student.completedLessons.push(key);
+            student.points += points;
+            localStorage.setItem('arabicStudentFull', JSON.stringify(student));
+            document.getElementById(`lesson-${key}`).classList.add('completed');
+            document.getElementById(`lesson-${key}`).querySelector('.lesson-status').innerHTML = `✅ مكتمل +${points}`;
+            renderLessons(currentSelectedLevel);
+            alert(`🎉 إجابة صحيحة! +${points} نقطة! أحسنت 🎉`);
+        } else { alert("❌ إجابة خاطئة. الإجابة الصحيحة هي: " + (correct === 0 ? "الخيار الأول" : correct === 1 ? "الخيار الثاني" : "الخيار الثالث") + ". حاول مرة أخرى بعد مراجعة الدرس!"); }
+    };
+
+    // التحقق من إكمال المستوى
+    window.checkLevelCompletion = function() {
+        if (!student.level) { alert("يرجى إجراء اختبار تحديد المستوى أولاً!"); return; }
+        const data = allLevelsData[student.level];
+        const done = student.completedLessons.filter(k => k.startsWith(student.level)).length;
+        if (done >= data.required) { alert(`🎉🎉🎉 تهانينا! لقد أكملت مستوى ${data.name} بنجاح!\n\nيمكنك الآن الحصول على شهادتك من تبويب "الشهادة".`); showTab('certificate'); }
+        else { alert(`📊 تقدمك في مستوى ${data.name}: ${done}/${data.required} درساً\n\nأكمل الدروس المتبقية للحصول على شهادتك!`); }
+    };
+
+    // إصدار الشهادة
+    window.generateCertificate = function() {
+        if (!student.level) { alert("يرجى إجراء اختبار تحديد المستوى أولاً!"); return; }
+        const data = allLevelsData[student.level];
+        const done = student.completedLessons.filter(k => k.startsWith(student.level)).length;
+        if (done < data.required) { alert(`⚠️ تحتاج إلى إكمال ${data.required - done} دروس إضافية للحصول على الشهادة!`); return; }
+        const totalPoints = student.points;
+        const maxPoints = 50 + data.levelPoints;
+        document.getElementById('certStudentName').innerText = student.name || "طالب العربية";
+        document.getElementById('certLevel').innerHTML = data.name;
+        document.getElementById('certPoints').innerText = `${totalPoints} / ${maxPoints} نقطة`;
+        document.getElementById('certMotivation').innerHTML = `🎉 تهانينا! لقد أتقنت مستوى ${data.name} بنجاح. نتمنى لك مزيداً من التوفيق والنجاح في رحلتك التعليمية! 🌟`;
+        document.getElementById('certDate').innerText = new Date().toLocaleDateString('ar-EG');
+        document.getElementById('certificatePreview').classList.add('show');
+        alert("🎓 تهانينا! شهادتك الرسمية جاهزة. يمكنك طباعتها الآن.");
+    };
+
+    window.printCertificate = function() { window.print(); };
+
+    // مسح جميع بيانات الطالب
+    window.clearAllStudentData = function() {
+        if (confirm("⚠️ هل أنت متأكد؟ سيتم مسح جميع بيانات الطالب الحالي:\n- الاسم\n- المستوى\n- الإجابات\n- النقاط\n- الدروس المكتملة\n\nسيبدأ اختبار جديد للطالب التالي.")) {
+            student = {
+                name: "",
+                level: null,
+                placementAnswers: new Array(placementQuestions.length).fill(null),
+                completedLessons: [],
+                points: 0
+            };
+            localStorage.setItem('arabicStudentFull', JSON.stringify(student));
+            renderPlacement();
+            document.getElementById('levelDisplay').innerHTML = "المستوى: غير محدد";
+            document.getElementById('studentNameDisplay').innerText = "طالب جديد";
+            document.getElementById('scoreDisplay').innerHTML = "⭐ 0";
+            document.getElementById('placementFeedback').style.display = "none";
+            document.getElementById('levelFeedback').style.display = "none";
+            document.getElementById('certificatePreview').classList.remove('show');
+            showTab('placement');
+            alert("✅ تم مسح جميع البيانات! يمكن للطالب الجديد بدء الاختبار.");
+        }
+    };
+
+    // تبديل التبويبات
+    function showTab(tabName) {
+        document.getElementById('placementTab').classList.remove('active-tab');
+        document.getElementById('lessonsTab').classList.remove('active-tab');
+        document.getElementById('certificateTab').classList.remove('active-tab');
+        if (tabName === 'placement') document.getElementById('placementTab').classList.add('active-tab');
+        if (tabName === 'lessons') { document.getElementById('lessonsTab').classList.add('active-tab'); if (student.level) renderLessons(student.level); }
+        if (tabName === 'certificate') document.getElementById('certificateTab').classList.add('active-tab');
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (tabName === 'placement') document.getElementById('placementTabBtn').classList.add('active');
+        if (tabName === 'lessons') document.getElementById('lessonsTabBtn').classList.add('active');
+        if (tabName === 'certificate') document.getElementById('certificateTabBtn').classList.add('active');
+    }
+
+    // تبديل المستويات
+    function switchLevel(level) {
+        if (student.level) {
+            renderLessons(level);
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active-level'));
+            document.querySelector(`.level-btn[data-level="${level}"]`).classList.add('active-level');
+        }
+    }
+
+    // ربط الأحداث
+    document.getElementById('submitPlacementBtn').onclick = submitPlacementTest;
+    document.getElementById('checkCompletionBtn').onclick = checkLevelCompletion;
+    document.getElementById('generateCertBtn').onclick = generateCertificate;
+    document.getElementById('printCertBtn').onclick = printCertificate;
+    document.getElementById('resetAllDataBtn').onclick = clearAllStudentData;
+    document.getElementById('placementTabBtn').onclick = () => showTab('placement');
+    document.getElementById('lessonsTabBtn').onclick = () => showTab('lessons');
+    document.getElementById('certificateTabBtn').onclick = () => showTab('certificate');
+    
+    document.querySelectorAll('.level-btn').forEach(btn => {
+        btn.onclick = () => switchLevel(btn.dataset.level);
+    });
+
+    // تشغيل
+    renderPlacement();
+    if (student.name) document.getElementById('studentNameDisplay').innerText = student.name;
+    if (student.level) document.getElementById('levelDisplay').innerHTML = `المستوى: ${allLevelsData[student.level].name}`;
+    if (student.points) document.getElementById('scoreDisplay').innerHTML = `⭐ ${student.points}`;
+</script>
+</body>
+</html>
