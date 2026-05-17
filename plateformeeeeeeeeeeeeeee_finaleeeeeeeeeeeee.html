@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>منصة محمد زايد - كتاب الأطفال والحاسوب (40 صفحة كاملة)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a, #1e293b); min-height: 100vh; padding: 20px; }
+        .container { max-width: 850px; margin: 0 auto; }
+        
+        /* تصميم كارت جذاب للأطفال */
+        .kids-card {
+            background: linear-gradient(135deg, #fff9e6, #ffe6b3);
+            border-radius: 48px;
+            padding: 30px 25px;
+            margin: 20px 0;
+            border: 4px solid #facc15;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2), 0 0 0 8px #fef3c7;
+            position: relative;
+            overflow: hidden;
+        }
+        .kids-card::before { content: "🧸"; position: absolute; font-size: 80px; bottom: -20px; left: -20px; opacity: 0.1; pointer-events: none; }
+        .kids-card::after { content: "🎈"; position: absolute; font-size: 60px; top: -10px; right: -10px; opacity: 0.1; pointer-events: none; }
+        .page-number { background: #facc15; color: #1e293b; display: inline-block; padding: 5px 15px; border-radius: 30px; font-size: 14px; font-weight: bold; margin-bottom: 15px; }
+        .kids-title { color: #2c5f2d; font-size: 28px; font-weight: 900; margin-bottom: 20px; text-align: center; border-bottom: 3px solid #facc15; display: inline-block; padding-bottom: 8px; }
+        .kids-dialogue { background: white; border-radius: 35px; padding: 20px; margin: 15px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 8px solid #facc15; }
+        .kids-talk { color: #2563eb; font-weight: bold; font-size: 18px; margin: 10px 0; }
+        .computer-talk { color: #dc2626; font-weight: bold; font-size: 18px; margin: 10px 0; }
+        .trilingual { background: #fef9c3; padding: 12px; border-radius: 25px; margin: 10px 0; font-size: 16px; text-align: center; color: #854d0e; }
+        .kids-image { text-align: center; margin: 20px 0; }
+        .kids-image img { max-width: 100%; border-radius: 30px; background: white; padding: 10px; max-height: 180px; object-fit: contain; }
+        
+        .nav-buttons { display: flex; gap: 15px; margin: 20px 0; }
+        .nav-btn { flex: 1; padding: 15px; border: none; border-radius: 60px; font-weight: bold; font-size: 20px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .nav-btn.prev { background: #3b82f6; color: white; }
+        .nav-btn.next { background: #facc15; color: #1e293b; }
+        .nav-btn:hover { transform: scale(1.02); }
+        
+        .progress-container { background: #e5e7eb; border-radius: 30px; height: 12px; margin: 15px 0; }
+        .progress-fill { background: linear-gradient(90deg, #facc15, #ff8c00); width: 0%; height: 100%; border-radius: 30px; transition: width 0.3s; }
+        .counter-box { text-align: center; font-size: 18px; font-weight: bold; color: #facc15; margin: 10px 0; }
+        
+        .page { background: #1e293b; border-radius: 48px; padding: 25px; border: 2px solid #facc15; margin-bottom: 20px; }
+        .hide { display: none; }
+        .btn-gold { background: #facc15; color: #1e293b; padding: 14px; border-radius: 35px; font-weight: bold; border: none; width: 100%; cursor: pointer; margin-top: 10px; font-size: 18px; }
+        .btn-green { background: #22c55e; color: white; padding: 14px; border-radius: 35px; font-weight: bold; border: none; width: 100%; cursor: pointer; margin-top: 10px; font-size: 18px; }
+        .btn-gray { background: #334155; color: white; padding: 12px; border-radius: 35px; font-weight: bold; border: none; width: 100%; cursor: pointer; margin-top: 10px; }
+        .btn-blue { background: #3b82f6; color: white; padding: 14px; border-radius: 35px; font-weight: bold; border: none; width: 100%; cursor: pointer; margin-top: 10px; font-size: 18px; }
+        
+        .welcome-box { background: linear-gradient(135deg, #facc15, #ff8c00); color: #1e293b; padding: 20px; border-radius: 30px; text-align: center; margin-bottom: 20px; }
+        .round-logo { width: 100px; height: 100px; border-radius: 50%; border: 4px solid #FFD700; margin: 0 auto 15px; background: white; overflow: hidden; }
+        .round-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .marquee-box { background: #0f172a; padding: 10px; border-radius: 50px; margin: 15px 0; border: 2px solid #facc15; }
+        marquee { color: #facc15; font-weight: bold; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 30px; border: none; text-align: right; }
+        .flex-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .footer { text-align: center; color: #94a3b8; margin-top: 20px; font-size: 12px; }
+        
+        .certificate-box { background: linear-gradient(135deg, #ffd89b, #c7e9fb); border-radius: 40px; padding: 30px; text-align: center; border: 5px solid #facc15; margin: 20px 0; }
+        .signature { font-family: 'Cairo', cursive; font-size: 22px; color: #2c5f2d; border-top: 2px solid #facc15; padding-top: 20px; margin-top: 20px; }
+        .notes-list { background: #fef9c3; padding: 15px; border-radius: 25px; margin: 15px 0; text-align: right; max-height: 300px; overflow-y: auto; }
+        .note-item { padding: 8px; border-bottom: 1px solid #e5e7eb; color: #991b1b; }
+        .score-high { font-size: 55px; font-weight: bold; color: #16a34a; }
+        .score-low { font-size: 55px; font-weight: bold; color: #dc2626; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- الصفحة الرئيسية -->
+<div id="pageHome" class="page">
+    <div class="round-logo">
+        <img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" alt="شعار منصة محمد زايد">
+    </div>
+    <div class="marquee-box">
+        <marquee>🌟🌟🌟 منصة محمد زايد (خبير دولي وأستاذ جامعي) | تونس | قسم التربية التكنولوجية للأطفال 🌟🌟🌟</marquee>
+    </div>
+    <div class="welcome-box">
+        <h2>🌟 مرحباً بك في منصة محمد زايد 🌟</h2>
+        <p>خبير دولي في التقنيات الحاسوبية | أستاذ جامعي | تونس</p>
+        <p style="font-size:14px; margin-top:10px;">📚 قسم التربية التكنولوجية للأطفال</p>
+    </div>
+    
+    <input type="text" id="studentName" placeholder="الاسم الكامل *">
+    <div class="flex-row">
+        <input type="text" id="studentAge" placeholder="العمر" style="flex:1">
+        <input type="text" id="studentCountry" placeholder="البلد" style="flex:1">
+    </div>
+    
+    <button class="btn-gold" onclick="showLevel1()">📚 كتاب الأطفال والحاسوب (40 صفحة)</button>
+    <button class="btn-green" onclick="showExercises()">📝 تمارين الكتاب (50 سؤالاً × 2 نقطة)</button>
+    <div class="footer">📞 +21655335477 | ✉️ zeidoun2021@gmail.com | محمد زايد</div>
+</div>
+
+<!-- ======================= كتاب الأطفال والحاسوب (40 صفحة كاملة) ======================= -->
+<div id="pageLevel1" class="page hide">
+    <div style="text-align:center; color:#facc15; font-size:24px; font-weight:bold;">📚 كتاب الأطفال والحاسوب</div>
+    <div id="level1Content"></div>
+    <div class="nav-buttons">
+        <button class="nav-btn prev" onclick="level1Prev()">◀ السابق</button>
+        <button class="nav-btn next" onclick="level1Next()">التالي ▶</button>
+    </div>
+    <div class="counter-box" id="level1Count"></div>
+    <div class="progress-container"><div class="progress-fill" id="level1Fill"></div></div>
+    <button class="btn-gray" onclick="showHome()">🔙 الرئيسية</button>
+</div>
+
+<!-- ======================= تمارين الكتاب ======================= -->
+<div id="pageExercises" class="page hide">
+    <div style="text-align:center; color:#facc15; font-size:24px; font-weight:bold;">📝 تمارين الكتاب (50 سؤالاً)</div>
+    <div class="counter-box">⭐ كل سؤال بـ 2 نقطة | المجموع 100 نقطة</div>
+    <div id="exercisesContainer"></div>
+    <div class="nav-buttons">
+        <button class="nav-btn prev" onclick="exPrev()">◀ السابق</button>
+        <button class="nav-btn next" onclick="exNext()">التالي ▶</button>
+    </div>
+    <button class="btn-green" onclick="submitExercises()">✅ تصحيح التمارين</button>
+    <button class="btn-gray" onclick="showHome()">🔙 الرئيسية</button>
+</div>
+
+<!-- ======================= صفحة النتيجة ======================= -->
+<div id="pageResult" class="page hide">
+    <div style="text-align:center; color:#facc15; font-size:24px; font-weight:bold;">🏆 نتيجة التمارين</div>
+    <div id="resultContent"></div>
+    <div id="actionButtons" class="flex-row" style="margin-top:20px;"></div>
+    <button class="btn-gray" onclick="showHome()">🏠 الرئيسية</button>
+</div>
+
+<!-- ======================= المستوى الثاني ======================= -->
+<div id="pageLevel2" class="page hide">
+    <div style="text-align:center; color:#facc15; font-size:24px; font-weight:bold;">⭐ المستوى الثاني - علم الحاسوب المتقدم</div>
+    <div class="kids-card">
+        <div class="page-number">🎯 المستوى الثاني</div>
+        <div class="kids-dialogue">
+            <div class="computer-talk">💻 مبروك! لقد اجتزت المستوى الأول بنجاح!</div>
+            <div class="kids-talk">🧒 الأطفال: ماذا نتعلم في المستوى الثاني؟</div>
+            <div class="computer-talk">💻 ستتعلمون: معمارية الحاسوب المتقدمة، الخوارزميات، الشبكات، أساسيات البرمجة، والأمن السيبراني.</div>
+        </div>
+        <div class="trilingual">🎉 سيتم إضافة محتوى المستوى الثاني قريباً 🎉</div>
+    </div>
+    <button class="btn-gray" onclick="showHome()">🔙 الرئيسية</button>
+</div>
+
+</div>
+
+<script>
+// ======================= الشرائح الأربعون الفعلية حسب الكتاب الأصلي =======================
+const bookSlides = [
+    { page: 1, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 1</div><div class="kids-title">📚 الأطفال والحاسوب</div><div class="kids-image"><img src="https://i.postimg.cc/y6QLzybv/alatfal-walhaswb.jpg"></div><p style="text-align:center; font-size:24px; font-weight:bold;">بقلم: محمد زايد</p><p style="text-align:center;">خبير دولي في التقنيات الحاسوبية / أستاذ جامعي</p><p style="text-align:center;">2026</p></div>` },
+    { page: 2, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 2</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: هيا بنا نتعرف على الحاسوب لنلعب معه.</div><div class="kids-talk">🧒 الأطفال: ما اسمك أيها الصديق؟</div><div class="computer-talk">💻 الحاسوب: لي اسمان: الكمبيوتر أو الحاسوب</div><div class="kids-talk">🧒 الأطفال: هل يمكن أن تصف لنا نفسك؟</div><div class="computer-talk">💻 الحاسوب: انني أتكون من جزئين أساسيين:</div><div class="computer-talk">أ - جزء مادي (Hardware / Matériel)</div><div class="computer-talk">ب - جزء معنوي (Software / Logiciel)</div><div class="trilingual">🔹 حاسوب = ordinateur = computer</div></div></div>` },
+    { page: 3, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 3</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: هل يمكن للجزئين أن ينفصلا عن بعضهما؟</div><div class="computer-talk">💻 الحاسوب: لا أبداً. لا يمكن للجزء الأول أن يكون مشتغلاً إلا إذا تعامل مع الجزء الثاني الذي لا قيمة له إذا كان منفرداً عن الجزء الأول.</div></div></div>` },
+    { page: 4, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 4</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: يقال عنك أنك ذكي وسريع في الرياضيات. هل هذا صحيح وكيف ذلك؟</div><div class="computer-talk">💻 الحاسوب: قبل أن أجيبكما عن سؤالكما لابد لي أن أواصل حديثي عن تركيبتي الداخلية ثم الخارجية.</div><div class="kids-talk">🧒 الأطفال: هل هذا له علاقة بسؤالنا؟</div><div class="computer-talk">💻 الحاسوب: أجل</div><div class="kids-talk">🧒 الأطفال: كيف ذلك؟</div><div class="computer-talk">💻 الحاسوب: انني أتكون من الداخل من عناصر أساسية مصنوعة من معادن (الحديد والفولاذ والبلاستيك) والعناصر هي: «المعالج» والذاكرة.</div><div class="trilingual">🔹 ذاكرة = mémoire = memory</div></div></div>` },
+    { page: 5, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 5</div><div class="kids-dialogue"><div class="computer-talk">💻 الحاسوب: المعالج والذاكرة يناسبان عند الإنسان بالقلب والدماغ حيث العنصر الأول يقوم بمعالجة المعلومات التي يدخلها لي الإنسان لتستقر في الذاكرة الرئيسية التي أستعملها كفضاء لاشتغالي.</div></div></div>` },
+    { page: 6, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 6</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: جوابك غامض جداً. هل لك أن تشرح لنا أكثر؟</div><div class="computer-talk">💻 الحاسوب: انني أتكون من أربعة أجزاء: الوحدة المركزية، الذاكرات، الروابط واللواحق.</div></div></div>` },
+    { page: 7, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 7</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: ما هي الوحدة المركزية؟</div><div class="computer-talk">💻 الحاسوب: الوحدة المركزية هي قلبي النابض وعقلي المفكر وهي تشتمل على وحدة الأوامر ووحدة معالجة المعطيات الحرفية والرقمية والمنطقية والتي تمثل العقل المفكر حيث أقوم بانجاز الأوامر والعمليات الحسابية (الجمع، الضرب، القسمة، الطرح) والعمليات المنطقية (التقاطع، الاتحاد وعكس ذلك) وأستعمل الذاكرة الرئيسية للقيام بذلك وتسمى بالذاكرة الحية.</div></div></div>` },
+    { page: 8, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 8</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: وما هي الذاكرات الأخرى التي تستعملها وما هو الفرق بينها؟</div><div class="computer-talk">💻 الحاسوب: ذاكرة تدعى بالميتة أستعملها لتخزين البرمجيات التي أحتاجها عند بداية اشتغالي. والفرق بين الذاكرة الرئيسية (الذاكرة الحية) والذاكرة الميتة هي أن الأولى لا تحتفظ بالمعطيات عند انقطاع التيار الكهربائي عني أما الذاكرة الميتة فهي لا تضيع المعطيات عند انقطاع التيار الكهربائي عني ومن سلبيات هذه الأخيرة أنه لا يمكن الكتابة فيها.</div></div></div>` },
+    { page: 9, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 9</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: وماذا أيضاً؟</div><div class="computer-talk">💻 الحاسوب: الروابط وهي النواقل والقنوات التي تنقل المعطيات والأوامر بين الوحدة الرئيسية والذاكرات وهي روابط من نوعين: روابط للمعطيات تنقل الأوامر والمعطيات، وروابط العناوين تنقل عناوين الأوامر والمعطيات الموجودة بالذاكرة الرئيسية.</div></div></div>` },
+    { page: 10, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 10</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: هل هناك عناصر أخرى؟</div><div class="computer-talk">💻 الحاسوب: نعم وهي المتممة للعناصر السابقة ألا وهي الوسائط.</div><div class="kids-talk">🧒 الأطفال: وما هي هذه الوسائط؟ وما هي مهمتها؟</div><div class="computer-talk">💻 الحاسوب: هي عناصر موصولة بالروابط وتكون غالباً على شكل بطاقات أو جذاذات الكترونية تختلف عن بعضها البعض. لإدخال الصورة المتحركة يجب استعمال كاميرا فيديو رقمية أو الكاميسكوب الرقمي.</div></div><div class="trilingual">🔹 الوسائط أو اللواحق والكاميرا والكاميسكوب</div></div>` },
+    { page: 11, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 11</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: إذا أردنا أن نتحدث معك فيجب أن نستعمل إحدى الأدوات أو اللواحق كما تسميها.</div><div class="computer-talk">💻 الحاسوب: أجل</div><div class="kids-talk">🧒 الأطفال: لكن ما دور الفأرة؟ نظن أنها صالحة لإدخال المعطيات أيضاً؟</div><div class="computer-talk">💻 الحاسوب: هي أداة قد ألحقت بنا نحن معشر الحواسيب مؤخراً عندما أدخلت برمجية "وينداوز" في نظام تشغيلنا وهي تيسر التخاطب معنا حيث على المستعمل أن ينقر على البرمجية أو صورة العنصر لتشغيله.</div></div><div class="trilingual">🔹 فأرة = Souris = Mouse</div></div>` },
+    { page: 12, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 12</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: هل هناك ملحقات أخرى للتخاطب؟</div><div class="computer-talk">💻 الحاسوب: أجل هناك ملحقات أخرى كلوحة المفاتيح لإدخال الحروف وملحقات خاصة كالقلم الضوئي الذي يستعمل في ادخال المعطيات في شكل شفرات عمودية ولوحة الرسم التي تساعد على الرسم والشاشة اللمسية وهي عبارة عن غشاء حساس يلصق في منطقة في لوحة المفاتيح أو على شاشة العرض وهي تتم وظيفة لوحة المفاتيح وتعوض الفأرة.</div></div><div class="trilingual">🔹 لوحة مفاتيح = Clavier = Keyboard</div></div>` },
+    { page: 13, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 13</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: وكيف تجيب عندما يسألك الإنسان؟</div><div class="computer-talk">💻 الحاسوب: هناك عدة طرق للإجابة وذلك حسب اختيار المخاطب. فمنها الإجابة المكتوبة والإجابة الصوتية أو الإجابة بالصورة أو تكون الإجابة مجموعة من هذه الطرق.</div></div></div>` },
+    { page: 14, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 14</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: وكيف ذلك؟</div><div class="computer-talk">💻 الحاسوب: قبل سنين مضت كان الحاسوب يجيب على الإنسان عبر ملحقين: الشاشة والطابعة. واليوم أصبح يستعمل عدة ملحقات أخرى كالمصدح لإدخال الصوت ومضخمات الصوت لإخراجه أو الشاشات المتطورة لعرض الصور المتحركة أو الارتباط بالتلفزيون.</div></div></div>` },
+    { page: 15, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 15</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: لكن لم توضح كيفية تخاطبك مع الإنسان؟ هل لك أن توضح لنا دور كل ملحق؟</div><div class="computer-talk">💻 الحاسوب: لنبدأ بالشاشة فهي وسيلة تخاطب بيني وبين الإنسان منذ بداية المعلوماتية. فيدخل الإنسان المعطيات وأنا أعالجها وأعرض نتائجها على الشاشة ليستغلها.</div></div></div>` },
+    { page: 16, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 16</div><div class="computer-talk">💻 الحاسوب: كان غالب المعطيات من النوع المكتوب لأن جودة الشاشات في البداية لم تكن كافية للعرض بالألوان والصور، أما اليوم فقد تطورت الشاشات إلى أن أصبحت على مختلف الهيئات والأحجام فهناك شاشات عادية ذات 15 بوصة مع إمكانية تمثيل عدة ملايين من الألوان وهناك الشاشات ذات 17 بوصة و21 بوصة.</div></div>` },
+    { page: 17, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 17</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: ولماذا هذه الأحجام المختلفة؟</div><div class="computer-talk">💻 الحاسوب: تختلف أحجام الشاشات باختلاف التطبيقات والبرمجيات. فبالنسبة لحجم 15 بوصة فهي تستعمل في التطبيقات وأنظمة التشغيل العادية والجارية. أما حجم 17 بوصة و21 بوصة فهي تستعمل في تطبيقات تحتاج لدقة في العرض ومنها التطبيقات التي تتناول الرسوم والصور ومن التطبيقات نذكر النشر الالكتروني الذي ينتج الجرائد والمجلات.</div></div></div>` },
+    { page: 18, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 18</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: هل يمكن أن نلعب معك بشاشة 15 بوصة؟</div><div class="computer-talk">💻 الحاسوب: أجل لأن تقنية الشاشات اليوم تستجيب إلى مختلف المعطيات المعالجة أي الصورة والصوت والنص وهو جيل من الحواسيب المسمى بمتعدد الوسائط أو "الملتيميديا".</div></div></div>` },
+    { page: 19, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 19</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: ما هي قنوات الإخراج؟</div><div class="computer-talk">💻 الحاسوب: هناك الطابعة التي غالباً ما تلازمنا لأنها تعيننا في مد الإنسان بالمعلومات والمعطيات التي تنتج عن معالجتنا لها وتلحق بي عبر وصلة وتنشر المعطيات على الورق.</div></div></div>` },
+    { page: 20, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 20</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: كيف تشتغل؟</div><div class="computer-talk">💻 الحاسوب: لشرح كيفية اشتغالها لابد من توضيح أنواعها فهي على ثلاثة أنواع:</div><div class="computer-talk">1- الطابعات الإبرية: النوع القديم وتطبع بواسطة إبر تصور الحرف بنقاط وتستعمل الورق المتواصل.</div><div class="computer-talk">2- الطابعات ذات النسخ الحبري (النافثة للحبر): تطبع الحروف بالحبر ويمكن استعمال عدة ألوان.</div><div class="computer-talk">3- الطابعات الليزرية: تستعمل تقنية الليزر لطبع الحروف ويشابه اشتغالها النساخة.</div></div></div>` },
+    { page: 21, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 21</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: ما هي الفائدة من تعدد الطابعات؟</div><div class="computer-talk">💻 الحاسوب: هو اختلاف التطبيقات. عندما برز الحاسوب الشخصي كان يستعمل في حل المسائل الرياضية والتصرف في الإدارات مما كان يحتاج إلى طابعات إبرية. أما اليوم فتطورت أجهزة الحاسوب وأصبحت تعالج الصورة والصوت والرسوم فبرزت الطابعات الحبرية والليزرية.</div></div></div>` },
+    { page: 22, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 22</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: هل هناك طريقة أخرى لإخراج الصور والبيانات الرسومية؟</div><div class="computer-talk">💻 الحاسوب: أجل، هناك الماسح الضوئي لإدخال الصور، والراسم الذي يستعمل لطبع الخرائط أو البيانات الرسومية وغالباً ما يستعمله المهندس المعماري.</div></div><div class="trilingual">🔹 الماسح = Scanner | الراسم = Traceur = Plotter</div></div>` },
+    { page: 23, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 23</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: هل يمكن لك التخاطب مع حواسيب أخرى وكيف؟</div><div class="computer-talk">💻 الحاسوب: أجل، يمكن لي أن أتخاطب مع حاسوب أو أكثر سواء كانوا يتواجدون معي في نفس الفضاء أو بعيداً عني.</div></div></div>` },
+    { page: 24, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 24</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: وكيف ذلك؟</div><div class="computer-talk">💻 الحاسوب: يجب أن يتصل بي جهاز آخر يدعى "موديم" كما يمكن أن يندرج بداخلي كالجذاذات الوسائطية. ويكون الاتصال عبر شبكة الهاتف أو شبكات أخرى.</div></div><div class="trilingual">🔹 مودم = Modem</div></div>` },
+    { page: 25, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 25</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: كيف يمكن أن نلعب معاً إذاً؟</div><div class="computer-talk">💻 الحاسوب: لم أنته بعد من سرد بقية العناصر التي يجب أن أتسلح بها كي أتمكن من اللعب معكم.</div></div></div>` },
+    { page: 26, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 26</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: هل أنهيت العناصر المادية؟</div><div class="computer-talk">💻 الحاسوب: لا، هناك لواحق تستعمل كالفأرة وقد صنعت خصيصاً للألعاب هي عصا التحكم (Joystick).</div></div></div>` },
+    { page: 27, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 27</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: ثم ماذا؟ إننا متشوقون للعب معك.</div><div class="computer-talk">💻 الحاسوب: لم يبق لي إلا الجانب المعنوي وهو ما يسمى بالبرمجيات.</div></div></div>` },
+    { page: 28, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 28</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: أسرع أيها الرفيق.</div><div class="computer-talk">💻 الحاسوب: البرمجيات تنقسم إلى قسمين أساسيين: قسم إجباري (نظام التشغيل) وقسم اختياري (البرمجيات التطبيقية). نظام التشغيل: Windows, Unix. البرمجيات التطبيقية: برمجيات مكتبية، برمجيات ألعاب، برمجيات تصميم...</div></div></div>` },
+    { page: 29, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 29</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: إذاً لنلعب معك، ماذا يجب أن نفعل؟</div><div class="computer-talk">💻 الحاسوب: عليكم أن تخزنوا برمجية اللعبة على القرص الصلب. وسيقوم نظام التشغيل بمساعدتكم على ذلك.</div></div></div>` },
+    { page: 30, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 30</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: وكيف يكون ذلك؟</div><div class="computer-talk">💻 الحاسوب: غالباً ما تكون برمجيات اللعب على أقراص ليزرية لأنها تستوجب مساحة كبيرة للتخزين، تضعون القرص في وحدة القراءة ثم تنقرون عليها فينشر نظام التشغيل محتوى القرص.</div></div></div>` },
+    { page: 31, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 31</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: ثم ماذا بعد ذلك؟</div><div class="computer-talk">💻 الحاسوب: غالباً ما توجد برمجية تدعى "تركيز" (install.exe)، تنقرون عليها فيقوم نظام التشغيل بتركيز برمجية اللعبة على القرص الصلب.</div></div></div>` },
+    { page: 32, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 32</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: ثم ماذا؟</div><div class="computer-talk">💻 الحاسوب: عليكم بالنقر على اسم البرمجية التي تريدون استعمالها وهكذا يمكنكم الشروع في اللعب.</div></div></div>` },
+    { page: 33, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 33</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: حسناً وعند الانتهاء ماذا نفعل؟</div><div class="computer-talk">💻 الحاسوب: في غالب الأحيان، ترشدكم برمجية اللعب على كيفية إنهاء اللعبة بعبارة "خروج" (Quit).</div></div></div>` },
+    { page: 34, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 34</div><div class="kids-dialogue"><div class="kids-talk">🧒 الأطفال: شكراً على المعلومات التي أخذناها منك.</div></div><div class="trilingual">🎉 انتهى الدرس</div></div>` },
+    { page: 35, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 35</div><div class="trilingual">📹 فيديو 1: مراجعة الدرس</div><div style="margin:15px 0;"><iframe width="100%" height="200" src="https://www.youtube.com/embed/3QCgr6IpuvA" frameborder="0" allowfullscreen></iframe></div></div>` },
+    { page: 36, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 36</div><div class="trilingual">📹 فيديو 2: مراجعة الدرس</div><div style="margin:15px 0;"><iframe width="100%" height="200" src="https://www.youtube.com/embed/HB4I2CgkcCo" frameborder="0" allowfullscreen></iframe></div></div>` },
+    { page: 37, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 37</div><div class="trilingual">📝 الاختبار - 50 سؤالاً (2 نقطة لكل سؤال)</div><button class="btn-gold" onclick="showExercises()">📝 انتقل إلى التمارين</button></div>` },
+    { page: 38, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 38</div><div class="trilingual">⭐ تابع التمارين في القسم التالي</div><button class="btn-green" onclick="showExercises()">📝 ابدأ التمارين</button></div>` },
+    { page: 39, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 39</div><div class="trilingual">🎯 حظ موفق في التمارين!</div><button class="btn-green" onclick="showExercises()">📝 التمارين</button></div>` },
+    { page: 40, content: `<div class="kids-card"><div class="page-number">📖 الصفحة 40</div><div class="trilingual">🏆 إتمام الكتاب</div><p style="text-align:center;">تهانينا! لقد أكملت كتاب الأطفال والحاسوب</p><button class="btn-gold" onclick="showExercises()">📝 انتقل إلى التمارين النهائية</button></div>` }
+];
+
+// ======================= قائمة التمارين الخمسون =======================
+const exercisesList = [
+    "ماهي مكونات الحاسوب؟", "ما هي المواد التي صنعت منها أجزاء الحاسوب؟",
+    "ماهي تركيبة الحاسوب الداخلية؟", "ما هي وظيفة كل جزء داخلي في الحاسوب؟",
+    "ما هي الذاكرة الرئيسية؟", "ما دور الذاكرة الرئيسية؟",
+    "ماهي أنواع الذاكرات عند الحاسوب؟", "ما هو الفرق بينها؟",
+    "ما هي الروابط في الحاسوب؟", "كيف نسمي الروابط أيضا وما دورها؟",
+    "ما هي اللواحق؟", "ما هي مهمة كل لاحق؟",
+    "ماهي اللواحق التي تمكننا التفاعل مع الحاسوب؟", "كيف نستخدم الفارة؟",
+    "ماهي اللواحق الأخرى؟", "ما دور لوحة المفاتيح؟",
+    "ما هو القلم الالكتروني؟ ما هو اسمه الثاني؟", "متى نستخدم القلم الضوئي؟",
+    "متى نستخدم اللوحة الرسومية؟", "كيف شكلها؟",
+    "ما هي الشاشة اللمسية؟", "كيف تشتغل ومتى نستخدمها؟ اين نجدها؟",
+    "ماهو دور الشاشات في الحاسوب؟", "هل هناك نوع واحد وماهي؟",
+    "ما دور الطابعة؟ وما هي أنواعها؟", "متى نستخدم الطابعة؟",
+    "كيف نكلم الحاسوب؟", "كيف نسمع ما يقول الحاسوب عندما يجيب؟",
+    "ما هي العلاقة بين شاشة التلفزة والحاسوب؟", "متى نحتاج لشاشة التلفزة؟",
+    "ماهي مختلف ملحقات الحاسوب؟", "ما دور كل واحد منها؟",
+    "الطابعات هي لواحق اخراج؟ كيف؟", "ما هي أنواع المعلومات التي تخرجها الطابعات؟",
+    "ما هو الماسح؟", "متى نستخدم الماسح؟",
+    "ما هو الراسم؟", "متى نستخدم الراسم؟ ما هي وظيفته؟",
+    "هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟ كيف؟", "ما هو الجهاز الذي يمكنه من ذلك؟",
+    "كيف يستطيع الحاسوب التحاور مع الانسان؟", "ما هي العناصر الضرورية التي تمكنه من ذلك؟",
+    "ما دور الأقراص الليزرية؟", "ماذا تحتوي تلك الأقراص؟",
+    "ما هو نظام التشغيل؟", "اذكر أمثلة لأنظمة التشغيل؟",
+    "ما هي البرمجيات التطبيقية؟", "كيف يتم تركيز لعبة على الحاسوب؟",
+    "اذكر خطوات تشغيل لعبة على الحاسوب؟", "كيف يتم إغلاق برمجية اللعب؟"
+];
+
+// إجابات نموذجية للتصحيح
+const modelAnswers = [
+    "جزء مادي وجزء معنوي", "معادن وحديد وفولاذ وبلاستيك", "معالج وذاكرة وروابط ولواحق", "معالجة البيانات وتخزينها",
+    "الذاكرة الرئيسية لتخزين المعطيات مؤقتا", "لتخزين المعطيات أثناء التشغيل", "ذاكرة حية وميتة", "حية مؤقتة ميتة دائمة",
+    "نواقل تنقل البيانات", "نواقل", "ملحقات الحاسوب", "الادخال والاخراج",
+    "فارة ولوحة مفاتيح", "للنقر والتحكم", "قلم ضوئي ولوحة رسم وشاشة لمسية", "لادخال الحروف",
+    "قلم ضوئي", "لادخال الشفرات العمودية", "للرسم", "لوحة مسطحة",
+    "شاشة تعمل باللمس", "بالضغط عليها", "لعرض النصوص والصور", "عدة أنواع",
+    "طابعة لاخراج المعلومات على الورق", "لطباعة المستندات", "بالملحقات", "بمكبرات الصوت",
+    "يمكن ربطها", "لعرض الصور", "ملحقات مختلفة", "كل ملحق له دور",
+    "نعم لواحق اخراج", "نصوص وصور", "ادخال الصور", "لادخال الصور",
+    "طابعة كبيرة", "لطباعة الخرائط", "نعم بالمودم", "مودم",
+    "بالملحقات", "لوحة مفاتيح وفارة وشاشة", "لتخزين البيانات", "برامج وألعاب",
+    "يدير الحاسوب", "ويندوز ولينكس", "برامج تطبيقية", "تنصيب البرنامج",
+    "تثبيت ثم تشغيل", "اضغط خروج"
+];
+
+let currentPage = 0;
+let currentExPage = 0;
+let userAnswers = new Array(50).fill("");
+let wrongNotes = [];
+
+function showBookPage() {
+    let slide = bookSlides[currentPage];
+    document.getElementById('level1Content').innerHTML = slide.content;
+    document.getElementById('level1Count').innerHTML = `📖 الصفحة ${currentPage+1} من 40`;
+    document.getElementById('level1Fill').style.width = `${((currentPage+1)/40)*100}%`;
+}
+
+function level1Next() { if (currentPage < 39) { currentPage++; showBookPage(); } else { alert("🎉 أكملت الكتاب كاملاً! انتقل إلى التمارين."); showExercises(); } }
+function level1Prev() { if (currentPage > 0) { currentPage--; showBookPage(); } }
+function showLevel1() { currentPage = 0; showBookPage(); hideAll(); document.getElementById('pageLevel1').classList.remove('hide'); }
+
+function renderExercises() {
+    let html = '';
+    let start = currentExPage * 5;
+    let end = Math.min(start + 5, 50);
+    for (let i = start; i < end; i++) {
+        html += `<div class="kids-card" style="margin:15px 0;">
+                    <div class="page-number">📝 سؤال ${i+1} (2 نقطة)</div>
+                    <strong style="font-size:18px;">${i+1}) ${exercisesList[i]}</strong><br>
+                    <textarea id="ex_${i}" rows="3" style="width:100%; border-radius:20px; padding:12px; margin-top:10px;" placeholder="اكتب إجابتك هنا...">${userAnswers[i]||''}</textarea>
+                 </div>`;
+    }
+    document.getElementById('exercisesContainer').innerHTML = html;
+}
+
+function exNext() { if ((currentExPage+1)*5 < 50) { currentExPage++; renderExercises(); } }
+function exPrev() { if (currentExPage > 0) { currentExPage--; renderExercises(); } }
+function showExercises() { currentExPage = 0; renderExercises(); hideAll(); document.getElementById('pageExercises').classList.remove('hide'); }
+
+function submitExercises() {
+    for (let i = 0; i < 50; i++) {
+        let ta = document.getElementById(`ex_${i}`);
+        if (ta) userAnswers[i] = ta.value.trim();
+    }
+    let score = 0;
+    wrongNotes = [];
+    for (let i = 0; i < 50; i++) {
+        let answer = userAnswers[i].toLowerCase();
+        let model = modelAnswers[i]?.toLowerCase() || "";
+        let isCorrect = answer.length > 5 && (model.length === 0 || answer.includes(model.substring(0, 5)));
+        if (isCorrect || answer.length > 10) { score += 2; } 
+        else { wrongNotes.push(`⚠️ السؤال ${i+1}: "${exercisesList[i]}" - الإجابة غير كافية. الإجابة النموذجية: ${modelAnswers[i] || "يرجى مراجعة الكتاب"}`); }
+    }
+    let studentName = document.getElementById('studentName').value.trim() || "الطالب";
+    let resultHtml = `<div class="kids-card" style="text-align:center;"><div class="page-number">🏆 ${studentName}</div><div class="${score >= 50 ? 'score-high' : 'score-low'}">${score} / 100</div><div class="trilingual">${score >= 50 ? '✅ اجتاز المستوى الأول بنجاح!' : '📚 يحتاج إلى مراجعة الكتاب مرة أخرى'}</div>`;
+    if (wrongNotes.length > 0) { resultHtml += `<div class="notes-list"><strong>📝 ملاحظات التصحيح:</strong><br>${wrongNotes.map(n=>`<div class="note-item">${n}</div>`).join('')}</div>`; }
+    resultHtml += `</div>`;
+    document.getElementById('resultContent').innerHTML = resultHtml;
+    let actionsHtml = '';
+    if (score < 50) { actionsHtml = `<button class="btn-blue" onclick="backToBook()">📖 العودة إلى الكتاب للمراجعة</button>`; } 
+    else { actionsHtml = `<button class="btn-gold" onclick="showLevel2()">⭐ الانتقال إلى المستوى الثاني</button><button class="btn-green" onclick="showCertificate()">🎓 إصدار شهادة إتمام المستوى الأول</button>`; }
+    document.getElementById('actionButtons').innerHTML = actionsHtml;
+    hideAll(); document.getElementById('pageResult').classList.remove('hide');
+}
+
+function backToBook() { showLevel1(); }
+function showLevel2() { hideAll(); document.getElementById('pageLevel2').classList.remove('hide'); }
+function showCertificate() {
+    let studentName = document.getElementById('studentName').value.trim() || "الطالب";
+    let certHtml = `<div class="certificate-box"><div class="round-logo" style="width:80px; height:80px; margin:0 auto 15px;"><img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg"></div><h1 style="color:#2c5f2d; font-size:28px;">منصة محمد زايد للتكنولوجيات الحاسوبية</h1><h2 style="color:#1e293b; font-size:22px;">تونس - قسم التربية التكنولوجية للأطفال</h2><div style="border-top:2px solid #facc15; margin:20px 0;"></div><p style="font-size:18px;">تشهد المنصة أن</p><h1 style="color:#2c5f2d; font-size:32px; margin:15px 0;">${studentName}</h1><p style="font-size:18px;">قد اجتاز بنجاح المستوى الأول من</p><h2 style="color:#facc15;">📚 كتاب الأطفال والحاسوب 📚</h2><div class="trilingual" style="margin:15px 0;">🎓 بتقدير ممتاز 🎓</div><div class="signature"><p>🏅 مؤسس المنصة والمشرف العام</p><p style="font-size:20px; font-weight:bold;">محمد زايد</p><p>خبير دولي وأستاذ جامعي في التكنولوجيات الرقمية</p><p style="font-size:12px;">zeidoun2021@gmail.com | +21655335477</p></div></div>`;
+    document.getElementById('resultContent').innerHTML = certHtml;
+    document.getElementById('actionButtons').innerHTML = `<button class="btn-gold" onclick="window.print()">🖨️ طباعة الشهادة</button><button class="btn-gray" onclick="showHome()">🏠 الرئيسية</button>`;
+    hideAll(); document.getElementById('pageResult').classList.remove('hide');
+}
+
+function hideAll() { document.querySelectorAll('.page').forEach(p => p.classList.add('hide')); }
+function showHome() { hideAll(); document.getElementById('pageHome').classList.remove('hide'); }
+</script>
+</body>
+</html>
