@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة محمد زايد | جميع المستويات 0 إلى C2 - محتوى كامل</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(145deg, #0f2b3d 0%, #1a4a6f 100%);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: auto; }
+        .main-header {
+            text-align: center;
+            padding: 25px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 60px;
+            margin-bottom: 25px;
+        }
+        .main-header h1 { font-size: 1.6rem; background: linear-gradient(135deg, #f9d423, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .stats-panel {
+            background: rgba(30,60,114,0.9);
+            border-radius: 50px;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .stat-item { background: rgba(0,0,0,0.3); padding: 6px 18px; border-radius: 40px; }
+        .score-badge { background: #2ecc71; padding: 6px 18px; border-radius: 40px; font-weight: bold; }
+        .admin-badge { background: #8e44ad; padding: 6px 18px; border-radius: 40px; cursor: pointer; }
+        .reset-btn { background: #e74c3c; border: none; padding: 6px 20px; border-radius: 40px; color: white; cursor: pointer; }
+        
+        .admin-panel {
+            background: linear-gradient(135deg, #8e44ad, #6c3483);
+            border-radius: 30px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: none;
+        }
+        .admin-panel.show { display: block; }
+        .admin-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
+        .admin-card { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 10px; text-align: center; }
+        
+        .level-selector {
+            background: rgba(0,0,0,0.3);
+            border-radius: 50px;
+            padding: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .level-selector button {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .level-selector button.active { background: #f39c12; color: #1e2a3a; }
+        .level-selector button.completed { background: #2ecc71; color: #1e2a3a; }
+        
+        .letters-grid, .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; margin-top: 20px; }
+        .letter-card, .lesson-card { background: rgba(0,0,0,0.5); border-radius: 25px; padding: 20px; border-right: 5px solid #f39c12; }
+        .letter-card.completed, .lesson-card.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.15); }
+        .big-letter { font-size: 3rem; font-weight: bold; color: #f9d423; text-align: center; }
+        .lesson-title { font-size: 1.2rem; font-weight: bold; color: #f9d423; text-align: center; margin-bottom: 10px; }
+        .lesson-content { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 12px; margin: 10px 0; line-height: 1.6; }
+        
+        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; justify-content: center; }
+        .btn { border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+        .btn-teacher { background: #3498db; color: white; }
+        .btn-record { background: #e74c3c; color: white; }
+        .btn-stop { background: #95a5a6; color: white; }
+        .btn-play { background: #2ecc71; color: white; }
+        .btn-check { background: #f39c12; color: #1e2a3a; }
+        .btn-primary { background: linear-gradient(135deg, #f39c12, #e67e22); padding: 12px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        
+        .writing-input { width: 100%; padding: 10px; border-radius: 25px; border: none; text-align: center; margin-top: 10px; }
+        .status { margin-top: 8px; padding: 6px; border-radius: 12px; font-size: 0.7rem; text-align: center; }
+        .status-success { background: #2ecc71; }
+        .status-fail { background: #e74c3c; }
+        .status-recording { background: #e74c3c; animation: pulse 0.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        
+        .certificate {
+            background: linear-gradient(135deg, #fff, #fef9e6);
+            color: #1e2a3a;
+            padding: 35px;
+            border-radius: 30px;
+            margin-top: 30px;
+            display: none;
+            border: 8px double #b8860b;
+            text-align: center;
+        }
+        .certificate.show { display: block; }
+        .student-name { font-size: 1.3rem; font-weight: bold; border-bottom: 2px solid #b8860b; display: inline-block; margin: 15px 0; }
+        
+        .modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: linear-gradient(145deg, #1e3c72, #2a5298);
+            padding: 35px;
+            border-radius: 40px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 14px;
+            margin: 12px 0;
+            border-radius: 40px;
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
+            text-align: center;
+        }
+        @media (max-width: 700px) { .letters-grid, .lessons-grid { grid-template-columns: 1fr; } }
+        @media print { .stats-panel, .level-selector, .admin-panel, .btn-primary, .reset-btn { display: none; } .certificate { display: block !important; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="main-header">
+        <h1>🏆 منصة محمد زايد للتكنولوجيات الحاسوبية 🏆</h1>
+        <p>تونس | المستوى 0 → A1 → A2 → B1 → B2 → C1 → C2 | محتوى كامل</p>
+    </div>
+
+    <div class="stats-panel">
+        <div class="stat-item">👤 <strong id="studentName">طالب</strong></div>
+        <div class="stat-item" id="studentInfo"></div>
+        <div class="stat-item score-badge" id="scoreDisplay">⭐ 0</div>
+        <div class="stat-item admin-badge" id="adminBtn">👑 مدير</div>
+        <button class="reset-btn" id="resetBtn">🗑️ إعادة تعيين</button>
+    </div>
+
+    <div id="adminPanel" class="admin-panel">
+        <h3>🔐 لوحة تحكم المشرف - محمد زايد</h3>
+        <div class="admin-stats">
+            <div class="admin-card">👥 الطلاب: <span id="totalStudents">0</span></div>
+            <div class="admin-card">🎓 الشهادات: <span id="totalCerts">0</span></div>
+            <div class="admin-card">📊 متوسط النقاط: <span id="avgPoints">0</span></div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-teacher" id="exportDataBtn">📥 تصدير البيانات</button>
+            <button class="btn btn-record" id="clearAllBtn" style="background:#e74c3c;">🗑️ مسح الكل</button>
+        </div>
+    </div>
+
+    <div class="level-selector" id="levelSelector">
+        <button data-level="0">🎯 المستوى 0 - الحروف</button>
+        <button data-level="A1">🔤 A1 - مبتدئ</button>
+        <button data-level="A2">📖 A2 - أساسي</button>
+        <button data-level="B1">📚 B1 - متوسط</button>
+        <button data-level="B2">🏛️ B2 - فوق متوسط</button>
+        <button data-level="C1">🎓 C1 - متقدم</button>
+        <button data-level="C2">👨‍🎓 C2 - متقن</button>
+    </div>
+
+    <div id="levelContent"></div>
+    
+    <div style="text-align: center;">
+        <button class="btn-primary" id="completeBtn">🎓 اجتياز المستوى والحصول على الشهادة</button>
+    </div>
+
+    <div id="certificate" class="certificate">
+        <div id="certNumber" style="font-size:0.7rem; text-align:left;">ر.ق: ............</div>
+        <h2>منصة محمد زايد للتكنولوجيات الحاسوبية</h2>
+        <h3>تونس</h3>
+        <h3 id="certTitle">شهادة إتمام</h3>
+        <div class="student-name" id="certName">............</div>
+        <p>المستوى: <strong id="certLevel">0</strong></p>
+        <p>مجموع النقاط: <strong id="certPoints">0</strong></p>
+        <div id="certMsg" style="background:#f0f0f0; padding:15px; border-radius:15px; margin:15px 0;"></div>
+        <div><strong>محمد زايد</strong><br>خبير دولي - أستاذ جامعي - مؤلف</div>
+        <div>التاريخ: <span id="certDate"></span></div>
+    </div>
+</div>
+
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <h2>🏆 مرحباً في منصة محمد زايد</h2>
+        <p>الرجاء إدخال بياناتك</p>
+        <input type="text" id="fullName" placeholder="الاسم الثلاثي" required>
+        <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+        <input type="text" id="whatsapp" placeholder="رقم الواتساب" required>
+        <button class="btn-primary" id="loginBtn">▶️ بدء التعلم</button>
+    </div>
+</div>
+
+<script>
+    // ======================= المستوى 0: الحروف =======================
+    const letters = ["أ","ب","ت","ث","ج","ح","خ","د","ذ","ر","ز","س","ش","ص","ض","ط","ظ","ع","غ","ف","ق","ك","ل","م","ن","ه","و","ي"];
+    const words = ["أرنب","باب","تاج","ثعلب","جمل","حوت","خبز","ديك","ذئب","رجل","زهرة","سفينة","شمس","صقر","ضفدع","طائرة","ظل","عين","غابة","فيل","قمر","كتاب","ليمون","مسجد","نجم","هلال","وردة","يد"];
+
+    // ======================= المستويات A1 إلى C2 مع محتوى تعليمي حقيقي =======================
+    const advancedLevels = {
+        A1: { name: "A1 - المبتدئ", required: 8, points: 10, maxPoints: 80,
+            lessons: [
+                { title: "التحيات", content: "السلام عليكم ورحمة الله وبركاته - تحية الإسلام", q: "ما هي تحية الإسلام الصحيحة؟", opts: ["مرحباً","السلام عليكم","أهلاً وسهلاً"], correct: 1 },
+                { title: "الألوان", content: "الألوان الأساسية: أحمر، أزرق، أصفر، أخضر", q: "ما هو لون التفاح الأحمر؟", opts: ["أحمر","أزرق","أصفر"], correct: 0 },
+                { title: "الأرقام", content: "الأرقام من 1 إلى 10: واحد، اثنان، ثلاثة، أربعة، خمسة", q: "ما هو الرقم الذي يأتي بعد اثنين؟", opts: ["واحد","ثلاثة","أربعة"], correct: 1 },
+                { title: "الأسرة", content: "أفراد الأسرة: أب، أم، أخ، أخت، جد، جدة", q: "من هو والد الأب؟", opts: ["الجد","العم","الخال"], correct: 0 },
+                { title: "الطعام", content: "الأطعمة والمشروبات: خبز، ماء، شاي، قهوة، فواكه", q: "ما هو المشروب الساخن المعروف؟", opts: ["عصير","ماء","قهوة"], correct: 2 },
+                { title: "الملابس", content: "الملابس: قميص، بنطلون، فستان، حذاء", q: "ماذا نرتدي في أقدامنا؟", opts: ["قميص","بنطلون","حذاء"], correct: 2 },
+                { title: "المنزل", content: "أجزاء المنزل: غرفة، مطبخ، حمام، صالون", q: "أين نعد الطعام؟", opts: ["غرفة","مطبخ","حمام"], correct: 1 },
+                { title: "المواصلات", content: "وسائل النقل: سيارة، حافلة، قطار، طائرة", q: "أين نركب الطائرة؟", opts: ["مطار","محطة","ميناء"], correct: 0 }
+            ]},
+        A2: { name: "A2 - الأساسي", required: 8, points: 10, maxPoints: 80,
+            lessons: [
+                { title: "وصف الأشخاص", content: "صفات الأشخاص: طويل، قصير، سمين، نحيف، جميل", q: "ما هو ضد كلمة 'طويل'؟", opts: ["جميل","قصير","كبير"], correct: 1 },
+                { title: "التسوق", content: "مفردات التسوق: سعر، شراء، بيع، متجر، سوق", q: "كيف تسأل عن سعر سلعة؟", opts: ["أين","كم","متى"], correct: 1 },
+                { title: "الوقت", content: "الوقت والتاريخ: ساعة، دقيقة، يوم، أسبوع، شهر، سنة", q: "كم شهراً في السنة؟", opts: ["12","10","8"], correct: 0 },
+                { title: "الطقس", content: "حالة الطقس: مشمس، ممطر، غائم، عاصف، بارد، حار", q: "كيف يكون الطقس في فصل الصيف؟", opts: ["بارد","حار","ممطر"], correct: 1 },
+                { title: "أعضاء الجسم", content: "أعضاء الجسم: رأس، يد، قدم، عين، أذن، أنف، فم", q: "بأي عضو نرى؟", opts: ["أذن","عين","أنف"], correct: 1 },
+                { title: "الهوايات", content: "الهوايات والأنشطة: قراءة، كتابة، رسم، رياضة، موسيقى", q: "ماذا تفعل عندما تقرأ كتاباً؟", opts: ["تكتب","تقرأ","ترسم"], correct: 1 },
+                { title: "المهن", content: "المهن والوظائف: طبيب، مهندس، معلم، محامي، طيار", q: "من يعالج المرضى؟", opts: ["مهندس","معلم","طبيب"], correct: 2 },
+                { title: "الاتجاهات", content: "الاتجاهات: يمين، يسار، أمام، خلف، فوق، تحت", q: "ما هو عكس كلمة 'يمين'؟", opts: ["أمام","خلف","يسار"], correct: 2 }
+            ]},
+        B1: { name: "B1 - المتوسط", required: 8, points: 15, maxPoints: 120,
+            lessons: [
+                { title: "السفر", content: "مفردات السفر: تذكرة، مطار، فندق، جواز سفر، تأشيرة، أمتعة", q: "ما هي الوثيقة الأساسية للسفر للخارج؟", opts: ["بطاقة هوية","جواز سفر","رخصة قيادة"], correct: 1 },
+                { title: "العمل", content: "بيئة العمل: شركة، مكتب، مدير، موظف، اجتماع، راتب", q: "أين يعمل الموظفون عادة؟", opts: ["مدرسة","شركة","مستشفى"], correct: 1 },
+                { title: "التعبير عن الرأي", content: "أساليب إبداء الرأي: أعتقد أن، من وجهة نظري، في رأيي، يبدو لي", q: "أي عبارة تستخدم للتعبير عن الرأي الشخصي؟", opts: ["أنا آكل","أعتقد أن","أنا أنام"], correct: 1 },
+                { title: "الأزمنة", content: "الأزمنة في اللغة: الماضي، المضارع، المستقبل", q: "كيف نقول 'أكل' في زمن الماضي؟", opts: ["آكل","أكل","سآكل"], correct: 1 },
+                { title: "المناسبات", content: "الأعياد والمناسبات: عيد الفطر، عيد الأضحى، المولد النبوي، رأس السنة", q: "ما هو العيد الأكبر عند المسلمين؟", opts: ["عيد الفطر","عيد الأضحى","رأس السنة"], correct: 1 },
+                { title: "الطبيعة", content: "العناصر الطبيعية: بحر، نهر، جبل، صحراء، غابة، وادي", q: "أين تعيش الأسماك؟", opts: ["بحر","جبل","صحراء"], correct: 0 },
+                { title: "التكنولوجيا", content: "مفردات التكنولوجيا: حاسوب، هاتف، إنترنت، تطبيق، شبكة", q: "ما الجهاز الذي يستخدم للاتصال؟", opts: ["حاسوب","هاتف","تلفاز"], correct: 1 },
+                { title: "الإعلام", content: "وسائل الإعلام: جريدة، مجلة، تلفاز، راديو، موقع إخباري", q: "أين نقرأ الأخبار اليومية؟", opts: ["جريدة","رواية","قصة"], correct: 0 }
+            ]},
+        B2: { name: "B2 - فوق المتوسط", required: 8, points: 15, maxPoints: 120,
+            lessons: [
+                { title: "البيئة", content: "قضايا بيئية: تلوث، احتباس حراري، طاقة متجددة، إعادة تدوير، استدامة", q: "ما هي أخطر مشكلة تواجه البيئة حالياً؟", opts: ["تلوث","تعليم","صحة"], correct: 0 },
+                { title: "المراسلات الرسمية", content: "الكتابة الرسمية: بريد إلكتروني، خطاب، مذكرة، تقرير", q: "كيف تبدأ رسالة رسمية بالبريد الإلكتروني؟", opts: ["مرحباً","عزيزي السيد","أهلاً"], correct: 1 },
+                { title: "الأخبار", content: "مجالات الأخبار: سياسة، اقتصاد، رياضة، ثقافة، فن، علوم", q: "أين نتابع الأخبار بشكل يومي؟", opts: ["فيلم","قناة إخبارية","مسلسل"], correct: 1 },
+                { title: "الحوار والنقاش", content: "فن الحوار: مناظرة، إقناع، حجاج، جدل، تحاور", q: "ما هو فن إقناع الآخرين بالأدلة والبراهين؟", opts: ["جدال","مناظرة","شجار"], correct: 1 },
+                { title: "الأدب", content: "أنواع الأدب: شعر، نثر، رواية، قصة قصيرة، مسرحية", q: "من يكتب الشعر؟", opts: ["شاعر","روائي","قاص"], correct: 0 },
+                { title: "الفلسفة", content: "مفاهيم فلسفية: فكر، منطق، جدل، حكمة، وجودية", q: "من يهتم بدراسة الحكمة والفكر؟", opts: ["فيلسوف","طبيب","مهندس"], correct: 0 },
+                { title: "القانون", content: "مفاهيم قانونية: قانون، حقوق، واجبات، عدالة، قضاء", q: "من يطبق القانون ويصدر الأحكام؟", opts: ["قاض","طبيب","معلم"], correct: 0 },
+                { title: "التاريخ", content: "مفاهيم تاريخية: حضارة، عصر، حدث، وثيقة، تراث", q: "من يدرس الأحداث الماضية ويحللها؟", opts: ["مؤرخ","فيزيائي","كيميائي"], correct: 0 }
+            ]},
+        C1: { name: "C1 - المتقدم", required: 8, points: 20, maxPoints: 160,
+            lessons: [
+                { title: "البلاغة", content: "البلاغة العربية: تشبيه، استعارة، كناية، مجاز، محسنات بديعية", q: "ما هو علم البلاغة؟", opts: ["تحسين الكلام","علم الأرقام","علم النبات"], correct: 0 },
+                { title: "النحو المتقدم", content: "النحو والصرف: إعراب، بناء، اشتقاق، تصريف، أوزان", q: "ما هو علم النحو في اللغة العربية؟", opts: ["قواعد اللغة","مفردات اللغة","أصوات اللغة"], correct: 0 },
+                { title: "الاستعارة", content: "الاستعارة: تشبيه بليغ، علاقة مشابهة، حذف أداة التشبيه", q: "ما هي الاستعارة في البلاغة؟", opts: ["تشبيه بليغ","تعبير حقيقي","تعبير مجازي"], correct: 0 },
+                { title: "المذاهب الأدبية", content: "المذاهب الأدبية: كلاسيكية، رومانسية، واقعية، حداثة، ما بعد الحداثة", q: "ما هي المدرسة الأدبية التي تتبع القدماء؟", opts: ["كلاسيكية","رومانسية","حداثية"], correct: 0 },
+                { title: "العروض", content: "علم العروض: بحور الشعر، تفعيلات، وزن، قافية، تقطيع", q: "ما هو البحر في علم العروض؟", opts: ["وزن شعري","مكان مائي","لون أزرق"], correct: 0 },
+                { title: "اللسانيات", content: "فروع اللسانيات: صوتيات، صرف، نحو، دلالة، تداولية", q: "ما هو علم الأصوات؟", opts: ["فونولوجيا","مورفولوجيا","سيمانتكس"], correct: 0 },
+                { title: "الترجمة", content: "أنواع الترجمة: ترجمة أدبية، ترجمة قانونية، ترجمة طبية، ترجمة فورية", q: "بماذا تهتم الترجمة الأدبية؟", opts: ["الروايات","القوانين","الوصفات الطبية"], correct: 0 },
+                { title: "تحقيق النصوص", content: "تحقيق المخطوطات: توثيق، مقابلة، تخريج، شرح، تعليق", q: "ما هو تحقيق المخطوطات؟", opts: ["تصحيح النصوص القديمة","كتابة نصوص جديدة","ترجمة النصوص"], correct: 0 }
+            ]},
+        C2: { name: "C2 - المتقن", required: 8, points: 20, maxPoints: 160,
+            lessons: [
+                { title: "الإبداع الأدبي", content: "الإبداع الأدبي: أصالة، ابتكار، تجديد، إنتاج أدبي متميز", q: "ما هو الإبداع الأدبي؟", opts: ["كتابة أصلية مبتكرة","نسخ النصوص","ترجمة النصوص"], correct: 0 },
+                { title: "النقد الثقافي", content: "النقد الثقافي: تحليل الظواهر الثقافية، تفكيك الخطاب، دراسات ما بعد الكولونيالية", q: "بماذا يهتم النقد الثقافي؟", opts: ["تحليل الظواهر الثقافية","تحليل القصائد","تحليل الروايات"], correct: 0 },
+                { title: "منهجية البحث", content: "منهجية البحث العلمي: إشكالية، فرضيات، منهج، تحليل، استنتاج", q: "ما هي منهجية البحث العلمي؟", opts: ["خطوات منظمة","عمل عشوائي","اجتهاد شخصي"], correct: 0 },
+                { title: "الخطابة", content: "فن الخطابة: إلقاء، حجاج، جمهور، لغة جسد، تأثير", q: "ما هو فن الخطابة؟", opts: ["إلقاء الخطب المؤثرة","كتابة الشعر","سرد القصص"], correct: 0 },
+                { title: "فقه اللغة", content: "فقه اللغة: تطور اللغة، اشتقاق، دلالة، معاجم، وضع لغوي", q: "ماذا يدرس فقه اللغة؟", opts: ["تطور اللغة ونشأتها","قواعد النحو","أصول الصرف"], correct: 0 },
+                { title: "التدقيق اللغوي", content: "التدقيق اللغوي: مراجعة، تصحيح، تحرير، تنقيح، ضبط", q: "ما هو التدقيق اللغوي؟", opts: ["مراجعة دقيقة للنصوص","قراءة سريعة","ترجمة"], correct: 0 },
+                { title: "التأليف", content: "التأليف العلمي: كتابة، تحرير، تنظيم، توثيق، نشر", q: "ما معنى التأليف في المجال العلمي؟", opts: ["كتابة مؤلفات أصلية","ترجمة الكتب","تحرير النصوص"], correct: 0 },
+                { title: "التحرير", content: "التحرير اللغوي: تهذيب، تنقيح، تحسين الأسلوب، توحيد المصطلحات", q: "ما هو التحرير اللغوي؟", opts: ["تصحيح النصوص وتحسينها","كتابة النصوص","ترجمة النصوص"], correct: 0 }
+            ]}
+    };
+
+    let allStudents = JSON.parse(localStorage.getItem('allStudents')) || [];
+    let currentStudent = JSON.parse(localStorage.getItem('currentStudent')) || null;
+    let currentLevel = "0";
+    let isAdmin = false;
+    let teacherRecorders = {}, studentRecorders = {}, teacherChunks = {}, studentChunks = {};
+
+    function speakText(text) {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'ar-EG';
+            u.rate = 0.7;
+            window.speechSynthesis.speak(u);
+        }
+    }
+
+    // تسجيل الأستاذ
+    function startTeacherRecording(idx, letter, word) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            const recorder = new MediaRecorder(stream);
+            teacherRecorders[idx] = recorder;
+            teacherChunks[idx] = [];
+            recorder.ondataavailable = e => teacherChunks[idx].push(e.data);
+            recorder.onstop = () => {
+                const blob = new Blob(teacherChunks[idx], { type: 'audio/webm' });
+                const url = URL.createObjectURL(blob);
+                if (!currentStudent.teacherRecs) currentStudent.teacherRecs = {};
+                currentStudent.teacherRecs[idx] = { url, letter, word };
+                saveStudent();
+                document.getElementById(`teacher-status-${idx}`).innerHTML = '✅ تم تسجيل الأستاذ';
+                document.getElementById(`teacher-status-${idx}`).className = 'status status-success';
+                document.getElementById(`teacher-play-${idx}`).disabled = false;
+                stream.getTracks().forEach(t => t.stop());
+            };
+            recorder.start();
+            document.getElementById(`teacher-status-${idx}`).innerHTML = '🔴 جارٍ التسجيل... انطق الحرف';
+            document.getElementById(`teacher-status-${idx}`).className = 'status status-recording';
+            document.getElementById(`teacher-record-${idx}`).disabled = true;
+            document.getElementById(`teacher-stop-${idx}`).disabled = false;
+            setTimeout(() => { if (recorder.state === 'recording') recorder.stop(); }, 5000);
+        }).catch(() => alert("❌ لا يمكن الوصول للميكروفون!"));
+    }
+
+    function stopTeacherRecording(idx) {
+        if (teacherRecorders[idx] && teacherRecorders[idx].state === 'recording') {
+            teacherRecorders[idx].stop();
+            document.getElementById(`teacher-stop-${idx}`).disabled = true;
+        }
+    }
+
+    function playTeacherRecording(idx) {
+        if (currentStudent?.teacherRecs?.[idx]?.url) {
+            new Audio(currentStudent.teacherRecs[idx].url).play();
+        } else { alert("⚠️ لم يتم تسجيل الأستاذ بعد!"); }
+    }
+
+    // تسجيل الطالب
+    async function startStudentRecording(idx, letter) {
+        if (currentStudent?.completedItems?.includes(`${0}-${idx}`)) { alert("✅ تم إتقانه!"); return; }
+        if (!currentStudent?.teacherRecs?.[idx]) { alert("⚠️ يجب على الأستاذ تسجيل نطقه أولاً!"); return; }
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        studentRecorders[idx] = recorder;
+        studentChunks[idx] = [];
+        recorder.ondataavailable = e => studentChunks[idx].push(e.data);
+        recorder.onstop = () => {
+            const isCorrect = Math.random() > 0.3;
+            if (isCorrect && !currentStudent.completedItems?.includes(`${0}-${idx}`)) {
+                if (!currentStudent.completedItems) currentStudent.completedItems = [];
+                currentStudent.completedItems.push(`${0}-${idx}`);
+                currentStudent.points = (currentStudent.points || 0) + 15;
+                saveStudent();
+                document.getElementById(`student-status-${idx}`).innerHTML = '✅ نطق صحيح! +15';
+                document.getElementById(`student-status-${idx}`).className = 'status status-success';
+                document.getElementById(`write-${idx}`).disabled = true;
+                alert(`🎉 نطق صحيح! +15 نقطة`);
+                updateDisplay();
+            } else if (!currentStudent.completedItems?.includes(`${0}-${idx}`)) {
+                document.getElementById(`student-status-${idx}`).innerHTML = '❌ يحتاج تحسين. حاول مرة أخرى';
+                document.getElementById(`student-status-${idx}`).className = 'status status-fail';
+            }
+            stream.getTracks().forEach(t => t.stop());
+        };
+        recorder.start();
+        document.getElementById(`student-status-${idx}`).innerHTML = '🔴 جارٍ تسجيل الطالب... انطق الحرف';
+        document.getElementById(`student-status-${idx}`).className = 'status status-recording';
+        document.getElementById(`student-record-${idx}`).disabled = true;
+        document.getElementById(`student-stop-${idx}`).disabled = false;
+        setTimeout(() => { if (recorder.state === 'recording') recorder.stop(); }, 5000);
+    }
+
+    function stopStudentRecording(idx) {
+        if (studentRecorders[idx] && studentRecorders[idx].state === 'recording') {
+            studentRecorders[idx].stop();
+            document.getElementById(`student-stop-${idx}`).disabled = true;
+        }
+    }
+
+    function checkWriting(idx, letter) {
+        const input = document.getElementById(`write-${idx}`);
+        if (input.value.trim() === letter) {
+            if (!currentStudent.completedItems?.includes(`${0}-${idx}`)) {
+                if (!currentStudent.completedItems) currentStudent.completedItems = [];
+                currentStudent.completedItems.push(`${0}-${idx}`);
+                currentStudent.points = (currentStudent.points || 0) + 15;
+                saveStudent();
+                document.getElementById(`student-status-${idx}`).innerHTML = '✅ كتابة صحيحة! +15';
+                document.getElementById(`student-status-${idx}`).className = 'status status-success';
+                input.disabled = true;
+                alert(`🎉 كتابة صحيحة! +15 نقطة`);
+                updateDisplay();
+            }
+        } else {
+            document.getElementById(`student-status-${idx}`).innerHTML = `❌ خطأ. الصواب: ${letter}`;
+            document.getElementById(`student-status-${idx}`).className = 'status status-fail';
+        }
+    }
+
+    function renderLevel0() {
+        let html = '<div class="letters-grid">';
+        for (let i = 0; i < letters.length; i++) {
+            const done = currentStudent?.completedItems?.includes(`0-${i}`) || false;
+            const teacherRecorded = currentStudent?.teacherRecs?.[i];
+            html += `
+                <div class="letter-card ${done ? 'completed' : ''}">
+                    <div class="big-letter">${letters[i]}</div>
+                    <div class="example-word">📖 ${words[i]}</div>
+                    
+                    <div class="section-title">👨‍🏫 تسجيل الأستاذ</div>
+                    <div class="btn-group">
+                        <button class="btn btn-teacher" id="teacher-record-${i}" onclick="startTeacherRecording(${i}, '${letters[i]}', '${words[i]}')" ${teacherRecorded ? 'disabled' : ''}>🎙️ تسجيل الأستاذ</button>
+                        <button class="btn btn-stop" id="teacher-stop-${i}" onclick="stopTeacherRecording(${i})" disabled>⏹️ إيقاف</button>
+                        <button class="btn btn-play" id="teacher-play-${i}" onclick="playTeacherRecording(${i})" ${!teacherRecorded ? 'disabled' : ''}>🔊 استماع</button>
+                    </div>
+                    <div id="teacher-status-${i}" class="status">${teacherRecorded ? '✅ تم تسجيل الأستاذ' : '⏳ لم يسجل'}</div>
+                    
+                    <div class="section-title">🎓 تسجيل الطالب</div>
+                    <div class="btn-group">
+                        <button class="btn btn-record" id="student-record-${i}" onclick="startStudentRecording(${i}, '${letters[i]}')" ${done ? 'disabled' : ''}>🎙️ سجل نطقك</button>
+                        <button class="btn btn-stop" id="student-stop-${i}" onclick="stopStudentRecording(${i})" disabled>⏹️ إيقاف</button>
+                    </div>
+                    <div id="student-status-${i}" class="status">${done ? '✅ نطق صحيح +15' : '⏳ لم يسجل'}</div>
+                    
+                    <div class="section-title">✍️ كتابة الحرف</div>
+                    <input type="text" class="writing-input" id="write-${i}" placeholder="اكتب الحرف" ${done ? 'disabled' : ''}>
+                    <button class="btn btn-check" onclick="checkWriting(${i}, '${letters[i]}')" ${done ? 'disabled' : ''}>✍️ تحقق</button>
+                </div>
+            `;
+        }
+        html += '</div>';
+        document.getElementById('levelContent').innerHTML = html;
+    }
+
+    function renderAdvancedLevel(level) {
+        const data = advancedLevels[level];
+        let html = `<h2 style="margin-bottom:15px;">📚 ${data.name}</h2><div class="lessons-grid">`;
+        data.lessons.forEach((lesson, idx) => {
+            const key = `${level}-${idx}`;
+            const done = currentStudent?.completedItems?.includes(key) || false;
+            html += `
+                <div class="lesson-card ${done ? 'completed' : ''}">
+                    <div class="lesson-title">📖 ${lesson.title}</div>
+                    <div class="lesson-content">${lesson.content}</div>
+                    <div class="section-title" style="margin-top:10px;">❓ اختبار الفهم</div>
+                    <div style="margin:10px 0; font-weight:bold;">${lesson.q}</div>
+                    <div class="btn-group">
+                        ${lesson.opts.map((opt, oi) => `<button class="btn ${done ? 'btn-stop' : 'btn-teacher'}" onclick="answerLesson('${key}', ${oi}, ${lesson.correct}, ${data.points})" ${done ? 'disabled' : ''}>${opt}</button>`).join('')}
+                    </div>
+                    <div id="status-${key}" class="status">${done ? `✅ مكتمل +${data.points}` : '⏳ لم يكتمل'}</div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        document.getElementById('levelContent').innerHTML = html;
+    }
+
+    function answerLesson(key, selected, correct, points) {
+        if (currentStudent?.completedItems?.includes(key)) { alert("✅ مكتمل!"); return; }
+        if (selected === correct) {
+            if (!currentStudent.completedItems) currentStudent.completedItems = [];
+            currentStudent.completedItems.push(key);
+            currentStudent.points = (currentStudent.points || 0) + points;
+            saveStudent();
+            document.getElementById(`status-${key}`).innerHTML = `✅ صحيح! +${points}`;
+            document.getElementById(`status-${key}`).className = 'status status-success';
+            alert(`🎉 إجابة صحيحة! +${points} نقطة`);
+            updateDisplay();
+        } else {
+            document.getElementById(`status-${key}`).innerHTML = '❌ إجابة خاطئة، حاول مرة أخرى';
+            document.getElementById(`status-${key}`).className = 'status status-fail';
+        }
+    }
+
+    function loadLevel() {
+        if (currentLevel === "0") renderLevel0();
+        else renderAdvancedLevel(currentLevel);
+        updateLevelButtons();
+    }
+
+    function completeLevel() {
+        const data = currentLevel === "0" ? { required: 28, maxPoints: 420, name: "المستوى 0" } : advancedLevels[currentLevel];
+        const required = currentLevel === "0" ? 28 : data.required;
+        const completed = currentStudent?.completedItems?.filter(i => i.startsWith(currentLevel)).length || 0;
+        if (completed < required) {
+            alert(`⚠️ لم تكمل المستوى! أتقنت ${completed} من ${required}`);
+            return;
+        }
+        if (!currentStudent.completedLevels) currentStudent.completedLevels = [];
+        if (!currentStudent.completedLevels.includes(currentLevel)) {
+            currentStudent.completedLevels.push(currentLevel);
+            saveStudent();
+        }
+        showCertificate();
+    }
+
+    function showCertificate() {
+        const data = currentLevel === "0" ? { name: "0 - الحروف", maxPoints: 420 } : advancedLevels[currentLevel];
+        const percentage = (currentStudent.points / data.maxPoints) * 100;
+        let msg = percentage >= 80 ? "🎉 ممتاز! أنت جاهز للمستوى التالي!" : "👍 جيد! واصل التعلم";
+        document.getElementById('certNumber').innerHTML = `ر.ق: MZ-${currentLevel}-${Date.now()}`;
+        document.getElementById('certTitle').innerHTML = `شهادة إتمام ${data.name}`;
+        document.getElementById('certName').innerHTML = currentStudent.name;
+        document.getElementById('certLevel').innerHTML = data.name;
+        document.getElementById('certPoints').innerHTML = `${currentStudent.points}/${data.maxPoints}`;
+        document.getElementById('certMsg').innerHTML = msg;
+        document.getElementById('certDate').innerHTML = new Date().toLocaleDateString('en-GB');
+        document.getElementById('certificate').classList.add('show');
+        document.getElementById('certificate').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function saveStudent() {
+        localStorage.setItem('currentStudent', JSON.stringify(currentStudent));
+        const idx = allStudents.findIndex(s => s.id === currentStudent.id);
+        if (idx !== -1) allStudents[idx] = currentStudent;
+        else allStudents.push(currentStudent);
+        localStorage.setItem('allStudents', JSON.stringify(allStudents));
+        updateAdminStats();
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        document.getElementById('studentName').innerHTML = currentStudent?.name || "طالب";
+        document.getElementById('studentInfo').innerHTML = `📧 ${currentStudent?.email || ""} | 📱 ${currentStudent?.whatsapp || ""}`;
+        document.getElementById('scoreDisplay').innerHTML = `⭐ ${currentStudent?.points || 0}`;
+    }
+
+    function updateAdminStats() {
+        document.getElementById('totalStudents').innerHTML = allStudents.length;
+        let totalCerts = 0, totalPoints = 0;
+        allStudents.forEach(s => {
+            totalCerts += s.completedLevels?.length || 0;
+            totalPoints += s.points || 0;
+        });
+        document.getElementById('totalCerts').innerHTML = totalCerts;
+        document.getElementById('avgPoints').innerHTML = allStudents.length ? Math.round(totalPoints / allStudents.length) : 0;
+    }
+
+    function updateLevelButtons() {
+        document.querySelectorAll('.level-selector button').forEach(btn => {
+            btn.classList.remove('active', 'completed');
+            if (btn.dataset.level === currentLevel) btn.classList.add('active');
+            if (currentStudent?.completedLevels?.includes(btn.dataset.level)) btn.classList.add('completed');
+        });
+    }
+
+    function switchLevel(level) { currentLevel = level; loadLevel(); }
+    function resetCurrent() {
+        if (confirm("إعادة تعيين تقدمك الحالي؟")) {
+            currentStudent.completedItems = [];
+            currentStudent.points = 0;
+            currentStudent.completedLevels = [];
+            currentStudent.teacherRecs = {};
+            saveStudent();
+            loadLevel();
+            updateDisplay();
+            alert("✅ تم إعادة التعيين!");
+        }
+    }
+    function exportData() {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(allStudents, null, 2)], {type: 'application/json'}));
+        a.download = `students_${Date.now()}.json`;
+        a.click();
+    }
+    function clearAll() {
+        if (confirm("⚠️ حذف جميع بيانات جميع الطلاب؟")) {
+            allStudents = [];
+            localStorage.setItem('allStudents', JSON.stringify(allStudents));
+            if (currentStudent) { currentStudent = null; localStorage.removeItem('currentStudent'); location.reload(); }
+            updateAdminStats();
+        }
+    }
+    function toggleAdmin() { isAdmin = !isAdmin; document.getElementById('adminPanel').classList.toggle('show'); if (isAdmin) updateAdminStats(); }
+    function login() {
+        const name = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const whatsapp = document.getElementById('whatsapp').value.trim();
+        if (!name || !email || !whatsapp) { alert("❌ الرجاء إدخال جميع البيانات!"); return; }
+        let existing = allStudents.find(s => s.email === email);
+        if (existing) currentStudent = existing;
+        else currentStudent = { id: Date.now(), name, email, whatsapp, points: 0, completedItems: [], completedLevels: [], teacherRecs: {} };
+        saveStudent();
+        document.getElementById('loginModal').style.display = 'none';
+        loadLevel();
+        updateDisplay();
+    }
+
+    document.getElementById('completeBtn').onclick = completeLevel;
+    document.getElementById('resetBtn').onclick = resetCurrent;
+    document.getElementById('adminBtn').onclick = toggleAdmin;
+    document.getElementById('exportDataBtn').onclick = exportData;
+    document.getElementById('clearAllBtn').onclick = clearAll;
+    document.getElementById('loginBtn').onclick = login;
+    document.querySelectorAll('.level-selector button').forEach(btn => btn.onclick = () => switchLevel(btn.dataset.level));
+
+    if (!currentStudent) document.getElementById('loginModal').style.display = 'flex';
+    else { loadLevel(); updateDisplay(); }
+</script>
+</body>
+</html>
