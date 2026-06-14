@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة محمد زايد</title>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a, #1e293b); min-height: 100vh; padding: 20px; }
+        .container { max-width: 500px; margin: auto; }
+        .page { background: #1e293b; border-radius: 30px; padding: 25px; margin-bottom: 20px; border: 1px solid #facc15; display: none; }
+        .page.active { display: block; }
+        .btn { padding: 12px; border-radius: 30px; font-weight: bold; border: none; cursor: pointer; width: 100%; margin-top: 10px; font-size: 16px; }
+        .btn-gold { background: #facc15; color: #1e293b; }
+        .btn-admin { background: #8b5cf6; color: white; }
+        .btn-red { background: #dc2626; color: white; }
+        .btn-gray { background: #475569; color: white; }
+        .btn-excel { background: #1d7e3a; color: white; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 30px; border: none; background: #f1f5f9; text-align: right; }
+        .welcome-box { background: linear-gradient(135deg, #facc15, #ff8c00); color: #1e293b; padding: 20px; border-radius: 30px; text-align: center; margin-bottom: 20px; }
+        .logo { text-align: center; font-size: 48px; margin-bottom: 20px; }
+        table { width: 100%; color: white; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #334155; text-align: center; }
+        .status { background: #0f172a; padding: 15px; border-radius: 20px; margin: 10px 0; text-align: center; color: #facc15; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- صفحة التسجيل -->
+<div id="pageRegister" class="page active">
+    <div class="logo">🌟</div>
+    <div class="welcome-box"><h2>🌟 منصة محمد زايد 🌟</h2><p>يرجى إكمال التسجيل</p></div>
+    
+    <input type="text" id="regName" placeholder="الاسم الكامل *">
+    <input type="email" id="regEmail" placeholder="البريد الإلكتروني *">
+    <input type="tel" id="regWhatsapp" placeholder="واتساب *">
+    <input type="text" id="regCountry" placeholder="البلد *">
+    <input type="password" id="regKey" placeholder="مفتاح الدخول" value="00001">
+    
+    <button class="btn btn-gold" onclick="registerUser()">🔑 دخول إلى المنصة</button>
+    <button class="btn btn-admin" onclick="showAdminLogin()">👑 دخول المشرف</button>
+    
+    <div class="status">💻 تصميم: محمد زايد</div>
+</div>
+
+<!-- الصفحة الرئيسية -->
+<div id="pageHome" class="page">
+    <div class="logo">🌟</div>
+    <div class="welcome-box"><h2>🌟 مرحباً <span id="welcomeName"></span> 🌟</h2></div>
+    <button class="btn btn-gray" onclick="showProfile()">👤 ملفي الشخصي</button>
+    <button class="btn btn-red" onclick="logout()">🚪 تسجيل الخروج</button>
+</div>
+
+<!-- صفحة تسجيل الدخول للمشرف -->
+<div id="pageAdminLogin" class="page">
+    <div class="welcome-box"><h2>👑 دخول المشرف</h2></div>
+    <input type="password" id="adminPassInput" placeholder="كلمة مرور المشرف">
+    <button class="btn btn-admin" onclick="enterAdmin()">🔓 دخول</button>
+    <button class="btn btn-gray" onclick="showRegister()">🔙 العودة</button>
+</div>
+
+<!-- لوحة تحكم المشرف -->
+<div id="pageAdmin" class="page">
+    <div class="welcome-box"><h2>👑 لوحة تحكم المشرف</h2></div>
+    
+    <div style="margin-bottom:20px;">
+        <button class="btn btn-gray" onclick="showAdminUsers()" style="margin-bottom:10px;">👥 عرض المستخدمين</button>
+        <button class="btn btn-gray" onclick="showAdminKeys()">🔑 إدارة المفاتيح</button>
+    </div>
+    
+    <div id="adminUsersPanel">
+        <div id="adminStats" class="status"></div>
+        <div id="adminUsersList" style="max-height: 400px; overflow-y: auto; margin: 15px 0;"></div>
+        <button class="btn btn-excel" onclick="exportToExcel()">📊 تصدير إلى Excel</button>
+        <button class="btn btn-red" onclick="deleteAllUsers()">🗑️ مسح جميع المستخدمين</button>
+    </div>
+    
+    <div id="adminKeysPanel" style="display:none;">
+        <div style="background:#0f172a; padding:15px; border-radius:20px;">
+            <h3 style="color:#facc15;">المفاتيح الحالية</h3>
+            <div id="keysList" style="margin:10px 0;"></div>
+            <input type="text" id="newKeyInput" placeholder="مفتاح جديد">
+            <button class="btn btn-gold" onclick="addNewKey()">➕ إضافة مفتاح</button>
+            <input type="password" id="newAdminPassInput" placeholder="كلمة مرور جديدة للمشرف" style="margin-top:15px;">
+            <button class="btn btn-gold" onclick="changeAdminPassword()">🔒 تغيير كلمة المرور</button>
+        </div>
+    </div>
+    
+    <button class="btn btn-red" onclick="logoutAdmin()" style="margin-top:15px;">🚪 خروج</button>
+</div>
+
+</div>
+
+<script>
+// ======================= البيانات الأساسية =======================
+let currentUser = null;
+
+// تحميل المفاتيح من localStorage
+let validKeys = JSON.parse(localStorage.getItem('validKeys'));
+if(!validKeys) {
+    validKeys = ['00001'];
+    localStorage.setItem('validKeys', JSON.stringify(validKeys));
+}
+
+// تحميل كلمة مرور المشرف
+let adminPassword = localStorage.getItem('adminPass');
+if(!adminPassword) {
+    adminPassword = '000012';
+    localStorage.setItem('adminPass', adminPassword);
+}
+
+// ======================= دوال التسجيل =======================
+function registerUser() {
+    console.log("بدء التسجيل...");
+    
+    let name = document.getElementById('regName').value.trim();
+    let email = document.getElementById('regEmail').value.trim();
+    let whatsapp = document.getElementById('regWhatsapp').value.trim();
+    let country = document.getElementById('regCountry').value.trim();
+    let key = document.getElementById('regKey').value.trim();
+    
+    if(!name || !email || !whatsapp || !country) {
+        alert("❌ أكمل جميع الحقول");
+        return;
+    }
+    
+    if(!validKeys.includes(key)) {
+        alert("❌ مفتاح خاطئ. المفتاح الصحيح هو: 00001");
+        return;
+    }
+    
+    // إنشاء بيانات المستخدم الجديد
+    let newUser = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        whatsapp: whatsapp,
+        country: country,
+        date: new Date().toLocaleString()
+    };
+    
+    // تحميل المستخدمين الحاليين
+    let allUsers = JSON.parse(localStorage.getItem('allUsers'));
+    if(!allUsers) allUsers = [];
+    
+    // إضافة المستخدم الجديد
+    allUsers.push(newUser);
+    localStorage.setItem('allUsers', JSON.stringify(allUsers));
+    
+    // حفظ المستخدم الحالي
+    currentUser = newUser;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+    // عرض الترحيب
+    document.getElementById('welcomeName').innerHTML = currentUser.name;
+    
+    // الانتقال إلى الصفحة الرئيسية
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('pageHome').classList.add('active');
+    
+    alert("✅ مرحباً " + name + "! تم تسجيل الدخول بنجاح.");
+    console.log("تم التسجيل بنجاح، عدد المستخدمين:", allUsers.length);
+}
+
+// ======================= دوال المشرف =======================
+function loadAdminUsers() {
+    let allUsers = JSON.parse(localStorage.getItem('allUsers'));
+    if(!allUsers) allUsers = [];
+    
+    document.getElementById('adminStats').innerHTML = `👥 إجمالي المسجلين: ${allUsers.length}`;
+    
+    if(allUsers.length === 0) {
+        document.getElementById('adminUsersList').innerHTML = '<p style="text-align:center; color:#aaa;">لا يوجد مستخدمين مسجلين</p>';
+        return;
+    }
+    
+    let html = '<table>';
+    html += '<tr style="background:#334155;"><th>#</th><th>الاسم</th><th>البريد</th><th>واتساب</th><th>البلد</th><th>التاريخ</th></tr>';
+    
+    for(let i = 0; i < allUsers.length; i++) {
+        let user = allUsers[i];
+        html += `<tr>
+                    <td>${i+1}</td>
+                    <td>${user.name || '-'}</td>
+                    <td>${user.email || '-'}</td>
+                    <td>${user.whatsapp || '-'}</td>
+                    <td>${user.country || '-'}</td>
+                    <td>${user.date || '-'}</td>
+                </tr>`;
+    }
+    html += '</table>';
+    document.getElementById('adminUsersList').innerHTML = html;
+}
+
+function showAdminUsers() {
+    document.getElementById('adminUsersPanel').style.display = 'block';
+    document.getElementById('adminKeysPanel').style.display = 'none';
+    loadAdminUsers();
+}
+
+function showAdminKeys() {
+    document.getElementById('adminUsersPanel').style.display = 'none';
+    document.getElementById('adminKeysPanel').style.display = 'block';
+    loadAdminKeys();
+}
+
+function loadAdminKeys() {
+    let keys = JSON.parse(localStorage.getItem('validKeys'));
+    if(!keys) keys = ['00001'];
+    validKeys = keys;
+    
+    let html = '';
+    for(let i = 0; i < keys.length; i++) {
+        html += `<span style="background:#facc15; color:#1e293b; padding:5px 12px; border-radius:20px; margin:5px; display:inline-block;">🔑 ${keys[i]}</span>`;
+    }
+    document.getElementById('keysList').innerHTML = html;
+}
+
+// ======================= تصدير إلى Excel =======================
+function exportToExcel() {
+    let allUsers = JSON.parse(localStorage.getItem('allUsers'));
+    if(!allUsers) allUsers = [];
+    
+    if(allUsers.length === 0) {
+        alert("لا يوجد مستخدمين للتصدير");
+        return;
+    }
+    
+    let data = [["#", "الاسم", "البريد", "واتساب", "البلد", "التاريخ"]];
+    for(let i = 0; i < allUsers.length; i++) {
+        data.push([i+1, allUsers[i].name, allUsers[i].email, allUsers[i].whatsapp, allUsers[i].country, allUsers[i].date]);
+    }
+    
+    let ws = XLSX.utils.aoa_to_sheet(data);
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "المستخدمين");
+    XLSX.writeFile(wb, `users_${new Date().toLocaleDateString()}.xlsx`);
+    alert("✅ تم التصدير");
+}
+
+// ======================= حذف جميع المستخدمين =======================
+function deleteAllUsers() {
+    if(!confirm("⚠️ هل أنت متأكد من حذف جميع المستخدمين نهائياً؟")) return;
+    
+    localStorage.setItem('allUsers', JSON.stringify([]));
+    alert("✅ تم حذف جميع المستخدمين");
+    loadAdminUsers();
+}
+
+// ======================= إدارة المفاتيح =======================
+function addNewKey() {
+    let newKey = document.getElementById('newKeyInput').value.trim();
+    if(!newKey) {
+        alert("❌ أدخل مفتاحاً");
+        return;
+    }
+    
+    let keys = JSON.parse(localStorage.getItem('validKeys'));
+    if(!keys) keys = ['00001'];
+    
+    if(keys.includes(newKey)) {
+        alert("❌ المفتاح موجود بالفعل");
+        return;
+    }
+    
+    keys.push(newKey);
+    localStorage.setItem('validKeys', JSON.stringify(keys));
+    validKeys = keys;
+    loadAdminKeys();
+    document.getElementById('newKeyInput').value = '';
+    alert(`✅ تم إضافة المفتاح: ${newKey}`);
+}
+
+function changeAdminPassword() {
+    let newPass = document.getElementById('newAdminPassInput').value.trim();
+    if(!newPass) {
+        alert("❌ أدخل كلمة مرور جديدة");
+        return;
+    }
+    
+    localStorage.setItem('adminPass', newPass);
+    adminPassword = newPass;
+    alert("✅ تم تغيير كلمة مرور المشرف");
+    document.getElementById('newAdminPassInput').value = '';
+}
+
+// ======================= دوال التنقل =======================
+function showRegister() {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('pageRegister').classList.add('active');
+}
+
+function showAdminLogin() {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('pageAdminLogin').classList.add('active');
+}
+
+function showProfile() {
+    if(currentUser) {
+        alert(`👤 ${currentUser.name}\n📧 ${currentUser.email}\n📱 ${currentUser.whatsapp}\n🌍 ${currentUser.country}`);
+    } else {
+        alert("الرجاء تسجيل الدخول أولاً");
+    }
+}
+
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    showRegister();
+}
+
+function logoutAdmin() {
+    showRegister();
+}
+
+function enterAdmin() {
+    let pass = document.getElementById('adminPassInput').value;
+    if(pass === adminPassword) {
+        showAdminUsers();
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('pageAdmin').classList.add('active');
+    } else {
+        alert("❌ كلمة مرور خاطئة");
+    }
+}
+
+// ======================= استعادة الجلسة =======================
+let savedUser = localStorage.getItem('currentUser');
+if(savedUser) {
+    try {
+        currentUser = JSON.parse(savedUser);
+        document.getElementById('welcomeName').innerHTML = currentUser.name;
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('pageHome').classList.add('active');
+    } catch(e) {
+        showRegister();
+    }
+}
+
+console.log("✅ المنصة جاهزة");
+console.log("✅ مفتاح الدخول: 00001");
+console.log("✅ كلمة مرور المشرف: 000012");
+</script>
+</body>
+</html>
