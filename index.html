@@ -6070,6 +6070,114 @@ window.addEventListener('click', (e) => {
 </style>
     
 </body>
- 
+ <!-- 🔧 إصلاح دوال المشرف -->
+<script>
+(function() {
+    console.log('🔧 تفعيل إصلاح المشرف...');
+
+    window.showAdminLogin = function() {
+        document.querySelectorAll('.container > div[id^="page"]').forEach(p => p.classList.add('hide'));
+        const page = document.getElementById('pageAdminLogin');
+        if (page) page.classList.remove('hide');
+        const inp = document.getElementById('adminPassInput');
+        if (inp) { inp.value = ''; inp.focus(); }
+        const err = document.getElementById('adminErrorMsg');
+        if (err) err.style.display = 'none';
+    };
+
+    window.enterAdmin = async function() {
+        const p = document.getElementById('adminPassInput').value.trim();
+        const e = document.getElementById('adminErrorMsg');
+        if (p !== '012345') {
+            if (e) { e.style.display = 'block'; e.innerHTML = '❌ كلمة المرور غير صحيحة'; }
+            document.getElementById('adminPassInput').value = '';
+            return;
+        }
+        if (e) e.style.display = 'none';
+        document.getElementById('adminPassInput').value = '';
+        window.isAdminMode = true;
+        window.userStatus = 'admin';
+        if (window.updateUserBanner) window.updateUserBanner();
+        try { await window.loadFirebaseData(); await window.loadAdminPanel(); } catch(err) {}
+        document.querySelectorAll('.container > div[id^="page"]').forEach(x => x.classList.add('hide'));
+        const pa = document.getElementById('pageAdmin');
+        if (pa) pa.classList.remove('hide');
+    };
+
+    window.loadFirebaseData = async function() {
+        try {
+            if (window.fbGetAllUsers) window.allUsersCache = await window.fbGetAllUsers();
+            if (window.fbGetAllSubscriptions) window.allSubsCache = await window.fbGetAllSubscriptions();
+        } catch (e) { console.warn(e); }
+    };
+
+    window.loadAdminPanel = async function() {
+        const statsEl = document.getElementById('adminStats');
+        const listEl = document.getElementById('adminUsersList');
+        const visitorsEl = document.getElementById('adminVisitorsList');
+        if (!statsEl || !listEl) return;
+        const users = window.allUsersCache || [];
+        const subs = users.filter(u => u.subscribed).length;
+        const blocked = users.filter(u => (u.loginCount || 0) > 2 && !u.subscribed).length;
+        statsEl.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;"><div style="background:#3b82f6;color:white;padding:12px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:900;">' + users.length + '</div><div style="font-size:12px;">👥 مسجل</div></div><div style="background:#22c55e;color:white;padding:12px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:900;">' + subs + '</div><div style="font-size:12px;">💎 مشترك</div></div><div style="background:#dc2626;color:white;padding:12px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:900;">' + blocked + '</div><div style="font-size:12px;">🚫 استنفد</div></div></div>';
+        if (users.length === 0) { listEl.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا مسجلين بعد</p>'; }
+        else {
+            listEl.innerHTML = users.map((u, i) => {
+                const lc = u.loginCount || 0;
+                const ib = lc > 2 && !u.subscribed;
+                const bc = u.subscribed ? '#22c55e' : (ib ? '#dc2626' : '#3b82f6');
+                return '<div style="background:#f8fafc;padding:14px;border-radius:12px;margin-bottom:10px;border-right:4px solid ' + bc + ';color:#0f172a;"><div style="font-weight:900;color:#dc2626;font-size:15px;">' + (i+1) + '. ' + (u.name || '-') + (ib ? ' 🚫' : '') + '</div><div style="font-size:12px;color:#475569;margin-top:4px;">📧 ' + (u.email || '-') + ' • 📱 ' + (u.whatsapp || '-') + '</div><div style="font-size:12px;color:#475569;">💼 ' + (u.profession || '-') + ' • 🎯 ' + (u.specialty || '-') + '</div><div style="font-size:11px;color:#94a3b8;margin-top:4px;">🌍 ' + (u.country || '-') + ' • 🏷️ ' + (u.category || '-') + ' • 🔢 دخولات: ' + lc + '</div><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;"><button onclick="toggleSubscribe(\'' + u.firebaseId + '\',' + !u.subscribed + ')" style="background:' + (u.subscribed ? '#dc2626' : '#22c55e') + ';color:white;border:none;padding:5px 12px;border-radius:15px;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;font-weight:bold;">' + (u.subscribed ? '⬇️ إلغاء' : '💎 ترقية') + '</button><button onclick="resetUserLogins(\'' + u.firebaseId + '\')" style="background:#f59e0b;color:white;border:none;padding:5px 12px;border-radius:15px;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;font-weight:bold;">🔄 تصفير (' + lc + ')</button><button onclick="deleteUser(\'' + u.firebaseId + '\')" style="background:#64748b;color:white;border:none;padding:5px 12px;border-radius:15px;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;font-weight:bold;">🗑️ حذف</button></div></div>';
+            }).join('');
+        }
+        if (visitorsEl && window.fbGetAllVisitors) {
+            try {
+                const visitors = await window.fbGetAllVisitors();
+                visitorsEl.innerHTML = '<h3 style="color:#8b5cf6; margin-top:20px; text-align:center; font-weight:900; padding:12px; background:rgba(139,92,246,0.1); border-radius:12px;">👀 آخر الزوار (' + visitors.length + ')</h3><div style="background:#1e293b; padding:12px; border-radius:12px; margin-top:10px;">' + visitors.map(v => '<div style="padding:8px; border-bottom:1px solid #334155; color:#e2e8f0; font-size:13px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;"><span>📱 ' + (v.device || '-') + ' • 🌐 ' + (v.browser || '-') + ' • 💻 ' + (v.os || '-') + '</span><span style="color:#94a3b8;">' + (v.visitedAt ? new Date(v.visitedAt.seconds*1000).toLocaleString('ar-EG') : '-') + '</span></div>').join('') + '</div>';
+            } catch(e) { console.warn(e); }
+        }
+    };
+
+    window.toggleSubscribe = async function(userId, sub) {
+        try { await window.fbSaveSubscription(userId, { subscribed: sub }); alert(sub ? '💎 تم الترقية' : '⬇️ تم الإلغاء'); await window.loadFirebaseData(); await window.loadAdminPanel(); } catch (e) { alert('⚠️ خطأ'); }
+    };
+    window.resetUserLogins = async function(userId) {
+        if (!confirm('تصفير دخولات هذا المستخدم؟')) return;
+        try { await window.fbSaveSubscription(userId, { loginCount: 0, blocked: false }); alert('✅ تم'); await window.loadFirebaseData(); await window.loadAdminPanel(); } catch (e) { alert('⚠️ خطأ'); }
+    };
+    window.deleteUser = async function(userId) {
+        if (!confirm('حذف هذا المستخدم؟')) return;
+        try { await window.fbDeleteUser(userId); alert('🗑️ تم'); await window.loadFirebaseData(); await window.loadAdminPanel(); } catch (e) { alert('⚠️ خطأ'); }
+    };
+    window.adminGoToSections = function() {
+        document.querySelectorAll('.container > div[id^="page"]').forEach(p => p.classList.add('hide'));
+        document.getElementById('pageHome').classList.remove('hide');
+        document.getElementById('welcomeName').textContent = 'المشرف العام';
+    };
+    window.adminRefresh = async function() {
+        const btn = event.target;
+        const o = btn.textContent;
+        btn.textContent = '⏳...';
+        btn.disabled = true;
+        await window.loadFirebaseData();
+        await window.loadAdminPanel();
+        btn.textContent = '✅ تم';
+        setTimeout(() => { btn.textContent = o; btn.disabled = false; }, 800);
+    };
+    window.logoutAdmin = function() {
+        if (!confirm('الخروج من لوحة المشرف؟')) return;
+        window.isAdminMode = false;
+        window.userStatus = window.currentUser ? (window.currentUser.subscribed ? 'subscriber' : 'registered') : 'visitor';
+        if (window.updateUserBanner) window.updateUserBanner();
+        document.querySelectorAll('.container > div[id^="page"]').forEach(p => p.classList.add('hide'));
+        document.getElementById('pageWelcome').classList.remove('hide');
+    };
+    window.confirmReset = function() {
+        const c = prompt('1 = تصفير محاولات الزائر\n2 = حذف الكل\nاختر:');
+        if (c === '1') { localStorage.setItem('visitorAttempts', '0'); alert('✅ تم'); }
+    };
+
+    console.log('✅ إصلاح المشرف جاهز');
+})();
+</script>
 </html>
 <!-- ✅ نهاية الجزء 10 — اكتمل الملف -->
