@@ -4573,7 +4573,7 @@ async function loadAdminPanel() {
     if (visitorsEl && window.fbGetAllVisitors) {
         try {
             const visitors = await window.fbGetAllVisitors();
-            visitorsEl.innerHTML = `<h3 style="color:#8b5cf6; margin-top:20px; text-align:center; font-weight:900; padding:12px; background:rgba(139,92,246,0.1); border-radius:12px;">👀 آخر الزوار (${visitors.length})</h3><div style="max-height:300px; overflow-y:auto; background:#1e293b; padding:12px; border-radius:12px; margin-top:10px;">${visitors..map(v => `<div style="padding:8px; border-bottom:1px solid #334155; color:#e2e8f0; font-size:13px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;"><span>📱 ${v.device || '-'} • 🌐 ${v.browser || '-'} • 💻 ${v.os || '-'}</span><span style="color:#94a3b8;">${v.visitedAt ? new Date(v.visitedAt.seconds*1000).toLocaleString('ar-EG') : '-'}</span></div>`).join('')}</div>`;
+            visitorsEl.innerHTML = `<h3 style="color:#8b5cf6; margin-top:20px; text-align:center; font-weight:900; padding:12px; background:rgba(139,92,246,0.1); border-radius:12px;">👀 آخر الزوار (${visitors.length})</h3><div style="max-height:300px; overflow-y:auto; background:#1e293b; padding:12px; border-radius:12px; margin-top:10px;">${visitors.map(v => `<div style="padding:8px; border-bottom:1px solid #334155; color:#e2e8f0; font-size:13px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;"><span>📱 ${v.device || '-'} • 🌐 ${v.browser || '-'} • 💻 ${v.os || '-'}</span><span style="color:#94a3b8;">${v.visitedAt ? new Date(v.visitedAt.seconds*1000).toLocaleString('ar-EG') : '-'}</span></div>`).join('')}</div>`;
         } catch(e) { console.warn(e); }
     }
 }
