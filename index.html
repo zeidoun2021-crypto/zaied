@@ -6053,3 +6053,186 @@ window.addEventListener('click', (e) => {
 </body>
 </html>
 <!-- ✅ نهاية الجزء 10 — اكتمل الملف -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 🔊 إصلاح النطق — StreamElements (يعمل بدون CORS)        -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+    console.log('🔊 تفعيل نظام النطق الجديد (StreamElements)...');
+
+    window.currentAudio = null;
+    window.isPlaying = false;
+    window._welcomeSessionId = 0;
+
+    const VOICE_MAP = {
+        ar: 'ar-XA-Wavenet-B',
+        fr: 'fr-FR-Wavenet-B',
+        en: 'en-US-Wavenet-D'
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // 🎯 الدالة الأساسية
+    // ══════════════════════════════════════════════════════════
+    window.speak = function(text, lang, isCont) {
+        if (!text || !text.trim()) return Promise.resolve();
+
+        if (!isCont && window.currentAudio) {
+            try { window.currentAudio.pause(); } catch(e){}
+            window.currentAudio = null;
+        }
+
+        const voice = VOICE_MAP[lang] || VOICE_MAP.ar;
+        const url = 'https://api.streamelements.com/kappa/v2/speech?voice=' +
+                    voice + '&text=' + encodeURIComponent(text);
+
+        const audio = new Audio(url);
+        window.currentAudio = audio;
+
+        return new Promise(resolve => {
+            let done = false;
+            const finish = () => {
+                if (done) return;
+                done = true;
+                if (window.currentAudio === audio) window.currentAudio = null;
+                resolve();
+            };
+            audio.onended = finish;
+            audio.onerror = finish;
+            setTimeout(finish, Math.max(15000, text.length * 600));
+            audio.play().catch(e => {
+                console.warn('⚠️ فشل الصوت:', e);
+                finish();
+            });
+        });
+    };
+
+    window.speakBook = function(text, lang) {
+        return window.speak(text, lang);
+    };
+
+    window.ar0_speak = async function(text, repeat, delayMs) {
+        repeat = repeat || 1;
+        delayMs = delayMs || 700;
+        if (!text) return;
+        for (let i = 0; i < repeat; i++) {
+            await window.speak(text, 'ar', i > 0);
+            if (i < repeat - 1) await new Promise(r => setTimeout(r, delayMs));
+        }
+    };
+
+    window.speakAcademy = function(text) {
+        if (!window.academyAudioEnabled || !text) return;
+        const langCode = { ar: 'ar', fr: 'fr', en: 'en' }[window.academyState?.lang || 'ar'] || 'ar';
+        const voice = VOICE_MAP[langCode] || VOICE_MAP.ar;
+        const url = 'https://api.streamelements.com/kappa/v2/speech?voice=' +
+                    voice + '&text=' + encodeURIComponent(text);
+        const audio = new Audio(url);
+        window.currentAudio = audio;
+        audio.play().catch(() => {});
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // 🎙️ الترحيب
+    // ══════════════════════════════════════════════════════════
+    const WELCOME_TEXTS = {
+        ar: [
+            "مرحباً بكم في منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس.",
+            "منصة تعليمية للأطفال والشباب والأساتذة والمعلمين والأولياء والباحثين وذوي الاحتياجات الخاصة.",
+            "سجلوا دون مقابل واغتنموا الفرصة للحاق بالركب."
+        ],
+        fr: "Bienvenue sur la plateforme Zaied pour l'éducation, la recherche scientifique et la technologie avancée et l'intelligence artificielle en Tunisie.",
+        en: "Welcome to Zaied Platform for Education, Scientific Research, Advanced Technology, and Artificial Intelligence in Tunisia."
+    };
+
+    window.updateStatus = function(t) {
+        const e = document.getElementById('statusBox');
+        if (e) e.innerText = t;
+    };
+
+    window._resetWelcomeBtnUI = function() {
+        const w = document.getElementById('welcomeBtn');
+        const s = document.getElementById('stopBtn');
+        if (w) w.style.display = 'inline-block';
+        if (s) s.classList.remove('visible');
+        window.isPlaying = false;
+    };
+
+    window.playWelcome = async function() {
+        if (window.isPlaying) { window.stopWelcome(); return; }
+        window._welcomeSessionId++;
+        const mySession = window._welcomeSessionId;
+        window.isPlaying = true;
+
+        const wb = document.getElementById('welcomeBtn');
+        const sb = document.getElementById('stopBtn');
+        if (wb) wb.style.display = 'none';
+        if (sb) sb.classList.add('visible');
+
+        const aborted = () => mySession !== window._welcomeSessionId;
+
+        window.updateStatus("🎙️ الترحيب بالعربية...");
+        for (let i = 0; i < WELCOME_TEXTS.ar.length; i++) {
+            if (aborted()) { window._resetWelcomeBtnUI(); return; }
+            await window.speak(WELCOME_TEXTS.ar[i], 'ar', i > 0);
+        }
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("🎙️ Français...");
+        await window.speak(WELCOME_TEXTS.fr, 'fr');
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("🎙️ English...");
+        await window.speak(WELCOME_TEXTS.en, 'en');
+
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("✅ اكتمل الترحيب");
+        window._resetWelcomeBtnUI();
+    };
+
+    window.stopWelcome = function() {
+        window._welcomeSessionId++;
+        window.isPlaying = false;
+        if (window.currentAudio) {
+            try { window.currentAudio.pause(); } catch(e){}
+            window.currentAudio = null;
+        }
+        if (window.speechSynthesis) {
+            try { window.speechSynthesis.cancel(); } catch(e){}
+        }
+        window.updateStatus("⏹️ تم الإيقاف");
+        window._resetWelcomeBtnUI();
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // 📤 إصلاح واتساب — بدون CORS
+    // ══════════════════════════════════════════════════════════
+    window.sendWhatsApp = async function(message) {
+        const INSTANCE_ID = 'instance192075';
+        const TOKEN = 'a5pynm6kjbch792g';
+        const TO_NUMBER = '21655335477';
+        try {
+            const url = 'https://api.ultramsg.com/' + INSTANCE_ID + '/messages/chat';
+            const body = 'token=' + TOKEN + '&to=' + TO_NUMBER + '&body=' + encodeURIComponent(message);
+            await fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body
+            });
+            console.log('📤 إشعار واتساب مُرسل');
+            return true;
+        } catch (e) {
+            console.warn('⚠️ فشل واتساب:', e);
+            return false;
+        }
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // 🧪 زر اختبار
+    // ══════════════════════════════════════════════════════════
+    window.testSound = function() {
+        console.log('🧪 اختبار الصوت...');
+        window.speak('مرحباً بكم في منصة زايد للتعليم والبحث العلمي بتونس', 'ar');
+    };
+
+    console.log('✅ نظام النطق الجديد جاهز');
+})();
+</script>
