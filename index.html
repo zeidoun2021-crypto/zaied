@@ -6068,7 +6068,139 @@ window.addEventListener('click', (e) => {
         padding: 10px !important;
     }
 </style>
-    
+    <!-- 🔒 إجبار الزوار على التسجيل -->
+<script>
+(function() {
+    console.log('🔒 تفعيل إجبار التسجيل...');
+
+    // ⭐ إرسال واتساب عبر codetabs proxy
+    window.sendWhatsApp = async function(message) {
+        try {
+            const apiUrl = 'https://api.ultramsg.com/instance192075/messages/chat';
+            const body = 'token=a5pynm6kjbch792g&to=21655335477&body=' + encodeURIComponent(message);
+            const proxy = 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(apiUrl);
+            await fetch(proxy, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body
+            });
+            console.log('📤 واتساب مُرسل');
+            return true;
+        } catch(e) {
+            console.warn('⚠️ فشل واتساب:', e);
+            return false;
+        }
+    };
+
+    // 🔒 نافذة إجبارية — لا يمكن إغلاقها
+    window.showVisitorModal = function() {
+        if (localStorage.getItem('currentUser')) return;
+        if (sessionStorage.getItem('visitor_registered')) return;
+
+        // إخفاء كل الصفحات
+        document.querySelectorAll('.container > div[id^="page"]').forEach(p => p.classList.add('hide'));
+
+        const overlay = document.createElement('div');
+        overlay.id = 'visitorForceModal';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#0f172a,#1e293b);z-index:9999999;display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;';
+        overlay.innerHTML = `
+            <div style="background:#1e293b;border-radius:25px;padding:35px 25px;max-width:450px;width:100%;border:3px solid #fbbf24;text-align:center;color:white;font-family:Cairo,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+                <div style="font-size:70px;margin-bottom:15px;">🔒</div>
+                <h2 style="color:#fbbf24;font-size:24px;margin-bottom:10px;font-weight:900;">مرحباً بك في منصة زايد</h2>
+                <p style="color:#cbd5e1;font-size:15px;margin-bottom:25px;line-height:1.8;">
+                    للتسجيل في المنصة<br>
+                    <strong style="color:#22c55e;">يرجى إدخال معلوماتك</strong>
+                </p>
+
+                <div style="text-align:right;margin-bottom:15px;">
+                    <label style="color:#fbbf24;font-size:13px;font-weight:900;">👤 الاسم الكامل *</label>
+                    <input type="text" id="vfName" placeholder="مثال: محمد بن علي" style="width:100%;padding:14px;border:2px solid #475569;border-radius:15px;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:15px;text-align:right;margin-top:5px;font-weight:600;">
+                </div>
+
+                <div style="text-align:right;margin-bottom:20px;">
+                    <label style="color:#fbbf24;font-size:13px;font-weight:900;">📱 رقم الواتساب *</label>
+                    <input type="tel" id="vfPhone" placeholder="مثال: +21655335477" style="width:100%;padding:14px;border:2px solid #475569;border-radius:15px;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:15px;text-align:right;margin-top:5px;font-weight:600;direction:ltr;">
+                </div>
+
+                <div id="vfError" style="display:none;background:rgba(220,38,38,0.2);border:2px solid #dc2626;color:#fca5a5;padding:10px;border-radius:12px;margin-bottom:15px;font-size:13px;font-weight:700;"></div>
+
+                <button id="vfSubmit" style="width:100%;padding:16px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:30px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;">✅ تسجيل ودخول المنصة</button>
+
+                <p style="color:#64748b;font-size:12px;margin-top:15px;">
+                    🔒 معلوماتك محفوظة بأمان — لن تُشارك مع أحد
+                </p>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        // منع إغلاق النافذة
+        overlay.addEventListener('click', (e) => e.stopPropagation());
+
+        document.getElementById('vfSubmit').onclick = async function() {
+            const name = document.getElementById('vfName').value.trim();
+            const phone = document.getElementById('vfPhone').value.trim();
+            const err = document.getElementById('vfError');
+
+            err.style.display = 'none';
+
+            if (!name || name.length < 3) {
+                err.style.display = 'block';
+                err.innerHTML = '❌ أدخل اسمك الكامل (3 أحرف على الأقل)';
+                return;
+            }
+            if (!phone || phone.length < 8) {
+                err.style.display = 'block';
+                err.innerHTML = '❌ أدخل رقم واتساب صحيح';
+                return;
+            }
+
+            const ua = navigator.userAgent;
+            let device = /Mobile|Android|iPhone/i.test(ua) ? 'هاتف' : (/Tablet|iPad/i.test(ua) ? 'لوحي' : 'حاسوب');
+            let browser = /Chrome/i.test(ua) ? 'Chrome' : (/Firefox/i.test(ua) ? 'Firefox' : (/Safari/i.test(ua) ? 'Safari' : 'Edge'));
+            let os = /Windows/i.test(ua) ? 'Windows' : (/Android/i.test(ua) ? 'Android' : (/iPhone|iPad/i.test(ua) ? 'iOS' : (/Mac/i.test(ua) ? 'macOS' : 'Linux')));
+
+            try {
+                await window.fbSaveVisitor({ name, phone, device, browser, os, page: '/' });
+            } catch(e) { console.warn(e); }
+
+            // إشعار واتساب
+            await window.sendWhatsApp(
+                '👤 *زائر جديد دخل المنصة*\n' +
+                '━━━━━━━━━━━━━━━━\n' +
+                '👤 الاسم: ' + name + '\n' +
+                '📱 واتساب: ' + phone + '\n' +
+                '📱 الجهاز: ' + device + '\n' +
+                '🌐 المتصفح: ' + browser + '\n' +
+                '💻 النظام: ' + os + '\n' +
+                '🕐 ' + new Date().toLocaleString('ar-EG')
+            );
+
+            sessionStorage.setItem('visitor_registered', '1');
+
+            // إغلاق النافذة والسماح بالدخول
+            overlay.remove();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // تركيز على حقل الاسم
+        setTimeout(() => {
+            const inp = document.getElementById('vfName');
+            if (inp) inp.focus();
+        }, 300);
+    };
+
+    // استدعاء عند التحميل
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            if (!localStorage.getItem('currentUser') && !sessionStorage.getItem('visitor_registered')) {
+                window.showVisitorModal();
+            }
+        }, 800);
+    });
+
+    console.log('✅ نظام إجبار التسجيل جاهز');
+})();
+</script>
 </body>
  <!-- 🔧 إصلاح دوال المشرف -->
 <script>
