@@ -6051,5 +6051,22 @@ window.addEventListener('click', (e) => {
 <!-- 🔊 زر اختبار عائم -->
 <button onclick="testSound()" style="position:fixed;bottom:80px;right:10px;z-index:99999;background:#dc2626;color:white;padding:12px 20px;border-radius:25px;border:3px solid #fbbf24;font-weight:900;cursor:pointer;font-family:'Cairo',sans-serif;box-shadow:0 5px 20px rgba(0,0,0,0.4);">🔊 اختبار الصوت</button>
 </body>
+    <!-- ⭐ إصلاح عرض الزوار — كلهم ظاهرين في الصفحة -->
+<style>
+    /* إزالة القيد من إطار الزوار */
+    #adminVisitorsList > div {
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+    #adminVisitorsList {
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+    /* جعل كل زائر واضح */
+    #adminVisitorsList > div > div {
+        font-size: 14px !important;
+        padding: 10px !important;
+    }
+</style>
 </html>
 <!-- ✅ نهاية الجزء 10 — اكتمل الملف -->
