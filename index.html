@@ -2890,5 +2890,113 @@ console.log('✅ كل شيء جاهز');
     console.log('✅ قارئ الشرائح جاهز');
 })();
 </script>
+	<script>
+// 🔊 إضافة زر نطق في كل شريحة من الكتاب
+(function() {
+    console.log('🔊 إضافة أزرار النطق...');
+    
+    let _voices = [];
+    function loadV() {
+        if (!window.speechSynthesis) return;
+        try { _voices = speechSynthesis.getVoices() || []; } catch(e){ _voices = []; }
+    }
+    loadV();
+    if (window.speechSynthesis) {
+        speechSynthesis.onvoiceschanged = loadV;
+        setTimeout(loadV, 500);
+        setTimeout(loadV, 1500);
+    }
+
+    // دالة النطق
+    window.speak = function(text, lang) {
+        if (!text || !text.trim()) return;
+        try { speechSynthesis.cancel(); } catch(e){}
+        const code = lang === 'fr' ? 'fr-FR' : (lang === 'en' ? 'en-US' : 'ar-SA');
+        setTimeout(function() {
+            try {
+                if (_voices.length === 0) loadV();
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = code;
+                const v = _voices.find(x => x.lang && x.lang.includes(code.split('-')[0]));
+                if (v) u.voice = v;
+                u.rate = 0.9;
+                speechSynthesis.speak(u);
+            } catch(e) {}
+        }, 100);
+    };
+    window.speakBook = window.speak;
+    window.ar0_speak = async function(t, r) {
+        r = r || 1;
+        for (let i = 0; i < r; i++) {
+            window.speak(t, 'ar');
+            if (i < r - 1) await new Promise(x => setTimeout(x, 700));
+        }
+    };
+    window.speakAcademy = function(t) { window.speak(t, 'ar'); };
+    window.stopAllAudio = function() { try { speechSynthesis.cancel(); } catch(e){} };
+
+    // استخراج نص الشريحة
+    function getText(slide) {
+        let text = '';
+        // العنوان
+        const title = slide.querySelector('.book-slide-title, .slide-card > div:nth-child(2), .term-title');
+        if (title) text += title.textContent.trim() + '. ';
+        // الحوار والنصوص
+        slide.querySelectorAll('.dialogue > div, .book-text, .children, .computer, .definition-text, .translation-box').forEach(el => {
+            const t = (el.textContent || '').trim();
+            if (t && t.length > 2) text += t + '. ';
+        });
+        // أي نص آخر
+        if (text.length < 20) {
+            slide.querySelectorAll('p, span:not(:empty), div:not(:has(*))').forEach(el => {
+                const t = (el.textContent || '').trim();
+                if (t && t.length > 3 && !text.includes(t)) text += t + '. ';
+            });
+        }
+        return text.replace(/\s+/g, ' ').trim().slice(0, 1500);
+    }
+
+    // إضافة الزر
+    function addBtn() {
+        const content = document.getElementById('lessonViewerContent');
+        if (!content) return;
+        const slide = content.querySelector('.slide-card, .book-slide-container');
+        if (!slide) return;
+        if (slide.querySelector('.my-read-btn')) return; // موجود
+
+        const btnBox = document.createElement('div');
+        btnBox.style.cssText = 'text-align:center;margin:20px 0;padding:15px;background:rgba(220,38,38,0.1);border-radius:20px;border:2px dashed #dc2626;';
+        
+        const btnAr = document.createElement('button');
+        btnAr.className = 'my-read-btn';
+        btnAr.innerHTML = '🔊 اقرأ هذه الشريحة';
+        btnAr.style.cssText = 'background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;padding:15px 30px;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 8px 25px rgba(220,38,38,0.4);';
+        btnAr.onclick = function() {
+            window.stopAllAudio();
+            const txt = getText(slide);
+            console.log('📖 قراءة:', txt.slice(0, 100));
+            if (txt) window.speak(txt, 'ar');
+        };
+        
+        btnBox.appendChild(btnAr);
+        slide.appendChild(btnBox);
+        console.log('✅ زر أُضيف للشريحة');
+    }
+
+    // فحص كل 800ms
+    setInterval(addBtn, 800);
+    
+    // عند الضغط على "التالي"
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'lessonNextBtn' || e.target.id === 'lessonPrevBtn' ||
+            (e.target.onclick && e.target.onclick.toString().includes('nextLesson'))) {
+            setTimeout(addBtn, 200);
+            setTimeout(addBtn, 800);
+        }
+    }, true);
+
+    console.log('✅ النظام جاهز');
+})();
+</script>
 </body>
 </html>
