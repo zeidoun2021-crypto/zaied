@@ -2998,5 +2998,184 @@ console.log('✅ كل شيء جاهز');
     console.log('✅ النظام جاهز');
 })();
 </script>
+	<script>
+// 🔊 قارئ الشرائح الذكي
+(function() {
+    console.log('🔊 تفعيل القارئ الذكي...');
+    
+    let _voices = [];
+    function loadV() {
+        if (!window.speechSynthesis) return;
+        try { _voices = speechSynthesis.getVoices() || []; } catch(e){ _voices = []; }
+    }
+    loadV();
+    if (window.speechSynthesis) {
+        speechSynthesis.onvoiceschanged = loadV;
+        setTimeout(loadV, 500);
+        setTimeout(loadV, 1500);
+    }
+
+    // دالة النطق
+    function speakOne(text, lang) {
+        return new Promise(r => {
+            if (!text || !text.trim()) { r(); return; }
+            try { speechSynthesis.cancel(); } catch(e){}
+            setTimeout(function() {
+                try {
+                    if (_voices.length === 0) loadV();
+                    const u = new SpeechSynthesisUtterance(text);
+                    u.lang = lang === 'fr' ? 'fr-FR' : (lang === 'en' ? 'en-US' : 'ar-SA');
+                    const v = _voices.find(x => x.lang && x.lang.includes(lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar')));
+                    if (v) u.voice = v;
+                    u.rate = 0.9;
+                    let done = false;
+                    const finish = () => { if (done) return; done = true; r(); };
+                    u.onend = finish;
+                    u.onerror = finish;
+                    setTimeout(finish, Math.max(10000, text.length * 400));
+                    speechSynthesis.speak(u);
+                } catch(e) { r(); }
+            }, 100);
+        });
+    }
+    window.speak = speakOne;
+    window.speakBook = speakOne;
+    window.ar0_speak = async function(t, r) {
+        r = r || 1;
+        for (let i = 0; i < r; i++) {
+            await speakOne(t, 'ar');
+            if (i < r - 1) await new Promise(x => setTimeout(x, 700));
+        }
+    };
+    window.speakAcademy = function(t) { speakOne(t, 'ar'); };
+    window.stopAllAudio = function() { try { speechSynthesis.cancel(); } catch(e){} };
+
+    // ==================== التنظيف ====================
+    
+    // إزالة الإيموجي
+    function clean(t) {
+        return t.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F1FF}\u{1F200}-\u{1F2FF}]/gu, '').trim();
+    }
+
+    // إزالة بادئة "الأطفال - " / "الحاسوب :"
+    function removeSpeakers(text) {
+        return text
+            .replace(/^الأطفال\s*[-:]\s*/, '')
+            .replace(/^الاطفال\s*[-:]\s*/, '')
+            .replace(/^الحاسوب\s*[-:]\s*/, '')
+            .replace(/^الكمبيوتر\s*[-:]\s*/, '')
+            .replace(/^الأطفال\s+/, '')
+            .replace(/^الحاسوب\s+/, '')
+            .trim();
+    }
+
+    // ==================== استخراج النصوص ====================
+    function buildScript(slide) {
+        const parts = []; // {type: 'ar'|'multi', text}
+        
+        // 1) العنوان
+        const title = slide.querySelector('.book-slide-title, .slide-card .book-slide-title');
+        if (title) {
+            const t = clean(title.textContent);
+            if (t) parts.push({ type: 'ar', text: t });
+        }
+        
+        // 2) النصوص العادية (book-text)
+        slide.querySelectorAll('.book-text').forEach(el => {
+            const t = clean(el.textContent);
+            if (t && t.length > 3) parts.push({ type: 'ar', text: t });
+        });
+        
+        // 3) الحوار
+        const dialogue = slide.querySelector('.dialogue');
+        if (dialogue) {
+            dialogue.querySelectorAll('.children, .computer').forEach(el => {
+                let t = clean(el.textContent);
+                t = removeSpeakers(t);
+                if (t && t.length > 2) parts.push({ type: 'ar', text: t });
+            });
+        }
+        
+        // 4) الترجمة (عربي + فرنسي + إنجليزي)
+        slide.querySelectorAll('.translation-box').forEach(el => {
+            const ar = el.querySelector('.translation-ar');
+            const fr = el.querySelector('.translation-fr');
+            const en = el.querySelector('.translation-en');
+            
+            // في حالة الجداول التي تحتوي | 
+            const html = el.innerHTML;
+            if (ar && fr && en) {
+                // استخراج كل زوج (عربي | فرنسي | إنجليزي)
+                const arTexts = el.querySelectorAll('.translation-ar');
+                const frTexts = el.querySelectorAll('.translation-fr');
+                const enTexts = el.querySelectorAll('.translation-en');
+                
+                for (let i = 0; i < arTexts.length; i++) {
+                    const arText = clean(arTexts[i].textContent);
+                    const frText = frTexts[i] ? clean(frTexts[i].textContent) : '';
+                    const enText = enTexts[i] ? clean(enTexts[i].textContent) : '';
+                    
+                    if (arText) parts.push({ type: 'ar', text: arText });
+                    if (frText) parts.push({ type: 'fr', text: frText });
+                    if (enText) parts.push({ type: 'en', text: enText });
+                }
+            }
+        });
+        
+        // 5) النص العادي (paragraphs)
+        if (parts.length === 0) {
+            slide.querySelectorAll('p, h2, h3').forEach(el => {
+                const t = clean(el.textContent);
+                if (t && t.length > 5) parts.push({ type: 'ar', text: t });
+            });
+        }
+        
+        return parts;
+    }
+
+    // ==================== التشغيل ====================
+    async function playSlide(slide) {
+        const parts = buildScript(slide);
+        console.log('📖 أجزاء النطق:', parts.length);
+        
+        for (const p of parts) {
+            const lang = p.type === 'fr' ? 'fr' : (p.type === 'en' ? 'en' : 'ar');
+            console.log('▶️', lang, ':', p.text.slice(0, 50));
+            await speakOne(p.text, lang);
+            await new Promise(r => setTimeout(r, 400));
+        }
+        console.log('✅ انتهى النطق');
+    }
+
+    // ==================== الزر ====================
+    function addBtn() {
+        const content = document.getElementById('lessonViewerContent');
+        if (!content) return;
+        const slide = content.querySelector('.slide-card, .book-slide-container');
+        if (!slide || slide.querySelector('.my-read-btn')) return;
+
+        const btn = document.createElement('button');
+        btn.className = 'my-read-btn';
+        btn.innerHTML = '🔊 اقرأ هذه الصفحة';
+        btn.style.cssText = 'display:block;margin:20px auto;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;padding:15px 35px;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 8px 25px rgba(220,38,38,0.4);';
+        btn.onclick = function() {
+            window.stopAllAudio();
+            playSlide(slide);
+        };
+        slide.appendChild(btn);
+    }
+
+    setInterval(addBtn, 800);
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'lessonNextBtn' || e.target.id === 'lessonPrevBtn') {
+            window.stopAllAudio();
+            setTimeout(addBtn, 300);
+            setTimeout(addBtn, 800);
+        }
+    }, true);
+
+    console.log('✅ القارئ الذكي جاهز');
+})();
+</script>
 </body>
 </html>
