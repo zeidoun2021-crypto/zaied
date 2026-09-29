@@ -4233,5 +4233,146 @@ console.log('✅ كل شيء جاهز');
     console.log('🚪 زر ثاني: المغادرة');
 })();
 </script>
+	<script>
+// 🚪 إصلاح زر المغادرة — زر واحد فقط
+(function() {
+    console.log('🚪 إصلاح زر المغادرة...');
+
+    // ═══════════════════════════════════════════
+    // 1️⃣ إخفاء زر المغادرة من الشريط العلوي نهائياً
+    // ═══════════════════════════════════════════
+    function removeBannerExit() {
+        const bb = document.getElementById('bannerExitBtn');
+        if (bb && bb.parentNode) {
+            bb.remove();
+        }
+    }
+    
+    removeBannerExit();
+    setInterval(removeBannerExit, 300);
+    
+    // عند تحديث الشريط
+    const origUpdateBanner = window.updateUserBanner;
+    if (typeof origUpdateBanner === 'function') {
+        window.updateUserBanner = function() {
+            const result = origUpdateBanner.apply(this, arguments);
+            setTimeout(removeBannerExit, 50);
+            return result;
+        };
+    }
+
+    // ═══════════════════════════════════════════
+    // 2️⃣ استبدال exitPlatform — صفحة وداع واضحة
+    // ═══════════════════════════════════════════
+    window.exitPlatform = function() {
+        // إيقاف الأصوات
+        if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} }
+        if (window.currentAudio) { try { window.currentAudio.pause(); } catch(e){} }
+
+        if (!confirm('🚪 هل تريد مغادرة المنصة؟')) return;
+
+        // إخفاء كل شيء
+        document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) {
+            p.classList.add('hide');
+        });
+        document.querySelectorAll('#userStatusBanner, .copyright-bar, #globalExitBtn, #globalSpeakSlideBtn, .my-read-btn, #floatingReadBtn').forEach(function(e) {
+            e.style.display = 'none';
+        });
+
+        // صفحة الوداع
+        const bye = document.createElement('div');
+        bye.id = 'goodbyeScreen';
+        bye.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#0f172a,#1e293b);z-index:9999999;display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;font-family:Cairo,sans-serif;overflow:auto;';
+
+        bye.innerHTML = 
+            '<div style="max-width:520px;width:100%;text-align:center;color:white;padding:30px;">' +
+                
+                '<div style="font-size:120px;margin-bottom:25px;">👋</div>' +
+                
+                '<h1 style="color:#fbbf24;font-size:34px;margin-bottom:20px;font-weight:900;line-height:1.4;">' +
+                    'شكراً لزيارتك منصة زايد' +
+                '</h1>' +
+                
+                '<p style="font-size:18px;color:#cbd5e1;margin-bottom:15px;line-height:1.9;">' +
+                    'نتمنى لك يوماً سعيداً 🌟' +
+                '</p>' +
+                
+                '<p style="font-size:16px;color:#94a3b8;margin-bottom:40px;">' +
+                    'نراك قريباً إن شاء الله' +
+                '</p>' +
+
+                '<button onclick="window.returnToPlatform()" ' +
+                    'style="width:100%;max-width:350px;padding:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:4px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:19px;cursor:pointer;box-shadow:0 12px 40px rgba(34,197,94,0.5);margin-bottom:15px;">' +
+                    '🔄 العودة للمنصة' +
+                '</button>' +
+
+                '<div style="margin-top:15px;">' +
+                    '<a href="https://wa.me/21655335477" target="_blank" ' +
+                        'style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:14px 30px;border-radius:40px;text-decoration:none;font-weight:900;font-size:15px;border:2px solid #fbbf24;">' +
+                        '💬 تواصل معنا' +
+                    '</a>' +
+                '</div>' +
+
+                '<p style="font-size:13px;color:#475569;margin-top:40px;">' +
+                    '© 2026 — محمد زايد — تونس 🇹🇳' +
+                '</p>' +
+
+            '</div>';
+
+        document.body.appendChild(bye);
+
+        // إشعار واتساب
+        if (window.sendWhatsApp) {
+            try {
+                window.sendWhatsApp(
+                    '🚪 زائر غادر المنصة\n' +
+                    '📅 ' + new Date().toLocaleString('ar-EG')
+                );
+            } catch(e) {}
+        }
+    };
+
+    // ═══════════════════════════════════════════
+    // 3️⃣ دالة العودة للمنصة
+    // ═══════════════════════════════════════════
+    window.returnToPlatform = function() {
+        const bye = document.getElementById('goodbyeScreen');
+        if (bye) bye.remove();
+        
+        // إعادة زر المغادرة العائم
+        const exitBtn = document.getElementById('globalExitBtn');
+        if (exitBtn) exitBtn.style.display = 'block';
+        
+        // إعادة الشريط
+        const banner = document.getElementById('userStatusBanner');
+        if (banner) banner.style.display = 'block';
+        
+        // إعادة شريط الحقوق
+        const cbar = document.querySelector('.copyright-bar');
+        if (cbar) cbar.style.display = 'block';
+        
+        // أرجع للصفحة الرئيسية أو الترحيب
+        if (window.currentUser || window.isAdminMode) {
+            const home = document.getElementById('pageHome');
+            if (home) home.classList.remove('hide');
+        } else {
+            const welcome = document.getElementById('pageWelcome');
+            if (welcome) welcome.classList.remove('hide');
+        }
+    };
+
+    // ═══════════════════════════════════════════
+    // 4️⃣ إخفاء زر bannerExitBtn من نفس الشريط
+    // ═══════════════════════════════════════════
+    // هذا يمنع ظهور الزر في المرة القادمة
+    const style = document.createElement('style');
+    style.textContent = '#bannerExitBtn { display: none !important; }';
+    document.head.appendChild(style);
+
+    console.log('✅ إصلاح زر المغادرة جاهز');
+    console.log('🚪 زر واحد فقط — في الأسفل يسار');
+    console.log('🔄 زر العودة للمنصة واضح في صفحة الوداع');
+})();
+</script>
 </body>
 </html>
