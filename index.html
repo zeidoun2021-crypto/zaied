@@ -7133,6 +7133,112 @@ console.log('✅ الصوت جاهز — بنفس كود المنجد');
     console.log('✅ زر المغادرة الجديد جاهز');
 })();
 </script>
+    <script>
+(function() {
+    console.log('🔊 الصوت — translate.googleapis.com');
+    window.currentAudio = null;
+    window._welcomeSessionId = 0;
+
+    window.speak = function(text, lang, isCont) {
+        if (!text || !text.trim()) return Promise.resolve();
+        if (!isCont && window.currentAudio) {
+            try { window.currentAudio.pause(); } catch(e){}
+            window.currentAudio = null;
+        }
+        const code = lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar');
+        
+        // ⭐ endpoint مختلف: translate.googleapis.com
+        const url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&q=' +
+                    encodeURIComponent(text) + '&tl=' + code + '&client=gtx';
+        
+        const audio = new Audio(url);
+        window.currentAudio = audio;
+        return new Promise(r => {
+            let d = false;
+            const f = () => { if (d) return; d = true; if (window.currentAudio === audio) window.currentAudio = null; r(); };
+            audio.onended = f;
+            audio.onerror = f;
+            setTimeout(f, 15000);
+            audio.play().catch(f);
+        });
+    };
+
+    window.speakBook = function(t, l) { return window.speak(t, l); };
+    window.ar0_speak = async function(t, r, d) {
+        r = r || 1; d = d || 700;
+        if (!t) return;
+        for (let i = 0; i < r; i++) {
+            await window.speak(t, 'ar', i > 0);
+            if (i < r - 1) await new Promise(x => setTimeout(x, d));
+        }
+    };
+    window.speakAcademy = function(t) {
+        if (!window.academyAudioEnabled || !t) return;
+        const c = { ar: 'ar', fr: 'fr', en: 'en' }[window.academyState?.lang || 'ar'] || 'ar';
+        window.speak(t, c);
+    };
+    window.testSound = function() {
+        console.log('🧪 اختبار...');
+        window.speak('مرحباً بكم في منصة زايد', 'ar');
+    };
+
+    const WELCOME = {
+        ar: [
+            "مرحباً بكم في منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس.",
+            "منصة تعليمية للأطفال والشباب والأساتذة والمعلمين والأولياء والباحثين وذوي الاحتياجات الخاصة.",
+            "سجلوا دون مقابل واغتنموا الفرصة للحاق بالركب."
+        ],
+        fr: "Bienvenue sur la plateforme Zaied pour l'éducation et la recherche scientifique en Tunisie.",
+        en: "Welcome to Zaied Platform for Education and Scientific Research in Tunisia."
+    };
+
+    window.updateStatus = function(t) {
+        const e = document.getElementById('statusBox');
+        if (e) e.innerText = t;
+    };
+    window._resetWelcomeBtnUI = function() {
+        const w = document.getElementById('welcomeBtn');
+        const s = document.getElementById('stopBtn');
+        if (w) w.style.display = 'inline-block';
+        if (s) s.classList.remove('visible');
+        window.isPlaying = false;
+    };
+    window.playWelcome = async function() {
+        if (window.isPlaying) { window.stopWelcome(); return; }
+        window._welcomeSessionId++;
+        const mySession = window._welcomeSessionId;
+        window.isPlaying = true;
+        const wb = document.getElementById('welcomeBtn');
+        const sb = document.getElementById('stopBtn');
+        if (wb) wb.style.display = 'none';
+        if (sb) sb.classList.add('visible');
+        const aborted = () => mySession !== window._welcomeSessionId;
+        window.updateStatus("🎙️ بالعربية...");
+        for (let i = 0; i < WELCOME.ar.length; i++) {
+            if (aborted()) { window._resetWelcomeBtnUI(); return; }
+            await window.speak(WELCOME.ar[i], 'ar', i > 0);
+        }
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("🎙️ Français...");
+        await window.speak(WELCOME.fr, 'fr');
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("🎙️ English...");
+        await window.speak(WELCOME.en, 'en');
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("✅ اكتمل");
+        window._resetWelcomeBtnUI();
+    };
+    window.stopWelcome = function() {
+        window._welcomeSessionId++;
+        window.isPlaying = false;
+        if (window.currentAudio) { try { window.currentAudio.pause(); } catch(e){} window.currentAudio = null; }
+        if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch(e){} }
+        window.updateStatus("⏹️ تم الإيقاف");
+        window._resetWelcomeBtnUI();
+    };
+    console.log('✅ الصوت جاهز (translate.googleapis.com)');
+})();
+</script>
 </body>
      <!-- 🔧 إصلاح دوال المشرف -->
 <script>
