@@ -2818,5 +2818,77 @@ setInterval(function() {
 
 console.log('✅ كل شيء جاهز');
 </script>
+	<script>
+// 🔊 زر قراءة الشريحة — يظهر تلقائياً في كل شريحة
+(function() {
+    console.log('🔊 تفعيل قارئ الشرائح...');
+
+    // دالة استخراج النص
+    function getSlideText() {
+        // ابحث عن الشريحة النشطة
+        const containers = [
+            'lessonViewerContent', 'middleSlideContent', 
+            'wwSlideContent', 'aiSlideContent'
+        ];
+        
+        for (const id of containers) {
+            const el = document.getElementById(id);
+            if (el && el.offsetParent !== null) { // مرئي
+                // استخرج كل النصوص
+                let text = '';
+                el.querySelectorAll('*').forEach(node => {
+                    // تجاهل الأزرار
+                    if (node.tagName === 'BUTTON') return;
+                    if (node.children.length === 0) {
+                        const t = (node.textContent || '').trim();
+                        if (t && t.length > 2 && !t.match(/^[🔊📖🏆📝✅❌◀▶🇸🇦🇫🇷🇬🇧🇹🇳🌙💻🎯📊💡🔧💿📏📁📎🎨✨🖥️⌨️🖨️📷📡💾⚙️🔗🔀🔁📋📝⚖️📚🧒🎓🏫]+$/)) {
+                            text += t + '. ';
+                        }
+                    }
+                });
+                return text.replace(/\s+/g, ' ').trim().slice(0, 2000);
+            }
+        }
+        return '';
+    }
+
+    // زر عائم دائم
+    const btn = document.createElement('button');
+    btn.id = 'floatingReadBtn';
+    btn.innerHTML = '🔊 اقرأ الشريحة';
+    btn.style.cssText = 'position:fixed;bottom:150px;right:20px;z-index:999999;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;padding:16px 26px;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 8px 25px rgba(0,0,0,0.5);display:none;';
+    btn.onclick = function() {
+        window.stopAllAudio();
+        const txt = getSlideText();
+        if (txt) {
+            console.log('📖 القراءة:', txt.slice(0, 100));
+            setTimeout(() => window.speak(txt, 'ar'), 200);
+        } else {
+            alert('⚠️ لا يوجد نص للقراءة');
+        }
+    };
+    document.body.appendChild(btn);
+
+    // إظهار الزر فقط عندما يكون في شريحة
+    setInterval(function() {
+        const viewers = [
+            document.getElementById('pageLessonViewer'),
+            document.getElementById('pageMiddleSlideViewer'),
+            document.getElementById('pageWordWorkshop'),
+            document.getElementById('pageAISlideViewer')
+        ];
+        let isSlidePage = false;
+        for (const v of viewers) {
+            if (v && !v.classList.contains('hide')) {
+                isSlidePage = true;
+                break;
+            }
+        }
+        btn.style.display = isSlidePage ? 'block' : 'none';
+    }, 500);
+
+    console.log('✅ قارئ الشرائح جاهز');
+})();
+</script>
 </body>
 </html>
