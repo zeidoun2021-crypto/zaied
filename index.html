@@ -7499,5 +7499,92 @@ console.log('✅ الصوت جاهز — بنفس كود المنجد');
     console.log('✅ إصلاح المشرف جاهز');
 })();
 </script>
+    <script>
+// 🔊 Web Speech API — يعمل بدون إنترنت
+(function() {
+    console.log('🔊 تفعيل Web Speech API...');
+    let _voices = [];
+    function loadV() { try { _voices = speechSynthesis.getVoices() || []; } catch(e){} }
+    loadV();
+    if (window.speechSynthesis) {
+        speechSynthesis.onvoiceschanged = loadV;
+        setTimeout(loadV, 300);
+        setTimeout(loadV, 1000);
+    }
+    window.speak = function(text, lang) {
+        if (!text || !text.trim()) return Promise.resolve();
+        try { speechSynthesis.cancel(); } catch(e){}
+        const code = lang === 'fr' ? 'fr-FR' : (lang === 'en' ? 'en-US' : 'ar-SA');
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = code;
+        if (_voices.length === 0) loadV();
+        const v = _voices.find(x => x.lang && x.lang.includes('ar') && code === 'ar-SA') ||
+                  _voices.find(x => x.lang && x.lang.includes(code.split('-')[0]));
+        if (v) u.voice = v;
+        u.rate = 0.9;
+        return new Promise(r => {
+            let d = false;
+            const f = () => { if (d) return; d = true; r(); };
+            u.onend = f; u.onerror = f;
+            setTimeout(f, 15000);
+            speechSynthesis.speak(u);
+        });
+    };
+    window.speakBook = window.speak;
+    window.ar0_speak = async function(t, r, d) {
+        r = r || 1; d = d || 700;
+        for (let i = 0; i < r; i++) {
+            await window.speak(t, 'ar');
+            if (i < r - 1) await new Promise(x => setTimeout(x, d));
+        }
+    };
+    window.speakAcademy = function(t) {
+        if (!t) return;
+        window.speak(t, window.academyState?.lang || 'ar');
+    };
+    window.testSound = function() {
+        console.log('🧪 اختبار...');
+        console.log('أصوات:', _voices.filter(v => v.lang.includes('ar')).map(v => v.lang + ' - ' + v.name));
+        window.speak('مرحباً بكم في منصة زايد للتعليم والبحث العلمي بتونس', 'ar');
+    };
+    const W = {
+        ar: ["مرحباً بكم في منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس.",
+             "منصة تعليمية للأطفال والشباب والأساتذة والمعلمين والأولياء والباحثين وذوي الاحتياجات الخاصة.",
+             "سجلوا دون مقابل واغتنموا الفرصة للحاق بالركب."],
+        fr: "Bienvenue sur la plateforme Zaied en Tunisie.",
+        en: "Welcome to Zaied Platform in Tunisia."
+    };
+    window.updateStatus = function(t) { const e = document.getElementById('statusBox'); if (e) e.innerText = t; };
+    window._resetWB = function() { const w = document.getElementById('welcomeBtn'); const s = document.getElementById('stopBtn'); if (w) w.style.display = 'inline-block'; if (s) s.classList.remove('visible'); window.isPlaying = false; };
+    window.playWelcome = async function() {
+        if (window.isPlaying) { window.stopWelcome(); return; }
+        window._welcomeSid = (window._welcomeSid || 0) + 1;
+        const sid = window._welcomeSid;
+        window.isPlaying = true;
+        const wb = document.getElementById('welcomeBtn'), sb = document.getElementById('stopBtn');
+        if (wb) wb.style.display = 'none';
+        if (sb) sb.classList.add('visible');
+        const ab = () => sid !== window._welcomeSid;
+        window.updateStatus("🎙️ بالعربية...");
+        for (let i = 0; i < W.ar.length; i++) { if (ab()) { window._resetWB(); return; } await window.speak(W.ar[i], 'ar'); }
+        if (ab()) { window._resetWB(); return; }
+        window.updateStatus("🎙️ Français...");
+        await window.speak(W.fr, 'fr');
+        if (ab()) { window._resetWB(); return; }
+        window.updateStatus("🎙️ English...");
+        await window.speak(W.en, 'en');
+        window.updateStatus("✅ اكتمل");
+        window._resetWB();
+    };
+    window.stopWelcome = function() {
+        window._welcomeSid = (window._welcomeSid || 0) + 1;
+        window.isPlaying = false;
+        try { speechSynthesis.cancel(); } catch(e){}
+        window.updateStatus("⏹️ تم الإيقاف");
+        window._resetWB();
+    };
+    console.log('✅ Web Speech API جاهز');
+})();
+</script>
 </html>
 <!-- ✅ نهاية الجزء 10 — اكتمل الملف -->
