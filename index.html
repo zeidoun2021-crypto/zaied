@@ -6543,6 +6543,29 @@ window.addEventListener('click', (e) => {
     console.log('✅ تم إلغاء النافذة');
 })();
 </script>
+    <script>
+(function() {
+    console.log('📤 إصلاح الواتساب...');
+    window.sendWhatsApp = async function(message) {
+        try {
+            const apiUrl = 'https://api.ultramsg.com/instance192075/messages/chat';
+            const body = 'token=a5pynm6kjbch792g&to=21655335477&body=' + encodeURIComponent(message);
+            const proxy = 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(apiUrl);
+            await fetch(proxy, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body
+            });
+            console.log('📤 واتساب مُرسل');
+            return true;
+        } catch(e) {
+            console.warn('⚠️ فشل واتساب:', e);
+            return false;
+        }
+    };
+    console.log('✅ واتساب جاهز');
+})();
+</script>
 </body>
      <!-- 🔧 إصلاح دوال المشرف -->
 <script>
