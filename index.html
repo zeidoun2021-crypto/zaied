@@ -3177,5 +3177,175 @@ console.log('✅ كل شيء جاهز');
     console.log('✅ القارئ الذكي جاهز');
 })();
 </script>
+	<script>
+// 🔒 حماية صارمة — لا دخول لأي قسم بدون تسجيل
+(function() {
+    console.log('🔒 تفعيل الحماية الصارمة...');
+
+    // ═══════ قائمة كل دوال التنقل المحمية ═══════
+    const protectedFunctions = [
+        'showChildrenTech', 'showArabicSection', 'openAcademy',
+        'showGamesSection', 'showWorkshopsSection', 'showScientificLessons',
+        'showLecturesSection', 'showFullDictionary', 'showBooksSection',
+        'showAcademicProjects', 'openBook', 'openPrimaryStage', 'openMiddleStage',
+        'openHighStage', 'openPrimaryLesson1', 'openPythonLesson', 'showAISection',
+        'showAICertificates', 'openPrimaryLesson1', 'openPythonLesson',
+        'moveToSections', 'goToHome', 'showProfile'
+    ];
+
+    // ═══════ دالة فحص حالة التسجيل ═══════
+    function isRegistered() {
+        return !!(window.currentUser && window.currentUser.name && window.currentUser.email);
+    }
+
+    // ═══════ حماية كل دالة ═══════
+    function protect() {
+        protectedFunctions.forEach(fn => {
+            if (typeof window[fn] === 'function' && !window[fn].__protected) {
+                const orig = window[fn];
+                window[fn] = function() {
+                    // إذا كان مشرف → اسمح
+                    if (window.isAdminMode) {
+                        return orig.apply(this, arguments);
+                    }
+                    // إذا كان مسجل → اسمح
+                    if (isRegistered()) {
+                        return orig.apply(this, arguments);
+                    }
+                    // زائر → امنع
+                    console.log('🚫 محاولة دخول من زائر:', fn);
+                    showBlockMessage(fn);
+                    return false;
+                };
+                window[fn].__protected = true;
+            }
+        });
+    }
+
+    // ═══════ رسالة المنع ═══════
+    function showBlockMessage(fnName) {
+        const old = document.getElementById('blockMsg');
+        if (old) old.remove();
+
+        const msg = document.createElement('div');
+        msg.id = 'blockMsg';
+        msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#dc2626,#991b1b);color:white;padding:35px 25px;border-radius:25px;border:4px solid #fbbf24;z-index:9999999;max-width:500px;width:90%;text-align:center;font-family:Cairo,sans-serif;box-shadow:0 25px 70px rgba(0,0,0,0.6);direction:rtl;';
+        msg.innerHTML = `
+            <div style="font-size:70px;margin-bottom:15px;">🔒</div>
+            <h2 style="color:#fbbf24;font-size:23px;margin-bottom:15px;font-weight:900;">التسجيل مطلوب</h2>
+            <p style="font-size:16px;line-height:1.9;margin-bottom:15px;">
+                لاستخدام أقسام المنصة<br>
+                <strong style="color:#fbbf24;">يجب التسجيل المجاني أولاً</strong>
+            </p>
+            <p style="font-size:13px;color:#fca5a5;margin-bottom:20px;background:rgba(0,0,0,0.3);padding:12px;border-radius:15px;">
+                ⚠️ جميع المعلومات يجب أن تكون صحيحة
+            </p>
+            <button onclick="scrollToRegisterAndClose()" 
+                style="width:100%;padding:16px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:30px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;margin-bottom:10px;box-shadow:0 8px 25px rgba(34,197,94,0.4);">
+                📝 سجّل الآن مجاناً
+            </button>
+            <button onclick="document.getElementById('blockMsg').remove()" 
+                style="width:100%;padding:12px;background:rgba(0,0,0,0.3);color:white;border:none;border-radius:30px;font-family:Cairo,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">
+                إغلاق
+            </button>
+        `;
+        document.body.appendChild(msg);
+
+        // إشعار واتساب للمشرف
+        try {
+            if (window.sendWhatsApp) {
+                window.sendWhatsApp('🚫 محاولة دخول من زائر بدون تسجيل\n🔗 القسم: ' + fnName + '\n📅 ' + new Date().toLocaleString('ar-EG'));
+            }
+        } catch(e) {}
+    }
+
+    // ═══════ الانتقال للتسجيل ═══════
+    window.scrollToRegisterAndClose = function() {
+        const m = document.getElementById('blockMsg');
+        if (m) m.remove();
+        document.querySelectorAll('.container > div[id^="page"]').forEach(p => p.classList.add('hide'));
+        document.getElementById('pageWelcome').classList.remove('hide');
+        setTimeout(() => {
+            const reg = document.getElementById('registerSection');
+            if (reg) reg.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    };
+
+    // ═══════ الفحص الدوري (كل ثانية) ═══════
+    setInterval(protect, 1000);
+    setTimeout(protect, 500);
+    setTimeout(protect, 2000);
+    setTimeout(protect, 3500);
+
+    // ═══════ تحقق قوي من بيانات التسجيل ═══════
+    const origRegister = window.registerUser;
+    window.registerUser = async function() {
+        const n = document.getElementById('regName').value.trim();
+        const p = document.getElementById('regProfession').value.trim();
+        const sp = document.getElementById('regSpecialty').value.trim();
+        const e = document.getElementById('regEmail').value.trim().toLowerCase();
+        const w = document.getElementById('regWhatsapp').value.trim();
+        const c = document.getElementById('regCountry').value.trim();
+        const cat = document.querySelector('input[name="cat"]:checked')?.value || '';
+
+        // ═══ فحوصات صارمة ═══
+        const errs = [];
+
+        // الاسم
+        if (!n || n.length < 3) {
+            errs.push("❌ الاسم الكامل (3 أحرف على الأقل)");
+        } else if (n.length > 60) {
+            errs.push("❌ الاسم طويل جداً (60 حرف كحد أقصى)");
+        } else if (!/^[\u0600-\u06FFa-zA-Z\s'\-\.]+$/.test(n)) {
+            errs.push("❌ الاسم يجب أن يحتوي على أحرف فقط (بدون أرقام أو رموز)");
+        } else if (n.split(' ').length < 2) {
+            errs.push("❌ اكتب الاسم الكامل (الاسم + اللقب)");
+        }
+
+        // المهنة
+        if (!p || p.length < 2) errs.push("❌ المهنة (حرفان على الأقل)");
+        else if (!/^[\u0600-\u06FFa-zA-Z\s'\-\.]+$/.test(p)) errs.push("❌ المهنة بأحرف فقط");
+
+        // الاختصاص
+        if (!sp || sp.length < 2) errs.push("❌ الاختصاص (حرفان على الأقل)");
+        else if (!/^[\u0600-\u06FFa-zA-Z\s'\-\.]+$/.test(sp)) errs.push("❌ الاختصاص بأحرف فقط");
+
+        // البريد
+        if (!e) {
+            errs.push("❌ البريد الإلكتروني مطلوب");
+        } else if (!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(e)) {
+            errs.push("❌ البريد الإلكتروني غير صحيح");
+        } else if (e.length > 80) {
+            errs.push("❌ البريد الإلكتروني طويل جداً");
+        }
+
+        // الواتساب
+        const cleanPhone = w.replace(/[\s\-\(\)]/g, '');
+        if (!w) {
+            errs.push("❌ رقم الواتساب مطلوب");
+        } else if (!/^\+?\d{8,15}$/.test(cleanPhone)) {
+            errs.push("❌ رقم الواتساب (8 إلى 15 رقماً)");
+        }
+
+        // البلد
+        if (!c || c.length < 2) errs.push("❌ البلد");
+        else if (!/^[\u0600-\u06FFa-zA-Z\s'\-\.]+$/.test(c)) errs.push("❌ البلد بأحرف فقط");
+
+        // الفئة
+        if (!cat) errs.push("❌ اختر فئتك");
+
+        // ═══ عرض الأخطاء ═══
+        if (errs.length > 0) {
+            alert("⚠️ يرجى تصحيح:\n\n" + errs.join("\n"));
+            return;
+        }
+
+        // ═══ استدعاء الدالة الأصلية ═══
+        return origRegister.apply(this, arguments);
+    };
+
+    console.log('✅ الحماية الصارمة جاهزة');
+})();
+</script>
 </body>
 </html>
