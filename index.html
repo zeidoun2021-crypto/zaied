@@ -6521,6 +6521,28 @@ window.addEventListener('click', (e) => {
     console.log('✅ قاعدة المرتين مفعّلة');
 })();
 </script>
+    <script>
+(function() {
+    console.log('🚫 إلغاء النافذة العائمة...');
+    window.showVisitorModal = function() { return; };
+    window.registerVisitor = function() { return; };
+    function rm() {
+        ['visitorForceModal','visitorAskModal','visitorModal'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        });
+        document.body.style.overflow = 'auto';
+    }
+    rm();
+    setInterval(rm, 500);
+    window.addEventListener('load', function() {
+        setTimeout(rm, 200);
+        setTimeout(rm, 1000);
+        setTimeout(rm, 2500);
+    });
+    console.log('✅ تم إلغاء النافذة');
+})();
+</script>
 </body>
      <!-- 🔧 إصلاح دوال المشرف -->
 <script>
