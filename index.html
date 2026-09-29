@@ -3739,5 +3739,178 @@ console.log('✅ كل شيء جاهز');
     console.log('✅ القارئ بدون إيموجي جاهز');
 })();
 </script>
+	<script>
+// 🎯 القارئ النهائي — إزالة كل الرموز
+(function() {
+    console.log('🎯 القارئ الجذري...');
+
+    let _voices = [];
+    function loadV() {
+        if (!window.speechSynthesis) return;
+        try { _voices = speechSynthesis.getVoices() || []; } catch(e){ _voices = []; }
+    }
+    loadV();
+    if (window.speechSynthesis) {
+        speechSynthesis.onvoiceschanged = loadV;
+        setTimeout(loadV, 500);
+        setTimeout(loadV, 1500);
+    }
+
+    function speakOne(text, lang) {
+        return new Promise(r => {
+            if (!text || !text.trim()) { r(); return; }
+            try { speechSynthesis.cancel(); } catch(e){}
+            setTimeout(function() {
+                try {
+                    if (_voices.length === 0) loadV();
+                    const u = new SpeechSynthesisUtterance(text);
+                    u.lang = lang === 'fr' ? 'fr-FR' : (lang === 'en' ? 'en-US' : 'ar-SA');
+                    const v = _voices.find(x => x.lang && x.lang.includes(lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar')));
+                    if (v) u.voice = v;
+                    u.rate = 0.9;
+                    let done = false;
+                    const finish = () => { if (done) return; done = true; r(); };
+                    u.onend = finish;
+                    u.onerror = finish;
+                    setTimeout(finish, Math.max(10000, text.length * 400));
+                    speechSynthesis.speak(u);
+                } catch(e) { r(); }
+            }, 100);
+        });
+    }
+
+    window.speak = speakOne;
+    window.speakBook = speakOne;
+    window.ar0_speak = async function(t, r) {
+        r = r || 1;
+        for (let i = 0; i < r; i++) {
+            await speakOne(t, 'ar');
+            if (i < r - 1) await new Promise(x => setTimeout(x, 700));
+        }
+    };
+    window.speakAcademy = function(t) { speakOne(t, 'ar'); };
+    window.stopAllAudio = function() { try { speechSynthesis.cancel(); } catch(e){} };
+
+    // ═══════════════════════════════════════════
+    // 🧹 التنظيف الجذري
+    // ═══════════════════════════════════════════
+    function clean(t) {
+        if (!t) return '';
+
+        // 1) إزالة كل الرموز غير الحروف والأرقام
+        // نُبقي فقط: العربية + الإنجليزية + الأرقام + الفواصل الأساسية
+        t = t.replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFFa-zA-Z0-9\s\.\,\!\?\:\;\-\u060C\u061B\u061F\u0660-\u0669]/g, ' ');
+
+        // 2) إزالة "صفحة X" و "شريحة X"
+        t = t.replace(/(صفحة|شريحة|الصفحة|الشريحة)\s*\d+(\s*من\s*\d+)?/gi, ' ');
+        t = t.replace(/\bص\s*\d+\b/gi, ' ');
+
+        // 3) إزالة كلمة "كتاب" منفردة
+        t = t.replace(/\bكتاب\b/gi, ' ');
+        t = t.replace(/\bكتاب\s+مفتوح\b/gi, ' ');
+
+        // 4) إزالة كلمات المتحدثين في البداية
+        t = t.replace(/^\s*(الأطفال|الاطفال|الطفل)\s*[-:،.]?\s*/gi, '');
+        t = t.replace(/^\s*(الحاسوب|الكمبيوتر)\s*[-:،.]?\s*/gi, '');
+
+        // 5) إزالة كلمات الأزرار
+        t = t.replace(/اقرأ\s*(هذه)?\s*(الصفحة|الشريحة)\s*(كاملة)?/gi, ' ');
+        t = t.replace(/نطق\s*(الحرف|الكلمة|كل)/gi, ' ');
+        t = t.replace(/استمع\s*(للترحيب)?/gi, ' ');
+
+        // 6) تصحيح المسافات
+        t = t.replace(/\s+/g, ' ').trim();
+        
+        // 7) إزالة الشرطات والنقاط المتكررة في البداية والنهاية
+        t = t.replace(/^[\s\-\.\,]+|[\s\-\.\,]+$/g, '');
+
+        return t;
+    }
+
+    // ═══════════════════════════════════════════
+    // 📖 استخراج النص من الشريحة فقط
+    // ═══════════════════════════════════════════
+    function buildScript(slideEl) {
+        const parts = [];
+
+        // 1) العنوان
+        const title = slideEl.querySelector('.book-slide-title');
+        if (title) {
+            const t = clean(title.textContent);
+            if (t && t.length > 2) parts.push({ type: 'ar', text: t });
+        }
+
+        // 2) الحوار
+        slideEl.querySelectorAll('.dialogue .children, .dialogue .computer').forEach(el => {
+            const t = clean(el.textContent);
+            if (t && t.length > 2) parts.push({ type: 'ar', text: t });
+        });
+
+        // 3) النصوص
+        slideEl.querySelectorAll('.book-text').forEach(el => {
+            const t = clean(el.textContent);
+            if (t && t.length > 3) parts.push({ type: 'ar', text: t });
+        });
+
+        // 4) الترجمات
+        slideEl.querySelectorAll('.translation-box').forEach(el => {
+            const arList = el.querySelectorAll('.translation-ar');
+            const frList = el.querySelectorAll('.translation-fr');
+            const enList = el.querySelectorAll('.translation-en');
+            const maxLen = Math.max(arList.length, frList.length, enList.length);
+            for (let i = 0; i < maxLen; i++) {
+                const ar = arList[i] ? clean(arList[i].textContent) : '';
+                const fr = frList[i] ? clean(frList[i].textContent) : '';
+                const en = enList[i] ? clean(enList[i].textContent) : '';
+                if (ar) parts.push({ type: 'ar', text: ar });
+                if (fr) parts.push({ type: 'fr', text: fr });
+                if (en) parts.push({ type: 'en', text: en });
+            }
+        });
+
+        // إزالة التكرار
+        const seen = new Set();
+        return parts.filter(p => {
+            const key = p.text.toLowerCase().trim();
+            if (!key || key.length < 2 || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+    }
+
+    async function playSlide(slideEl) {
+        const parts = buildScript(slideEl);
+        console.log('📖 عدد الأجزاء:', parts.length);
+        for (const p of parts) {
+            const lang = p.type === 'fr' ? 'fr' : (p.type === 'en' ? 'en' : 'ar');
+            console.log('▶️', lang, ':', p.text);
+            await speakOne(p.text, lang);
+            await new Promise(r => setTimeout(r, 400));
+        }
+    }
+
+    function addBtn() {
+        const content = document.getElementById('lessonViewerContent');
+        if (!content) return;
+        const slide = content.querySelector('.slide-card, .book-slide-container');
+        if (!slide || slide.querySelector('.my-read-btn')) return;
+
+        const btn = document.createElement('button');
+        btn.className = 'my-read-btn';
+        btn.innerHTML = '🔊 اقرأ هذه الصفحة';
+        btn.style.cssText = 'display:block;margin:20px auto;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;padding:15px 35px;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;';
+        btn.onclick = function(e) {
+            e.stopPropagation();
+            window.stopAllAudio();
+            playSlide(slide);
+        };
+        slide.appendChild(btn);
+    }
+
+    setInterval(addBtn, 800);
+
+    console.log('✅ القارئ الجذري جاهز');
+})();
+</script>
 </body>
 </html>
