@@ -1256,7 +1256,7 @@ document.addEventListener('keydown', function(e) {
 
 console.log('✅ نظام إجبار الزوار جاهز');
 </script>
-<script>
+
 // ═══════════════════════════════════════════════════════════
 // 👥 حالة المستخدم
 // ═══════════════════════════════════════════════════════════
@@ -2138,188 +2138,52 @@ window.addEventListener('click', function(e) {
     console.log('✅ الكتاب الأصلي جاهز:', window.originalBookSlides.length, 'شريحة');
     console.log('✅ 50 سؤالاً جاهزة للاختبار');
 })();
-</script>
-	<script>
-// 🚪 إخراج الزائر فعلياً من المنصة
+</script><script>
+// 🚪 زر المغادرة — بسيط وآمن
 (function() {
-    console.log('🚪 تفعيل زر المغادرة الفعلي...');
-
     window.exitPlatform = function() {
-        // إيقاف كل الأصوات
+        // إيقاف الأصوات
         try { speechSynthesis.cancel(); } catch(e){}
         try { if (window.currentAudio) window.currentAudio.pause(); } catch(e){}
         try { window.killWelcome && window.killWelcome(); } catch(e){}
 
         if (!confirm('🚪 هل تريد مغادرة المنصة؟')) return;
 
-        // ═══════════════════════════════════════════
-        // 1) حاول إغلاق التبويب
-        // ═══════════════════════════════════════════
-        try {
-            window.open('', '_self', '');
-            window.close();
-        } catch(e) {}
+        // استبدال الصفحة كاملة
+        document.body.innerHTML = 
+            '<div style="min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e293b);display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;font-family:Cairo,sans-serif;color:white;">' +
+                '<div style="max-width:520px;width:100%;text-align:center;padding:40px 30px;background:linear-gradient(135deg,#1e293b,#0f172a);border:4px solid #fbbf24;border-radius:30px;">' +
+                    '<div style="font-size:120px;margin-bottom:25px;">👋</div>' +
+                    '<h1 style="color:#fbbf24;font-size:30px;margin-bottom:20px;font-weight:900;line-height:1.4;">شكراً لزيارتك منصة زايد</h1>' +
+                    '<p style="font-size:17px;color:#cbd5e1;line-height:2;margin-bottom:25px;">نتمنى لك يوماً سعيداً 🌟</p>' +
+                    '<div style="background:rgba(220,38,38,0.15);border:3px solid #dc2626;border-radius:20px;padding:18px;margin-bottom:20px;">' +
+                        '<p style="font-size:15px;color:#fca5a5;font-weight:900;margin:0;">⚠️ لقد غادرت المنصة</p>' +
+                    '</div>' +
+                    '<div style="background:rgba(34,197,94,0.1);border:2px solid #22c55e;border-radius:20px;padding:15px;margin-bottom:20px;">' +
+                        '<p style="font-size:14px;color:#4ade80;font-weight:700;margin:0 0 8px 0;">💡 لإغلاق الصفحة:</p>' +
+                        '<p style="font-size:14px;color:#cbd5e1;margin:0;">اضغط <strong style="color:#fbbf24;">Ctrl + W</strong><br>أو انقر على <strong style="color:#dc2626;">✕</strong> في التبويب</p>' +
+                    '</div>' +
+                    '<p style="font-size:13px;color:#94a3b8;margin-bottom:8px;">🌐 للعودة لاحقاً:</p>' +
+                    '<p style="font-size:13px;color:#fbbf24;font-weight:900;word-break:break-all;margin-bottom:20px;">zeidoun2021-crypto.github.io/zaied</p>' +
+                    '<a href="https://wa.me/21655335477" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:12px 30px;border-radius:40px;text-decoration:none;font-weight:900;font-size:14px;">💬 تواصل معنا</a>' +
+                    '<p style="font-size:12px;color:#475569;margin-top:30px;">© 2026 — محمد زايد — تونس 🇹🇳</p>' +
+                '</div>' +
+            '</div>';
 
-        // ═══════════════════════════════════════════
-        // 2) إذا فشل الإغلاق → استبدل المحتوى بصفحة الوداع
-        //    (بدون زر عودة داخل المنصة)
-        // ═══════════════════════════════════════════
-        setTimeout(function() {
-            // استبدل كامل الصفحة
-            document.open();
-            document.write(`
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>شكراً لزيارتك — منصة زايد</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    direction: rtl;
-    color: white;
-}
-.card {
-    max-width: 550px;
-    width: 100%;
-    text-align: center;
-    padding: 40px 30px;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    border: 4px solid #fbbf24;
-    border-radius: 30px;
-    box-shadow: 0 25px 80px rgba(0,0,0,0.6);
-}
-.hand { font-size: 130px; margin-bottom: 25px; animation: wave 1.5s ease-in-out infinite; }
-@keyframes wave {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(20deg); }
-    75% { transform: rotate(-20deg); }
-}
-h1 {
-    color: #fbbf24;
-    font-size: 32px;
-    margin-bottom: 20px;
-    font-weight: 900;
-    line-height: 1.4;
-}
-p { font-size: 18px; color: #cbd5e1; line-height: 2; margin-bottom: 20px; }
-.info-box {
-    background: rgba(220,38,38,0.15);
-    border: 3px solid #dc2626;
-    border-radius: 20px;
-    padding: 20px;
-    margin: 25px 0;
-}
-.info-box p { color: #fca5a5; font-weight: 900; font-size: 16px; margin: 0; }
-.tip {
-    background: rgba(34,197,94,0.1);
-    border: 2px solid #22c55e;
-    border-radius: 20px;
-    padding: 15px 20px;
-    margin: 20px 0;
-    color: #4ade80;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.9;
-}
-.close-tip {
-    font-size: 15px;
-    color: #94a3b8;
-    margin-top: 20px;
-    font-weight: 700;
-}
-.wa-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, #25D366, #128C7E);
-    color: white;
-    padding: 14px 35px;
-    border-radius: 40px;
-    text-decoration: none;
-    font-weight: 900;
-    font-size: 15px;
-    margin-top: 15px;
-    border: 2px solid #fbbf24;
-}
-.footer {
-    margin-top: 35px;
-    padding-top: 20px;
-    border-top: 1px solid #334155;
-    font-size: 12px;
-    color: #64748b;
-    font-weight: 700;
-}
-</style>
-</head>
-<body>
-    <div class="card">
-        <div class="hand">👋</div>
-        <h1>شكراً لزيارتك<br>منصة زايد</h1>
-        <p>نتمنى لك يوماً سعيداً 🌟<br>ونراك قريباً إن شاء الله</p>
-        
-        <div class="info-box">
-            <p>⚠️ لقد غادرت المنصة</p>
-        </div>
-        
-        <div class="tip">
-            💡 <strong>لإغلاق الصفحة:</strong><br>
-            اضغط <strong style="color:#fbbf24;">Ctrl + W</strong> (ويندوز)<br>
-            أو <strong style="color:#fbbf24;">Cmd + W</strong> (ماك)<br>
-            أو انقر على علامة <strong style="color:#dc2626;">✕</strong> في التبويب
-        </div>
-        
-        <p style="font-size:14px; color:#94a3b8; margin-top:10px;">
-            🌐 للعودة لاحقاً:
-        </p>
-        <p style="font-size:13px; color:#fbbf24; font-weight:900; letter-spacing:0.5px; word-break:break-all;">
-            zeidoun2021-crypto.github.io/zaied
-        </p>
-        
-        <a href="https://wa.me/21655335477" target="_blank" class="wa-btn">
-            💬 تواصل معنا
-        </a>
-        
-        <div class="footer">
-            © 2026 — محمد زايد — تونس 🇹🇳
-        </div>
-    </div>
-    
-    <script>
-        // محاولة إضافية لإغلاق التبويب
+        // محاولة إغلاق التبويب
         setTimeout(function() {
             try { window.close(); } catch(e) {}
-        }, 500);
-        
-        // منع الرجوع للخلف في المتصفح
-        try {
-            history.pushState(null, '', location.href);
-            window.onpopstate = function() {
-                history.pushState(null, '', location.href);
-            };
-        } catch(e) {}
-        
+        }, 300);
+
         // إشعار واتساب
         try {
             fetch('https://api.ultramsg.com/instance192075/messages/chat', {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'token=a5pynm6kjbch792g&to=21655335477&body=' + encodeURIComponent('🚪 زائر غادر المنصة\\n📅 ' + new Date().toLocaleString('ar-EG'))
+                body: 'token=a5pynm6kjbch792g&to=21655335477&body=' + encodeURIComponent('🚪 مغادرة المنصة')
             });
         } catch(e) {}
-    </script>
-</body>
-</html>
-            `);
-            document.close();
-        }, 300);
     };
 
     // تجاوز أي دالة قديمة
@@ -2330,8 +2194,9 @@ p { font-size: 18px; color: #cbd5e1; line-height: 2; margin-bottom: 20px; }
         }
     }, 500);
 
-    console.log('✅ زر المغادرة الفعلي جاهز');
+    console.log('✅ زر المغادرة جاهز');
 })();
+</script>
 </script>
 </body>
 </html>
