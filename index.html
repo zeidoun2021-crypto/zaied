@@ -7239,6 +7239,156 @@ console.log('✅ الصوت جاهز — بنفس كود المنجد');
     console.log('✅ الصوت جاهز (translate.googleapis.com)');
 })();
 </script>
+    <script>
+// 🔊 نظام النطق النهائي — Web Speech API (بدون إنترنت)
+(function() {
+    console.log('🔊 تفعيل Web Speech API...');
+    window.currentAudio = null;
+    window._welcomeSessionId = 0;
+
+    // تحميل الأصوات
+    let _voices = [];
+    function loadVoices() {
+        if (!window.speechSynthesis) return;
+        try { _voices = window.speechSynthesis.getVoices() || []; } catch(e) { _voices = []; }
+    }
+    loadVoices();
+    if (window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+        setTimeout(loadVoices, 300);
+        setTimeout(loadVoices, 800);
+        setTimeout(loadVoices, 1500);
+    }
+
+    window.speak = function(text, lang, isCont) {
+        if (!text || !text.trim()) return Promise.resolve();
+        
+        if (window.speechSynthesis) {
+            try { window.speechSynthesis.cancel(); } catch(e){}
+        }
+        
+        const code = lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar');
+        const langCode = code === 'fr' ? 'fr-FR' : (code === 'en' ? 'en-US' : 'ar-SA');
+
+        if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') {
+            console.warn('Web Speech غير مدعوم');
+            return Promise.resolve();
+        }
+
+        try {
+            if (_voices.length === 0) loadVoices();
+            
+            // ابحث عن صوت مطابق
+            let voice = _voices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase()) ||
+                        _voices.find(v => v.lang && v.lang.toLowerCase().startsWith(code)) ||
+                        _voices.find(v => v.name && v.name.toLowerCase().includes(code === 'ar' ? 'naayf' : (code === 'fr' ? 'french' : 'english')));
+
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = langCode;
+            if (voice) u.voice = voice;
+            u.rate = 0.9;
+            u.pitch = 1;
+            u.volume = 1;
+
+            return new Promise(r => {
+                let done = false;
+                const f = () => { if (done) return; done = true; r(); };
+                u.onend = f;
+                u.onerror = f;
+                setTimeout(f, Math.max(8000, text.length * 300));
+                window.speechSynthesis.speak(u);
+            });
+        } catch(e) {
+            console.warn('خطأ:', e);
+            return Promise.resolve();
+        }
+    };
+
+    window.speakBook = function(t, l) { return window.speak(t, l); };
+
+    window.ar0_speak = async function(t, r, d) {
+        r = r || 1; d = d || 700;
+        if (!t) return;
+        for (let i = 0; i < r; i++) {
+            await window.speak(t, 'ar', i > 0);
+            if (i < r - 1) await new Promise(x => setTimeout(x, d));
+        }
+    };
+
+    window.speakAcademy = function(t) {
+        if (!window.academyAudioEnabled || !t) return;
+        const c = { ar: 'ar', fr: 'fr', en: 'en' }[window.academyState?.lang || 'ar'] || 'ar';
+        window.speak(t, c);
+    };
+
+    window.testSound = function() {
+        console.log('🧪 اختبار...');
+        console.log('الأصوات:', _voices.filter(v => v.lang && v.lang.includes('ar')).map(v => v.lang + ' - ' + v.name));
+        window.speak('مرحباً بكم في منصة زايد للتعليم والبحث العلمي بتونس', 'ar');
+    };
+
+    // 🎙️ الترحيب
+    const WELCOME = {
+        ar: [
+            "مرحباً بكم في منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس.",
+            "منصة تعليمية للأطفال والشباب والأساتذة والمعلمين والأولياء والباحثين وذوي الاحتياجات الخاصة.",
+            "سجلوا دون مقابل واغتنموا الفرصة للحاق بالركب."
+        ],
+        fr: "Bienvenue sur la plateforme Zaied pour l'éducation et la recherche scientifique en Tunisie.",
+        en: "Welcome to Zaied Platform for Education and Scientific Research in Tunisia."
+    };
+
+    window.updateStatus = function(t) {
+        const e = document.getElementById('statusBox');
+        if (e) e.innerText = t;
+    };
+
+    window._resetWelcomeBtnUI = function() {
+        const w = document.getElementById('welcomeBtn');
+        const s = document.getElementById('stopBtn');
+        if (w) w.style.display = 'inline-block';
+        if (s) s.classList.remove('visible');
+        window.isPlaying = false;
+    };
+
+    window.playWelcome = async function() {
+        if (window.isPlaying) { window.stopWelcome(); return; }
+        window._welcomeSessionId++;
+        const mySession = window._welcomeSessionId;
+        window.isPlaying = true;
+        const wb = document.getElementById('welcomeBtn');
+        const sb = document.getElementById('stopBtn');
+        if (wb) wb.style.display = 'none';
+        if (sb) sb.classList.add('visible');
+        const aborted = () => mySession !== window._welcomeSessionId;
+
+        window.updateStatus("🎙️ الترحيب بالعربية...");
+        for (let i = 0; i < WELCOME.ar.length; i++) {
+            if (aborted()) { window._resetWelcomeBtnUI(); return; }
+            await window.speak(WELCOME.ar[i], 'ar', i > 0);
+        }
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("🎙️ Français...");
+        await window.speak(WELCOME.fr, 'fr');
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("🎙️ English...");
+        await window.speak(WELCOME.en, 'en');
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("✅ اكتمل الترحيب");
+        window._resetWelcomeBtnUI();
+    };
+
+    window.stopWelcome = function() {
+        window._welcomeSessionId++;
+        window.isPlaying = false;
+        if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch(e){} }
+        window.updateStatus("⏹️ تم الإيقاف");
+        window._resetWelcomeBtnUI();
+    };
+
+    console.log('✅ Web Speech API جاهز');
+})();
+</script>
 </body>
      <!-- 🔧 إصلاح دوال المشرف -->
 <script>
