@@ -6925,6 +6925,139 @@ window.addEventListener('click', (e) => {
     console.log('✅ الصوت العربي جاهز');
 })();
 </script>
+    <script>
+// 🔊 النطق — بنفس كود المنجد الذي يعمل
+function speakArabic(text) {
+    if(!text) return;
+    let url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=ar&client=tw-ob`;
+    let audio = new Audio(url);
+    audio.play().catch(e => console.log("خطأ:", e));
+}
+
+function speakEnglish(text) {
+    if(!text) return;
+    let url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=en&client=tw-ob`;
+    let audio = new Audio(url);
+    audio.play().catch(e => console.log("خطأ:", e));
+}
+
+function speakFrench(text) {
+    if(!text) return;
+    let url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=fr&client=tw-ob`;
+    let audio = new Audio(url);
+    audio.play().catch(e => console.log("خطأ:", e));
+}
+
+// 🎯 دالة speak الموحدة — تستعمل نفس الطريقة
+window.speak = function(text, lang, isCont) {
+    if (!text || !text.trim()) return;
+    if (lang === 'fr') {
+        speakFrench(text);
+    } else if (lang === 'en') {
+        speakEnglish(text);
+    } else {
+        speakArabic(text);
+    }
+};
+
+window.speakBook = function(text, lang) {
+    window.speak(text, lang);
+};
+
+window.ar0_speak = function(text, repeat, delayMs) {
+    repeat = repeat || 1;
+    delayMs = delayMs || 700;
+    if (!text) return;
+    let i = 0;
+    function playNext() {
+        if (i >= repeat) return;
+        speakArabic(text);
+        i++;
+        if (i < repeat) setTimeout(playNext, delayMs);
+    }
+    playNext();
+};
+
+window.speakAcademy = function(text) {
+    if (!window.academyAudioEnabled || !text) return;
+    const c = { ar: 'ar', fr: 'fr', en: 'en' }[window.academyState?.lang || 'ar'] || 'ar';
+    if (c === 'fr') speakFrench(text);
+    else if (c === 'en') speakEnglish(text);
+    else speakArabic(text);
+};
+
+window.testSound = function() {
+    console.log('🧪 اختبار الصوت العربي...');
+    speakArabic('مرحباً بكم في منصة زايد للتعليم والبحث العلمي بتونس');
+};
+
+// 🎙️ الترحيب — بنفس الطريقة البسيطة
+const WELCOME_AR = [
+    "مرحباً بكم في منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس.",
+    "منصة تعليمية للأطفال والشباب والأساتذة والمعلمين والأولياء والباحثين وذوي الاحتياجات الخاصة.",
+    "سجلوا دون مقابل واغتنموا الفرصة للحاق بالركب."
+];
+const WELCOME_FR = "Bienvenue sur la plateforme Zaied pour l'éducation, la recherche scientifique et la technologie avancée et l'intelligence artificielle en Tunisie.";
+const WELCOME_EN = "Welcome to Zaied Platform for Education, Scientific Research, Advanced Technology, and Artificial Intelligence in Tunisia.";
+
+window._welcomeRunning = false;
+
+window.updateStatus = function(t) {
+    const e = document.getElementById('statusBox');
+    if (e) e.innerText = t;
+};
+
+window.playWelcome = function() {
+    if (window._welcomeRunning) { window.stopWelcome(); return; }
+    window._welcomeRunning = true;
+    const wb = document.getElementById('welcomeBtn');
+    const sb = document.getElementById('stopBtn');
+    if (wb) wb.style.display = 'none';
+    if (sb) sb.classList.add('visible');
+
+    let step = 0;
+    const totalSteps = WELCOME_AR.length + 2;
+
+    function nextStep() {
+        if (!window._welcomeRunning) return;
+        if (step < WELCOME_AR.length) {
+            window.updateStatus("🎙️ الترحيب بالعربية...");
+            speakArabic(WELCOME_AR[step]);
+            step++;
+            setTimeout(nextStep, 9000);
+        } else if (step === WELCOME_AR.length) {
+            window.updateStatus("🎙️ Français...");
+            speakFrench(WELCOME_FR);
+            step++;
+            setTimeout(nextStep, 9000);
+        } else if (step === WELCOME_AR.length + 1) {
+            window.updateStatus("🎙️ English...");
+            speakEnglish(WELCOME_EN);
+            step++;
+            setTimeout(nextStep, 9000);
+        } else {
+            window.updateStatus("✅ اكتمل الترحيب");
+            window._welcomeRunning = false;
+            if (wb) wb.style.display = 'inline-block';
+            if (sb) sb.classList.remove('visible');
+        }
+    }
+    nextStep();
+};
+
+window.stopWelcome = function() {
+    window._welcomeRunning = false;
+    const wb = document.getElementById('welcomeBtn');
+    const sb = document.getElementById('stopBtn');
+    if (wb) wb.style.display = 'inline-block';
+    if (sb) sb.classList.remove('visible');
+    window.updateStatus("⏹️ تم الإيقاف");
+    // إيقاف أي صوت
+    document.querySelectorAll('audio').forEach(a => { try { a.pause(); } catch(e){} });
+};
+
+console.log('✅ الصوت جاهز — بنفس كود المنجد');
+</script>
 </body>
      <!-- 🔧 إصلاح دوال المشرف -->
 <script>
