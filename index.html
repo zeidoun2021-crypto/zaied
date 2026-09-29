@@ -6201,8 +6201,328 @@ window.addEventListener('click', (e) => {
     console.log('✅ نظام إجبار التسجيل جاهز');
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 🔊 إصلاح الصوت — codetabs proxy (يعمل بدون CORS)     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+(function() {
+    console.log('🔊 تفعيل الصوت النهائي...');
+    window.currentAudio = null;
+    window.isPlaying = false;
+    window._welcomeSessionId = 0;
+
+    const PROXY = 'https://api.codetabs.com/v1/proxy/?quest=';
+
+    window.speak = function(text, lang, isCont) {
+        if (!text || !text.trim()) return Promise.resolve();
+        if (!isCont && window.currentAudio) {
+            try { window.currentAudio.pause(); } catch(e){}
+            window.currentAudio = null;
+        }
+        const code = lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar');
+        const gUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' +
+                     encodeURIComponent(text) + '&tl=' + code + '&client=tw-ob&ttsspeed=0.9';
+        const audio = new Audio(PROXY + encodeURIComponent(gUrl));
+        window.currentAudio = audio;
+        return new Promise(r => {
+            let d = false;
+            const f = () => { if (d) return; d = true; if (window.currentAudio === audio) window.currentAudio = null; r(); };
+            audio.onended = f;
+            audio.onerror = f;
+            setTimeout(f, 15000);
+            audio.play().catch(f);
+        });
+    };
+
+    window.speakBook = function(t, l) { return window.speak(t, l); };
+
+    window.ar0_speak = async function(t, r, d) {
+        r = r || 1; d = d || 700;
+        if (!t) return;
+        for (let i = 0; i < r; i++) {
+            await window.speak(t, 'ar', i > 0);
+            if (i < r - 1) await new Promise(x => setTimeout(x, d));
+        }
+    };
+
+    window.speakAcademy = function(t) {
+        if (!window.academyAudioEnabled || !t) return;
+        const c = { ar: 'ar', fr: 'fr', en: 'en' }[window.academyState?.lang || 'ar'] || 'ar';
+        const g = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' +
+                  encodeURIComponent(t) + '&tl=' + c + '&client=tw-ob';
+        const a = new Audio(PROXY + encodeURIComponent(g));
+        window.currentAudio = a;
+        a.play().catch(() => {});
+    };
+
+    // 🎙️ الترحيب
+    const WELCOME = {
+        ar: [
+            "مرحباً بكم في منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس.",
+            "منصة تعليمية للأطفال والشباب والأساتذة والمعلمين والأولياء والباحثين وذوي الاحتياجات الخاصة.",
+            "سجلوا دون مقابل واغتنموا الفرصة للحاق بالركب."
+        ],
+        fr: "Bienvenue sur la plateforme Zaied pour l'éducation, la recherche scientifique et la technologie avancée et l'intelligence artificielle en Tunisie.",
+        en: "Welcome to Zaied Platform for Education, Scientific Research, Advanced Technology, and Artificial Intelligence in Tunisia."
+    };
+
+    window.updateStatus = function(t) {
+        const e = document.getElementById('statusBox');
+        if (e) e.innerText = t;
+    };
+
+    window._resetWelcomeBtnUI = function() {
+        const w = document.getElementById('welcomeBtn');
+        const s = document.getElementById('stopBtn');
+        if (w) w.style.display = 'inline-block';
+        if (s) s.classList.remove('visible');
+        window.isPlaying = false;
+    };
+
+    window.playWelcome = async function() {
+        if (window.isPlaying) { window.stopWelcome(); return; }
+        window._welcomeSessionId++;
+        const mySession = window._welcomeSessionId;
+        window.isPlaying = true;
+        const wb = document.getElementById('welcomeBtn');
+        const sb = document.getElementById('stopBtn');
+        if (wb) wb.style.display = 'none';
+        if (sb) sb.classList.add('visible');
+        const aborted = () => mySession !== window._welcomeSessionId;
+
+        window.updateStatus("🎙️ الترحيب بالعربية...");
+        for (let i = 0; i < WELCOME.ar.length; i++) {
+            if (aborted()) { window._resetWelcomeBtnUI(); return; }
+            await window.speak(WELCOME.ar[i], 'ar', i > 0);
+        }
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("🎙️ Français...");
+        await window.speak(WELCOME.fr, 'fr');
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("🎙️ English...");
+        await window.speak(WELCOME.en, 'en');
+        if (aborted()) { window._resetWelcomeBtnUI(); return; }
+        window.updateStatus("✅ اكتمل الترحيب");
+        window._resetWelcomeBtnUI();
+    };
+
+    window.stopWelcome = function() {
+        window._welcomeSessionId++;
+        window.isPlaying = false;
+        if (window.currentAudio) {
+            try { window.currentAudio.pause(); } catch(e){}
+            window.currentAudio = null;
+        }
+        if (window.speechSynthesis) {
+            try { window.speechSynthesis.cancel(); } catch(e){}
+        }
+        window.updateStatus("⏹️ تم الإيقاف");
+        window._resetWelcomeBtnUI();
+    };
+
+    window.testSound = function() {
+        window.speak('مرحباً بكم في منصة زايد للتعليم والبحث العلمي بتونس', 'ar');
+    };
+
+    console.log('✅ الصوت جاهز');
+})();
+</script>
+    <!-- ═══════════════════════════════════════════════════════ -->
+<!-- 👤 إصلاح لوحة المشرف — عرض كل معلومات المسجل          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+(function() {
+    console.log('👤 تفعيل لوحة المشرف الكاملة...');
+
+    window.sendWhatsApp = async function(message) {
+        try {
+            const apiUrl = 'https://api.ultramsg.com/instance192075/messages/chat';
+            const body = 'token=a5pynm6kjbch792g&to=21655335477&body=' + encodeURIComponent(message);
+            const proxy = 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(apiUrl);
+            await fetch(proxy, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body
+            });
+            return true;
+        } catch(e) { return false; }
+    };
+
+    window.loadAdminPanel = async function() {
+        const statsEl = document.getElementById('adminStats');
+        const listEl = document.getElementById('adminUsersList');
+        const visitorsEl = document.getElementById('adminVisitorsList');
+        if (!statsEl || !listEl) return;
+
+        const users = window.allUsersCache || [];
+        const subs = users.filter(u => u.subscribed).length;
+        const blocked = users.filter(u => (u.loginCount || 0) > 2 && !u.subscribed).length;
+
+        statsEl.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;">' +
+            '<div style="background:#3b82f6;color:white;padding:12px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:900;">' + users.length + '</div><div style="font-size:12px;">👥 مسجل</div></div>' +
+            '<div style="background:#22c55e;color:white;padding:12px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:900;">' + subs + '</div><div style="font-size:12px;">💎 مشترك</div></div>' +
+            '<div style="background:#dc2626;color:white;padding:12px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:900;">' + blocked + '</div><div style="font-size:12px;">🚫 استنفد</div></div>' +
+            '</div>';
+
+        if (users.length === 0) {
+            listEl.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا مسجلين بعد</p>';
+        } else {
+            listEl.innerHTML = users.map((u, i) => {
+                const lc = u.loginCount || 0;
+                const isBlocked = lc > 2 && !u.subscribed;
+                const bc = u.subscribed ? '#22c55e' : (isBlocked ? '#dc2626' : '#3b82f6');
+                const subBadge = u.subscribed ? '<span style="background:#22c55e;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:900;">💎 مشترك</span>' : '<span style="background:#64748b;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:900;">✅ مجاني</span>';
+                const blockedBadge = isBlocked ? ' <span style="background:#dc2626;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:900;">🚫 محظور</span>' : '';
+                return '<div style="background:#f8fafc;padding:16px;border-radius:14px;margin-bottom:12px;border-right:5px solid ' + bc + ';color:#0f172a;">' +
+                    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">' +
+                        '<div style="font-weight:900;color:#dc2626;font-size:16px;">' + (i+1) + '. ' + (u.name || '-') + '</div>' +
+                        '<div>' + subBadge + blockedBadge + '</div>' +
+                    '</div>' +
+                    '<div style="background:white;border-radius:10px;padding:12px;margin-bottom:8px;font-size:13px;line-height:1.9;color:#334155;">' +
+                        '<div>📧 <strong>البريد:</strong> ' + (u.email || '-') + '</div>' +
+                        '<div>📱 <strong>الواتساب:</strong> ' + (u.whatsapp || '-') + '</div>' +
+                        '<div>🌍 <strong>البلد:</strong> ' + (u.country || 'غير محدد') + '</div>' +
+                        '<div>💼 <strong>المهنة:</strong> ' + (u.profession || '-') + '</div>' +
+                        '<div>🎯 <strong>الاختصاص:</strong> ' + (u.specialty || '-') + '</div>' +
+                        '<div>🏷️ <strong>الفئة:</strong> ' + (u.category || '-') + '</div>' +
+                        '<div>📅 <strong>تاريخ التسجيل:</strong> ' + (u.date || '-') + '</div>' +
+                        '<div>🔢 <strong>عدد الدخولات:</strong> ' + lc + ' / 2 (المجاني)</div>' +
+                    '</div>' +
+                    '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+                        '<button onclick="toggleSubscribe(\'' + u.firebaseId + '\',' + !u.subscribed + ')" style="background:' + (u.subscribed ? '#dc2626' : '#22c55e') + ';color:white;border:none;padding:8px 14px;border-radius:15px;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;font-weight:bold;">' + (u.subscribed ? '⬇️ إلغاء اشتراك' : '💎 ترقية لمشترك') + '</button>' +
+                        '<button onclick="resetUserLogins(\'' + u.firebaseId + '\')" style="background:#f59e0b;color:white;border:none;padding:8px 14px;border-radius:15px;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;font-weight:bold;">🔄 تصفير الدخولات</button>' +
+                        '<button onclick="deleteUser(\'' + u.firebaseId + '\')" style="background:#64748b;color:white;border:none;padding:8px 14px;border-radius:15px;cursor:pointer;font-family:Cairo,sans-serif;font-size:12px;font-weight:bold;">🗑️ حذف</button>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        if (visitorsEl && window.fbGetAllVisitors) {
+            try {
+                const visitors = await window.fbGetAllVisitors();
+                visitorsEl.innerHTML = '<h3 style="color:#8b5cf6; margin-top:20px; text-align:center; font-weight:900; padding:12px; background:rgba(139,92,246,0.1); border-radius:12px;">👀 آخر الزوار (' + visitors.length + ')</h3>' +
+                    '<div style="background:#1e293b; padding:12px; border-radius:12px; margin-top:10px;">' +
+                    visitors.map(v => '<div style="padding:10px; border-bottom:1px solid #334155; color:#e2e8f0; font-size:13px;">' +
+                        '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">' +
+                            '<span>📱 ' + (v.device || '-') + ' • 🌐 ' + (v.browser || '-') + ' • 💻 ' + (v.os || '-') + '</span>' +
+                            '<span style="color:#94a3b8;">' + (v.visitedAt ? new Date(v.visitedAt.seconds*1000).toLocaleString('ar-EG') : '-') + '</span>' +
+                        '</div>' +
+                        (v.name && v.name !== 'زائر مجهول' ? '<div style="color:#fbbf24;margin-top:5px;">👤 ' + v.name + ' • 📱 ' + (v.phone || '-') + '</div>' : '') +
+                    '</div>').join('') +
+                    '</div>';
+            } catch(e) { console.warn(e); }
+        }
+    };
+
+    window.toggleSubscribe = async function(userId, sub) {
+        try { await window.fbSaveSubscription(userId, { subscribed: sub }); alert(sub ? '💎 تم الترقية' : '⬇️ تم الإلغاء'); await window.loadFirebaseData(); await window.loadAdminPanel(); } catch (e) { alert('⚠️ خطأ'); }
+    };
+    window.resetUserLogins = async function(userId) {
+        if (!confirm('تصفير دخولات هذا المستخدم؟')) return;
+        try { await window.fbSaveSubscription(userId, { loginCount: 0, blocked: false }); alert('✅ تم'); await window.loadFirebaseData(); await window.loadAdminPanel(); } catch (e) { alert('⚠️ خطأ'); }
+    };
+    window.deleteUser = async function(userId) {
+        if (!confirm('حذف هذا المستخدم؟')) return;
+        try { await window.fbDeleteUser(userId); alert('🗑️ تم'); await window.loadFirebaseData(); await window.loadAdminPanel(); } catch (e) { alert('⚠️ خطأ'); }
+    };
+
+    console.log('✅ لوحة المشرف الكاملة جاهزة');
+})();
+</script>
+    <!-- ═══════════════════════════════════════════════════════ -->
+<!-- 🔒 قاعدة المرتين المجانيتين + الحظر التلقائي           -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+(function() {
+    console.log('🔒 تفعيل قاعدة المرتين...');
+
+    const MAX_FREE = 2;
+
+    window.showLoginBlockedModal = function(user) {
+        const old = document.getElementById('loginBlockedModal');
+        if (old) old.remove();
+        const modal = document.createElement('div');
+        modal.id = 'loginBlockedModal';
+        modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.97);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;';
+        modal.innerHTML = '<div style="background:#1e293b;border-radius:25px;padding:35px 25px;max-width:520px;width:100%;border:3px solid #dc2626;text-align:center;color:white;font-family:Cairo,sans-serif;">' +
+            '<div style="font-size:70px;margin-bottom:15px;">🔒</div>' +
+            '<h2 style="color:#dc2626;font-size:24px;margin-bottom:12px;">انتهت محاولاتك المجانية</h2>' +
+            '<p style="font-size:15px;line-height:1.9;color:#cbd5e1;margin-bottom:20px;">مرحباً <strong style="color:#fbbf24;">' + (user.name || 'عزيزي') + '</strong><br>استعملت <strong style="color:#dc2626;">' + (user.loginCount || 0) + '</strong> دخولات.<br>لمواصلة الاستعمال، لازم تشترك.</p>' +
+            '<div style="background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;padding:20px;border-radius:18px;margin-bottom:18px;">' +
+                '<div style="font-size:50px;font-weight:900;">50</div>' +
+                '<div style="font-weight:900;">دينار / سنة</div>' +
+            '</div>' +
+            '<a href="https://wa.me/21655335477?text=' + encodeURIComponent('أريد الاشتراك\n' + (user.name || '') + '\n' + (user.email || '')) + '" target="_blank" style="display:block;background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:15px;border-radius:30px;text-decoration:none;font-weight:900;margin-bottom:12px;">💬 اشترك الآن عبر واتساب</a>' +
+            '<button onclick="document.getElementById(\'loginBlockedModal\').remove();" style="width:100%;background:#334155;color:white;padding:13px;border-radius:30px;border:none;cursor:pointer;font-weight:900;font-family:Cairo,sans-serif;">إغلاق</button>' +
+            '</div>';
+        document.body.appendChild(modal);
+        if (window.speak) window.speak('انتهت محاولاتك المجانية، يرجى الاشتراك', 'ar');
+    };
+
+    window.showExistingUserLogin = async function() {
+        const email = prompt('📧 أدخل بريدك الإلكتروني:');
+        if (!email) return;
+        const e = email.trim().toLowerCase();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { alert('⚠️ بريد غير صحيح'); return; }
+        try {
+            const user = await window.fbGetUserByEmail(e);
+            if (!user) { alert('❌ لا يوجد حساب'); return; }
+            if (user.blocked === true) { alert('🚫 حسابك محظور'); window.showLoginBlockedModal(user); return; }
+
+            if (user.subscribed === true) {
+                user.loginCount = (user.loginCount || 0) + 1;
+                await window._doUserLogin(user, true);
+                return;
+            }
+
+            const prev = user.loginCount || 0;
+            const newCount = prev + 1;
+
+            if (newCount > MAX_FREE) {
+                if (window.fbSaveSubscription) {
+                    await window.fbSaveSubscription(user.firebaseId, { loginCount: newCount, blocked: true, lastBlockedAt: new Date().toISOString() });
+                }
+                if (window.sendWhatsApp) {
+                    await window.sendWhatsApp('🚫 محاولة دخول مرفوضة\n👤 ' + user.name + '\n📧 ' + user.email + '\n📱 ' + (user.whatsapp || '-') + '\n🌍 ' + (user.country || '-') + '\n🔢 عدد المحاولات: ' + newCount + '\n📅 ' + new Date().toLocaleString('ar-EG'));
+                }
+                window.showLoginBlockedModal(user);
+                return;
+            }
+
+            user.loginCount = newCount;
+            await window._doUserLogin(user, false);
+        } catch (err) { console.error(err); alert('⚠️ خطأ'); }
+    };
+
+    window._doUserLogin = async function(user, isSubscriber) {
+        if (window.fbSaveSubscription) {
+            await window.fbSaveSubscription(user.firebaseId, { loginCount: user.loginCount, lastLoginAt: new Date().toISOString() });
+        }
+        if (window.fbSaveLoginCount) {
+            await window.fbSaveLoginCount(user.firebaseId, user.loginCount);
+        }
+        window.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        window.userStatus = isSubscriber ? 'subscriber' : 'registered';
+        if (window.updateUserBanner) window.updateUserBanner();
+
+        const statusTxt = isSubscriber ? '💎 مشترك' : '✅ مجاني';
+        const remaining = isSubscriber ? '∞' : Math.max(0, MAX_FREE - user.loginCount);
+
+        if (window.sendWhatsApp) {
+            await window.sendWhatsApp('🔓 دخول جديد\n👤 ' + user.name + '\n📧 ' + user.email + '\n📱 ' + (user.whatsapp || '-') + '\n🌍 ' + (user.country || '-') + '\n💼 ' + (user.profession || '-') + '\n🎯 ' + (user.specialty || '-') + '\n🏷️ ' + (user.category || '-') + '\n🔰 ' + statusTxt + '\n🔢 عدد الدخولات: ' + user.loginCount + '\n⏳ متبقي: ' + remaining + '\n📅 ' + new Date().toLocaleString('ar-EG'));
+        }
+
+        alert('✅ مرحباً ' + user.name + '\n\n' + (isSubscriber ? '💎 مشترك — دخول غير محدود' : '🔢 الدخول رقم: ' + user.loginCount + ' من ' + MAX_FREE + '\n⏳ متبقي: ' + remaining + ' دخول'));
+
+        if (window.moveToSections) window.moveToSections();
+    };
+
+    console.log('✅ قاعدة المرتين مفعّلة');
+})();
+</script>
 </body>
- <!-- 🔧 إصلاح دوال المشرف -->
+     <!-- 🔧 إصلاح دوال المشرف -->
 <script>
 (function() {
     console.log('🔧 تفعيل إصلاح المشرف...');
