@@ -2772,5 +2772,55 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
     console.log('✅ نموذج التسجيل + الصوت بالثلاث لغات جاهز');
 })();
 </script>
+	<style>
+/* 👑 شريط أزرار لوحة المشرف */
+.admin-toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    padding: 15px;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-radius: 20px;
+    border: 2px solid #fbbf24;
+    max-width: 900px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+.admin-toolbar button {
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 40px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.admin-toolbar button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+.admin-btn-sections { background: linear-gradient(135deg,#3b82f6,#1e40af); }
+.admin-btn-refresh  { background: linear-gradient(135deg,#22c55e,#16a34a); }
+.admin-btn-reset    { background: linear-gradient(135deg,#f59e0b,#b45309); }
+.admin-btn-logout   { background: linear-gradient(135deg,#dc2626,#991b1b); }
+
+@media (max-width: 600px) {
+    .admin-toolbar button {
+        flex: 1 1 45%;
+        min-width: 45%;
+        max-width: 45%;
+        font-size: 13px;
+        padding: 12px 10px;
+    }
+}
+</style>
 </body>
 </html>
