@@ -2362,6 +2362,26 @@ window.finalExit = function() {
 };
 
 console.log('✅ التعريف النهائي جاهز');
+		
+// ═══ إعادة ربط الزر بالتعريف الجديد (يتجاوز كل الروابط القديمة) ═══
+function rebindExitButton() {
+    const btn = document.getElementById('globalExitBtn');
+    if (!btn) return;
+    // تجاهل الربط القديم
+    btn.onclick = null;
+    btn.removeAttribute('onclick');
+    // ربط جديد
+    btn.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.exitPlatform();
+    };
+}
+// بعد ثانية (حتى ينتهي البلوك القديم من الربط)
+setTimeout(rebindExitButton, 1500);
+setTimeout(rebindExitButton, 3000);
+setTimeout(rebindExitButton, 5000);
+console.log('✅ إعادة الربط جاهزة');
 </script>
 </body>
 </html>
