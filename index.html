@@ -3183,5 +3183,51 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   console.log('✅ النظام الشامل جاهز');
 })();
 </script>
+	<script>
+// ═══════════════════════════════════════════════════════════
+// 🔀 فصل تام بين الصفحتين — لا تظهر عناصر الصفحة 1 في الصفحة 2
+// ═══════════════════════════════════════════════════════════
+(function() {
+  function separate() {
+    var priceEl = document.querySelector('.hero-price');
+    if (!priceEl) return;
+
+    var priceVisible = getComputedStyle(priceEl).display !== 'none';
+
+    // عناصر الصفحة 1 (يجب أن تظهر فقط في الصفحة 1)
+    var tab1Selectors = [
+      '.hero-teacher',
+      '[class*="hero-teacher"]',
+      '[class*="hero-feature"]',
+      '[class*="hero-list"]',
+      '[class*="hero-intro"]',
+      '[class*="hero-heading"]',
+      '[class*="hero-title"]'
+    ];
+
+    tab1Selectors.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        // تجاهل الأباء (لا تخفي الحاويات الكبيرة)
+        if (el.querySelector('.hero-price')) return;
+        if (priceVisible) {
+          el.style.setProperty('display', 'none', 'important');
+        } else {
+          el.style.removeProperty('display');
+        }
+      });
+    });
+
+    // احذف أي زر عائم متبقٍ
+    ['zaiedTabs','zaied2Tabs'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.remove();
+    });
+  }
+
+  setInterval(separate, 250);
+  window.addEventListener('load', function() { setTimeout(separate, 500); });
+  console.log('✅ الفصل التام جاهز');
+})();
+</script>
 </body>
 </html>
