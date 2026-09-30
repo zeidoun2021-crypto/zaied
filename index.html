@@ -3078,5 +3078,110 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   }
 })();
 </script>
+	<script>
+// ═══════════════════════════════════════════════════════════
+// 🧹 تنظيف شامل + تقسيم الصفحة — بدون تدخل يدوي
+// ═══════════════════════════════════════════════════════════
+(function() {
+  function cleanOld() {
+    ['zaiedTabs','zaied2Tabs','gotoSubBtn','backToFeaturesBtn','pageDividerBtn'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) { el.remove(); console.log('🧹 حذفت:', id); }
+    });
+    document.querySelectorAll('button').forEach(function(b) {
+      var t = (b.innerText || '');
+      if ((t.includes('الميزات') && t.includes('الاشتراك')) || 
+          t === '💎 الاشتراك' || t === '📚 الميزات') {
+        var p = b.parentElement;
+        if (p && (p.id || '').indexOf('zaied') === -1) p.remove();
+      }
+    });
+  }
+
+  function setup() {
+    cleanOld();
+    if (document.getElementById('zaiedSplitOK')) return;
+
+    var priceEl = document.querySelector('.hero-price');
+    if (!priceEl) { setTimeout(setup, 700); return; }
+
+    var parent = priceEl.parentElement;
+    var safety = 0;
+    while (parent && parent.parentElement && safety < 12) {
+      var t = parent.innerText || '';
+      if (t.includes('انضم إلى') || t.includes('وصول كامل') || t.includes('ميزات')) break;
+      parent = parent.parentElement;
+      safety++;
+    }
+
+    var children = Array.from(parent.children);
+    var startIdx = -1;
+    children.forEach(function(c, i) {
+      if (c === priceEl || c.contains(priceEl)) startIdx = i;
+    });
+    if (startIdx === -1) { setTimeout(setup, 700); return; }
+
+    var tab2Items = children.slice(startIdx);
+    tab2Items.forEach(function(el) { el.style.setProperty('display', 'none', 'important'); });
+
+    // زر الانتقال للاشتراك
+    var wrap1 = document.createElement('div');
+    wrap1.id = 'zaiedSplitOK';
+    wrap1.style.cssText = 'text-align:center;margin:25px auto;max-width:420px;padding:0 20px;';
+    var btn1 = document.createElement('button');
+    btn1.innerHTML = '💎 انتقل إلى الاشتراك السنوي';
+    btn1.style.cssText = 'width:100%;padding:18px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;border:4px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 8px 25px rgba(251,191,36,0.5);';
+    wrap1.appendChild(btn1);
+    parent.insertBefore(wrap1, tab2Items[0]);
+
+    // زر العودة
+    var wrap2 = document.createElement('div');
+    wrap2.style.cssText = 'text-align:center;margin:25px auto;max-width:420px;padding:0 20px;display:none;';
+    var btn2 = document.createElement('button');
+    btn2.innerHTML = '◀ العودة للميزات والتعريف';
+    btn2.style.cssText = 'width:100%;padding:15px;background:linear-gradient(135deg,#334155,#1e293b);color:white;border:2px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:15px;cursor:pointer;';
+    wrap2.appendChild(btn2);
+    var last = tab2Items[tab2Items.length - 1];
+    last.parentElement.insertBefore(wrap2, last.nextSibling);
+
+    btn1.onclick = function() {
+      tab2Items.forEach(function(el) { el.style.removeProperty('display'); });
+      wrap1.style.display = 'none';
+      wrap2.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    btn2.onclick = function() {
+      tab2Items.forEach(function(el) { el.style.setProperty('display', 'none', 'important'); });
+      wrap2.style.display = 'none';
+      wrap1.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    console.log('✅ التقسيم جاهز');
+  }
+
+  // 🙈 إخفاء شريط "أنت المشرف" خارج لوحة المشرف
+  function hideAdminBanner() {
+    var banner = document.getElementById('userStatusBanner');
+    if (!banner) return;
+    var adminPage = document.getElementById('pageAdmin');
+    var loginPage = document.getElementById('pageAdminLogin');
+    var onAdmin = (adminPage && !adminPage.classList.contains('hide')) ||
+                  (loginPage && !loginPage.classList.contains('hide'));
+    banner.style.setProperty('display', onAdmin ? '' : 'none', 'important');
+  }
+
+  // راقب دائماً
+  setInterval(function() { cleanOld(); hideAdminBanner(); }, 400);
+  window.addEventListener('load', function() {
+    setTimeout(setup, 1200);
+    setTimeout(hideAdminBanner, 500);
+  });
+  setTimeout(setup, 2000);
+  setTimeout(setup, 4000);
+
+  console.log('✅ النظام الشامل جاهز');
+})();
+</script>
 </body>
 </html>
