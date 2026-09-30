@@ -1538,7 +1538,7 @@ window.logoutUser = function() {
     window.updateUserBanner();
 };
 
-window.exitPlatform = function() {
+window.exitPlatform_DEAD = function() {
     window.killWelcome();
     if (!confirm('🚪 هل تريد مغادرة المنصة؟')) return;
     
@@ -2141,7 +2141,7 @@ window.addEventListener('click', function(e) {
 </script><script>
 // 🚪 زر المغادرة — بسيط وآمن
 (function() {
-    window.exitPlatform = function() {
+    window.exitPlatform_DEAD = function() {
         // إيقاف الأصوات
         try { speechSynthesis.cancel(); } catch(e){}
         try { if (window.currentAudio) window.currentAudio.pause(); } catch(e){}
@@ -2187,10 +2187,10 @@ window.addEventListener('click', function(e) {
     };
 
     // تجاوز أي دالة قديمة
-    const MY_EXIT = window.exitPlatform;
+    const MY_EXIT = window.exitPlatform_DEAD;
     setInterval(function() {
-        if (window.exitPlatform !== MY_EXIT) {
-            window.exitPlatform = MY_EXIT;
+        if (window.exitPlatform_DEAD !== MY_EXIT) {
+            window.exitPlatform_DEAD = MY_EXIT;
         }
     }, 500);
 
@@ -2232,7 +2232,7 @@ window.addEventListener('click', function(e) {
                 '</div>' +
             '</div>';
     }
-    window.exitPlatform = doExit;
+    window.exitPlatform_DEAD = doExit;
 
     // ═══════════════════════════════════════════
     // إنشاء الزر إذا لم يكن موجوداً
@@ -2271,7 +2271,7 @@ window.addEventListener('click', function(e) {
 // ═══════════════════════════════════════════════════════════
 // 🚪 نسخة نهائية من زر المغادرة (تفوز على كل النسخ السابقة)
 // ═══════════════════════════════════════════════════════════
-window.exitPlatform = function() {
+window.exitPlatform_DEAD = function() {
     try { speechSynthesis.cancel(); } catch(e){}
     try { window.killWelcome && window.killWelcome(); } catch(e){}
     if (!confirm('🚪 هل تريد مغادرة المنصة؟')) return;
@@ -2327,6 +2327,41 @@ window.finalExit = function() {
         }
     }, 500);
 };
+</script>
+	<script>
+// 🚪 التعريف النهائي (يجب أن يكون آخر شيء في الملف)
+window.exitPlatform = function() {
+    try { speechSynthesis.cancel(); } catch(e){}
+    try { window.killWelcome && window.killWelcome(); } catch(e){}
+    if (!confirm('🚪 هل تريد مغادرة المنصة؟')) return;
+
+    document.body.innerHTML =
+        '<div style="min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e293b);display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;font-family:Cairo,sans-serif;color:white;">' +
+            '<div style="max-width:520px;width:100%;text-align:center;padding:40px 30px;background:linear-gradient(135deg,#1e293b,#0f172a);border:4px solid #fbbf24;border-radius:30px;">' +
+                '<div style="font-size:120px;margin-bottom:25px;">👋</div>' +
+                '<h1 style="color:#fbbf24;font-size:28px;margin-bottom:20px;font-weight:900;">شكراً لزيارتك منصة زايد</h1>' +
+                '<p style="font-size:17px;color:#cbd5e1;line-height:2;margin-bottom:25px;">نتمنى لك يوماً سعيداً 🌟</p>' +
+                '<button onclick="window.finalExit()" style="width:100%;padding:20px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:4px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:19px;cursor:pointer;margin-bottom:15px;">🚪 الخروج النهائي</button>' +
+                '<button onclick="location.reload()" style="width:100%;padding:15px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:2px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:16px;cursor:pointer;margin-bottom:20px;">🔄 العودة إلى المنصة</button>' +
+                '<p id="exitMsg" style="font-size:13px;color:#94a3b8;min-height:20px;"></p>' +
+                '<a href="https://wa.me/21655335477" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:12px 30px;border-radius:40px;text-decoration:none;font-weight:900;font-size:14px;">💬 تواصل معنا</a>' +
+                '<p style="font-size:12px;color:#475569;margin-top:30px;">© 2026 — محمد زايد — تونس 🇹🇳</p>' +
+            '</div>' +
+        '</div>';
+};
+
+window.finalExit = function() {
+    const msg = document.getElementById('exitMsg');
+    if (msg) msg.textContent = '⏳ جاري إغلاق التبويب...';
+    try { window.open('', '_self', ''); window.close(); } catch(e) {}
+    setTimeout(function() { try { window.close(); } catch(e) {} }, 100);
+    setTimeout(function() {
+        try { window.open('about:blank', '_self'); window.close(); } catch(e) {}
+        if (msg) msg.innerHTML = '<span style="color:#fbbf24;font-weight:900;">⚠️ المتصفح رفض الإغلاق</span><br><span style="font-size:12px;">اضغط <strong>Ctrl + W</strong> يدوياً</span>';
+    }, 500);
+};
+
+console.log('✅ التعريف النهائي جاهز');
 </script>
 </body>
 </html>
