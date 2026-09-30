@@ -2930,68 +2930,92 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   #zaied2Tabs button.active {
     background: linear-gradient(135deg, #22c55e, #16a34a);
   }
-  .zaied2hide { display: none !important; }
 </style>
 
 <script>
 (function() {
-  function findYellowCard() {
-    return document.querySelector('.hero-price') 
-        || document.querySelector('[class*="hero-price"]:not([class*="num"]):not([class*="cur"]):not([class*="usd"]):not([class*="note"])');
-  }
-  
   function setup() {
-    const yellow = findYellowCard();
-    if (!yellow) { setTimeout(setup, 500); return; }
+    // ابحث عن البطاقة الصفراء بالبحث في النص
+    const all = document.querySelectorAll('div, section, article');
+    let yellowCard = null;
     
-    // صعد للأب الذي يحتوي على الميزات + البطاقة
-    let container = yellow.parentElement;
+    for (let i = 0; i < all.length; i++) {
+      const el = all[i];
+      // البطاقة الصفراء تحتوي على السعر والنص "د.ت" و "الاشتراك السنوي"
+      const txt = el.innerText || '';
+      if (txt.includes('الاشتراك السنوي') && txt.includes('د.ت') && txt.length < 500) {
+        yellowCard = el;
+        break;
+      }
+    }
+    
+    if (!yellowCard) {
+      console.log('⏳ لم أجد البطاقة الصفراء بعد، إعادة المحاولة...');
+      setTimeout(setup, 800);
+      return;
+    }
+    
+    console.log('✅ وجدت البطاقة الصفراء:', yellowCard.className);
+    
+    // ابحث عن الأب المشترك الذي يحتوي على: البطاقة الصفراء + الميزات
+    let commonParent = yellowCard.parentElement;
     let safety = 0;
-    while (container && container.parentElement && safety < 10) {
-      const t = container.innerText || '';
-      if (t.includes('انضم إلى أكاديمية') || t.includes('ميزات')) break;
-      container = container.parentElement;
+    while (commonParent && safety < 8) {
+      const t = commonParent.innerText || '';
+      if (t.includes('انضم إلى أكاديمية') || t.includes('ميزات') || t.includes('وصول كامل')) {
+        break;
+      }
+      commonParent = commonParent.parentElement;
       safety++;
     }
-    if (!container) container = yellow.parentElement;
+    if (!commonParent) commonParent = yellowCard.parentElement;
     
-    const siblings = Array.from(container.children);
-    let yellowIdx = -1;
-    siblings.forEach(function(el, i) {
-      if (el === yellow || el.contains(yellow)) yellowIdx = i;
-    });
-    if (yellowIdx === -1) { setTimeout(setup, 500); return; }
+    console.log('✅ الأب المشترك:', commonParent.tagName, commonParent.className);
     
-    // التبويب 2 = كل شيء من البطاقة الصفراء وما بعدها
-    const tab2Items = siblings.slice(yellowIdx);
-    tab2Items.forEach(function(el) { el.classList.add('zaied2hide'); });
+    // اعثر على مسار البطاقة الصفراء داخل الأب
+    let current = yellowCard;
+    while (current && current.parentElement !== commonParent) {
+      current = current.parentElement;
+    }
+    if (!current) { setTimeout(setup, 800); return; }
     
-    // شريط التبويبات
+    // كل شيء من current وما بعده = تبويب 2
+    const allChildren = Array.from(commonParent.children);
+    const startIdx = allChildren.indexOf(current);
+    const tab2Items = allChildren.slice(startIdx);
+    
+    console.log('📋 عناصر تبويب 2:', tab2Items.length);
+    
+    // اخفاء افتراضي
+    tab2Items.forEach(function(el) { el.style.display = 'none'; });
+    
+    // شريط التبويبات — ضعه قبل القسم كله
     const tabsBar = document.createElement('div');
     tabsBar.id = 'zaied2Tabs';
     tabsBar.innerHTML =
       '<button class="active" data-tab="1">📚 التعريف والميزات</button>' +
       '<button data-tab="2">💎 الاشتراك السنوي</button>';
-    container.insertBefore(tabsBar, container.firstChild);
+    commonParent.insertBefore(tabsBar, commonParent.firstChild);
     
     tabsBar.querySelectorAll('button').forEach(function(btn) {
       btn.onclick = function() {
         tabsBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         if (this.dataset.tab === '1') {
-          tab2Items.forEach(el => el.classList.add('zaied2hide'));
+          tab2Items.forEach(el => el.style.display = 'none');
         } else {
-          tab2Items.forEach(el => el.classList.remove('zaied2hide'));
+          tab2Items.forEach(el => el.style.display = '');
         }
         window.scrollTo({top: 0, behavior: 'smooth'});
       };
     });
     
-    console.log('✅ تم تقسيم الصفحة الرئيسية إلى تبويبين');
+    console.log('🎉 تم تقسيم الصفحة إلى تبويبين');
   }
   
-  window.addEventListener('load', function() { setTimeout(setup, 1200); });
+  window.addEventListener('load', function() { setTimeout(setup, 1500); });
 })();
 </script>
+	
 </body>
 </html>
