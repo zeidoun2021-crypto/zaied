@@ -2972,6 +2972,29 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   }
 })();
 </script>
-	
+	<script>
+(function() {
+    function check() {
+        const banner = document.getElementById('userStatusBanner');
+        if (!banner) return;
+
+        // اختبار: هل نحن في لوحة المشرف؟
+        const adminPage = document.getElementById('pageAdmin');
+        const loginPage = document.getElementById('pageAdminLogin');
+        const onAdmin = (adminPage && !adminPage.classList.contains('hide')) ||
+                        (loginPage && !loginPage.classList.contains('hide'));
+
+        // إن لم نكن في لوحة المشرف → أخفِ الشريط
+        if (!onAdmin) {
+            banner.style.setProperty('display', 'none', 'important');
+        } else {
+            banner.style.removeProperty('display');
+        }
+    }
+    setInterval(check, 200);
+    window.addEventListener('load', function() { setTimeout(check, 300); });
+    console.log('✅ شريط المشرف مخفي خارج اللوحة');
+})();
+</script>
 </body>
 </html>
