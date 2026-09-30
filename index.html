@@ -2899,121 +2899,74 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
     console.log('✅ نظام المشرف جاهز — isAdminMode:', window.isAdminMode);
 })();
 </script>
-	<style>
-  #zaied2Tabs {
+<style>
+  #zaiedTabs {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999998;
     display: flex;
-    gap: 10px;
-    justify-content: center;
-    padding: 12px;
-    margin: 15px auto;
-    max-width: 700px;
-    position: sticky;
-    top: 0;
-    z-index: 9000;
+    gap: 8px;
+    padding: 8px 10px;
     background: linear-gradient(135deg, #0f172a, #1e293b);
     border: 2px solid #fbbf24;
     border-radius: 50px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
   }
-  #zaied2Tabs button {
-    flex: 1;
-    max-width: 300px;
-    padding: 12px 20px;
+  #zaiedTabs button {
+    padding: 10px 18px;
+    border-radius: 30px;
     border: 2px solid #fbbf24;
-    border-radius: 40px;
     background: #1e293b;
     color: white;
-    font-family: 'Cairo', sans-serif;
+    font-family: Cairo, sans-serif;
     font-weight: 900;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
   }
-  #zaied2Tabs button.active {
+  #zaiedTabs button.active {
     background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
   }
 </style>
 
 <script>
-(function() {
-  function setup() {
-    // ابحث عن البطاقة الصفراء بالبحث في النص
-    const all = document.querySelectorAll('div, section, article');
-    let yellowCard = null;
-    
-    for (let i = 0; i < all.length; i++) {
-      const el = all[i];
-      // البطاقة الصفراء تحتوي على السعر والنص "د.ت" و "الاشتراك السنوي"
-      const txt = el.innerText || '';
-      if (txt.includes('الاشتراك السنوي') && txt.includes('د.ت') && txt.length < 500) {
-        yellowCard = el;
-        break;
-      }
-    }
-    
-    if (!yellowCard) {
-      console.log('⏳ لم أجد البطاقة الصفراء بعد، إعادة المحاولة...');
-      setTimeout(setup, 800);
-      return;
-    }
-    
-    console.log('✅ وجدت البطاقة الصفراء:', yellowCard.className);
-    
-    // ابحث عن الأب المشترك الذي يحتوي على: البطاقة الصفراء + الميزات
-    let commonParent = yellowCard.parentElement;
-    let safety = 0;
-    while (commonParent && safety < 8) {
-      const t = commonParent.innerText || '';
-      if (t.includes('انضم إلى أكاديمية') || t.includes('ميزات') || t.includes('وصول كامل')) {
-        break;
-      }
-      commonParent = commonParent.parentElement;
-      safety++;
-    }
-    if (!commonParent) commonParent = yellowCard.parentElement;
-    
-    console.log('✅ الأب المشترك:', commonParent.tagName, commonParent.className);
-    
-    // اعثر على مسار البطاقة الصفراء داخل الأب
-    let current = yellowCard;
-    while (current && current.parentElement !== commonParent) {
-      current = current.parentElement;
-    }
-    if (!current) { setTimeout(setup, 800); return; }
-    
-    // كل شيء من current وما بعده = تبويب 2
-    const allChildren = Array.from(commonParent.children);
-    const startIdx = allChildren.indexOf(current);
-    const tab2Items = allChildren.slice(startIdx);
-    
-    console.log('📋 عناصر تبويب 2:', tab2Items.length);
-    
-    // اخفاء افتراضي
-    tab2Items.forEach(function(el) { el.style.display = 'none'; });
-    
-    // شريط التبويبات — ضعه قبل القسم كله
-    const tabsBar = document.createElement('div');
-    tabsBar.id = 'zaied2Tabs';
-    tabsBar.innerHTML =
-      '<button class="active" data-tab="1">📚 التعريف والميزات</button>' +
-      '<button data-tab="2">💎 الاشتراك السنوي</button>';
-    commonParent.insertBefore(tabsBar, commonParent.firstChild);
-    
-    tabsBar.querySelectorAll('button').forEach(function(btn) {
-      btn.onclick = function() {
-        tabsBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        if (this.dataset.tab === '1') {
-          tab2Items.forEach(el => el.style.display = 'none');
-        } else {
-          tab2Items.forEach(el => el.style.display = '');
-        }
-        window.scrollTo({top: 0, behavior: 'smooth'});
-      };
+(function(){
+  function apply(tab) {
+    document.querySelectorAll('#zaiedTabs button').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.t === tab);
     });
-    
-    console.log('🎉 تم تقسيم الصفحة إلى تبويبين');
+    // العناصر التي تنتمي لقسم الاشتراك (من Console)
+    const els = document.querySelectorAll('.hero-price, .hero-payment, .hero-pay-tag, .hero-btns, .hero-links, [class*="hero-price"], [class*="hero-payment"]');
+    els.forEach(function(el) {
+      if (tab === '1') {
+        el.style.setProperty('display', 'none', 'important');
+      } else {
+        el.style.removeProperty('display');
+      }
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  
-  window.addEventListener('load', function() { setTimeout(setup, 1500); });
+
+  function init() {
+    if (document.getElementById('zaiedTabs')) return;
+    const bar = document.createElement('div');
+    bar.id = 'zaiedTabs';
+    bar.innerHTML = '<button data-t="1" class="active">📚 الميزات</button><button data-t="2">💎 الاشتراك</button>';
+    document.body.appendChild(bar);
+    bar.querySelectorAll('button').forEach(function(b) {
+      b.onclick = function() { apply(b.dataset.t); };
+    });
+    apply('1');
+    console.log('✅ التبويبات جاهزة');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1500); });
+  } else {
+    setTimeout(init, 1500);
+  }
 })();
 </script>
 	
