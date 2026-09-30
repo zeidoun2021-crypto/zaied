@@ -3320,5 +3320,105 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   setTimeout(setup, 3000);
 })();
 </script>
+	<script>
+// ═══════════════════════════════════════════════════════════
+// 🔀 فصل كامل عبر الرابط (#) — صفحتان مستقلتان تماماً
+// ═══════════════════════════════════════════════════════════
+(function() {
+  // 🧹 احذف كل بقايا الأكواد السابقة
+  ['zaiedTabs','zaied2Tabs','gotoSubBtn','backToFeaturesBtn','pageDividerBtn','zaiedSplitOK','zaiedPage2'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.remove();
+  });
+  document.querySelectorAll('button').forEach(function(b) {
+    var t = (b.innerText || '').trim();
+    if (t === '📚 الميزات' || t === '💎 الاشتراك' || 
+        (t.includes('انتقل إلى الاشتراك') && b.parentElement.id !== 'zaiedNavWrap') ||
+        (t.includes('العودة للميزات') && b.parentElement.id !== 'zaiedNavWrap')) {
+      var p = b.parentElement;
+      if (p && p.id !== 'zaiedNavWrap') p.remove();
+    }
+  });
+
+  function route() {
+    var isSub = location.hash === '#subscribe';
+    var priceEl = document.querySelector('.hero-price');
+    if (!priceEl) { setTimeout(route, 700); return; }
+
+    var parent = priceEl.parentElement;
+    var safety = 0;
+    while (parent && parent.parentElement && safety < 12) {
+      var t = parent.innerText || '';
+      if (t.includes('انضم إلى') || t.includes('وصول كامل')) break;
+      parent = parent.parentElement;
+      safety++;
+    }
+
+    var children = Array.from(parent.children);
+    var startIdx = -1;
+    children.forEach(function(c, i) {
+      if (c === priceEl || c.contains(priceEl)) startIdx = i;
+    });
+    if (startIdx === -1) { setTimeout(route, 700); return; }
+
+    var subItems = children.slice(0, startIdx);  // عناصر الصفحة 1
+    var priceItems = children.slice(startIdx);   // عناصر الصفحة 2
+
+    if (isSub) {
+      // 💎 الصفحة 2: أخفِ كل شيء ما عدا الاشتراك
+      subItems.forEach(function(el){ el.style.setProperty('display','none','important'); });
+      priceItems.forEach(function(el){ el.style.removeProperty('display'); });
+    } else {
+      // 📚 الصفحة 1: أخفِ الاشتراك فقط
+      priceItems.forEach(function(el){ el.style.setProperty('display','none','important'); });
+      subItems.forEach(function(el){ el.style.removeProperty('display'); });
+    }
+
+    // أضف زر التنقل (يظهر فقط إن لم يكن موجوداً)
+    if (!document.getElementById('zaiedNavWrap')) {
+      var wrap = document.createElement('div');
+      wrap.id = 'zaiedNavWrap';
+      wrap.style.cssText = 'text-align:center;margin:25px auto;max-width:420px;padding:0 20px;';
+      parent.insertBefore(wrap, priceItems[0]);
+
+      var btn1 = document.createElement('button');
+      btn1.id = 'zaiedBtnToSub';
+      btn1.innerHTML = '💎 انتقل إلى الاشتراك السنوي';
+      btn1.style.cssText = 'width:100%;padding:18px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;border:4px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 8px 25px rgba(251,191,36,0.5);';
+      btn1.onclick = function() { location.hash = '#subscribe'; };
+
+      var btn2 = document.createElement('button');
+      btn2.id = 'zaiedBtnBack';
+      btn2.innerHTML = '◀ العودة للميزات والتعريف';
+      btn2.style.cssText = 'width:100%;padding:15px;background:linear-gradient(135deg,#334155,#1e293b);color:white;border:2px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:15px;cursor:pointer;margin-top:20px;';
+      btn2.onclick = function() { location.hash = ''; };
+
+      wrap.appendChild(btn1);
+      wrap.appendChild(btn2);
+    }
+
+    // أظهر/أخفِ الأزرار حسب الصفحة
+    var b1 = document.getElementById('zaiedBtnToSub');
+    var b2 = document.getElementById('zaiedBtnBack');
+    if (isSub) {
+      if (b1) b1.style.display = 'none';
+      if (b2) b2.style.display = 'block';
+    } else {
+      if (b1) b1.style.display = 'block';
+      if (b2) b2.style.display = 'none';
+    }
+  }
+
+  // راقب التغييرات
+  window.addEventListener('hashchange', route);
+  window.addEventListener('load', function() {
+    setTimeout(route, 1200);
+    setTimeout(route, 2500);
+  });
+  setTimeout(route, 1500);
+  setTimeout(route, 3000);
+  console.log('✅ الفصل عبر الرابط جاهز');
+})();
+</script>
 </body>
 </html>
