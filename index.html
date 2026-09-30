@@ -2382,6 +2382,19 @@ setTimeout(rebindExitButton, 1500);
 setTimeout(rebindExitButton, 3000);
 setTimeout(rebindExitButton, 5000);
 console.log('✅ إعادة الربط جاهزة');
+		
+// ═══ اعتراض النقرة (Capture Phase) ═══
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'globalExitBtn') {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        console.log('🚪 اعتراض النقرة — استدعاء exitPlatform الجديدة');
+        window.exitPlatform();
+    }
+}, true);
+
+console.log('✅ اعتراض النقرات جاهز');
 </script>
 </body>
 </html>
