@@ -2822,5 +2822,59 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
     }
 }
 </style>
+	<script>
+// ═══════════════════════════════════════════════════════════
+// 👑 زر دخول المشرف داخل نافذة الزائر + حفظ دائم
+// ═══════════════════════════════════════════════════════════
+(function() {
+    if (location.search.includes('admin=1')) {
+        localStorage.setItem('zaiedAdminPermanent', '1');
+        window.isAdminMode = true;
+        window.currentUser = {name:'admin', email:'a@a.com', whatsapp:'1', subscribed:true};
+    }
+    if (localStorage.getItem('zaiedAdminPermanent') === '1') {
+        window.isAdminMode = true;
+        window.currentUser = {name:'admin', email:'a@a.com', whatsapp:'1', subscribed:true};
+    }
+    setInterval(function() {
+        if (!window.isAdminMode) return;
+        const m = document.getElementById('visitorIdentityModal');
+        if (m) m.remove();
+    }, 150);
+
+    function injectAdminBtn() {
+        const modal = document.getElementById('visitorIdentityModal');
+        if (!modal || modal.querySelector('#injectedAdminBtn')) return;
+        const box = modal.querySelector('div');
+        if (!box) return;
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'margin-top:15px;padding-top:12px;border-top:1px dashed rgba(148,163,184,0.4);text-align:center;';
+        const btn = document.createElement('button');
+        btn.id = 'injectedAdminBtn';
+        btn.type = 'button';
+        btn.innerHTML = '👑 دخول المشرف';
+        btn.style.cssText = 'background:none;border:none;color:#94a3b8;font-family:Cairo,sans-serif;font-size:12px;cursor:pointer;text-decoration:underline;padding:8px 15px;';
+        btn.onclick = function(e) {
+            e.preventDefault(); e.stopPropagation();
+            try { window.speechSynthesis.cancel(); } catch(err) {}
+            localStorage.setItem('zaiedAdminPermanent', '1');
+            window.isAdminMode = true;
+            window.currentUser = {name:'admin', email:'a@a.com', whatsapp:'1', subscribed:true};
+            modal.remove();
+            if (typeof window.showAdminLogin === 'function') {
+                window.showAdminLogin();
+            } else {
+                document.querySelectorAll('.container > div[id^="page"]').forEach(p => p.classList.add('hide'));
+                const ap = document.getElementById('pageAdminLogin');
+                if (ap) ap.classList.remove('hide');
+            }
+        };
+        wrap.appendChild(btn);
+        box.appendChild(wrap);
+    }
+    setInterval(injectAdminBtn, 300);
+    console.log('✅ زر المشرف + الحفظ الدائم جاهز');
+})();
+</script>
 </body>
 </html>
