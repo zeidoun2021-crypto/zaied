@@ -3229,5 +3229,96 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   console.log('✅ الفصل التام جاهز');
 })();
 </script>
+	<script>
+// ═══════════════════════════════════════════════════════════
+// 📑 فصل تام — الصفحة 2 كنافذة كاملة تغطي الشاشة
+// ═══════════════════════════════════════════════════════════
+(function() {
+  // 🧹 نظّف كل الأكواد القديمة
+  function clean() {
+    ['zaiedTabs','zaied2Tabs','gotoSubBtn','backToFeaturesBtn','pageDividerBtn','zaiedSplitOK'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.remove();
+    });
+    // أعِد إظهار كل ما أخفيناه سابقاً
+    document.querySelectorAll('[class*="hero-"]').forEach(function(el){
+      if (el.id === 'zaiedPage2' || el.closest('#zaiedPage2')) return;
+      el.style.removeProperty('display');
+    });
+  }
+  clean();
+
+  function setup() {
+    if (document.getElementById('zaiedPage2')) return;
+    var priceEl = document.querySelector('.hero-price');
+    if (!priceEl) { setTimeout(setup, 700); return; }
+
+    var parent = priceEl.parentElement;
+    var safety = 0;
+    while (parent && parent.parentElement && safety < 12) {
+      var t = parent.innerText || '';
+      if (t.includes('انضم إلى') || t.includes('وصول كامل')) break;
+      parent = parent.parentElement;
+      safety++;
+    }
+
+    var children = Array.from(parent.children);
+    var startIdx = -1;
+    children.forEach(function(c, i) {
+      if (c === priceEl || c.contains(priceEl)) startIdx = i;
+    });
+    if (startIdx === -1) { setTimeout(setup, 700); return; }
+
+    var tab2Items = children.slice(startIdx);
+    var page2HTML = tab2Items.map(function(el){ return el.outerHTML; }).join('');
+
+    // أخفِ عناصر الصفحة 2 من العرض العادي
+    tab2Items.forEach(function(el){ el.style.setProperty('display','none','important'); });
+
+    // زر "انتقل للاشتراك" — في نهاية الصفحة 1
+    var btnWrap = document.createElement('div');
+    btnWrap.id = 'gotoSubBtn';
+    btnWrap.style.cssText = 'text-align:center;margin:25px auto;max-width:420px;padding:0 20px;';
+    var btn1 = document.createElement('button');
+    btn1.innerHTML = '💎 انتقل إلى الاشتراك السنوي';
+    btn1.style.cssText = 'width:100%;padding:18px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;border:4px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 8px 25px rgba(251,191,36,0.5);';
+    btnWrap.appendChild(btn1);
+    parent.insertBefore(btnWrap, tab2Items[0]);
+
+    // ═══ الصفحة 2: نافذة كاملة تغطي الشاشة ═══
+    var page2 = document.createElement('div');
+    page2.id = 'zaiedPage2';
+    page2.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#0f172a,#1e293b);z-index:9999998;overflow-y:auto;padding:40px 20px 100px;display:none;direction:rtl;font-family:Cairo,sans-serif;';
+    page2.innerHTML =
+      '<div style="max-width:900px;margin:0 auto;">' +
+        '<div style="text-align:center;margin-bottom:25px;">' +
+          '<div style="font-size:60px;margin-bottom:10px;">💎</div>' +
+          '<h1 style="color:#fbbf24;font-size:28px;font-weight:900;">صفحة الاشتراك السنوي</h1>' +
+          '<p style="color:#94a3b8;font-size:14px;margin-top:8px;">اختر طريقتك المفضلة</p>' +
+        '</div>' +
+        page2HTML +
+        '<div style="text-align:center;margin-top:35px;">' +
+          '<button id="zaiedBackBtn" style="padding:16px 40px;background:linear-gradient(135deg,#334155,#1e293b);color:white;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:16px;cursor:pointer;">◀ العودة للميزات والتعريف</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(page2);
+
+    // ═══ الأحداث ═══
+    btn1.onclick = function() {
+      page2.style.display = 'block';
+      page2.scrollTop = 0;
+    };
+    page2.querySelector('#zaiedBackBtn').onclick = function() {
+      page2.style.display = 'none';
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+
+    console.log('✅ فصل تام: صفحة 2 كنافذة كاملة');
+  }
+
+  setTimeout(setup, 1500);
+  setTimeout(setup, 3000);
+})();
+</script>
 </body>
 </html>
