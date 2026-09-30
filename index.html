@@ -368,6 +368,63 @@ input, textarea { -webkit-user-select: text !important; user-select: text !impor
 .category-name { font-size: 22px; font-weight: 900; }
 .academy-screen { display: none; }
 .academy-screen.active { display: block; }
+/* ═══ 🎨 لوحة الاستقبال الاحترافية ═══ */
+.hero-offer {
+    max-width: 950px;
+    width: 100%;
+    margin: 20px auto 30px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 4px solid #fbbf24;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 50px rgba(251,191,36,0.3);
+    animation: heroPulse 4s ease-in-out infinite;
+}
+@keyframes heroPulse {
+    0%, 100% { box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 50px rgba(251,191,36,0.3); }
+    50% { box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 70px rgba(220,38,38,0.5); }
+}
+.hero-top { background: linear-gradient(135deg, #dc2626, #991b1b); padding: 12px 20px; text-align: center; }
+.hero-badge { color: #fff; font-weight: 900; font-size: 15px; }
+.hero-main { display: grid; grid-template-columns: 260px 1fr; gap: 25px; padding: 30px 25px; align-items: center; }
+.hero-teacher { text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(220,38,38,0.15), rgba(251,191,36,0.1)); border: 3px solid rgba(251,191,36,0.4); border-radius: 25px; }
+.hero-avatar { width: 140px; height: 140px; margin: 0 auto 15px; border-radius: 50%; background: #fff; padding: 4px; box-shadow: 0 0 30px rgba(251,191,36,0.6); overflow: hidden; }
+.hero-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.hero-teacher h3 { color: #fbbf24; font-size: 18px; font-weight: 900; margin-bottom: 8px; }
+.hero-teacher p { color: #cbd5e1; font-size: 12px; line-height: 1.6; font-weight: 600; }
+.hero-offer-content { color: white; }
+.hero-title { font-size: 26px; font-weight: 900; line-height: 1.4; margin-bottom: 12px; color: #fff; }
+.hero-title span { color: #fbbf24; text-shadow: 0 0 20px rgba(251,191,36,0.5); }
+.hero-subtitle { font-size: 15px; color: #cbd5e1; line-height: 1.7; margin-bottom: 18px; font-weight: 600; }
+.hero-features { list-style: none; padding: 0; margin: 0 0 20px; }
+.hero-features li { padding: 8px 12px; font-size: 14px; color: #e2e8f0; font-weight: 600; display: flex; align-items: center; gap: 10px; background: rgba(34,197,94,0.08); border-right: 3px solid #22c55e; border-radius: 10px; margin-bottom: 6px; }
+.hero-features li span { font-size: 16px; flex-shrink: 0; }
+.hero-price { background: linear-gradient(135deg, #fbbf24, #f59e0b); padding: 18px; border-radius: 20px; text-align: center; margin-bottom: 15px; box-shadow: 0 10px 30px rgba(251,191,36,0.4); }
+.hero-price-label { color: #1e293b; font-size: 14px; font-weight: 900; margin-bottom: 10px; }
+.hero-price-values { display: flex; justify-content: center; align-items: center; gap: 15px; color: #0f172a; }
+.hero-price-item { display: flex; align-items: baseline; gap: 3px; }
+.hero-price-num { font-size: 40px; font-weight: 900; line-height: 1; color: #dc2626; }
+.hero-price-cur { font-size: 18px; font-weight: 900; color: #1e293b; }
+.hero-price-sep { color: #92400e; font-size: 24px; font-weight: 900; }
+.hero-price-note { color: #1e293b; font-size: 12px; font-weight: 700; margin-top: 8px; }
+.hero-payment { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-bottom: 18px; font-size: 13px; color: #cbd5e1; font-weight: 700; }
+.hero-pay-tag { background: rgba(59,130,246,0.2); border: 2px solid #3b82f6; color: #93c5fd; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 900; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+.hero-btn { flex: 1; min-width: 180px; padding: 15px 20px; border-radius: 40px; font-family: 'Cairo', sans-serif; font-weight: 900; font-size: 15px; text-align: center; text-decoration: none; border: none; cursor: pointer; display: inline-block; }
+.hero-btn-primary { background: linear-gradient(135deg, #25D366, #128C7E); color: white; box-shadow: 0 8px 25px rgba(37,211,102,0.4); }
+.hero-btn-secondary { background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; box-shadow: 0 8px 25px rgba(59,130,246,0.4); }
+.hero-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; font-size: 12px; color: #94a3b8; font-weight: 700; padding-top: 12px; border-top: 1px dashed rgba(148,163,184,0.3); }
+@media (max-width: 768px) {
+    .hero-main { grid-template-columns: 1fr; padding: 20px 15px; gap: 15px; }
+    .hero-avatar { width: 100px; height: 100px; }
+    .hero-teacher h3 { font-size: 16px; }
+    .hero-title { font-size: 20px; }
+    .hero-subtitle { font-size: 13px; }
+    .hero-features li { font-size: 12px; padding: 6px 10px; }
+    .hero-price-num { font-size: 32px; }
+    .hero-btn { min-width: 100%; font-size: 14px; padding: 12px 16px; }
+    .hero-links { flex-direction: column; align-items: center; gap: 5px; }
+}
 #globalExitBtn { position: fixed; top: 20px; left: 20px; z-index: 999999; background: linear-gradient(135deg,#dc2626,#991b1b); color: white; border: 3px solid #fbbf24; padding: 12px 22px; border-radius: 30px; font-family: 'Cairo', sans-serif; font-weight: 900; font-size: 15px; cursor: pointer; direction: rtl; }
 </style>
 </head>
@@ -387,6 +444,56 @@ input, textarea { -webkit-user-select: text !important; user-select: text !impor
 
     <!-- ═══ 🏠 صفحة الترحيب ═══ -->
     <div id="pageWelcome">
+<!-- ═══ 🎨 لوحة الاستقبال الاحترافية ═══ -->
+<div class="hero-offer">
+    <div class="hero-top">
+        <div class="hero-badge">🌟 منصة زايد التعليمية — تونس 🇹🇳</div>
+    </div>
+    <div class="hero-main">
+        <div class="hero-teacher">
+            <div class="hero-avatar">
+                <img src="https://i.postimg.cc/HWS05DXt/zayd8.jpg" alt="الأستاذ محمد زايد">
+            </div>
+            <h3>الأستاذ محمد زايد</h3>
+            <p>خبير دولي في التقنيات الحاسوبية والذكاء الاصطناعي</p>
+        </div>
+        <div class="hero-offer-content">
+            <h1 class="hero-title">🎓 انضم إلى <span>أكاديمية زايد الذكية</span></h1>
+            <p class="hero-subtitle">احصل على وصول كامل لكل الأقسام التعليمية والبحثية والذكاء الاصطناعي</p>
+            <ul class="hero-features">
+                <li><span>✅</span> دروس تفاعلية بثلاث لغات (عربي، فرنسي، إنجليزي)</li>
+                <li><span>✅</span> شهادات معتمدة عند إتمام كل درس</li>
+                <li><span>✅</span> مسارات متعددة: البرمجة، الذكاء الاصطناعي، البحث العلمي</li>
+                <li><span>✅</span> محتوى متجدد باستمرار + ورشات تطبيقية</li>
+                <li><span>✅</span> دعم مباشر من الأستاذ محمد زايد</li>
+            </ul>
+            <div class="hero-price">
+                <div class="hero-price-label">💎 الاشتراك السنوي</div>
+                <div class="hero-price-values">
+                    <div class="hero-price-item"><span class="hero-price-num">20</span><span class="hero-price-cur">د.ت</span></div>
+                    <div class="hero-price-sep">|</div>
+                    <div class="hero-price-item"><span class="hero-price-num">20</span><span class="hero-price-cur">$</span></div>
+                    <div class="hero-price-sep">|</div>
+                    <div class="hero-price-item"><span class="hero-price-num">20</span><span class="hero-price-cur">€</span></div>
+                </div>
+                <div class="hero-price-note">دفع مرة واحدة — وصول لمدة سنة كاملة</div>
+            </div>
+            <div class="hero-payment">
+                <span>💳 نقبل:</span>
+                <span class="hero-pay-tag">🇹🇳 الدينار الإلكتروني</span>
+                <span class="hero-pay-tag">💵 Western Union</span>
+            </div>
+            <div class="hero-actions">
+                <a href="https://wa.me/21655335477?text=أريد%20الاشتراك%20في%20منصة%20زايد" target="_blank" class="hero-btn hero-btn-primary">💬 اشترك الآن عبر واتساب</a>
+                <button onclick="scrollToRegister()" class="hero-btn hero-btn-secondary">📝 سجّل مجاناً أولاً</button>
+            </div>
+            <div class="hero-links">
+                <span>🌐 zeidoun2021-crypto.github.io/zaied</span>
+                <span>📞 +216 55 335 477</span>
+            </div>
+        </div>
+    </div>
+</div>
         <div class="logo-wrapper">
             <div class="outer-ring"></div>
             <div class="rotating-flags">
@@ -2428,9 +2535,9 @@ window.finalExit = function() {
 };
 
 console.log('✅ التعريف النهائي لـ finalExit جاهز');
-		
+
 // ═══════════════════════════════════════════════════════════
-// 🎯 نموذج تعريف الزائر — إلزامي للدخول
+// 🎯 نموذج تعريف الزائر + الصوت بالثلاث لغات
 // ═══════════════════════════════════════════════════════════
 (function() {
     'use strict';
@@ -2439,14 +2546,50 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
         return localStorage.getItem('zaied_visitor_id') === 'true';
     };
 
-    const origIsReal = window.isRealUser;
-    window.isRealUser = function() {
-        if (window.isIdentifiedVisitor()) return true;
-        if (window.currentUser) return true;
-        if (window.isAdminMode) return true;
-        return origIsReal ? origIsReal() : false;
-    };
+    // ═══ دالة نطق نص بلغة محددة ═══
+    function speakText(text, lang) {
+        return new Promise(function(resolve) {
+            if (!text || !window.speechSynthesis) { resolve(); return; }
+            try { window.speechSynthesis.cancel(); } catch(e) {}
+            setTimeout(function() {
+                try {
+                    const u = new SpeechSynthesisUtterance(text);
+                    u.lang = lang === 'fr' ? 'fr-FR' : (lang === 'en' ? 'en-US' : 'ar-SA');
+                    u.rate = 0.9; u.pitch = 1; u.volume = 1;
+                    const voices = window.speechSynthesis.getVoices() || [];
+                    const v = voices.find(x => x.lang && x.lang.includes(lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar')));
+                    if (v) u.voice = v;
+                    let done = false;
+                    const finish = function() { if (done) return; done = true; resolve(); };
+                    u.onend = finish;
+                    u.onerror = finish;
+                    setTimeout(finish, Math.max(8000, text.length * 350));
+                    window.speechSynthesis.speak(u);
+                } catch(e) { resolve(); }
+            }, 100);
+        });
+    }
 
+    // ═══ نطق الترحيب بالثلاث لغات ═══
+    async function playWelcomeVoice(lang) {
+        const texts = {
+            ar: 'أهلاً بك في منصة زايد. سجل اسمك لتتصفح المحتوى مجاناً. لست مطالباً بأي شيء.',
+            fr: 'Bienvenue sur la plateforme Zaied. Inscrivez votre nom pour naviguer gratuitement.',
+            en: 'Welcome to Zaied Platform. Register your name to browse for free.'
+        };
+        if (lang === 'all') {
+            await speakText(texts.ar, 'ar');
+            await new Promise(r => setTimeout(r, 400));
+            await speakText(texts.fr, 'fr');
+            await new Promise(r => setTimeout(r, 400));
+            await speakText(texts.en, 'en');
+        } else {
+            await speakText(texts[lang], lang);
+        }
+    }
+    window.playWelcomeVoice = playWelcomeVoice;
+
+    // ═══ استبدال showForcedModal بنموذج التسجيل ═══
     window.showForcedModal = function() {
         if (window.currentUser || window.isAdminMode || window.isIdentifiedVisitor()) return;
         if (document.getElementById('visitorIdentityModal')) return;
@@ -2458,22 +2601,25 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
         modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.97);z-index:9999999;display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;font-family:Cairo,sans-serif;overflow-y:auto;';
 
         modal.innerHTML = 
-            '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:30px;padding:30px 25px;max-width:520px;width:100%;border:5px solid #fbbf24;color:white;max-height:95vh;overflow-y:auto;">' +
-
+            '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:30px;padding:30px 25px;max-width:480px;width:100%;border:5px solid #fbbf24;color:white;max-height:95vh;overflow-y:auto;">' +
                 '<div style="text-align:center;margin-bottom:20px;">' +
-                    '<div style="font-size:70px;margin-bottom:10px;">🎯</div>' +
-                    '<h2 style="color:#fbbf24;font-size:24px;font-weight:900;margin-bottom:10px;">عرّفنا بنفسك</h2>' +
-                    '<p style="font-size:14px;color:#cbd5e1;line-height:1.8;margin:0;">' +
-                        'للاطلاع على الأقسام، أخبرنا قليلاً عنك<br>' +
-                        '<strong style="color:#22c55e;">مجاناً — دقيقة واحدة فقط</strong>' +
-                    '</p>' +
+                    '<div style="font-size:70px;margin-bottom:10px;">👋</div>' +
+                    '<h2 style="color:#fbbf24;font-size:24px;font-weight:900;margin-bottom:8px;">أهلاً بك في منصة زايد</h2>' +
+                    '<p style="font-size:16px;color:#cbd5e1;line-height:1.8;margin:10px 0;">سجّل اسمك لتتصفح المحتوى <strong style="color:#22c55e;">مجاناً</strong></p>' +
+                    '<div style="display:flex;gap:8px;justify-content:center;margin:15px 0;flex-wrap:wrap;">' +
+                        '<button id="voiceAr" style="padding:8px 14px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:20px;font-family:Cairo,sans-serif;font-weight:900;font-size:12px;cursor:pointer;">🇹🇳 عربي</button>' +
+                        '<button id="voiceFr" style="padding:8px 14px;background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;border:2px solid #fbbf24;border-radius:20px;font-family:Cairo,sans-serif;font-weight:900;font-size:12px;cursor:pointer;">🇫🇷 Français</button>' +
+                        '<button id="voiceEn" style="padding:8px 14px;background:linear-gradient(135deg,#16a34a,#15803d);color:white;border:2px solid #fbbf24;border-radius:20px;font-family:Cairo,sans-serif;font-weight:900;font-size:12px;cursor:pointer;">🇬🇧 English</button>' +
+                    '</div>' +
+                    '<div style="background:rgba(34,197,94,0.15);border:2px solid #22c55e;border-radius:20px;padding:12px;margin-top:5px;">' +
+                        '<p style="font-size:15px;color:#4ade80;font-weight:900;margin:0;">✅ لست مطالباً بأي شيء</p>' +
+                    '</div>' +
                 '</div>' +
 
                 '<div style="margin-bottom:12px;">' +
                     '<label style="display:block;color:#fbbf24;font-weight:900;margin-bottom:6px;font-size:13px;">👤 الاسم الكامل *</label>' +
                     '<input id="viName" type="text" placeholder="أحمد بن علي" style="width:100%;padding:12px;border-radius:15px;border:2px solid #334155;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;box-sizing:border-box;">' +
                 '</div>' +
-
                 '<div style="margin-bottom:12px;">' +
                     '<label style="display:block;color:#fbbf24;font-weight:900;margin-bottom:6px;font-size:13px;">💼 المهنة *</label>' +
                     '<select id="viProf" style="width:100%;padding:12px;border-radius:15px;border:2px solid #334155;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;box-sizing:border-box;">' +
@@ -2493,32 +2639,31 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
                         '<option value="أخرى">✨ أخرى</option>' +
                     '</select>' +
                 '</div>' +
-
                 '<div style="margin-bottom:12px;">' +
                     '<label style="display:block;color:#fbbf24;font-weight:900;margin-bottom:6px;font-size:13px;">🌍 البلد *</label>' +
                     '<input id="viCountry" type="text" placeholder="تونس" style="width:100%;padding:12px;border-radius:15px;border:2px solid #334155;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;box-sizing:border-box;">' +
                 '</div>' +
-
-                '<div style="margin-bottom:20px;">' +
-                    '<label style="display:block;color:#fbbf24;font-weight:900;margin-bottom:6px;font-size:13px;">📱 رقم الواتساب *</label>' +
+                '<div style="margin-bottom:18px;">' +
+                    '<label style="display:block;color:#fbbf24;font-weight:900;margin-bottom:6px;font-size:13px;">📱 رقم الواتساب (اختياري)</label>' +
                     '<input id="viWa" type="tel" placeholder="+216 XX XXX XXX" style="width:100%;padding:12px;border-radius:15px;border:2px solid #334155;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;box-sizing:border-box;">' +
                 '</div>' +
 
-                // زر الإدلاء بالهوية (أخضر)
-                '<button id="viSubmitBtn" style="width:100%;padding:16px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:16px;cursor:pointer;margin-bottom:10px;">✅ ادخل للمنصة</button>' +
-
-                // زر الرفض (أحمر)
-                '<button id="viRefuseBtn" style="width:100%;padding:14px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:15px;cursor:pointer;margin-bottom:15px;">🚪 رفض ومغادرة</button>' +
-
-                '<div style="background:rgba(34,197,94,0.1);border:1px solid #22c55e;border-radius:12px;padding:10px;text-align:center;font-size:12px;color:#4ade80;line-height:1.6;">' +
-                    '🔒 بياناتك محفوظة بأمان ولن تُشارك مع أي طرف' +
-                '</div>' +
-
+                '<button id="viSubmitBtn" style="width:100%;padding:16px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;margin-bottom:10px;">🎓 ادخل وتصفح مجاناً</button>' +
+                '<button id="viRefuseBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:14px;cursor:pointer;margin-bottom:12px;">🚪 رفض ومغادرة</button>' +
+                '<div style="text-align:center;font-size:12px;color:#64748b;">بياناتك محفوظة بأمان · لن تُشارك مع أي طرف</div>' +
             '</div>';
 
         document.body.appendChild(modal);
 
-        // ═══ زر الإدلاء بالهوية ═══
+        // تشغيل الصوت تلقائيًا بالعربية
+        setTimeout(function() { playWelcomeVoice('ar').catch(function(){}); }, 500);
+
+        // أزرار الصوت
+        document.getElementById('voiceAr').onclick = function() { try { window.speechSynthesis.cancel(); } catch(e) {} playWelcomeVoice('ar'); };
+        document.getElementById('voiceFr').onclick = function() { try { window.speechSynthesis.cancel(); } catch(e) {} playWelcomeVoice('fr'); };
+        document.getElementById('voiceEn').onclick = function() { try { window.speechSynthesis.cancel(); } catch(e) {} playWelcomeVoice('en'); };
+
+        // زر التسجيل
         document.getElementById('viSubmitBtn').onclick = async function() {
             const name = document.getElementById('viName').value.trim();
             const prof = document.getElementById('viProf').value;
@@ -2529,15 +2674,12 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
             if (!name || name.length < 3) errs.push('❌ الاسم (3 أحرف على الأقل)');
             if (!prof) errs.push('❌ اختر المهنة');
             if (!country || country.length < 2) errs.push('❌ البلد');
-            if (!wa || !/^\+?\d{8,15}$/.test(wa.replace(/[\s\-]/g, ''))) errs.push('❌ رقم واتساب (8-15 رقم)');
 
-            if (errs.length) {
-                alert('⚠️ يرجى تصحيح:\n\n' + errs.join('\n'));
-                return;
-            }
+            if (errs.length) { alert('⚠️ يرجى تصحيح:\n\n' + errs.join('\n')); return; }
 
             this.disabled = true;
             this.textContent = '⏳ جاري الحفظ...';
+            try { window.speechSynthesis.cancel(); } catch(e) {}
 
             try {
                 let ipAddr = '', ipCity = '';
@@ -2548,63 +2690,46 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
                     ipCity = geo.city || '';
                 } catch(e) {}
 
-                const data = {
-                    name: name,
-                    profession: prof,
-                    country: country,
-                    city: ipCity,
-                    ip: ipAddr,
-                    whatsapp: wa,
+                await window.fbSaveVisitor({
+                    name: name, profession: prof, country: country, city: ipCity, ip: ipAddr,
+                    whatsapp: wa || '-',
                     device: /Mobile/i.test(navigator.userAgent) ? 'هاتف' : 'حاسوب',
                     browser: navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge)/)?.[0] || 'آخر',
                     referrer: document.referrer || 'direct',
                     identified: true,
                     page: window.location.pathname
-                };
+                });
 
-                // حفظ في Firebase (يظهر في لوحة المشرف)
-                await window.fbSaveVisitor(data);
-
-                // إشعار واتساب للمشرف
                 if (window.sendWhatsApp) {
                     await window.sendWhatsApp(
-                        '🎯 زائر جديد عرّف نفسه\n' +
-                        '━━━━━━━━━━━━━━━\n' +
-                        '👤 ' + name + '\n' +
-                        '💼 ' + prof + '\n' +
-                        '🌍 ' + country + ' — ' + ipCity + '\n' +
-                        '📱 ' + wa + '\n' +
-                        '📍 ' + ipAddr + '\n' +
-                        '🕐 ' + new Date().toLocaleString('ar-EG')
+                        '🎯 زائر جديد\n━━━━━━━━━━━━━━━\n👤 ' + name + '\n💼 ' + prof + '\n🌍 ' + country + ' — ' + ipCity + '\n📱 ' + (wa || 'لم يُدخل') + '\n🕐 ' + new Date().toLocaleString('en-GB')
                     );
                 }
 
-                // حفظ في المتصفح (حتى لا يُسأل مجددًا)
                 localStorage.setItem('zaied_visitor_id', 'true');
                 localStorage.setItem('zaied_visitor_name', name);
 
                 modal.remove();
-                alert('✅ مرحباً ' + name + '!\n\n🎓 يمكنك الآن النقر على أي قسم');
+                try { speakText('مرحباً ' + name + '. يمكنك الآن تصفح جميع الأقسام', 'ar'); } catch(e) {}
+                setTimeout(function() {
+                    alert('✅ مرحباً ' + name + '!\n\n🎓 يمكنك الآن تصفح جميع الأقسام');
+                }, 200);
 
             } catch(e) {
                 console.error(e);
                 alert('⚠️ خطأ في الحفظ — حاول مرة أخرى');
                 this.disabled = false;
-                this.textContent = '✅ ادخل للمنصة';
+                this.textContent = '🎓 ادخل وتصفح مجاناً';
             }
         };
 
-        // ═══ زر الرفض → صفحة الوداع ═══
+        // زر الرفض
         document.getElementById('viRefuseBtn').onclick = function() {
             if (!confirm('🚪 هل أنت متأكد من رفض التسجيل؟\n\nلن تتمكن من الوصول إلى محتوى المنصة.')) return;
-
+            try { window.speechSynthesis.cancel(); } catch(e) {}
             modal.remove();
-
-            // إخفاء كل شيء
             document.querySelectorAll('.container > div[id^="page"]').forEach(p => p.classList.add('hide'));
             document.querySelectorAll('#userStatusBanner, .copyright-bar, #globalExitBtn').forEach(e => e.style.display = 'none');
-
-            // عرض صفحة الوداع
             const bye = document.createElement('div');
             bye.id = 'goodbyeScreen';
             bye.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#0f172a,#1e293b);z-index:9999999;display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;font-family:Cairo,sans-serif;';
@@ -2613,24 +2738,31 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
                     '<div style="font-size:120px;margin-bottom:25px;">👋</div>' +
                     '<h1 style="color:#fbbf24;font-size:28px;margin-bottom:20px;font-weight:900;">شكراً لزيارتك منصة زايد</h1>' +
                     '<p style="font-size:17px;color:#cbd5e1;line-height:2;margin-bottom:25px;">نتمنى لك يوماً سعيداً 🌟</p>' +
-                    
                     '<div style="background:rgba(220,38,38,0.15);border:2px solid #dc2626;border-radius:20px;padding:15px;margin-bottom:20px;">' +
                         '<p style="font-size:14px;color:#fca5a5;font-weight:900;margin:0 0 8px 0;">⚠️ لم يتم تفعيل حسابك</p>' +
                         '<p style="font-size:13px;color:#cbd5e1;margin:0;">يمكنك العودة لاحقاً وإدخال بياناتك للدخول</p>' +
                     '</div>' +
-
                     '<button onclick="location.reload()" style="width:100%;padding:16px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;margin-bottom:15px;">🔄 العودة للمنصة</button>' +
-                    
                     '<a href="https://wa.me/21655335477" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:12px 30px;border-radius:40px;text-decoration:none;font-weight:900;font-size:14px;">💬 تواصل معنا</a>' +
-                    
                     '<p style="font-size:12px;color:#475569;margin-top:30px;">© 2026 — محمد زايد — تونس 🇹🇳</p>' +
                 '</div>';
-
             document.body.appendChild(bye);
         };
     };
 
-    console.log('✅ نظام تعريف الزائر (إلزامي) جاهز');
+    // عرض النموذج تلقائيًا في صفحة الاستقبال بعد 3 ثواني
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            const welcomePage = document.getElementById('pageWelcome');
+            if (welcomePage && !welcomePage.classList.contains('hide')) {
+                if (!window.currentUser && !window.isAdminMode && !window.isIdentifiedVisitor()) {
+                    window.showForcedModal();
+                }
+            }
+        }, 3000);
+    });
+
+    console.log('✅ نموذج التسجيل + الصوت بالثلاث لغات جاهز');
 })();
 </script>
 </body>
