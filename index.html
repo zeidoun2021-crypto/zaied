@@ -2902,44 +2902,42 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
 <style>
   #zaiedTabs {
     position: fixed;
-    top: 15px;
+    top: 80px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 9999998;
+    z-index: 2147483647;
     display: flex;
     gap: 8px;
     padding: 8px 10px;
     background: linear-gradient(135deg, #0f172a, #1e293b);
-    border: 2px solid #fbbf24;
+    border: 3px solid #fbbf24;
     border-radius: 50px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.8);
   }
   #zaiedTabs button {
-    padding: 10px 18px;
+    padding: 12px 22px;
     border-radius: 30px;
     border: 2px solid #fbbf24;
     background: #1e293b;
     color: white;
     font-family: Cairo, sans-serif;
     font-weight: 900;
-    font-size: 13px;
+    font-size: 14px;
     cursor: pointer;
   }
   #zaiedTabs button.active {
     background: linear-gradient(135deg, #22c55e, #16a34a);
-    color: white;
   }
 </style>
 
 <script>
 (function(){
-  function apply(tab) {
-    document.querySelectorAll('#zaiedTabs button').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.t === tab);
-    });
-    // العناصر التي تنتمي لقسم الاشتراك (من Console)
-    const els = document.querySelectorAll('.hero-price, .hero-payment, .hero-pay-tag, .hero-btns, .hero-links, [class*="hero-price"], [class*="hero-payment"]');
-    els.forEach(function(el) {
+  var TAB2_SELECTORS = '.hero-price, .hero-payment, .hero-pay-tag, .hero-btns, .hero-links';
+
+  function applyTab(tab) {
+    var btns = document.querySelectorAll('#zaiedTabs button');
+    btns.forEach(function(b) { b.classList.toggle('active', b.dataset.t === tab); });
+    document.querySelectorAll(TAB2_SELECTORS).forEach(function(el) {
       if (tab === '1') {
         el.style.setProperty('display', 'none', 'important');
       } else {
@@ -2951,15 +2949,20 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
 
   function init() {
     if (document.getElementById('zaiedTabs')) return;
-    const bar = document.createElement('div');
+    if (!document.querySelector('.hero-price')) {
+      setTimeout(init, 800);
+      return;
+    }
+    var bar = document.createElement('div');
     bar.id = 'zaiedTabs';
-    bar.innerHTML = '<button data-t="1" class="active">📚 الميزات</button><button data-t="2">💎 الاشتراك</button>';
+    bar.innerHTML = '<button data-t="1" class="active">📚 الميزات</button>' +
+                    '<button data-t="2">💎 الاشتراك</button>';
     document.body.appendChild(bar);
     bar.querySelectorAll('button').forEach(function(b) {
-      b.onclick = function() { apply(b.dataset.t); };
+      b.onclick = function() { applyTab(b.dataset.t); };
     });
-    apply('1');
-    console.log('✅ التبويبات جاهزة');
+    applyTab('1');
+    console.log('✅ التبويبات الدائمة جاهزة');
   }
 
   if (document.readyState === 'loading') {
