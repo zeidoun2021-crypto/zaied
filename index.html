@@ -2395,6 +2395,39 @@ document.addEventListener('click', function(e) {
 }, true);
 
 console.log('✅ اعتراض النقرات جاهز');
+		
+// ═══════════════════════════════════════════════════════════
+// 🚪 التعريف النهائي لـ finalExit (يفوز على كل النسخ السابقة)
+// ═══════════════════════════════════════════════════════════
+window.finalExit = function() {
+    const msg = document.getElementById('exitMsg');
+    if (msg) msg.textContent = '⏳ جاري العودة...';
+
+    // محاولة إغلاق التبويب (يعمل فقط إن فُتح بواسطة الكود)
+    try { window.close(); } catch(e) {}
+
+    setTimeout(function() {
+        // إن كان هناك تاريخ تصفح → ارجع للصفحة السابقة
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            // لا يوجد تاريخ → شاشة وداع نهائية
+            document.body.innerHTML =
+                '<div style="min-height:100vh;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Cairo,sans-serif;direction:rtl;">' +
+                    '<div style="text-align:center;padding:40px;">' +
+                        '<div style="font-size:150px;">👋</div>' +
+                        '<h1 style="color:#fbbf24;font-size:32px;margin:30px 0;">إلى اللقاء!</h1>' +
+                        '<p style="font-size:18px;color:#cbd5e1;line-height:2;">شكراً لزيارتك منصة زايد</p>' +
+                        '<p style="font-size:15px;color:#64748b;margin-top:20px;">يمكنك إغلاق هذا التبويب</p>' +
+                        '<p style="font-size:15px;color:#64748b;">اضغط <strong style="color:#fbbf24;font-size:20px;">Ctrl + W</strong></p>' +
+                        '<p style="font-size:13px;color:#475569;margin-top:40px;">© 2026 — محمد زايد — تونس 🇹🇳</p>' +
+                    '</div>' +
+                '</div>';
+        }
+    }, 500);
+};
+
+console.log('✅ التعريف النهائي لـ finalExit جاهز');
 </script>
 </body>
 </html>
