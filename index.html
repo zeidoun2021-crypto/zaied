@@ -2996,5 +2996,87 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
     console.log('✅ شريط المشرف مخفي خارج اللوحة');
 })();
 </script>
+	<script>
+(function(){
+  var TAB2 = '.hero-price, .hero-payment, .hero-pay-tag, .hero-btns, .hero-links';
+
+  function setup() {
+    // احذف أي شريط قديم
+    var oldBar = document.getElementById('zaiedTabs');
+    if (oldBar) oldBar.remove();
+    if (document.getElementById('zaiedTabsStyle')) document.getElementById('zaiedTabsStyle').remove();
+    if (document.getElementById('gotoSubBtn')) return;
+
+    var priceEl = document.querySelector('.hero-price');
+    if (!priceEl) { setTimeout(setup, 800); return; }
+
+    // ابحث عن الأب المشترك
+    var parent = priceEl.parentElement;
+    var safety = 0;
+    while (parent && parent.parentElement && safety < 10) {
+      var t = parent.innerText || '';
+      if (t.includes('وصول كامل') || t.includes('ميزات') || t.includes('انضم إلى')) break;
+      parent = parent.parentElement;
+      safety++;
+    }
+
+    var children = Array.from(parent.children);
+    var startIdx = -1;
+    children.forEach(function(c, i) {
+      if (c === priceEl || c.contains(priceEl)) startIdx = i;
+    });
+    if (startIdx === -1) { setTimeout(setup, 800); return; }
+
+    var tab2Items = children.slice(startIdx);
+    tab2Items.forEach(function(el) { el.style.setProperty('display', 'none', 'important'); });
+
+    // زر الانتقال للاشتراك
+    var gotoWrap = document.createElement('div');
+    gotoWrap.id = 'gotoSubBtn';
+    gotoWrap.style.cssText = 'text-align:center;margin:25px auto;max-width:420px;padding:0 20px;';
+    var gotoBtn = document.createElement('button');
+    gotoBtn.innerHTML = '💎 انتقل إلى الاشتراك السنوي';
+    gotoBtn.style.cssText = 'width:100%;padding:18px 30px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;border:4px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 8px 25px rgba(251,191,36,0.5);';
+    gotoWrap.appendChild(gotoBtn);
+    parent.insertBefore(gotoWrap, tab2Items[0]);
+
+    // زر العودة
+    var backWrap = document.createElement('div');
+    backWrap.id = 'backToFeaturesBtn';
+    backWrap.style.cssText = 'text-align:center;margin:25px auto;max-width:420px;padding:0 20px;';
+    var backBtn = document.createElement('button');
+    backBtn.innerHTML = '◀ العودة للميزات والتعريف';
+    backBtn.style.cssText = 'width:100%;padding:15px 30px;background:linear-gradient(135deg,#334155,#1e293b);color:white;border:2px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:15px;cursor:pointer;';
+    backWrap.appendChild(backBtn);
+    var last = tab2Items[tab2Items.length - 1];
+    last.parentElement.insertBefore(backWrap, last.nextSibling);
+
+    // الأحداث
+    gotoBtn.onclick = function() {
+      tab2Items.forEach(function(el) { el.style.removeProperty('display'); });
+      gotoWrap.style.setProperty('display', 'none', 'important');
+      backWrap.style.removeProperty('display');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    backBtn.onclick = function() {
+      tab2Items.forEach(function(el) { el.style.setProperty('display', 'none', 'important'); });
+      backWrap.style.setProperty('display', 'none', 'important');
+      gotoWrap.style.removeProperty('display');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // الوضع الافتراضي
+    backWrap.style.setProperty('display', 'none', 'important');
+
+    console.log('✅ التقسيم بأزرار داخلية جاهز');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(setup, 1500); });
+  } else {
+    setTimeout(setup, 1500);
+  }
+})();
+</script>
 </body>
 </html>
