@@ -2899,5 +2899,99 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
     console.log('✅ نظام المشرف جاهز — isAdminMode:', window.isAdminMode);
 })();
 </script>
+	<style>
+  #zaied2Tabs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    padding: 12px;
+    margin: 15px auto;
+    max-width: 700px;
+    position: sticky;
+    top: 0;
+    z-index: 9000;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border: 2px solid #fbbf24;
+    border-radius: 50px;
+  }
+  #zaied2Tabs button {
+    flex: 1;
+    max-width: 300px;
+    padding: 12px 20px;
+    border: 2px solid #fbbf24;
+    border-radius: 40px;
+    background: #1e293b;
+    color: white;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  #zaied2Tabs button.active {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+  }
+  .zaied2hide { display: none !important; }
+</style>
+
+<script>
+(function() {
+  function findYellowCard() {
+    return document.querySelector('.hero-price') 
+        || document.querySelector('[class*="hero-price"]:not([class*="num"]):not([class*="cur"]):not([class*="usd"]):not([class*="note"])');
+  }
+  
+  function setup() {
+    const yellow = findYellowCard();
+    if (!yellow) { setTimeout(setup, 500); return; }
+    
+    // صعد للأب الذي يحتوي على الميزات + البطاقة
+    let container = yellow.parentElement;
+    let safety = 0;
+    while (container && container.parentElement && safety < 10) {
+      const t = container.innerText || '';
+      if (t.includes('انضم إلى أكاديمية') || t.includes('ميزات')) break;
+      container = container.parentElement;
+      safety++;
+    }
+    if (!container) container = yellow.parentElement;
+    
+    const siblings = Array.from(container.children);
+    let yellowIdx = -1;
+    siblings.forEach(function(el, i) {
+      if (el === yellow || el.contains(yellow)) yellowIdx = i;
+    });
+    if (yellowIdx === -1) { setTimeout(setup, 500); return; }
+    
+    // التبويب 2 = كل شيء من البطاقة الصفراء وما بعدها
+    const tab2Items = siblings.slice(yellowIdx);
+    tab2Items.forEach(function(el) { el.classList.add('zaied2hide'); });
+    
+    // شريط التبويبات
+    const tabsBar = document.createElement('div');
+    tabsBar.id = 'zaied2Tabs';
+    tabsBar.innerHTML =
+      '<button class="active" data-tab="1">📚 التعريف والميزات</button>' +
+      '<button data-tab="2">💎 الاشتراك السنوي</button>';
+    container.insertBefore(tabsBar, container.firstChild);
+    
+    tabsBar.querySelectorAll('button').forEach(function(btn) {
+      btn.onclick = function() {
+        tabsBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        if (this.dataset.tab === '1') {
+          tab2Items.forEach(el => el.classList.add('zaied2hide'));
+        } else {
+          tab2Items.forEach(el => el.classList.remove('zaied2hide'));
+        }
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      };
+    });
+    
+    console.log('✅ تم تقسيم الصفحة الرئيسية إلى تبويبين');
+  }
+  
+  window.addEventListener('load', function() { setTimeout(setup, 1200); });
+})();
+</script>
 </body>
 </html>
