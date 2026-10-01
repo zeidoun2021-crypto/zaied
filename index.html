@@ -4174,5 +4174,104 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   console.log('✅ نظام إضافة زر المشرف جاهز');
 })();
 </script>
+	<style>
+  /* أخفِ كل شيء في الصفحة ما عدا نافذة التسجيل */
+  body > *:not(#visitorIdentityModal):not(script):not(style) {
+    display: none !important;
+  }
+  body {
+    background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a) !important;
+    min-height: 100vh;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 20px !important;
+    margin: 0 !important;
+  }
+</style>
+
+<script>
+(function() {
+  // 🧹 احذف كل الأكواد القديمة التي أضفناها
+  ['zaiedTabs','zaied2Tabs','gotoSubBtn','backToFeaturesBtn','pageDividerBtn',
+   'zaiedSplitOK','zaiedPage2','zaiedNavWrap','zaiedFinalOK','zaiedGoBtn',
+   'zaiedSubOverlay','zaiedSplitFinal','zaiedBackFinal','zaiedGate','zaiedGateNew',
+   'zaiedMustReg','forcedRegisterModal','visitorForceModal'].forEach(function(id){
+    var el = document.getElementById(id); if (el) el.remove();
+  });
+
+  // ✅ أضف زر المشرف داخل النافذة (إن لم يكن موجوداً)
+  function addAdminBtn() {
+    var modal = document.getElementById('visitorIdentityModal');
+    if (!modal) return;
+    if (modal.querySelector('#adminBtnInside')) return;
+
+    var card = modal.querySelector('div');
+    if (!card) return;
+
+    var wrap = document.createElement('div');
+    wrap.id = 'adminBtnInside';
+    wrap.style.cssText = 'margin-top:15px;padding-top:12px;border-top:1px dashed rgba(148,163,184,0.4);text-align:center;';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.innerHTML = '👑 دخول المشرف';
+    btn.style.cssText = 'background:none;border:none;color:#fbbf24;font-family:Cairo,sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;padding:8px 15px;font-weight:900;';
+    btn.onclick = function(e) {
+      e.preventDefault(); e.stopPropagation();
+      try { window.speechSynthesis.cancel(); } catch(err) {}
+      var pass = prompt('👑 كلمة مرور المشرف:');
+      if (pass === '012345') {
+        localStorage.setItem('zaiedAdminPermanent', '1');
+        localStorage.setItem('zaiedVisitorOK', '1');
+        window.isAdminMode = true;
+        window.userStatus = 'admin';
+        window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+        modal.remove();
+        location.reload();
+      } else if (pass !== null) {
+        alert('❌ كلمة المرور غير صحيحة');
+      }
+    };
+    wrap.appendChild(btn);
+    card.appendChild(wrap);
+    console.log('✅ زر المشرف أُضيف');
+  }
+  setInterval(addAdminBtn, 300);
+
+  // ⚠️ منع إغلاق النافذة (إن حاول أحد إغلاقها)
+  setInterval(function() {
+    if (localStorage.getItem('zaiedVisitorOK') === '1') return;
+    if (window.isAdminMode) return;
+    var modal = document.getElementById('visitorIdentityModal');
+    if (!modal) {
+      // النافذة اختفت بدون تسجيل → أعد إنشاءها بعد 1 ثانية
+      setTimeout(function() {
+        if (typeof window.showForcedModal === 'function') {
+          window.showForcedModal();
+        } else if (typeof showForcedModal === 'function') {
+          showForcedModal();
+        }
+      }, 1000);
+    }
+  }, 800);
+
+  // ✅ بعد التسجيل → أعِد إظهار كل الصفحات
+  setInterval(function() {
+    if (localStorage.getItem('zaiedVisitorOK') === '1' || window.isAdminMode) {
+      // أعد إظهار كل شيء
+      document.querySelectorAll('body > *').forEach(function(el){
+        if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE') return;
+        el.style.removeProperty('display');
+      });
+      document.body.style.removeProperty('display');
+      document.body.style.removeProperty('align-items');
+      document.body.style.removeProperty('justify-content');
+    }
+  }, 500);
+
+  console.log('✅ النظام: صفحة الترحيب والتسجيل فقط');
+})();
+</script>
 </body>
 </html>
