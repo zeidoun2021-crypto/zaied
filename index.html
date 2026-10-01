@@ -3964,5 +3964,132 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   console.log('✅ بوابة التسجيل الإلزامية جاهزة');
 })();
 </script>
+	<script>
+(function() {
+  // ═══ 1) نظّف كل الأكواد القديمة ═══
+  ['zaiedTabs','zaied2Tabs','gotoSubBtn','backToFeaturesBtn','pageDividerBtn',
+   'zaiedSplitOK','zaiedPage2','zaiedNavWrap','zaiedFinalOK','zaiedGoBtn',
+   'zaiedSubOverlay','zaiedSplitFinal','zaiedBackFinal','zaiedGate','zaiedGateNew',
+   'visitorIdentityModal','forcedRegisterModal','visitorForceModal'].forEach(function(id){
+    var el = document.getElementById(id); if (el) el.remove();
+  });
+  // أعِد إظهار كل شيء كان مخفياً
+  document.querySelectorAll('#pageWelcome [style*="display: none"]').forEach(function(el){
+    el.style.removeProperty('display');
+  });
+
+  // ═══ 2) إذا مسجل من قبل → لا شيء ═══
+  if (localStorage.getItem('zaiedVisitorOK') === '1' || localStorage.getItem('zaiedAdminPermanent') === '1') {
+    console.log('✅ مسجل سابقاً');
+    return;
+  }
+
+  // ═══ 3) امنع التنقل قبل التسجيل ═══
+  var NAV_BLOCK = /showChildrenTech|showArabicSection|openAcademy|showGamesSection|showWorkshopsSection|showScientificLessons|showLecturesSection|showFullDictionary|showBooksSection|showAcademicProjects|openBook|openPrimary|openMiddle|openHigh|openPython|showAISection|showAICertificates|openAIPath|openAcademyCategory|openUniversityStage|moveToSections|adminGoToSections/;
+
+  document.addEventListener('click', function(e) {
+    if (localStorage.getItem('zaiedVisitorOK') === '1') return;
+    if (window.isAdminMode) return;
+    var el = e.target;
+    while (el && el !== document.body) {
+      var oc = (el.getAttribute && el.getAttribute('onclick')) || '';
+      if (NAV_BLOCK.test(oc)) {
+        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+        // وجّه الزائر إلى نموذج التسجيل
+        var reg = document.getElementById('registerSection');
+        if (reg) {
+          reg.scrollIntoView({behavior:'smooth', block:'start'});
+          reg.style.border = '5px solid #22c55e';
+          reg.style.boxShadow = '0 0 50px rgba(34,197,94,0.8)';
+          setTimeout(function(){ reg.style.border='3px solid #dc2626'; reg.style.boxShadow=''; }, 2500);
+        }
+        // نبّه
+        var name = document.getElementById('regName');
+        if (name) { setTimeout(function(){ name.focus(); }, 500); }
+        return false;
+      }
+      el = el.parentElement;
+    }
+  }, true);
+
+  // ═══ 4) راقب التسجيل → فعّل الدخول ═══
+  setInterval(function() {
+    if (localStorage.getItem('zaiedVisitorOK') === '1') return;
+    if (window.isAdminMode) return;
+    // إذا currentUser موجود → يعني سجّل → فعّله
+    if (window.currentUser && window.currentUser.name && window.currentUser.whatsapp) {
+      localStorage.setItem('zaiedVisitorOK', '1');
+      console.log('✅ تم التسجيل — تم فتح التصفح');
+    }
+  }, 500);
+
+  // ═══ 5) أضف زر عائم "دخول المشرف" أسفل يسار ═══
+  function addAdminFloatBtn() {
+    if (localStorage.getItem('zaiedAdminPermanent') === '1') return;
+    if (document.getElementById('zaiedAdminFloat')) return;
+    var btn = document.createElement('button');
+    btn.id = 'zaiedAdminFloat';
+    btn.innerHTML = '👑';
+    btn.title = 'دخول المشرف';
+    btn.style.cssText = 'position:fixed;bottom:15px;right:15px;z-index:2147483646;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:white;border:3px solid #fbbf24;font-size:22px;cursor:pointer;box-shadow:0 6px 20px rgba(139,92,246,0.6);';
+    btn.onclick = function() {
+      var pass = prompt('👑 كلمة مرور المشرف:');
+      if (pass === '012345') {
+        localStorage.setItem('zaiedAdminPermanent', '1');
+        localStorage.setItem('zaiedVisitorOK', '1');
+        window.isAdminMode = true;
+        window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+        location.reload();
+      } else if (pass !== null) {
+        alert('❌ كلمة المرور غير صحيحة');
+      }
+    };
+    document.body.appendChild(btn);
+  }
+  setInterval(addAdminFloatBtn, 700);
+
+  // ═══ 6) راقب عدم وجود نموذج التسجيل — إن غاب أظهر تحذيراً ═══
+  setInterval(function() {
+    if (localStorage.getItem('zaiedVisitorOK') === '1') return;
+    if (window.isAdminMode) return;
+    var reg = document.getElementById('registerSection');
+    if (reg) {
+      // أضف شارة "إلزامي" عليه
+      if (!reg.querySelector('.must-reg-badge')) {
+        var badge = document.createElement('div');
+        badge.className = 'must-reg-badge';
+        badge.style.cssText = 'background:linear-gradient(135deg,#22c55e,#16a34a);color:white;padding:8px 14px;border-radius:15px;text-align:center;font-weight:900;font-size:13px;margin-bottom:12px;border:2px solid #fbbf24;';
+        badge.innerHTML = '✅ التسجيل مجاني — املأ البيانات للتصفح';
+        reg.insertBefore(badge, reg.firstChild);
+      }
+    }
+  }, 800);
+
+  // ═══ 7) أظهر تنبيهاً في أعلى الشاشة إن لم يسجل ═══
+  function addTopBanner() {
+    if (localStorage.getItem('zaiedVisitorOK') === '1') {
+      var ex = document.getElementById('zaiedMustReg'); if (ex) ex.remove();
+      return;
+    }
+    if (window.isAdminMode) return;
+    if (document.getElementById('zaiedMustReg')) return;
+    var b = document.createElement('div');
+    b.id = 'zaiedMustReg';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:2147483645;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;text-align:center;padding:10px;font-family:Cairo,sans-serif;font-weight:900;font-size:14px;box-shadow:0 4px 20px rgba(0,0,0,0.5);';
+    b.innerHTML = '📝 التسجيل إلزامي للتصفح — <span style="text-decoration:underline;cursor:pointer;" id="zaiedJumpReg">اذهب إلى النموذج ⬇</span>';
+    document.body.appendChild(b);
+    document.getElementById('zaiedJumpReg').onclick = function() {
+      var reg = document.getElementById('registerSection');
+      if (reg) {
+        reg.scrollIntoView({behavior:'smooth'});
+        setTimeout(function(){ document.getElementById('regName').focus(); }, 600);
+      }
+    };
+  }
+  setInterval(addTopBanner, 800);
+
+  console.log('✅ نظام التسجيل الإلزامي جاهز — الصفحة الأولى تبقى مع النموذج');
+})();
+</script>
 </body>
 </html>
