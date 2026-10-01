@@ -4289,5 +4289,65 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   setInterval(makeBtn, 500);
 })();
 </script>
+	<script>
+// 👑 دخول المشرف — 3 طرق مضمونة
+(function() {
+  // ── 1) دخول سريع عبر الرابط (?admin=1)
+  if (location.search.indexOf('admin=1') !== -1) {
+    localStorage.setItem('zaiedAdminPermanent', '1');
+    window.isAdminMode = true;
+    window.userStatus = 'admin';
+    window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+    console.log('👑 دخول مشرف عبر الرابط');
+    setTimeout(function() {
+      location.href = location.pathname; // نظّف الرابط
+    }, 500);
+    return;
+  }
+
+  // ── 2) الزر العائم — دائماً بدون شروط
+  function makeBtn() {
+    if (document.getElementById('myAdminBtn')) return;
+    var b = document.createElement('button');
+    b.id = 'myAdminBtn';
+    b.type = 'button';
+    b.innerHTML = '👑';
+    b.title = 'دخول المشرف';
+    b.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:2147483647;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:white;border:4px solid #fbbf24;font-size:24px;cursor:pointer;box-shadow:0 8px 25px rgba(139,92,246,0.9);';
+    b.onclick = function(e) {
+      e.preventDefault(); e.stopPropagation();
+      var p = prompt('👑 كلمة مرور المشرف:');
+      if (p === '012345') {
+        localStorage.setItem('zaiedAdminPermanent', '1');
+        window.isAdminMode = true;
+        window.userStatus = 'admin';
+        window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+        location.reload();
+      } else if (p !== null) {
+        alert('❌ كلمة المرور غير صحيحة');
+      }
+    };
+    document.body.appendChild(b);
+    console.log('✅ زر المشرف ظهر');
+  }
+  makeBtn();
+  setInterval(makeBtn, 500);
+
+  // ── 3) اختصار لوحة المفاتيح: Ctrl+Shift+A
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a' || e.key === 'ش')) {
+      e.preventDefault();
+      var p = prompt('👑 كلمة المرور:');
+      if (p === '012345') {
+        localStorage.setItem('zaiedAdminPermanent', '1');
+        window.isAdminMode = true;
+        window.userStatus = 'admin';
+        window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+        location.reload();
+      }
+    }
+  }, true);
+})();
+</script>
 </body>
 </html>
