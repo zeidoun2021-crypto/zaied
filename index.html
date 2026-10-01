@@ -3805,5 +3805,164 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   setTimeout(setup, 2000);
 })();
 </script>
+	<style>
+  #zaiedGate {
+    position: fixed; inset: 0; z-index: 2147483647;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; direction: rtl; font-family: Cairo, sans-serif;
+    overflow-y: auto;
+  }
+  body.zaied-gate-open > *:not(#zaiedGate) { display: none !important; }
+  #zaiedGate .gate-card {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 5px solid #fbbf24; border-radius: 30px;
+    padding: 30px 25px; max-width: 460px; width: 100%;
+    box-shadow: 0 30px 100px rgba(0,0,0,0.9); text-align: center;
+  }
+  #zaiedGate input {
+    width: 100%; padding: 14px; margin-bottom: 12px;
+    border: 2px solid #475569; border-radius: 25px;
+    background: #0f172a; color: white;
+    font-family: Cairo, sans-serif; font-size: 15px; font-weight: 600;
+  }
+  #zaiedGate input:focus { outline: none; border-color: #fbbf24; }
+</style>
+
+<script>
+(function() {
+  // 🧹 حذف كل الأكواد القديمة تلقائياً
+  ['zaiedTabs','zaied2Tabs','gotoSubBtn','backToFeaturesBtn','pageDividerBtn',
+   'zaiedSplitOK','zaiedPage2','zaiedNavWrap','zaiedFinalOK','zaiedGoBtn',
+   'zaiedSubOverlay','zaiedSplitFinal','zaiedBackFinal','visitorIdentityModal',
+   'forcedRegisterModal','visitorForceModal'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.remove();
+  });
+
+  // إذا سجّل من قبل → لا شيء
+  if (localStorage.getItem('zaiedVisitorOK') === '1') return;
+
+  function buildGate() {
+    if (document.getElementById('zaiedGate')) return;
+    document.body.classList.add('zaied-gate-open');
+
+    var gate = document.createElement('div');
+    gate.id = 'zaiedGate';
+    gate.innerHTML =
+      '<div class="gate-card">' +
+        '<div style="font-size:60px;margin-bottom:10px;">👋</div>' +
+        '<h2 style="color:#fbbf24;font-size:22px;font-weight:900;margin-bottom:15px;">أهلاً بك في منصة زايد</h2>' +
+        '<p style="color:#cbd5e1;font-size:14px;line-height:1.8;margin-bottom:20px;">' +
+          'سجّل اسمك ورقم هاتفك للتصفح مجاناً<br>' +
+          '<span style="color:#4ade80;font-weight:700;">✅ لستُ مطالباً بأيِّ شيء</span>' +
+        '</p>' +
+        '<input type="text" id="zgName" placeholder="👤 الاسم الكامل *">' +
+        '<input type="tel" id="zgPhone" placeholder="📱 رقم الهاتف *">' +
+        '<div id="zgErr" style="display:none;color:#fca5a5;font-size:13px;margin-bottom:10px;font-weight:700;background:rgba(220,38,38,0.15);padding:10px;border-radius:15px;"></div>' +
+        '<button id="zgSubmit" style="width:100%;padding:18px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:4px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:17px;cursor:pointer;box-shadow:0 8px 25px rgba(34,197,94,0.5);margin-bottom:10px;">✅ ادخل وتصفّح مجاناً</button>' +
+        '<button id="zgExit" style="width:100%;padding:12px;background:transparent;color:#94a3b8;border:2px solid #475569;border-radius:50px;font-family:Cairo,sans-serif;font-weight:700;font-size:13px;cursor:pointer;">🚪 أرفض — غادر المنصة</button>' +
+      '</div>';
+    document.body.appendChild(gate);
+
+    setTimeout(function(){ var n = document.getElementById('zgName'); if (n) n.focus(); }, 200);
+
+    document.getElementById('zgSubmit').onclick = async function() {
+      var name = document.getElementById('zgName').value.trim();
+      var phone = document.getElementById('zgPhone').value.trim();
+      var err = document.getElementById('zgErr');
+
+      if (!name || name.length < 3) {
+        err.style.display = 'block'; err.textContent = '⚠️ أدخل اسمك الكامل (3 أحرف على الأقل)'; return;
+      }
+      if (!/^[\u0600-\u06FFa-zA-Z\s]+$/.test(name)) {
+        err.style.display = 'block'; err.textContent = '⚠️ الاسم يجب أن يحتوي على أحرف فقط'; return;
+      }
+      if (!phone || !/^\+?\d{8,15}$/.test(phone.replace(/[\s\-]/g,''))) {
+        err.style.display = 'block'; err.textContent = '⚠️ أدخل رقم هاتف صحيح (8-15 رقم)'; return;
+      }
+      err.style.display = 'none';
+
+      try {
+        var ua = navigator.userAgent;
+        var device = /Mobile|Android|iPhone/i.test(ua) ? 'هاتف' : (/Tablet|iPad/i.test(ua) ? 'لوحي' : 'حاسوب');
+        var browser = /Chrome/i.test(ua) ? 'Chrome' : (/Firefox/i.test(ua) ? 'Firefox' : (/Safari/i.test(ua) ? 'Safari' : (/Edge/i.test(ua) ? 'Edge' : 'آخر')));
+        var os = /Windows/i.test(ua) ? 'Windows' : (/Android/i.test(ua) ? 'Android' : (/iPhone|iPad/i.test(ua) ? 'iOS' : (/Mac/i.test(ua) ? 'macOS' : (/Linux/i.test(ua) ? 'Linux' : 'غير معروف'))));
+
+        if (window.fbSaveVisitor) {
+          await window.fbSaveVisitor({ name: name, phone: phone, device: device, browser: browser, os: os, page: '/' });
+        }
+        if (window.sendWhatsApp) {
+          await window.sendWhatsApp('👤 زائر جديد\n👤 ' + name + '\n📱 ' + phone + '\n💻 ' + device + ' • ' + browser + ' • ' + os + '\n🕐 ' + new Date().toLocaleString('ar-EG'));
+        }
+      } catch(e) { console.warn(e); }
+
+      localStorage.setItem('zaiedVisitorOK', '1');
+      localStorage.setItem('zaiedVisitorData', JSON.stringify({name:name, phone:phone, at:Date.now()}));
+
+      document.body.classList.remove('zaied-gate-open');
+      gate.remove();
+
+      // انتقل للصفحة الرئيسية
+      try {
+        document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
+        var ph = document.getElementById('pageHome');
+        if (ph) ph.classList.remove('hide');
+        var wn = document.getElementById('welcomeName');
+        if (wn) wn.textContent = name;
+      } catch(e) {}
+
+      try { if (window.speak) window.speak('مرحباً ' + name, 'ar'); } catch(e) {}
+    };
+
+    document.getElementById('zgExit').onclick = function() {
+      if (!confirm('🚪 هل تريد مغادرة المنصة؟')) return;
+      try {
+        if (window.fbSaveVisitor) {
+          window.fbSaveVisitor({ name: 'رافض التسجيل', phone: '-', refused: true, page: '/' });
+        }
+        if (window.sendWhatsApp) {
+          window.sendWhatsApp('🚪 زائر رفض التسجيل وغادر');
+        }
+      } catch(e) {}
+
+      document.body.innerHTML =
+        '<div style="min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e293b);color:white;display:flex;align-items:center;justify-content:center;font-family:Cairo,sans-serif;direction:rtl;text-align:center;padding:40px;">' +
+          '<div>' +
+            '<div style="font-size:130px;">👋</div>' +
+            '<h1 style="color:#fbbf24;font-size:28px;margin:20px 0;font-weight:900;">إلى اللقاء!</h1>' +
+            '<p style="color:#cbd5e1;font-size:16px;">شكراً لزيارتك منصة زايد</p>' +
+            '<p style="color:#94a3b8;font-size:13px;margin-top:30px;">أغلق هذه الصفحة الآن</p>' +
+            '<p style="color:#64748b;font-size:12px;margin-top:8px;">اضغط <strong style="color:#fbbf24;">Ctrl + W</strong> أو انقر ✕</p>' +
+          '</div>' +
+        '</div>';
+
+      try { window.close(); } catch(e) {}
+      setTimeout(function(){ try { window.close(); } catch(e) {} }, 400);
+    };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(buildGate, 800); });
+  } else {
+    setTimeout(buildGate, 800);
+  }
+
+  // منع ESC
+  document.addEventListener('keydown', function(e) {
+    if (document.getElementById('zaiedGate') && e.key === 'Escape') {
+      e.preventDefault(); e.stopPropagation();
+    }
+  }, true);
+
+  // إذا حاول أحد إغلاق النافذة → لا شيء
+  setInterval(function() {
+    if (localStorage.getItem('zaiedVisitorOK') === '1') return;
+    if (!document.getElementById('zaiedGate')) buildGate();
+  }, 500);
+
+  console.log('✅ بوابة التسجيل الإلزامية جاهزة');
+})();
+</script>
 </body>
 </html>
