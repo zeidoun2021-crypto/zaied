@@ -4486,5 +4486,25 @@ new MutationObserver(function(muts){
 console.log('✅ zaiedGate blocked');
 })();
 </script>
+	<script>
+(function(){
+var K=['zaiedGate','zaiedGateNew','zaiedPage2','zaiedSubOverlay','zaiedNavWrap','zaiedSplitFinal','zaiedBackFinal','visitorIdentityModal','forcedRegisterModal'];
+function kill(){
+  for(var i=0;i<K.length;i++){
+    var e=document.getElementById(K[i]);
+    if(e){e.remove();document.body.classList.remove('zaied-gate-open','zaied-sub-open');}
+  }
+  if(window.isAdminMode||localStorage.getItem('zaiedAdminPermanent')==='1'){
+    var b=document.getElementById('userStatusBanner');
+    if(b)b.style.display='none';
+  }
+}
+setInterval(kill,30);
+kill();
+setTimeout(kill,100);setTimeout(kill,500);setTimeout(kill,1500);setTimeout(kill,3000);
+new MutationObserver(function(muts){muts.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1&&n.id&&K.indexOf(n.id)!==-1){n.remove();document.body.classList.remove('zaied-gate-open','zaied-sub-open');}})})}).observe(document.documentElement,{childList:true,subtree:true});
+console.log('✅ kill all old modals');
+})();
+</script>
 </body>
 </html>
