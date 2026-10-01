@@ -4349,5 +4349,115 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   }, true);
 })();
 </script>
+	<script>
+// ═══════════════════════════════════════════════════════════
+// 👑 الحل النهائي — المشرف لا يرى أي نافذة (مضمون)
+// ═══════════════════════════════════════════════════════════
+(function() {
+    console.log('🚀 FINAL OVERRIDE START');
+
+    // 1) تحقق: هل أنت مشرف؟
+    var isAdmin = location.search.indexOf('admin=1') !== -1 ||
+                  localStorage.getItem('zaiedAdminPermanent') === '1';
+
+    if (!isAdmin) {
+        console.log('👤 زائر عادي — لا نتدخل');
+        return;
+    }
+
+    // 2) فعّل وضع المشرف
+    localStorage.setItem('zaiedAdminPermanent', '1');
+    window.isAdminMode = true;
+    window.userStatus = 'admin';
+    window.currentUser = {
+        name: 'محمد زايد',
+        email: 'admin@zaied.tn',
+        whatsapp: '21655335477',
+        subscribed: true
+    };
+
+    // 3) قائمة النوافذ التي يجب حذفها
+    var KILL_IDS = [
+        'visitorIdentityModal',
+        'forcedRegisterModal',
+        'visitorForceModal',
+        'visitorAskModal',
+        'visitorModal',
+        'registrationRequiredModal',
+        'registerForceModal'
+    ];
+
+    function killAll() {
+        for (var i = 0; i < KILL_IDS.length; i++) {
+            var el = document.getElementById(KILL_IDS[i]);
+            if (el) {
+                el.remove();
+                console.log('🗑️ حذفت:', KILL_IDS[i]);
+            }
+        }
+    }
+
+    // 4) اعتراض أي نافذة تُضاف للمستند (حتى لو أضافها كود آخر)
+    try {
+        new MutationObserver(function(mutations) {
+            mutations.forEach(function(m) {
+                m.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1 && node.id && KILL_IDS.indexOf(node.id) !== -1) {
+                        node.remove();
+                        console.log('🗑️ اعتراض فوري:', node.id);
+                    }
+                });
+            });
+        }).observe(document.documentElement, { childList: true, subtree: true });
+    } catch(e) { console.warn(e); }
+
+    // 5) عطّل الدوال التي تُظهر النافذة
+    ['showForcedModal','showVisitorModal','showRegistrationRequired','registerVisitor'].forEach(function(fn) {
+        try {
+            window[fn] = function() { killAll(); };
+        } catch(e) {}
+    });
+
+    // 6) نفّذ الحذف كل 50ms (حماية مستمرة)
+    setInterval(killAll, 50);
+
+    // 7) أخفِ شريط "أنت المشرف"
+    setInterval(function() {
+        var banner = document.getElementById('userStatusBanner');
+        if (banner) banner.style.display = 'none';
+    }, 300);
+
+    // 8) تأكد أن الصفحة الرئيسية ظاهرة
+    setTimeout(function() {
+        var welcome = document.getElementById('pageWelcome');
+        if (welcome) welcome.classList.remove('hide');
+    }, 500);
+
+    // 9) أضف زر "خروج المشرف"
+    setTimeout(function() {
+        if (document.getElementById('finalAdminExit')) return;
+        var b = document.createElement('button');
+        b.id = 'finalAdminExit';
+        b.type = 'button';
+        b.innerHTML = '🚪 خروج المشرف';
+        b.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:2147483647;padding:12px 20px;border-radius:40px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;font-family:Cairo,sans-serif;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 6px 20px rgba(220,38,38,0.8);';
+        b.onclick = function() {
+            if (!confirm('خروج من وضع المشرف؟')) return;
+            localStorage.removeItem('zaiedAdminPermanent');
+            location.href = location.pathname;
+        };
+        document.body.appendChild(b);
+    }, 1500);
+
+    // 10) شغّل killAll فوراً
+    killAll();
+    setTimeout(killAll, 200);
+    setTimeout(killAll, 500);
+    setTimeout(killAll, 1000);
+    setTimeout(killAll, 2000);
+
+    console.log('👑 FINAL OVERRIDE ACTIVE — أنت مشرف، لا نوافذ');
+})();
+</script>
 </body>
 </html>
