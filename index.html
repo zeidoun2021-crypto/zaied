@@ -4670,5 +4670,243 @@ console.log('✅ kill all old modals');
   setTimeout(processModal, 1500);
 })();
 </script>
+	<script>
+(function() {
+  // ═══════════════════════════════════════════════════════════
+  // 🎯 بوابة التسجيل الكاملة — إلزامية مع 3 محاولات
+  // ═══════════════════════════════════════════════════════════
+  
+  var MAX = 3;
+  var attempts = parseInt(localStorage.getItem('zaiedAttempts') || '0');
+  var isAdmin = localStorage.getItem('zaiedAdminPermanent') === '1';
+  var isVisitor = localStorage.getItem('zaiedVisitorOK') === '1';
+  
+  // ✅ إذا مسجل أو مشرف → لا نتدخل
+  if (isAdmin || isVisitor) return;
+  
+  // 🧹 احذف النوافذ القديمة فوراً
+  ['visitorIdentityModal','zaiedGate','zaiedGateNew','forcedRegisterModal','visitorForceModal'].forEach(function(id){
+    setInterval(function(){
+      var el = document.getElementById(id);
+      if (el) el.remove();
+    }, 100);
+  });
+  
+  function makeGate() {
+    if (document.getElementById('zaiedFullGate')) return;
+    
+    var g = document.createElement('div');
+    g.id = 'zaiedFullGate';
+    g.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);display:flex;align-items:flex-start;justify-content:center;padding:20px;direction:rtl;font-family:Cairo,sans-serif;overflow-y:auto;';
+    
+    g.innerHTML = 
+      '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border:5px solid #fbbf24;border-radius:30px;padding:25px 20px;max-width:480px;width:100%;box-shadow:0 30px 100px rgba(0,0,0,0.9);margin-top:20px;">' +
+        
+        '<div style="text-align:center;font-size:50px;margin-bottom:8px;">👋</div>' +
+        '<h2 style="color:#fbbf24;font-size:20px;font-weight:900;text-align:center;margin-bottom:10px;">أهلاً بك في منصة زايد</h2>' +
+        '<p style="color:#cbd5e1;font-size:13px;text-align:center;margin-bottom:15px;line-height:1.7;">' +
+          'سجّل بياناتك للتصفح مجاناً<br>' +
+          '<span style="color:#4ade80;font-weight:700;">✅ لستَ مطالباً بأيِّ شيء</span>' +
+        '</p>' +
+        
+        '<div id="zfErr" style="display:none;color:#fca5a5;background:rgba(220,38,38,0.15);padding:10px;border-radius:15px;text-align:center;font-size:13px;margin-bottom:12px;font-weight:700;line-height:1.6;"></div>' +
+        
+        '<input type="text" id="zfName" placeholder="👤 الاسم الكامل *" style="width:100%;padding:13px;margin-bottom:10px;border:2px solid #475569;border-radius:25px;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;font-weight:600;text-align:right;box-sizing:border-box;">' +
+        '<input type="text" id="zfProf" placeholder="💼 المهنة *" style="width:100%;padding:13px;margin-bottom:10px;border:2px solid #475569;border-radius:25px;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;font-weight:600;text-align:right;box-sizing:border-box;">' +
+        '<input type="text" id="zfSpec" placeholder="🎯 الاختصاص *" style="width:100%;padding:13px;margin-bottom:10px;border:2px solid #475569;border-radius:25px;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;font-weight:600;text-align:right;box-sizing:border-box;">' +
+        '<input type="email" id="zfEmail" placeholder="📧 البريد الإلكتروني *" style="width:100%;padding:13px;margin-bottom:10px;border:2px solid #475569;border-radius:25px;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;font-weight:600;text-align:right;box-sizing:border-box;">' +
+        '<input type="tel" id="zfPhone" placeholder="📱 رقم الواتساب *" style="width:100%;padding:13px;margin-bottom:10px;border:2px solid #475569;border-radius:25px;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;font-weight:600;text-align:right;box-sizing:border-box;">' +
+        '<input type="text" id="zfCountry" placeholder="🌍 البلد *" value="تونس" style="width:100%;padding:13px;margin-bottom:12px;border:2px solid #475569;border-radius:25px;background:#0f172a;color:white;font-family:Cairo,sans-serif;font-size:14px;font-weight:600;text-align:right;box-sizing:border-box;">' +
+        
+        '<div id="zfCats" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:15px;"></div>' +
+        
+        '<button id="zfSubmit" style="width:100%;padding:16px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:16px;cursor:pointer;margin-bottom:10px;">✅ ادخل وتصفح مجاناً</button>' +
+        '<button id="zfRefuse" style="width:100%;padding:12px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:13px;cursor:pointer;">🚪 أرفض — غادر</button>' +
+        
+        '<div style="text-align:center;margin-top:12px;padding-top:12px;border-top:1px dashed rgba(148,163,184,0.3);">' +
+          '<div style="color:#64748b;font-size:11px;margin-bottom:8px;">🔒 بياناتك محفوظة بأمان</div>' +
+          '<button id="zfAdmin" style="background:none;border:none;color:#94a3b8;font-family:Cairo,sans-serif;font-size:11px;cursor:pointer;text-decoration:underline;">👑 دخول المشرف</button>' +
+        '</div>' +
+      '</div>';
+    
+    document.body.appendChild(g);
+    
+    // التصنيفات
+    var cats = ['طفل','ولي','طالب','أستاذ','باحث','خبير'];
+    var icons = ['🧒','👨‍👩‍👧','🎓','👨‍🏫','🔬','🧠'];
+    var catsContainer = g.querySelector('#zfCats');
+    cats.forEach(function(c, i) {
+      var lbl = document.createElement('label');
+      lbl.style.cssText = 'background:rgba(255,255,255,0.08);padding:7px 12px;border-radius:20px;cursor:pointer;color:white;font-size:12px;font-weight:700;border:2px solid transparent;';
+      lbl.innerHTML = '<input type="radio" name="zfCat" value="' + c + '" style="display:none;">' + icons[i] + ' ' + c;
+      lbl.onclick = function() {
+        catsContainer.querySelectorAll('label').forEach(function(l2) {
+          l2.style.background = 'rgba(255,255,255,0.08)';
+          l2.style.borderColor = 'transparent';
+          l2.style.color = 'white';
+        });
+        lbl.style.background = 'linear-gradient(135deg,#fbbf24,#f59e0b)';
+        lbl.style.borderColor = '#fbbf24';
+        lbl.style.color = '#0f172a';
+        lbl.querySelector('input').checked = true;
+      };
+      catsContainer.appendChild(lbl);
+    });
+    
+    // زر الإرسال
+    g.querySelector('#zfSubmit').onclick = async function() {
+      var name = g.querySelector('#zfName').value.trim();
+      var prof = g.querySelector('#zfProf').value.trim();
+      var spec = g.querySelector('#zfSpec').value.trim();
+      var email = g.querySelector('#zfEmail').value.trim().toLowerCase();
+      var phone = g.querySelector('#zfPhone').value.trim();
+      var country = g.querySelector('#zfCountry').value.trim();
+      var cat = (g.querySelector('input[name="zfCat"]:checked') || {}).value || '';
+      var err = g.querySelector('#zfErr');
+      
+      var errs = [];
+      if (!name || name.length < 3) errs.push('الاسم الكامل (3 أحرف على الأقل)');
+      else if (!/^[\u0600-\u06FFa-zA-Z\s]+$/.test(name)) errs.push('الاسم: أحرف فقط');
+      else if (name.split(' ').length < 2) errs.push('اكتب الاسم واللقب');
+      if (!prof || prof.length < 2) errs.push('المهنة');
+      if (!spec || spec.length < 2) errs.push('الاختصاص');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.push('البريد الإلكتروني');
+      if (!phone || !/^\+?\d{8,15}$/.test(phone.replace(/[\s\-]/g,''))) errs.push('رقم الواتساب (8-15 رقم)');
+      if (!country || country.length < 2) errs.push('البلد');
+      if (!cat) errs.push('اختر الفئة');
+      
+      if (errs.length > 0) {
+        err.style.display = 'block';
+        err.innerHTML = '⚠️ يرجى تصحيح:<br>• ' + errs.join('<br>• ');
+        return;
+      }
+      
+      err.style.display = 'none';
+      g.querySelector('#zfSubmit').textContent = '⏳ جاري التسجيل...';
+      g.querySelector('#zfSubmit').disabled = true;
+      
+      try {
+        var userData = {
+          name: name, profession: prof, specialty: spec,
+          email: email, whatsapp: phone, country: country, category: cat,
+          date: new Date().toLocaleString('ar-EG'),
+          loginCount: 1, subscribed: false, blocked: false
+        };
+        
+        var fbId = null;
+        if (window.fbSaveUser) fbId = await window.fbSaveUser(userData);
+        if (fbId) userData.firebaseId = fbId;
+        
+        if (window.sendWhatsApp) {
+          try {
+            await window.sendWhatsApp(
+              '🎓 تسجيل جديد\n━━━━━━━━━━━━\n👤 ' + name + '\n💼 ' + prof + '\n🎯 ' + spec + '\n📧 ' + email + '\n📱 ' + phone + '\n🌍 ' + country + '\n🏷️ ' + cat + '\n🕐 ' + new Date().toLocaleString('ar-EG')
+            );
+          } catch(e) {}
+        }
+        
+        localStorage.setItem('zaiedVisitorOK', '1');
+        localStorage.setItem('zaiedAttempts', '0');
+        window.currentUser = userData;
+        window.userStatus = 'registered';
+        
+        g.remove();
+        
+        // انتقل للأقسام
+        document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
+        var h = document.getElementById('pageHome');
+        if (h) h.classList.remove('hide');
+        var wn = document.getElementById('welcomeName');
+        if (wn) wn.textContent = name;
+        var b = document.getElementById('userStatusBanner');
+        if (b) b.style.display = '';
+        
+        try { window.speak && window.speak('مرحباً ' + name, 'ar'); } catch(e) {}
+        
+      } catch(e) {
+        console.error(e);
+        err.style.display = 'block';
+        err.textContent = '⚠️ خطأ في التسجيل — حاول مجدداً';
+        g.querySelector('#zfSubmit').textContent = '✅ ادخل وتصفح مجاناً';
+        g.querySelector('#zfSubmit').disabled = false;
+      }
+    };
+    
+    // زر الرفض — 3 محاولات
+    g.querySelector('#zfRefuse').onclick = function() {
+      attempts++;
+      localStorage.setItem('zaiedAttempts', String(attempts));
+      
+      if (attempts >= MAX) {
+        try { window.fbSaveVisitor && window.fbSaveVisitor({name:'رافض التسجيل', phone:'-', refused:true, attempts:attempts}); } catch(e){}
+        try { window.sendWhatsApp && window.sendWhatsApp('🚪 زائر رفض التسجيل ' + attempts + ' مرات وغادر'); } catch(e){}
+        
+        document.body.innerHTML = 
+          '<div style="min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e293b);color:white;display:flex;align-items:center;justify-content:center;font-family:Cairo,sans-serif;direction:rtl;text-align:center;padding:40px;">' +
+            '<div>' +
+              '<div style="font-size:130px;">👋</div>' +
+              '<h1 style="color:#fbbf24;font-size:28px;margin:20px 0;font-weight:900;">إلى اللقاء!</h1>' +
+              '<p style="color:#cbd5e1;font-size:16px;line-height:1.9;">شكراً لزيارتك منصة زايد</p>' +
+              '<p style="color:#94a3b8;font-size:13px;margin-top:30px;">أغلق هذه الصفحة الآن</p>' +
+              '<p style="color:#64748b;font-size:12px;margin-top:8px;">اضغط <strong style="color:#fbbf24;">Ctrl + W</strong></p>' +
+              '<p style="color:#475569;font-size:11px;margin-top:40px;">© 2026 — محمد زايد — تونس 🇹🇳</p>' +
+            '</div>' +
+          '</div>';
+        
+        try { window.close(); } catch(e) {}
+        setTimeout(function(){ try { window.close(); } catch(e) {} }, 500);
+      } else {
+        alert('⚠️ تنبيه ' + attempts + ' من ' + MAX + '\n\nيجب إكمال التسجيل للتصفح.\nمتبقي: ' + (MAX - attempts) + ' محاولة.');
+      }
+    };
+    
+    // زر المشرف
+    g.querySelector('#zfAdmin').onclick = function() {
+      var p = prompt('👑 كلمة مرور المشرف:');
+      if (p === '012345') {
+        localStorage.setItem('zaiedAdminPermanent', '1');
+        localStorage.setItem('zaiedVisitorOK', '1');
+        localStorage.setItem('zaiedAttempts', '0');
+        window.isAdminMode = true;
+        window.userStatus = 'admin';
+        window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+        location.reload();
+      } else if (p !== null) {
+        alert('❌ كلمة المرور غير صحيحة');
+      }
+    };
+  }
+  
+  // شغّل البوابة
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(makeGate, 500); });
+  } else {
+    setTimeout(makeGate, 500);
+  }
+  
+  // 🚫 امنع أي نقرة خارج النافذة
+  document.addEventListener('click', function(e) {
+    if (localStorage.getItem('zaiedVisitorOK') === '1') return;
+    if (window.isAdminMode) return;
+    if (e.target.closest('#zaiedFullGate')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    return false;
+  }, true);
+  
+  // 🚫 امنع ESC
+  document.addEventListener('keydown', function(e) {
+    if (localStorage.getItem('zaiedVisitorOK') === '1') return;
+    if (window.isAdminMode) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
+  
+  console.log('✅ بوابة التسجيل الكاملة جاهزة');
+})();
+</script>
 </body>
 </html>
