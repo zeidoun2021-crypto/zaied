@@ -4459,5 +4459,32 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
     console.log('👑 FINAL OVERRIDE ACTIVE — أنت مشرف، لا نوافذ');
 })();
 </script>
+	<script>
+(function(){
+var K=['zaiedGate','zaiedGateNew','visitorIdentityModal','forcedRegisterModal','visitorForceModal'];
+function kill(){
+  for(var i=0;i<K.length;i++){
+    var e=document.getElementById(K[i]);
+    if(e){e.remove();document.body.classList.remove('zaied-gate-open','zaied-sub-open');}
+  }
+}
+setInterval(kill,30);
+kill();
+setTimeout(kill,100);
+setTimeout(kill,500);
+setTimeout(kill,1500);
+new MutationObserver(function(muts){
+  muts.forEach(function(m){
+    m.addedNodes.forEach(function(n){
+      if(n.nodeType===1&&K.indexOf(n.id)!==-1){
+        n.remove();
+        document.body.classList.remove('zaied-gate-open','zaied-sub-open');
+      }
+    });
+  });
+}).observe(document.documentElement,{childList:true,subtree:true});
+console.log('✅ zaiedGate blocked');
+})();
+</script>
 </body>
 </html>
