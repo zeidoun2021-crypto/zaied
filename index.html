@@ -6335,9 +6335,6 @@ window.addEventListener('click', (e) => {
 });
 </script>
 	<script>
-// ═══════════════════════════════════════════════════════════
-// 🎯 بوابة الزائر الإلزامية — النموذج الكامل (7 حقول)
-// ═══════════════════════════════════════════════════════════
 (function() {
   if (localStorage.getItem('zaiedVisitorInfo')) return;
   if (localStorage.getItem('currentUser')) return;
@@ -6346,11 +6343,9 @@ window.addEventListener('click', (e) => {
 
   function showGate() {
     if (document.getElementById('zaiedVisitorGate')) return;
-
     var g = document.createElement('div');
     g.id = 'zaiedVisitorGate';
     g.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);display:flex;align-items:flex-start;justify-content:center;padding:15px;direction:rtl;font-family:Cairo,sans-serif;overflow-y:auto;';
-
     g.innerHTML =
       '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border:5px solid #fbbf24;border-radius:30px;padding:25px 20px;max-width:520px;width:100%;box-shadow:0 30px 100px rgba(0,0,0,0.9);margin:auto;">' +
         '<div style="text-align:center;font-size:48px;margin-bottom:8px;">👋</div>' +
@@ -6371,7 +6366,6 @@ window.addEventListener('click', (e) => {
           '<button id="zvgAdmin" style="background:none;border:none;color:#94a3b8;font-family:Cairo,sans-serif;font-size:11px;cursor:pointer;text-decoration:underline;">👑 دخول المشرف</button>' +
         '</div>' +
       '</div>';
-
     document.body.appendChild(g);
 
     var cats = [['طفل','🧒'],['ولي','👨‍👩‍👧'],['طالب','🎓'],['أستاذ','👨‍🏫'],['باحث','🔬'],['خبير','🧠']];
@@ -6401,75 +6395,37 @@ window.addEventListener('click', (e) => {
       var country = document.getElementById('zvgCountry').value.trim();
       var cat = (document.querySelector('input[name="zvgCat"]:checked')||{}).value || '';
       var err = document.getElementById('zvgErr');
-
       var errs = [];
-      if (!name || name.length < 3) errs.push('الاسم الكامل (3 أحرف على الأقل)');
-      else if (!/^[\u0600-\u06FFa-zA-Z\s]+$/.test(name)) errs.push('الاسم: أحرف فقط');
+      if (!name || name.length < 3) errs.push('الاسم الكامل');
       if (!prof || prof.length < 2) errs.push('المهنة');
       if (!spec || spec.length < 2) errs.push('الاختصاص');
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.push('البريد الإلكتروني');
-      if (!phone || !/^\+?\d{8,15}$/.test(phone.replace(/[\s\-]/g,''))) errs.push('رقم الواتساب (8-15 رقم)');
-      if (!country || country.length < 2) errs.push('البلد');
-      if (!cat) errs.push('اختر الفئة');
-
-      if (errs.length) {
-        err.style.display = 'block';
-        err.innerHTML = '⚠️ يرجى تصحيح:<br>• ' + errs.join('<br>• ');
-        return;
-      }
+      if (!phone || !/^\+?\d{8,15}$/.test(phone.replace(/[\s\-]/g,''))) errs.push('رقم الواتساب');
+      if (!country) errs.push('البلد');
+      if (!cat) errs.push('الفئة');
+      if (errs.length) { err.style.display = 'block'; err.innerHTML = '⚠️ ' + errs.join(' • '); return; }
       err.style.display = 'none';
-
       var btn = document.getElementById('zvgSubmit');
       btn.textContent = '⏳ جاري التسجيل...';
       btn.disabled = true;
-
       try {
         var ua = navigator.userAgent;
         var device = /Mobile|Android|iPhone/i.test(ua) ? 'هاتف' : (/Tablet|iPad/i.test(ua) ? 'لوحي' : 'حاسوب');
-        var browser = /Chrome/i.test(ua) ? 'Chrome' : (/Firefox/i.test(ua) ? 'Firefox' : (/Safari/i.test(ua) ? 'Safari' : (/Edge/i.test(ua) ? 'Edge' : 'آخر')));
-        var os = /Windows/i.test(ua) ? 'Windows' : (/Android/i.test(ua) ? 'Android' : (/iPhone|iPad/i.test(ua) ? 'iOS' : (/Mac/i.test(ua) ? 'macOS' : (/Linux/i.test(ua) ? 'Linux' : 'غير معروف'))));
-
-        var userData = {
-          name: name, profession: prof, specialty: spec,
-          email: email, whatsapp: phone, country: country, category: cat,
-          date: new Date().toLocaleString('ar-EG'),
-          status: 'registered', loginCount: 1, subscribed: false, blocked: false
-        };
-
+        var browser = /Chrome/i.test(ua) ? 'Chrome' : (/Firefox/i.test(ua) ? 'Firefox' : (/Safari/i.test(ua) ? 'Safari' : 'آخر'));
+        var os = /Windows/i.test(ua) ? 'Windows' : (/Android/i.test(ua) ? 'Android' : (/iPhone|iPad/i.test(ua) ? 'iOS' : 'غير معروف'));
+        var userData = { name: name, profession: prof, specialty: spec, email: email, whatsapp: phone, country: country, category: cat, date: new Date().toLocaleString('ar-EG'), status: 'registered', loginCount: 1, subscribed: false, blocked: false };
         var fbId = null;
-        if (window.fbSaveUser) {
-          fbId = await window.fbSaveUser(userData);
-          if (fbId) userData.firebaseId = fbId;
-        }
-
-        if (window.fbSaveVisitor) {
-          await window.fbSaveVisitor({
-            name: name, phone: phone, email: email,
-            device: device, browser: browser, os: os, page: '/'
-          });
-        }
-
-        if (window.sendWhatsApp) {
-          try {
-            await window.sendWhatsApp(
-              '🎓 تسجيل جديد\n━━━━━━━━━━━━━━━\n👤 ' + name + '\n💼 ' + prof + '\n🎯 ' + spec + '\n📧 ' + email + '\n📱 ' + phone + '\n🌍 ' + country + '\n🏷️ ' + cat + '\n💻 ' + device + ' • ' + browser + '\n🕐 ' + new Date().toLocaleString('ar-EG')
-            );
-          } catch(e) {}
-        }
-
+        if (window.fbSaveUser) { fbId = await window.fbSaveUser(userData); if (fbId) userData.firebaseId = fbId; }
+        if (window.fbSaveVisitor) { await window.fbSaveVisitor({ name: name, phone: phone, email: email, device: device, browser: browser, os: os, page: '/' }); }
+        if (window.sendWhatsApp) { try { await window.sendWhatsApp('🎓 تسجيل جديد\n👤 ' + name + '\n💼 ' + prof + '\n🎯 ' + spec + '\n📧 ' + email + '\n📱 ' + phone + '\n🌍 ' + country + '\n🏷️ ' + cat); } catch(e) {} }
         localStorage.setItem('zaiedVisitorInfo', JSON.stringify({ name: name, phone: phone, at: Date.now() }));
         localStorage.setItem('currentUser', JSON.stringify(userData));
         window.currentUser = userData;
         window.userStatus = 'registered';
-
         g.remove();
         if (window.updateUserBanner) window.updateUserBanner();
         if (window.moveToSections) window.moveToSections();
-
-        console.log('✅ زائر سجّل: ' + name);
-
       } catch(e) {
-        console.error(e);
         err.style.display = 'block';
         err.textContent = '⚠️ خطأ — حاول مجدداً';
         btn.textContent = '✅ ادخل وتصفح مجاناً';
@@ -6479,13 +6435,9 @@ window.addEventListener('click', (e) => {
 
     document.getElementById('zvgExit').onclick = function() {
       if (!confirm('🚪 هل تريد مغادرة المنصة؟')) return;
-      try {
-        if (window.fbSaveVisitor) window.fbSaveVisitor({ name: 'رافض التسجيل', phone: '-', refused: true });
-        if (window.sendWhatsApp) window.sendWhatsApp('🚪 زائر رفض التسجيل وغادر');
-      } catch(e) {}
-      document.body.innerHTML = '<div style="min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e293b);color:white;display:flex;align-items:center;justify-content:center;font-family:Cairo,sans-serif;direction:rtl;text-align:center;padding:40px;"><div><div style="font-size:130px;">👋</div><h1 style="color:#fbbf24;font-size:28px;margin:20px 0;font-weight:900;">إلى اللقاء!</h1><p style="color:#cbd5e1;font-size:16px;">شكراً لزيارتك منصة زايد</p><p style="color:#94a3b8;font-size:13px;margin-top:30px;">أغلق هذه الصفحة الآن</p><p style="color:#64748b;font-size:12px;margin-top:8px;">اضغط <strong style="color:#fbbf24;">Ctrl + W</strong></p></div></div>';
+      try { if (window.fbSaveVisitor) window.fbSaveVisitor({ name: 'رافض التسجيل', refused: true }); } catch(e) {}
+      document.body.innerHTML = '<div style="min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e293b);color:white;display:flex;align-items:center;justify-content:center;font-family:Cairo,sans-serif;direction:rtl;text-align:center;padding:40px;"><div><div style="font-size:130px;">👋</div><h1 style="color:#fbbf24;font-size:28px;margin:20px 0;">إلى اللقاء!</h1><p style="color:#cbd5e1;">شكراً لزيارتك منصة زايد</p></div></div>';
       try { window.close(); } catch(e) {}
-      setTimeout(function(){ try { window.close(); } catch(e) {} }, 500);
     };
 
     document.getElementById('zvgAdmin').onclick = function() {
@@ -6497,9 +6449,7 @@ window.addEventListener('click', (e) => {
         window.userStatus = 'admin';
         window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
         location.reload();
-      } else if (p !== null) {
-        alert('❌ كلمة المرور غير صحيحة');
-      }
+      } else if (p !== null) { alert('❌ كلمة المرور غير صحيحة'); }
     };
   }
 
@@ -6508,7 +6458,6 @@ window.addEventListener('click', (e) => {
   } else {
     setTimeout(showGate, 800);
   }
-
   setInterval(function() {
     if (localStorage.getItem('zaiedVisitorInfo')) return;
     if (localStorage.getItem('currentUser')) return;
