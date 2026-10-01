@@ -4566,5 +4566,109 @@ console.log('✅ kill all old modals');
   }, 1500);
 })();
 </script>
+	<style>
+/* ✅ إظهار نافذة التسجيل دائماً (حتى للمشرف) */
+#zaiedGate, #zaiedGateNew, #visitorIdentityModal {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  z-index: 2147483646 !important;
+}
+/* اخفِ زر المشرف القديم العائم */
+#zaiedAdminFloatBtn, #myAdminBtn, #floatingAdminBtn { display: none !important; }
+</style>
+
+<script>
+(function() {
+  if (location.search.indexOf('admin=1') !== -1) {
+    localStorage.setItem('zaiedAdminPermanent', '1');
+  }
+  
+  function processModal() {
+    if (window.__gateDone) return;
+    
+    var modal = document.getElementById('zaiedGate') 
+             || document.getElementById('visitorIdentityModal') 
+             || document.getElementById('zaiedGateNew');
+    
+    if (!modal) {
+      if (typeof window.showForcedModal === 'function') {
+        try { window.showForcedModal(); } catch(e) {}
+      }
+      return;
+    }
+    
+    // اظهر النافذة
+    modal.style.setProperty('display', 'flex', 'important');
+    modal.style.setProperty('visibility', 'visible', 'important');
+    modal.style.setProperty('opacity', '1', 'important');
+    modal.style.setProperty('z-index', '2147483646', 'important');
+    
+    // أضف زر المشرف إن لم يكن موجوداً
+    if (!modal.querySelector('#adminInsideBtn')) {
+      var card = modal.querySelector('div');
+      if (card) {
+        var wrap = document.createElement('div');
+        wrap.id = 'adminInsideBtn';
+        wrap.style.cssText = 'margin-top:15px;padding-top:12px;border-top:1px dashed rgba(148,163,184,0.4);text-align:center;';
+        
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.innerHTML = '👑 دخول المشرف';
+        btn.style.cssText = 'background:none;border:none;color:#fbbf24;font-family:Cairo,sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;padding:8px 15px;font-weight:900;';
+        btn.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var p = prompt('👑 كلمة مرور المشرف:');
+          if (p === '012345') {
+            window.__gateDone = true;
+            localStorage.setItem('zaiedAdminPermanent', '1');
+            localStorage.setItem('zaiedVisitorOK', '1');
+            window.isAdminMode = true;
+            window.userStatus = 'admin';
+            window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+            
+            modal.style.setProperty('display', 'none', 'important');
+            document.body.classList.remove('zaied-gate-open','zaied-sub-open');
+            document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
+            var h = document.getElementById('pageHome');
+            if (h) h.classList.remove('hide');
+            var b = document.getElementById('userStatusBanner');
+            if (b) b.style.display = 'none';
+            console.log('👑 دخول المشرف — الأقسام');
+          } else if (p !== null) {
+            alert('❌ كلمة المرور غير صحيحة');
+          }
+        };
+        wrap.appendChild(btn);
+        card.appendChild(wrap);
+      }
+    }
+  }
+  
+  // اعترض زر الدخول العادي
+  document.addEventListener('click', function(e) {
+    var t = e.target;
+    while (t && t !== document.body) {
+      var txt = (t.innerText || '').trim();
+      if (txt.indexOf('ادخل') !== -1 && txt.indexOf('تصفح') !== -1) {
+        window.__gateDone = true;
+        break;
+      }
+      t = t.parentElement;
+    }
+  }, true);
+  
+  setInterval(processModal, 300);
+  setTimeout(processModal, 100);
+  setTimeout(processModal, 500);
+  setTimeout(processModal, 1500);
+})();
+</script>
 </body>
 </html>
