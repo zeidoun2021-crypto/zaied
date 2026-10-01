@@ -4091,5 +4091,88 @@ console.log('✅ التعريف النهائي لـ finalExit جاهز');
   console.log('✅ نظام التسجيل الإلزامي جاهز — الصفحة الأولى تبقى مع النموذج');
 })();
 </script>
+	<script>
+(function() {
+  // ✅ أضف زر "دخول المشرف" داخل نافذة الزائر
+  function addAdminBtn() {
+    var modal = document.getElementById('visitorIdentityModal');
+    if (!modal) return;
+    if (modal.querySelector('#adminBtnInside')) return;
+
+    // ابحث عن الحاوية الرئيسية داخل النافذة
+    var card = modal.querySelector('div');
+    if (!card) return;
+
+    // أنشئ الفاصل + الزر
+    var wrap = document.createElement('div');
+    wrap.id = 'adminBtnInside';
+    wrap.style.cssText = 'margin-top:15px;padding-top:12px;border-top:1px dashed rgba(148,163,184,0.4);text-align:center;';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.innerHTML = '👑 دخول المشرف';
+    btn.style.cssText = 'background:none;border:none;color:#fbbf24;font-family:Cairo,sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;padding:8px 15px;font-weight:900;';
+    btn.onclick = function(e) {
+      e.preventDefault(); e.stopPropagation();
+      try { window.speechSynthesis.cancel(); } catch(err) {}
+      var pass = prompt('👑 كلمة مرور المشرف:');
+      if (pass === '012345') {
+        localStorage.setItem('zaiedAdminPermanent', '1');
+        localStorage.setItem('zaiedVisitorOK', '1');
+        window.isAdminMode = true;
+        window.userStatus = 'admin';
+        window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+        modal.remove();
+        // اذهب للوحة المشرف
+        if (typeof window.enterAdmin === 'function') {
+          var inp = document.getElementById('adminPassInput');
+          if (inp) inp.value = '012345';
+          window.enterAdmin();
+        } else {
+          location.reload();
+        }
+      } else if (pass !== null) {
+        alert('❌ كلمة المرور غير صحيحة');
+      }
+    };
+    wrap.appendChild(btn);
+    card.appendChild(wrap);
+    console.log('✅ زر المشرف أُضيف');
+  }
+
+  // راقب ظهور النافذة كل 300ms
+  setInterval(addAdminBtn, 300);
+
+  // إن كان الزائر مسجل سابقاً (من تسجيل سابق) → أضف زر مشرف عائم للطوارئ
+  function addFloatingAdmin() {
+    if (localStorage.getItem('zaiedAdminPermanent') === '1') return;
+    if (document.getElementById('floatingAdminBtn')) return;
+    if (document.getElementById('visitorIdentityModal')) return; // النافذة ظاهرة، لا حاجة للعائم
+
+    var b = document.createElement('button');
+    b.id = 'floatingAdminBtn';
+    b.innerHTML = '👑';
+    b.title = 'دخول المشرف';
+    b.style.cssText = 'position:fixed;bottom:15px;right:15px;z-index:2147483646;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:white;border:3px solid #fbbf24;font-size:22px;cursor:pointer;box-shadow:0 6px 20px rgba(139,92,246,0.6);';
+    b.onclick = function() {
+      var pass = prompt('👑 كلمة مرور المشرف:');
+      if (pass === '012345') {
+        localStorage.setItem('zaiedAdminPermanent','1');
+        localStorage.setItem('zaiedVisitorOK','1');
+        window.isAdminMode = true;
+        window.userStatus = 'admin';
+        window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+        location.reload();
+      } else if (pass !== null) {
+        alert('❌ كلمة المرور غير صحيحة');
+      }
+    };
+    document.body.appendChild(b);
+  }
+  setInterval(addFloatingAdmin, 700);
+
+  console.log('✅ نظام إضافة زر المشرف جاهز');
+})();
+</script>
 </body>
 </html>
