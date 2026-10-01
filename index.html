@@ -4506,5 +4506,65 @@ new MutationObserver(function(muts){muts.forEach(function(m){m.addedNodes.forEac
 console.log('✅ kill all old modals');
 })();
 </script>
+	<style>
+/* 🧹 أخفِ كل النوافذ القديمة — بدون حذف */
+#zaiedPage2,
+#zaiedSubOverlay,
+#zaiedNavWrap,
+#zaiedSplitFinal,
+#zaiedBackFinal,
+#gotoSubBtn,
+#backToFeaturesBtn,
+#pageDividerBtn,
+#zaiedTabs,
+#zaied2Tabs { 
+  display: none !important; 
+  visibility: hidden !important; 
+  pointer-events: none !important;
+}
+</style>
+
+<script>
+(function(){
+  var isAdmin = location.search.indexOf('admin=1') !== -1 || localStorage.getItem('zaiedAdminPermanent') === '1';
+  if (!isAdmin) return;
+  
+  localStorage.setItem('zaiedAdminPermanent', '1');
+  window.isAdminMode = true;
+  window.userStatus = 'admin';
+  window.currentUser = {name:'محمد زايد', email:'admin@zaied.tn', whatsapp:'21655335477', subscribed:true};
+  
+  // أخفِ نافذة التسجيل أيضاً للمشرف + الشريط
+  var css = document.createElement('style');
+  css.textContent = '#zaiedGate, #zaiedGateNew, #visitorIdentityModal, #userStatusBanner { display:none !important; }';
+  document.head.appendChild(css);
+  
+  function showHome() {
+    document.body.classList.remove('zaied-gate-open','zaied-sub-open');
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
+    var h = document.getElementById('pageHome');
+    if (h) h.classList.remove('hide');
+  }
+  setTimeout(showHome, 500);
+  setTimeout(showHome, 1200);
+  setTimeout(showHome, 2500);
+  setInterval(showHome, 2000);
+  
+  // زر خروج المشرف
+  setTimeout(function() {
+    if (document.getElementById('finalAdminExit')) return;
+    var b = document.createElement('button');
+    b.id = 'finalAdminExit';
+    b.innerHTML = '🚪 خروج المشرف';
+    b.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:2147483647;padding:12px 20px;border-radius:40px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;font-family:Cairo,sans-serif;font-weight:900;font-size:14px;cursor:pointer;';
+    b.onclick = function() {
+      if (!confirm('خروج؟')) return;
+      localStorage.removeItem('zaiedAdminPermanent');
+      location.href = location.pathname;
+    };
+    document.body.appendChild(b);
+  }, 1500);
+})();
+</script>
 </body>
 </html>
