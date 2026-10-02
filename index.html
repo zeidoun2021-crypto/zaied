@@ -6797,6 +6797,7 @@ body.admin-mode #statsFloatBtn { display: block !important; }
         '<div class="u-name">' + (i+1) + '. ' + u.name + (u.subscribed ? ' 💎' : '') + '</div>' +
         '<div class="u-info">📧 ' + u.email + ' • 📱 ' + u.whatsapp + '</div>' +
         '<div class="u-info">💼 ' + u.profession + ' • 🎯 ' + u.specialty + '</div>' +
+'<div class="u-info">🌍 ' + u.country + ' • 🏙️ ' + (u.city || '-') + '</div>' +
         '<div class="u-info">🌍 ' + u.country + ' • 🏷️ ' + u.category + ' • 📅 ' + u.date + '</div>' +
         '<div style="margin-top:8px;">' +
           '<a href="https://wa.me/' + u.whatsapp.replace(/[^0-9]/g,'') + '" target="_blank" class="sd-btn sd-btn-success" style="text-decoration:none;display:inline-block;">💬 واتساب</a>' +
