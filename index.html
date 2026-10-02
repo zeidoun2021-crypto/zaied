@@ -6416,7 +6416,7 @@ if (!city || city.length < 2) errs.push('المدينة');
         var device = /Mobile|Android|iPhone/i.test(ua) ? 'هاتف' : (/Tablet|iPad/i.test(ua) ? 'لوحي' : 'حاسوب');
         var browser = /Chrome/i.test(ua) ? 'Chrome' : (/Firefox/i.test(ua) ? 'Firefox' : (/Safari/i.test(ua) ? 'Safari' : 'آخر'));
         var os = /Windows/i.test(ua) ? 'Windows' : (/Android/i.test(ua) ? 'Android' : (/iPhone|iPad/i.test(ua) ? 'iOS' : 'غير معروف'));
-        var userData = { name: name, profession: prof, specialty: spec, email: email, whatsapp: phone, country: country, category: cat, date: new Date().toLocaleString('ar-EG'), status: 'registered', loginCount: 1, subscribed: false, blocked: false };
+        var userData = { name: name, profession: prof, specialty: spec, email: email, whatsapp: phone, country: country, city: city, category: cat, date: new Date().toLocaleString('ar-EG'), status: 'registered', loginCount: 1, subscribed: false, blocked: false };
         var fbId = null;
         if (window.fbSaveUser) { fbId = await window.fbSaveUser(userData); if (fbId) userData.firebaseId = fbId; }
         if (window.fbSaveVisitor) { await window.fbSaveVisitor({ name: name, phone: phone, email: email, device: device, browser: browser, os: os, page: '/' }); }
