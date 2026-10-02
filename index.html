@@ -6509,6 +6509,343 @@ window.addEventListener('click', (e) => {
   };
 })();
 </script>
+	<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 📊 لوحة الإحصائيات — للمشرف فقط                            -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<style>
+#statsFloatBtn { display: none; }
+body.admin-mode #statsFloatBtn { display: block !important; }
+
+#statsDashboard {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  overflow-y: auto;
+  direction: rtl;
+  font-family: Cairo, sans-serif;
+  padding: 20px 15px 80px;
+}
+#statsDashboard.active { display: block; }
+
+.sd-card {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border-radius: 20px;
+  padding: 18px 15px;
+  border: 2px solid rgba(251,191,36,0.3);
+  text-align: center;
+  color: white;
+}
+.sd-card .num {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.sd-card .lbl {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 700;
+}
+.sd-blue { border-color: #3b82f6; }
+.sd-blue .num { color: #60a5fa; }
+.sd-purple { border-color: #8b5cf6; }
+.sd-purple .num { color: #a78bfa; }
+.sd-green { border-color: #22c55e; }
+.sd-green .num { color: #4ade80; }
+.sd-gold { border-color: #fbbf24; }
+.sd-gold .num { color: #fbbf24; }
+
+.sd-section {
+  background: rgba(30,41,59,0.8);
+  border: 2px solid rgba(251,191,36,0.2);
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.sd-btn {
+  padding: 10px 18px;
+  border-radius: 25px;
+  border: none;
+  font-family: Cairo, sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  cursor: pointer;
+  color: white;
+  margin: 3px;
+}
+.sd-btn-primary { background: linear-gradient(135deg,#3b82f6,#1e40af); }
+.sd-btn-success { background: linear-gradient(135deg,#22c55e,#16a34a); }
+.sd-btn-warn { background: linear-gradient(135deg,#f59e0b,#b45309); }
+.sd-btn-danger { background: linear-gradient(135deg,#dc2626,#991b1b); }
+
+.sd-input {
+  padding: 12px 18px;
+  border-radius: 25px;
+  border: 2px solid #475569;
+  background: #0f172a;
+  color: white;
+  font-family: Cairo, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.sd-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sd-user {
+  background: #f8fafc;
+  border-radius: 15px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-right: 5px solid #3b82f6;
+  color: #0f172a;
+}
+.sd-user.subscribed { border-right-color: #22c55e; }
+.sd-user .u-name { font-weight: 900; color: #dc2626; font-size: 15px; }
+.sd-user .u-info { font-size: 12px; color: #475569; margin-top: 4px; line-height: 1.7; }
+
+.sd-bar {
+  background: rgba(51,65,85,0.6);
+  border-radius: 8px;
+  height: 24px;
+  margin-bottom: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.sd-bar-fill {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.5s;
+}
+.sd-bar-label {
+  position: absolute;
+  top: 0; right: 10px;
+  line-height: 24px;
+  color: white;
+  font-size: 12px;
+  font-weight: 900;
+}
+</style>
+
+<button id="statsFloatBtn" onclick="document.getElementById('statsDashboard').classList.add('active')" style="position:fixed;bottom:20px;right:20px;z-index:9999998;padding:14px 22px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:white;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo,sans-serif;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 8px 25px rgba(139,92,246,0.6);">📊 الإحصائيات</button>
+
+<div id="statsDashboard">
+  <div style="max-width:1200px;margin:0 auto;">
+    
+    <div style="text-align:center;margin-bottom:20px;">
+      <h1 style="color:#fbbf24;font-size:24px;font-weight:900;">📊 لوحة الإحصائيات</h1>
+      <p style="color:#94a3b8;font-size:13px;margin-top:6px;">بيانات محدّثة من Firebase مباشرة</p>
+      <button onclick="document.getElementById('statsDashboard').classList.remove('active')" class="sd-btn sd-btn-danger" style="margin-top:10px;">✖ إغلاق</button>
+    </div>
+
+    <div id="sdStats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">
+      <div class="sd-card sd-blue"><div class="num" id="sdUsers">-</div><div class="lbl">👥 مسجل</div></div>
+      <div class="sd-card sd-purple"><div class="num" id="sdVisitors">-</div><div class="lbl">🎭 زائر</div></div>
+      <div class="sd-card sd-green"><div class="num" id="sdSubs">-</div><div class="lbl">💎 مشترك</div></div>
+      <div class="sd-card sd-gold"><div class="num" id="sdToday">-</div><div class="lbl">✨ اليوم</div></div>
+    </div>
+
+    <div class="sd-section">
+      <h3 style="color:#fbbf24;margin-bottom:12px;font-weight:900;">🌍 أعلى البلدان</h3>
+      <div id="sdCountries"><p style="color:#94a3b8;">جاري التحميل...</p></div>
+    </div>
+
+    <div class="sd-section">
+      <h3 style="color:#fbbf24;margin-bottom:12px;font-weight:900;">🔍 البحث والفلترة</h3>
+      <input type="text" id="sdSearch" class="sd-input" placeholder="🔍 ابحث بالاسم / البريد / الهاتف" oninput="sdRenderUsers()">
+      <div class="sd-row">
+        <button onclick="sdFilter='all';sdRenderUsers()" class="sd-btn sd-btn-primary">👥 الكل</button>
+        <button onclick="sdFilter='sub';sdRenderUsers()" class="sd-btn sd-btn-success">💎 مشترك</button>
+        <button onclick="sdFilter='free';sdRenderUsers()" class="sd-btn sd-btn-warn">✅ مجاني</button>
+      </div>
+      <div class="sd-row">
+        <button onclick="sdExportUsers()" class="sd-btn sd-btn-success">📥 تصدير Excel (المسجلين)</button>
+        <button onclick="sdExportVisitors()" class="sd-btn sd-btn-primary">📥 تصدير Excel (الزوار)</button>
+      </div>
+    </div>
+
+    <div class="sd-section">
+      <h3 style="color:#fbbf24;margin-bottom:12px;font-weight:900;">📋 قائمة المسجلين (<span id="sdCountUsers">-</span>)</h3>
+      <div id="sdUsersList"><p style="color:#94a3b8;">جاري التحميل...</p></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  var sdFilter = 'all';
+  var sdUsersData = [];
+  var sdVisitorsData = [];
+
+  function formatDate(ts) {
+    if (!ts) return '-';
+    try { return new Date(ts).toLocaleString('ar-EG'); } catch(e) { return '-'; }
+  }
+
+  function isToday(ts) {
+    if (!ts) return false;
+    try {
+      var d = new Date(ts);
+      var now = new Date();
+      return d.toDateString() === now.toDateString();
+    } catch(e) { return false; }
+  }
+
+  window.sdLoad = async function() {
+    try {
+      // المسجلون
+      var r1 = await fetch('https://firestore.googleapis.com/v1/projects/zaied-plateform/databases/(default)/documents/users?pageSize=500');
+      var d1 = await r1.json();
+      sdUsersData = (d1.documents || []).map(function(doc) {
+        var f = doc.fields || {};
+        return {
+          id: doc.name.split('/').pop(),
+          name: f.name ? f.name.stringValue : '-',
+          profession: f.profession ? f.profession.stringValue : '-',
+          specialty: f.specialty ? f.specialty.stringValue : '-',
+          email: f.email ? f.email.stringValue : '-',
+          whatsapp: f.whatsapp ? f.whatsapp.stringValue : '-',
+          country: f.country ? f.country.stringValue : '-',
+          category: f.category ? f.category.stringValue : '-',
+          date: f.date ? f.date.stringValue : '-',
+          subscribed: f.subscribed ? f.subscribed.booleanValue : false,
+          createdAt: f.createdAt && f.createdAt.timestampValue ? f.createdAt.timestampValue : null
+        };
+      });
+
+      // الزوار
+      var r2 = await fetch('https://firestore.googleapis.com/v1/projects/zaied-plateform/databases/(default)/documents/visitors?pageSize=500');
+      var d2 = await r2.json();
+      sdVisitorsData = (d2.documents || []).map(function(doc) {
+        var f = doc.fields || {};
+        return {
+          name: f.name ? f.name.stringValue : 'زائر مجهول',
+          phone: f.phone ? f.phone.stringValue : '-',
+          device: f.device ? f.device.stringValue : '-',
+          browser: f.browser ? f.browser.stringValue : '-',
+          visitedAt: f.visitedAt && f.visitedAt.timestampValue ? f.visitedAt.timestampValue : null
+        };
+      });
+
+      // الإحصائيات
+      document.getElementById('sdUsers').textContent = sdUsersData.length;
+      document.getElementById('sdVisitors').textContent = sdVisitorsData.length;
+      document.getElementById('sdSubs').textContent = sdUsersData.filter(function(u){ return u.subscribed; }).length;
+      document.getElementById('sdToday').textContent = sdUsersData.filter(function(u){ return isToday(u.createdAt); }).length;
+
+      // البلدان
+      var countries = {};
+      sdUsersData.forEach(function(u) {
+        if (u.country && u.country !== '-') {
+          countries[u.country] = (countries[u.country] || 0) + 1;
+        }
+      });
+      var sorted = Object.keys(countries).map(function(k){ return {name:k, count:countries[k]}; }).sort(function(a,b){ return b.count - a.count; }).slice(0, 8);
+      var maxCount = sorted[0] ? sorted[0].count : 1;
+      var cHtml = sorted.length ? sorted.map(function(c) {
+        return '<div style="margin-bottom:8px;"><div class="sd-bar"><div class="sd-bar-fill" style="width:' + (c.count/maxCount*100) + '%"></div><div class="sd-bar-label">' + c.name + ' — ' + c.count + '</div></div></div>';
+      }).join('') : '<p style="color:#94a3b8;">لا توجد بيانات</p>';
+      document.getElementById('sdCountries').innerHTML = cHtml;
+
+      // القائمة
+      sdRenderUsers();
+
+    } catch(e) {
+      console.error(e);
+      document.getElementById('sdUsersList').innerHTML = '<p style="color:#fca5a5;">❌ خطأ في التحميل: ' + e.message + '</p>';
+    }
+  };
+
+  window.sdRenderUsers = function() {
+    var search = (document.getElementById('sdSearch').value || '').toLowerCase().trim();
+    var filtered = sdUsersData.filter(function(u) {
+      if (sdFilter === 'sub' && !u.subscribed) return false;
+      if (sdFilter === 'free' && u.subscribed) return false;
+      if (search) {
+        var hay = (u.name + ' ' + u.email + ' ' + u.whatsapp + ' ' + u.profession).toLowerCase();
+        if (hay.indexOf(search) === -1) return false;
+      }
+      return true;
+    });
+
+    document.getElementById('sdCountUsers').textContent = filtered.length;
+
+    if (!filtered.length) {
+      document.getElementById('sdUsersList').innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا نتائج</p>';
+      return;
+    }
+
+    document.getElementById('sdUsersList').innerHTML = filtered.map(function(u, i) {
+      return '<div class="sd-user' + (u.subscribed ? ' subscribed' : '') + '">' +
+        '<div class="u-name">' + (i+1) + '. ' + u.name + (u.subscribed ? ' 💎' : '') + '</div>' +
+        '<div class="u-info">📧 ' + u.email + ' • 📱 ' + u.whatsapp + '</div>' +
+        '<div class="u-info">💼 ' + u.profession + ' • 🎯 ' + u.specialty + '</div>' +
+        '<div class="u-info">🌍 ' + u.country + ' • 🏷️ ' + u.category + ' • 📅 ' + u.date + '</div>' +
+        '<div style="margin-top:8px;">' +
+          '<a href="https://wa.me/' + u.whatsapp.replace(/[^0-9]/g,'') + '" target="_blank" class="sd-btn sd-btn-success" style="text-decoration:none;display:inline-block;">💬 واتساب</a>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  };
+
+  window.sdExportUsers = function() {
+    if (!sdUsersData.length) return alert('⚠️ لا بيانات');
+    var csv = 'الاسم,المهنة,الاختصاص,البريد,الواتساب,البلد,الفئة,التاريخ,مشترك\n';
+    sdUsersData.forEach(function(u) {
+      csv += '"' + u.name + '","' + u.profession + '","' + u.specialty + '","' + u.email + '","' + u.whatsapp + '","' + u.country + '","' + u.category + '","' + u.date + '","' + (u.subscribed ? 'نعم' : 'لا') + '"\n';
+    });
+    var blob = new Blob(['\ufeff' + csv], {type:'text/csv;charset=utf-8;'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'المسجلون_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+  };
+
+  window.sdExportVisitors = function() {
+    if (!sdVisitorsData.length) return alert('⚠️ لا بيانات');
+    var csv = 'الاسم,الهاتف,الجهاز,المتصفح,التاريخ\n';
+    sdVisitorsData.forEach(function(v) {
+      csv += '"' + v.name + '","' + v.phone + '","' + v.device + '","' + v.browser + '","' + formatDate(v.visitedAt) + '"\n';
+    });
+    var blob = new Blob(['\ufeff' + csv], {type:'text/csv;charset=utf-8;'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'الزوار_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+  };
+
+  // راقب تفعيل وضع المشرف
+  setInterval(function() {
+    if (window.isAdminMode) {
+      document.body.classList.add('admin-mode');
+    } else {
+      document.body.classList.remove('admin-mode');
+    }
+  }, 500);
+
+  // عند فتح اللوحة، حدّث البيانات
+  document.addEventListener('click', function(e) {
+    if (e.target.id === 'statsFloatBtn') {
+      setTimeout(sdLoad, 100);
+    }
+  }, true);
+
+  console.log('✅ لوحة الإحصائيات جاهزة — ستظهر لك فقط عندما تكون مشرفاً');
+})();
+</script>
 </body>
 </html>
 </body>
