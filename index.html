@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!DOCTYPE html>if (!country) errs.push('بلد الإقامة');
+if (!city || city.length < 2) errs.push('المدينة');
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -6402,7 +6403,8 @@ var city = document.getElementById('zvgCity').value.trim();
       if (!spec || spec.length < 2) errs.push('الاختصاص');
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.push('البريد الإلكتروني');
       if (!phone || !/^\+?\d{8,15}$/.test(phone.replace(/[\s\-]/g,''))) errs.push('رقم الواتساب');
-      if (!country) errs.push('البلد');
+      if (!country) errs.push('بلد الإقامة');
+if (!city || city.length < 2) errs.push('المدينة');
       if (!cat) errs.push('الفئة');
       if (errs.length) { err.style.display = 'block'; err.innerHTML = '⚠️ ' + errs.join(' • '); return; }
       err.style.display = 'none';
