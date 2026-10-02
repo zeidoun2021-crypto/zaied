@@ -6420,7 +6420,7 @@ if (!city || city.length < 2) errs.push('المدينة');
         var fbId = null;
         if (window.fbSaveUser) { fbId = await window.fbSaveUser(userData); if (fbId) userData.firebaseId = fbId; }
         if (window.fbSaveVisitor) { await window.fbSaveVisitor({ name: name, phone: phone, email: email, device: device, browser: browser, os: os, page: '/' }); }
-        if (window.sendWhatsApp) { try { await window.sendWhatsApp('🎓 تسجيل جديد\n👤 ' + name + '\n💼 ' + prof + '\n🎯 ' + spec + '\n📧 ' + email + '\n📱 ' + phone + '\n🌍 ' + country + '\n🏷️ ' + cat); } catch(e) {} }
+        if (window.sendWhatsApp) { try { await window.sendWhatsApp('🎓 تسجيل جديد\n👤 ' + name + '\n💼 ' + prof + '\n🎯 ' + spec + '\n📧 ' + email + '\n📱 ' + phone +'🌍 ' + country + '\n🏙️ ' + city + '\n🏷️ ' + cat); } catch(e) {} }
         localStorage.setItem('zaiedVisitorInfo', JSON.stringify({ name: name, phone: phone, at: Date.now() }));
         localStorage.setItem('currentUser', JSON.stringify(userData));
         window.currentUser = userData;
