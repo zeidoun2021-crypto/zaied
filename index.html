@@ -6589,5 +6589,143 @@ window.logoutAdmin = function() {
 
 console.log('✅ أزرار الخروج جاهزة بشكل دائم');
 </script>
+	<script>
+// ═══════════════════════════════════════════════════════
+// 🔒 الشريط الذهبي الإلزامي + منع الزوار
+// ═══════════════════════════════════════════════════════
+(function() {
+    'use strict';
+
+    // ═══ هل المستخدم مسجل؟ ═══
+    function isRegistered() {
+        if (window.currentUser) return true;
+        if (window.userStatus === 'registered') return true;
+        if (window.userStatus === 'subscriber') return true;
+        if (window.userStatus === 'admin') return true;
+        if (window.isAdminMode === true) return true;
+        if (localStorage.getItem('currentUser')) return true;
+        if (localStorage.getItem('zaiedAdminPermanent') === '1') return true;
+        return false;
+    }
+
+    // ═══ الشريط الذهبي المتحرك ═══
+    function showGoldBanner() {
+        if (document.getElementById('goldBannerFinal')) return;
+        if (isRegistered()) return;
+
+        var st = document.createElement('style');
+        st.textContent = 
+            '@keyframes gbMove{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}' +
+            '@keyframes gbShine{0%{background-position:-200% center}100%{background-position:200% center}}' +
+            '#goldBannerFinal{background:linear-gradient(90deg,#f59e0b,#fbbf24,#fcd34d,#fbbf24,#f59e0b)!important;background-size:200% auto!important;animation:gbShine 3s linear infinite}' +
+            '#goldBannerFinal .gbm{display:inline-block;white-space:nowrap;animation:gbMove 20s linear infinite}';
+        document.head.appendChild(st);
+
+        var b = document.createElement('div');
+        b.id = 'goldBannerFinal';
+        b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999998;padding:14px 20px;display:flex;align-items:center;gap:15px;border-bottom:4px solid #dc2626;box-shadow:0 4px 20px rgba(0,0,0,0.3);direction:rtl;font-family:Cairo,sans-serif;';
+        
+        b.innerHTML = 
+            '<div style="flex:1;overflow:hidden;height:30px;position:relative;">' +
+                '<div class="gbm" style="font-size:17px;font-weight:900;color:#7f1d1d;line-height:30px;">' +
+                    '🔒 لا يمكنك الدخول إلى المنصة إلا بعد التسجيل &nbsp;•&nbsp; التسجيل مجاني تماماً &nbsp;•&nbsp; سجّل الآن واستمتع بكل المحتوى &nbsp;•&nbsp; الدروس • الكتب • اللغة العربية • الذكاء الاصطناعي &nbsp;•&nbsp; 🔒 لا يمكنك الدخول إلا بعد التسجيل' +
+                '</div>' +
+            '</div>' +
+            '<button onclick="document.getElementById(\'registerSection\').scrollIntoView({behavior:\'smooth\',block:\'center\'})" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fff;border-radius:25px;padding:8px 20px;font-family:Cairo,sans-serif;font-weight:900;cursor:pointer;font-size:15px;white-space:nowrap;box-shadow:0 4px 15px rgba(34,197,94,0.6);">🔑 سجّل الآن مجاناً</button>';
+        
+        document.body.appendChild(b);
+        document.body.style.paddingTop = '70px';
+    }
+
+    // ═══ نافذة "التسجيل مطلوب" ═══
+    function showBlockModal() {
+        if (document.getElementById('blockModalFinal')) return;
+        if (isRegistered()) return;
+        
+        try {
+            if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; }
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        } catch(e) {}
+
+        var m = document.createElement('div');
+        m.id = 'blockModalFinal';
+        m.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.96);z-index:99999997;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Cairo,sans-serif;direction:rtl;';
+        
+        m.innerHTML = 
+            '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:30px;padding:35px 30px;max-width:550px;width:100%;border:4px solid #fbbf24;box-shadow:0 20px 60px rgba(220,38,38,0.4);text-align:center;color:white;">' +
+                '<div style="font-size:80px;margin-bottom:15px;">🔒</div>' +
+                '<h2 style="color:#fbbf24;font-size:26px;margin:0 0 15px 0;font-weight:900;">التسجيل مطلوب</h2>' +
+                '<p style="font-size:16px;line-height:1.9;color:#cbd5e1;margin-bottom:20px;">للوصول إلى محتوى المنصة<br>يجب عليك التسجيل أولاً</p>' +
+                '<div style="background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:20px;margin-bottom:20px;border:2px solid #fbbf24;">' +
+                    '<div style="font-size:18px;font-weight:900;color:#fbbf24;">✨ التسجيل مجاني تماماً ✨</div>' +
+                '</div>' +
+                '<button onclick="document.getElementById(\'blockModalFinal\').remove();document.getElementById(\'registerSection\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="width:100%;padding:18px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:18px;cursor:pointer;margin-bottom:10px;">🔑 سجّل الآن مجاناً</button>' +
+                '<button onclick="document.getElementById(\'blockModalFinal\').remove();" style="width:100%;padding:15px;background:#334155;color:white;border:2px solid #64748b;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:15px;cursor:pointer;">إغلاق</button>' +
+            '</div>';
+        
+        document.body.appendChild(m);
+    }
+
+    // ═══ قائمة الصفحات المسموحة للزائر ═══
+    var ALLOWED = ['pageWelcome', 'pageHome', 'pageAdmin', 'pageAdminLogin', 'pageAICertificates'];
+
+    function blockPage(pageId) {
+        if (ALLOWED.indexOf(pageId) !== -1) return;
+        if (isRegistered()) return;
+        var el = document.getElementById(pageId);
+        if (!el) return;
+        if (el.classList.contains('hide')) return;
+        el.classList.add('hide');
+        showBlockModal();
+    }
+
+    // ═══ مراقبة ظهور الصفحات ═══
+    function startWatching() {
+        var obs = new MutationObserver(function(muts) {
+            muts.forEach(function(mut) {
+                if (mut.type !== 'attributes' || mut.attributeName !== 'class') return;
+                var t = mut.target;
+                if (!t.id || t.id.indexOf('page') !== 0) return;
+                if (t.classList.contains('hide')) return;
+                blockPage(t.id);
+            });
+        });
+        document.querySelectorAll('[id^="page"]').forEach(function(el) {
+            obs.observe(el, { attributes: true, attributeFilter: ['class'] });
+        });
+    }
+
+    // ═══ التهيئة ═══
+    function init() {
+        if (isRegistered()) {
+            console.log('👤 مسجل — لا حاجة للحماية');
+            return;
+        }
+        console.log('🎭 زائر — الحماية مفعّلة');
+        showGoldBanner();
+        setTimeout(startWatching, 500);
+        setTimeout(startWatching, 2000);
+        
+        setInterval(function() {
+            if (isRegistered()) {
+                var b = document.getElementById('goldBannerFinal');
+                if (b) { b.remove(); document.body.style.paddingTop = ''; }
+                var m = document.getElementById('blockModalFinal');
+                if (m) m.remove();
+            } else {
+                if (!document.getElementById('goldBannerFinal')) showGoldBanner();
+            }
+        }, 2000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    console.log('✅ نظام الشريط الإلزامي جاهز');
+})();
+</script>
 </body>
 </html>
