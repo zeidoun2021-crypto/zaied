@@ -6334,5 +6334,228 @@ window.addEventListener('click', (e) => {
     if (modal && e.target === modal) closeSubscriptionModal();
 });
 </script>
+<script>
+(function() {
+    'use strict';
+
+    function isRegistered() {
+        return !!(localStorage.getItem('currentUser') || 
+                  localStorage.getItem('zaiedAdminPermanent') === '1');
+    }
+
+    var ALLOWED = ['pageWelcome', 'pageHome', 'pageAdminLogin', 'pageAICertificates'];
+
+    function showBanner() {
+        if (document.getElementById('vipBanner')) return;
+        if (isRegistered()) return;
+
+        var st = document.createElement('style');
+        st.textContent = '@keyframes vipShine{0%{background-position:-200% center}100%{background-position:200% center}}' +
+            '#vipBanner{background:linear-gradient(90deg,#f59e0b,#fbbf24,#fcd34d,#fbbf24,#f59e0b)!important;background-size:200% auto!important;animation:vipShine 3s linear infinite}' +
+            'body{padding-top:70px!important}';
+        document.head.appendChild(st);
+
+        var b = document.createElement('div');
+        b.id = 'vipBanner';
+        b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999999;color:#1e293b;padding:14px 20px;text-align:center;font-family:Cairo,sans-serif;font-weight:900;font-size:16px;border-bottom:4px solid #dc2626;box-shadow:0 4px 20px rgba(0,0,0,0.3);direction:rtl;';
+        b.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">' +
+            '<span style="font-size:22px;">🔒</span>' +
+            '<span style="color:#7f1d1d;">لا يمكنك الدخول إلى المنصة إلا بعد التسجيل</span>' +
+            '<button onclick="window.__goReg()" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fff;border-radius:25px;padding:8px 20px;font-family:Cairo;font-weight:900;cursor:pointer;font-size:15px;box-shadow:0 4px 15px rgba(34,197,94,0.6);">🔑 سجّل الآن مجاناً</button>' +
+            '</div>';
+        document.body.appendChild(b);
+    }
+
+    function showBlockModal() {
+        if (document.getElementById('blockModal')) return;
+        try {
+            if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; }
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        } catch(e) {}
+
+        var m = document.createElement('div');
+        m.id = 'blockModal';
+        m.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.96);z-index:99999999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Cairo,sans-serif;direction:rtl;';
+        m.innerHTML = '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:30px;padding:35px 30px;max-width:550px;width:100%;border:4px solid #fbbf24;box-shadow:0 20px 60px rgba(220,38,38,0.4);text-align:center;color:white;">' +
+            '<div style="font-size:80px;margin-bottom:15px;">🔒</div>' +
+            '<h2 style="color:#fbbf24;font-size:26px;margin:0 0 15px 0;font-weight:900;">التسجيل مطلوب</h2>' +
+            '<p style="font-size:16px;line-height:1.9;color:#cbd5e1;margin-bottom:20px;">للوصول إلى محتوى المنصة<br>يجب عليك التسجيل أولاً</p>' +
+            '<div style="background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:20px;margin-bottom:20px;border:2px solid #fbbf24;">' +
+            '<div style="font-size:18px;font-weight:900;color:#fbbf24;">✨ التسجيل مجاني تماماً ✨</div></div>' +
+            '<button onclick="window.__closeBlock();window.__goReg();" style="width:100%;padding:18px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;margin-bottom:10px;">🔑 سجّل الآن مجاناً</button>' +
+            '<button onclick="window.__closeBlock();" style="width:100%;padding:15px;background:#334155;color:white;border:2px solid #64748b;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">إغلاق</button>' +
+            '</div>';
+        document.body.appendChild(m);
+    }
+
+    window.__closeBlock = function() {
+        var m = document.getElementById('blockModal');
+        if (m) m.remove();
+    };
+
+    window.__goReg = function() {
+        var ids = ['regName','gwName','registerSection','visitorGateway'];
+        for (var i = 0; i < ids.length; i++) {
+            var el = document.getElementById(ids[i]);
+            if (el) {
+                el.scrollIntoView({behavior:'smooth', block:'center'});
+                setTimeout(function(){ try{el.focus();}catch(e){} }, 700);
+                return;
+            }
+        }
+    };
+
+    function blockIfForbidden(pageId) {
+        if (ALLOWED.indexOf(pageId) !== -1) return;
+        if (isRegistered()) return;
+        var el = document.getElementById(pageId);
+        if (!el) return;
+        if (el.classList.contains('hide')) return;
+        el.classList.add('hide');
+        showBlockModal();
+    }
+
+    function startWatching() {
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mut) {
+                if (mut.type !== 'attributes' || mut.attributeName !== 'class') return;
+                var t = mut.target;
+                if (!t.id || t.id.indexOf('page') !== 0) return;
+                if (t.classList.contains('hide')) return;
+                blockIfForbidden(t.id);
+            });
+        });
+        document.querySelectorAll('[id^="page"]').forEach(function(el) {
+            observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+        });
+    }
+
+    function init() {
+        if (isRegistered()) {
+            console.log('👤 مستخدم مسجل — لا حاجة للحجب');
+            return;
+        }
+        console.log('🎭 زائر — الحماية مفعّلة');
+        showBanner();
+        setTimeout(startWatching, 500);
+        setTimeout(startWatching, 3000);
+        setInterval(function() {
+            if (isRegistered()) {
+                var b = document.getElementById('vipBanner');
+                if (b) { b.remove(); document.body.style.paddingTop = ''; }
+            }
+        }, 5000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    console.log('✅ نظام حماية الزوار جاهز');
+})();
+</script>
+<script>
+(function() {
+    'use strict';
+
+    var _adding = false;
+
+    async function addVisitorCards() {
+        if (_adding) return;
+        var adminStats = document.getElementById('adminStats');
+        if (!adminStats) return;
+        
+        _adding = true;
+
+        try {
+            // احذف البطاقات القديمة إن وُجدت
+            var old = document.getElementById('visitorStatsCards');
+            if (old) old.remove();
+
+            // جلب الزوار من Firebase
+            var visitors = [];
+            if (typeof window.fbGetAllVisitors === 'function') {
+                visitors = await window.fbGetAllVisitors();
+            }
+            if (!visitors || !Array.isArray(visitors)) visitors = [];
+
+            // حساب زوار اليوم
+            var today = new Date().toDateString();
+            var todayCount = 0;
+            visitors.forEach(function(v) {
+                if (v.visitedAt && v.visitedAt.seconds) {
+                    var d = new Date(v.visitedAt.seconds * 1000);
+                    if (d.toDateString() === today) todayCount++;
+                }
+            });
+
+            // أنشئ صف البطاقات الجديد
+            var row = document.createElement('div');
+            row.id = 'visitorStatsCards';
+            row.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px;';
+            
+            row.innerHTML = 
+                '<div style="background:linear-gradient(135deg,#f59e0b,#d97706);color:white;padding:14px;border-radius:14px;text-align:center;box-shadow:0 4px 12px rgba(245,158,11,0.4);">' +
+                    '<div style="font-size:28px;font-weight:900;line-height:1;">' + visitors.length + '</div>' +
+                    '<div style="font-size:13px;font-weight:700;margin-top:6px;">🎭 زائر (إجمالي)</div>' +
+                '</div>' +
+                '<div style="background:linear-gradient(135deg,#ec4899,#be185d);color:white;padding:14px;border-radius:14px;text-align:center;box-shadow:0 4px 12px rgba(236,72,153,0.4);">' +
+                    '<div style="font-size:28px;font-weight:900;line-height:1;">' + todayCount + '</div>' +
+                    '<div style="font-size:13px;font-weight:700;margin-top:6px;">✨ زوار اليوم</div>' +
+                '</div>';
+
+            adminStats.appendChild(row);
+            console.log('✅ بطاقات الزوار — الإجمالي: ' + visitors.length + ' | اليوم: ' + todayCount);
+
+        } catch(e) {
+            console.error('❌ خطأ:', e);
+        } finally {
+            _adding = false;
+        }
+    }
+
+    // راقب ظهور لوحة المشرف
+    function checkAndAdd() {
+        var adminPage = document.getElementById('pageAdmin');
+        if (adminPage && !adminPage.classList.contains('hide')) {
+            setTimeout(addVisitorCards, 800);
+        }
+    }
+
+    var observer = new MutationObserver(checkAndAdd);
+
+    function init() {
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'], subtree: true });
+        // محاولة أولى
+        setTimeout(checkAndAdd, 2000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // اربط زر التحديث
+    var _checkInterval = setInterval(function() {
+        if (typeof window.adminRefresh === 'function' && !window.__adminRefreshPatched) {
+            var original = window.adminRefresh;
+            window.adminRefresh = async function() {
+                var old = document.getElementById('visitorStatsCards');
+                if (old) old.remove();
+                await original.apply(this, arguments);
+                setTimeout(addVisitorCards, 500);
+            };
+            window.__adminRefreshPatched = true;
+            clearInterval(_checkInterval);
+        }
+    }, 500);
+    setTimeout(function() { clearInterval(_checkInterval); }, 10000);
+
+    console.log('✅ سكريبت بطاقات الزوار جاهز');
+})();
+</script>
 </body>
 </html>
