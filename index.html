@@ -6727,5 +6727,280 @@ console.log('✅ أزرار الخروج جاهزة بشكل دائم');
     console.log('✅ نظام الشريط الإلزامي جاهز');
 })();
 </script>
+	<script>
+// ═══════════════════════════════════════════════════════
+// 🛡️ تحقق قوي + منع الزوار من الدخول بدون تسجيل كامل
+// ═══════════════════════════════════════════════════════
+(function() {
+    'use strict';
+
+    function isRegistered() {
+        if (window.currentUser) return true;
+        if (window.userStatus === 'registered') return true;
+        if (window.userStatus === 'subscriber') return true;
+        if (window.userStatus === 'admin') return true;
+        if (window.isAdminMode === true) return true;
+        if (localStorage.getItem('currentUser')) return true;
+        if (localStorage.getItem('zaiedAdminPermanent') === '1') return true;
+        return false;
+    }
+
+    // ═══ التحقق من الحقول ═══
+    var RULES = {
+        regName: {
+            label: 'الاسم الكامل',
+            test: function(v) {
+                if (!v || v.trim().length < 3) return '❌ الاسم قصير جداً (3 أحرف على الأقل)';
+                if (!/^[\u0600-\u06FFa-zA-Z\s]+$/.test(v)) return '❌ الاسم: أحرف عربية أو لاتينية فقط (بدون أرقام أو رموز)';
+                if (v.trim().split(/\s+/).length < 2) return '❌ اكتب الاسم واللقب (مثال: محمد أحمد)';
+                if (v.trim().length > 50) return '❌ الاسم طويل جداً (50 حرف كحد أقصى)';
+                return null;
+            }
+        },
+        regProfession: {
+            label: 'المهنة',
+            test: function(v) {
+                if (!v || v.trim().length < 2) return '❌ المهنة: حرفان على الأقل';
+                return null;
+            }
+        },
+        regSpecialty: {
+            label: 'الاختصاص',
+            test: function(v) {
+                if (!v || v.trim().length < 2) return '❌ الاختصاص: حرفان على الأقل';
+                return null;
+            }
+        },
+        regEmail: {
+            label: 'البريد الإلكتروني',
+            test: function(v) {
+                if (!v) return '❌ البريد الإلكتروني مطلوب';
+                if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(v.trim())) return '❌ بريد إلكتروني غير صحيح';
+                return null;
+            }
+        },
+        regWhatsapp: {
+            label: 'رقم الواتساب',
+            test: function(v) {
+                if (!v) return '❌ رقم الواتساب مطلوب';
+                var clean = v.replace(/[\s\-\(\)]/g, '');
+                if (!/^\+?\d{8,15}$/.test(clean)) return '❌ رقم غير صحيح — من 8 إلى 15 رقماً (مثال: +21655335477)';
+                return null;
+            }
+        },
+        regCountry: {
+            label: 'البلد',
+            test: function(v) {
+                if (!v || v.trim().length < 2) return '❌ البلد: حرفان على الأقل';
+                return null;
+            }
+        },
+        regCity: {
+            label: 'المدينة',
+            test: function(v) {
+                if (!v || v.trim().length < 2) return '❌ المدينة: حرفان على الأقل';
+                return null;
+            }
+        }
+    };
+
+    // ═══ إضافة حقل المدينة بعد البلد ═══
+    function addCityField() {
+        var countryField = document.getElementById('regCountry');
+        if (!countryField) return;
+        if (document.getElementById('regCity')) return;
+
+        var parent = countryField.parentElement;
+        if (!parent) return;
+
+        var cityWrapper = document.createElement('div');
+        cityWrapper.className = 'form-group';
+        cityWrapper.innerHTML = 
+            '<label style="display:block;color:#0f172a;font-size:13px;font-weight:900;margin-bottom:5px;">المدينة *</label>' +
+            '<input type="text" id="regCity" placeholder="مثال: تونس، صفاقس، سوسة..." style="width:100%;padding:11px 15px;border:2px solid #cbd5e1;border-radius:25px;font-family:Cairo,sans-serif;font-size:14px;font-weight:600;background:#f8fafc;color:#0f172a;box-sizing:border-box;">';
+
+        parent.parentElement.insertBefore(cityWrapper, parent.nextSibling);
+    }
+
+    // ═══ إضافة رسالة خطأ تحت كل حقل ═══
+    function addErrorSpan(fieldId) {
+        var field = document.getElementById(fieldId);
+        if (!field) return;
+        var errId = fieldId + '_err';
+        if (document.getElementById(errId)) return;
+        var span = document.createElement('span');
+        span.id = errId;
+        span.style.cssText = 'display:block;color:#dc2626;font-size:12px;font-weight:700;margin-top:4px;min-height:16px;';
+        field.parentElement.appendChild(span);
+    }
+
+    // ═══ تحقق لحظي من حقل ═══
+    function validateField(fieldId) {
+        var field = document.getElementById(fieldId);
+        if (!field) return true;
+        var err = document.getElementById(fieldId + '_err');
+        var rule = RULES[fieldId];
+        if (!rule) return true;
+
+        var result = rule.test(field.value);
+        if (result) {
+            field.style.borderColor = '#dc2626';
+            field.style.background = '#fef2f2';
+            if (err) { err.textContent = result; err.style.color = '#dc2626'; }
+            return false;
+        } else {
+            field.style.borderColor = '#22c55e';
+            field.style.background = '#f0fdf4';
+            if (err) { err.textContent = '✅ ' + rule.label + ' صحيح'; err.style.color = '#16a34a'; }
+            return true;
+        }
+    }
+
+    // ═══ إعداد الحقول ═══
+    function setupFields() {
+        addCityField();
+        Object.keys(RULES).forEach(function(fieldId) {
+            var field = document.getElementById(fieldId);
+            if (!field) return;
+            addErrorSpan(fieldId);
+
+            // منع الكتابة من الصفر
+            field.addEventListener('input', function() { validateField(fieldId); });
+            field.addEventListener('blur', function() { validateField(fieldId); });
+        });
+    }
+
+    // ═══ استبدال دالة التسجيل بتحقق قوي ═══
+    window.registerUser = async function() {
+        var allValid = true;
+        var firstError = null;
+        var errorMessages = [];
+
+        // تحقق من كل الحقول
+        Object.keys(RULES).forEach(function(fieldId) {
+            if (!validateField(fieldId)) {
+                allValid = false;
+                var err = RULES[fieldId].test(document.getElementById(fieldId).value);
+                if (err) errorMessages.push(err);
+                if (!firstError) firstError = document.getElementById(fieldId);
+            }
+        });
+
+        // تحقق من الفئة
+        var cat = document.querySelector('input[name="cat"]:checked');
+        if (!cat) {
+            allValid = false;
+            errorMessages.push('❌ اختر الفئة');
+        }
+
+        if (!allValid) {
+            alert('⚠️ يرجى تصحيح الأخطاء التالية:\n\n' + errorMessages.join('\n'));
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+            return;
+        }
+
+        // كل الحقول صحيحة → تابع التسجيل
+        var n = document.getElementById('regName').value.trim();
+        var p = document.getElementById('regProfession').value.trim();
+        var sp = document.getElementById('regSpecialty').value.trim();
+        var e = document.getElementById('regEmail').value.trim().toLowerCase();
+        var w = document.getElementById('regWhatsapp').value.trim();
+        var c = document.getElementById('regCountry').value.trim();
+        var city = (document.getElementById('regCity') || {}).value || '';
+        city = city.trim();
+        var cat2 = cat.value;
+
+        try {
+            var existing = await window.fbGetUserByEmail(e);
+            if (existing) {
+                window.currentUser = existing;
+                localStorage.setItem('currentUser', JSON.stringify(existing));
+                window.userStatus = existing.subscribed ? 'subscriber' : 'registered';
+                if (window.updateUserBanner) window.updateUserBanner();
+                alert('✅ مرحباً بعودتك ' + existing.name + '!');
+                if (window.moveToSections) window.moveToSections();
+                return;
+            }
+
+            var userData = {
+                name: n, profession: p, specialty: sp, email: e,
+                whatsapp: w, country: c, city: city, category: cat2,
+                date: new Date().toLocaleString('ar-EG'),
+                status: 'registered', subscribed: false, blocked: false
+            };
+
+            var fbId = await window.fbSaveUser(userData);
+            if (!fbId) { alert('⚠️ خطأ في التسجيل، حاول مرة أخرى'); return; }
+            userData.firebaseId = fbId;
+            window.currentUser = userData;
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            window.userStatus = 'registered';
+            if (window.updateUserBanner) window.updateUserBanner();
+
+            if (window.sendWhatsApp) {
+                window.sendWhatsApp('🎓 تسجيل جديد\n👤 ' + n + '\n💼 ' + p + '\n🎯 ' + sp + '\n📧 ' + e + '\n📱 ' + w + '\n🌍 ' + c + ' — ' + city + '\n🏷️ ' + cat2);
+            }
+
+            alert('✅ مرحباً ' + n + '! تم تسجيلك بنجاح');
+            if (window.moveToSections) window.moveToSections();
+        } catch(err) {
+            alert('⚠️ خطأ: ' + err.message);
+        }
+    };
+
+    // ═══ منع الزائر من الأقسام ═══
+    var ALLOWED = ['pageWelcome', 'pageAdminLogin', 'pageAdmin', 'pageAICertificates'];
+
+    setInterval(function() {
+        var m1 = document.getElementById('blockModalFinal');
+        if (m1) m1.remove();
+        var m2 = document.getElementById('blockModal');
+        if (m2) m2.remove();
+    }, 200);
+
+    function startWatching() {
+        var obs = new MutationObserver(function(muts) {
+            muts.forEach(function(mut) {
+                if (mut.type !== 'attributes' || mut.attributeName !== 'class') return;
+                var t = mut.target;
+                if (!t.id || t.id.indexOf('page') !== 0) return;
+                if (t.classList.contains('hide')) return;
+
+                if (!isRegistered() && ALLOWED.indexOf(t.id) === -1) {
+                    t.classList.add('hide');
+                    var welcome = document.getElementById('pageWelcome');
+                    if (welcome) welcome.classList.remove('hide');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setTimeout(function() {
+                        var reg = document.getElementById('registerSection');
+                        if (reg) reg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                }
+            });
+        });
+        document.querySelectorAll('[id^="page"]').forEach(function(el) {
+            obs.observe(el, { attributes: true, attributeFilter: ['class'] });
+        });
+    }
+
+    // التهيئة
+    function init() {
+        setupFields();
+        startWatching();
+        console.log('✅ التحقق القوي جاهز');
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(init, 800);
+        });
+    } else {
+        setTimeout(init, 800);
+    }
+})();
+</script>
 </body>
 </html>
