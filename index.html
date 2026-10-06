@@ -6557,5 +6557,37 @@ window.addEventListener('click', (e) => {
     console.log('✅ سكريبت بطاقات الزوار جاهز');
 })();
 </script>
+	<script>
+// ═══════════════════════════════════════════════════════
+// 🚪 إصلاح دائم لزر الخروج — ينتقل لجوجل مباشرة
+// ═══════════════════════════════════════════════════════
+window.exitPlatform = function() {
+    if (!confirm('⏻ هل تريد مغادرة المنصة نهائياً؟')) return;
+    try {
+        if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; }
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        document.querySelectorAll('iframe').forEach(function(f) { f.src = 'about:blank'; });
+        localStorage.clear();
+        sessionStorage.clear();
+    } catch(e) {}
+    window.location.replace('https://www.google.com');
+};
+
+window.logoutUser = function() {
+    if (!confirm('🚪 هل تريد تسجيل الخروج؟')) return;
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = window.location.pathname;
+};
+
+window.logoutAdmin = function() {
+    if (!confirm('الخروج من لوحة المشرف؟')) return;
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = window.location.pathname;
+};
+
+console.log('✅ أزرار الخروج جاهزة بشكل دائم');
+</script>
 </body>
 </html>
