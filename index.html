@@ -6529,6 +6529,49 @@ window.addEventListener('click', (e) => {
     }
 })();
 </script>
-
+<script>
+// ⚡ فتح لوحة المشرف بكلمة المرور — نسخة مضمونة
+document.addEventListener('keydown', function(e) {
+    if (e.target && e.target.id === 'adminPassInput' && e.key === 'Enter') {
+        var v = e.target.value.trim();
+        if (v === '012345') {
+            e.preventDefault();
+            window.isAdminMode = true;
+            window.userStatus = 'admin';
+            if (window.updateUserBanner) window.updateUserBanner();
+            document.querySelectorAll('.container > div[id^="page"]').forEach(function(x) {
+                x.classList.add('hide');
+                x.style.display = 'none';
+            });
+            var pa = document.getElementById('pageAdmin');
+            if (pa) { pa.classList.remove('hide'); pa.style.display = 'block'; }
+            setTimeout(function() {
+                if (window.loadAdminPanel) window.loadAdminPanel();
+            }, 400);
+        }
+    }
+});
+// زر الدخول — يُستدعى عند الضغط
+window.enterAdmin = function() {
+    var inp = document.getElementById('adminPassInput');
+    if (inp && inp.value.trim() === '012345') {
+        window.isAdminMode = true;
+        window.userStatus = 'admin';
+        if (window.updateUserBanner) window.updateUserBanner();
+        document.querySelectorAll('.container > div[id^="page"]').forEach(function(x) {
+            x.classList.add('hide');
+            x.style.display = 'none';
+        });
+        var pa = document.getElementById('pageAdmin');
+        if (pa) { pa.classList.remove('hide'); pa.style.display = 'block'; }
+        setTimeout(function() {
+            if (window.loadAdminPanel) window.loadAdminPanel();
+        }, 400);
+    } else {
+        var err = document.getElementById('adminErrorMsg');
+        if (err) { err.style.display = 'block'; err.innerHTML = '❌ كلمة المرور غير صحيحة'; }
+    }
+};
+</script>
 </body>
 </html>
