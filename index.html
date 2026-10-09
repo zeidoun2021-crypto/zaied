@@ -6573,5 +6573,8 @@ window.enterAdmin = function() {
     }
 };
 </script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){window.enterAdmin=function(){var i=document.getElementById('adminPassInput');var e=document.getElementById('adminErrorMsg');if(!i)return;if(i.value.trim()!=='012345'){if(e){e.style.display='block';e.innerHTML='❌ كلمة المرور غير صحيحة';}i.value='';return;}window.isAdminMode=true;window.userStatus='admin';if(window.updateUserBanner)window.updateUserBanner();document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){p.classList.add('hide');p.style.display='';});var a=document.getElementById('pageAdmin');if(a){a.classList.remove('hide');a.style.display='';}if(window.loadAdminPanel)window.loadAdminPanel();};console.log('✅ زر دخول المشرف جاهز');},1000);});
+</script>
 </body>
 </html>
