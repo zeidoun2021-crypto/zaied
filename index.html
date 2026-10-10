@@ -1824,4 +1824,21 @@ window.addEventListener('click', function(e) {
     console.log('✅ الإصلاحات النهائية جاهزة — كل شيء يعمل الآن');
 })();
 </script>
+    <script>
+/* ═══ 🛡️ منع المشرف نهائياً من الإحصائيات ═══ */
+(function(){ 'use strict';
+function isAdminNow(){ return window.isAdminMode === true || sessionStorage.getItem('zaiedAdminSession') === '1' || localStorage.getItem('zaiedAdminPermanent') === '1' || window.userStatus === 'admin'; }
+var oSV = window.fbSaveVisitor;
+window.fbSaveVisitor = async function(v){ if (isAdminNow()){ console.log('👑 مشرف — لن يُسجَّل كزائر'); return true; } if (oSV) return oSV.apply(this, arguments); return false; };
+var oSU = window.fbSaveUser;
+window.fbSaveUser = async function(u){ if (isAdminNow()){ console.log('👑 مشرف — لن يُحفظ كمستخدم'); return 'admin-skip'; } if (oSU) return oSU.apply(this, arguments); return null; };
+var oSS = window.fbSaveSubscription;
+window.fbSaveSubscription = async function(id, d){ if (isAdminNow()){ console.log('👑 مشرف — لن يُحفظ كمشترك'); return true; } if (oSS) return oSS.apply(this, arguments); return false; };
+var oSet = localStorage.setItem;
+localStorage.setItem = function(k, v){ if (k === 'zaied_last_visit' && isAdminNow()){ console.log('👑 مشرف — لن يُسجَّل تاريخ زيارته'); return; } return oSet.apply(this, arguments); };
+var oEA = window.enterAdmin;
+window.enterAdmin = async function(){ var p = document.getElementById('adminPassInput'); if (!p || p.value.trim() !== '012345'){ if (oEA) return oEA.apply(this, arguments); return; } try { localStorage.removeItem('zaied_last_visit'); } catch(e) {} window.allVisitorsCache = (window.allVisitorsCache || []).filter(function(v){ return v.email !== 'zeidoun2021@gmail.com'; }); var r = oEA ? oEA.apply(this, arguments) : null; console.log('👑 تم تفعيل الحماية الكاملة للمشرف'); return r; };
+console.log('✅ نظام منع المشرف من الإحصائيات جاهز');
+})();
+</script>
 </html>
