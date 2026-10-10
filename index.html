@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة زايد للتعليم والبحث العلمي بتونس</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);min-height:100vh;padding:15px 20px 60px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:15px}
+input{user-select:text !important}
+.hide{display:none !important}
+.container{max-width:1400px;width:100%}
+#userStatusBanner{position:sticky;top:0;z-index:1000;padding:10px 20px;border-radius:0 0 25px 25px;text-align:center;font-weight:bold;font-size:14px;margin:-15px -20px 15px -20px;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+#userStatusBanner.visitor{background:linear-gradient(135deg,#64748b,#475569);border-bottom:3px solid #94a3b8}
+#userStatusBanner.registered{background:linear-gradient(135deg,#3b82f6,#1e40af);border-bottom:3px solid #60a5fa}
+#userStatusBanner.admin{background:linear-gradient(135deg,#8b5cf6,#6d28d9);border-bottom:3px solid #fbbf24}
+#userStatusBanner .banner-content{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap}
+#userStatusBanner .banner-btn{padding:7px 18px;border-radius:25px;border:none;cursor:pointer;font-weight:bold;font-family:'Cairo',sans-serif;font-size:13px}
+.btn-register{background:#fbbf24;color:#1e293b}
+.btn-logout{background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.4) !important}
+.btn-exit-platform{background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:2px solid #fbbf24 !important}
+.logo-wrapper{position:relative;width:200px;height:200px;margin:20px auto 10px;display:flex;justify-content:center;align-items:center}
+.outer-ring{position:absolute;width:200px;height:200px;border-radius:50%;border:4px solid #dc2626;top:0;left:0;background:rgba(255,255,255,.98);box-shadow:0 0 20px #dc2626;animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px #dc2626}50%{box-shadow:0 0 32px #ef4444}}
+.rotating-flags{position:absolute;width:185px;height:185px;top:8px;left:8px;animation:rot 22s linear infinite;z-index:2}
+@keyframes rot{100%{transform:rotate(360deg)}}
+.rotating-flags svg{width:100%;height:100%;overflow:visible}
+.screen-wrapper{position:absolute;width:95px;height:90px;top:55px;left:52px;z-index:3}
+.screen-body{width:100%;height:68px;background:linear-gradient(135deg,#1e293b,#0f172a);border:2px solid #dc2626;border-radius:8px;padding:3px;overflow:hidden}
+.screen-body img{width:100%;height:100%;object-fit:cover;border-radius:4px}
+.screen-stand{width:24px;height:8px;background:linear-gradient(135deg,#dc2626,#991b1b);margin:0 auto;border-radius:0 0 5px 5px}
+.screen-base{width:55px;height:5px;background:linear-gradient(135deg,#dc2626,#991b1b);margin:0 auto;border-radius:5px}
+.marquee-bar{width:100%;max-width:800px;background:linear-gradient(135deg,#dc2626,#991b1b);padding:10px;border-radius:50px;border:2px solid #fbbf24;overflow:hidden;margin:10px auto}
+.marquee-bar marquee{color:#fff;font-weight:900;font-size:14px}
+.welcome-card{background:linear-gradient(135deg,#dc2626,#991b1b);padding:25px;border-radius:25px;text-align:center;border:4px solid #fbbf24;max-width:800px;width:100%;margin:0 auto}
+.welcome-card h2{font-size:24px;margin-bottom:10px;font-weight:900}
+.slogan{font-size:17px;font-weight:900;color:#fbbf24;margin:12px 0;padding:12px;background:rgba(0,0,0,.3);border-radius:15px;border:2px solid #fbbf24}
+.audience{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:12px 0}
+.audience span{background:rgba(255,255,255,.15);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.buttons-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:15px}
+.btn-register-main{padding:14px 30px;background:#22c55e;color:#fff;border:none;border-radius:40px;font-family:'Cairo',sans-serif;font-size:16px;font-weight:900;cursor:pointer}
+.btn-welcome{padding:14px 25px;background:#fbbf24;color:#0f172a;border:none;border-radius:40px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:900;cursor:pointer}
+.btn-stop{padding:14px 25px;background:#334155;color:#fff;border:none;border-radius:40px;font-size:14px;font-weight:700;cursor:pointer;display:none}
+.btn-stop.visible{display:inline-block}
+.status-box{margin-top:12px;padding:10px;background:rgba(0,0,0,.3);border-radius:15px;font-size:12px;min-height:35px;display:flex;align-items:center;justify-content:center;color:#fbbf24;font-weight:700}
+#visitorGateway{max-width:800px;width:100%;margin:20px auto;background:#fff;border:4px solid #dc2626;border-radius:25px;padding:30px;box-shadow:0 15px 50px rgba(220,38,38,.3)}
+#visitorGateway h2{color:#dc2626;text-align:center;font-size:24px;margin:8px 0;font-weight:900}
+.gw-sub{color:#475569;text-align:center;font-size:13px;margin-bottom:20px;font-weight:600;line-height:1.7}
+.gw-err{display:none;color:#991b1b;background:#fee2e2;padding:10px;border-radius:12px;font-size:13px;margin-bottom:12px;text-align:center;border:2px solid #dc2626;font-weight:700}
+.gw-input{display:block !important;width:100% !important;padding:14px 18px !important;margin-bottom:10px !important;border:2px solid #cbd5e1 !important;border-radius:25px !important;background:#f8fafc !important;color:#0f172a !important;font-size:14px !important;font-weight:600 !important;box-sizing:border-box !important;font-family:'Cairo',sans-serif !important}
+.gw-input:focus{outline:none !important;border-color:#dc2626 !important;background:#fff !important}
+.gw-submit{display:block !important;width:100% !important;padding:16px !important;background:linear-gradient(135deg,#dc2626,#991b1b) !important;color:#fff !important;border:3px solid #fbbf24 !important;border-radius:40px !important;font-weight:900 !important;font-size:17px !important;cursor:pointer !important;margin-top:15px !important;font-family:'Cairo',sans-serif !important}
+.gw-submit:hover{transform:scale(1.02);box-shadow:0 8px 25px rgba(220,38,38,.4)}
+.gw-submit:disabled{opacity:.6;cursor:not-allowed}
+.gw-admin-area{text-align:center;padding-top:12px;border-top:2px dashed #cbd5e1;margin-top:15px}
+.gw-admin-link{background:none;border:none;color:#8b5cf6;font-size:13px;cursor:pointer;text-decoration:underline;font-family:'Cairo',sans-serif;font-weight:700;margin:0 8px}
+.radio-group{display:flex !important;flex-wrap:wrap !important;justify-content:center !important;gap:8px !important;margin:15px 0 !important}
+.radio-group label{display:inline-block !important;background:#fee2e2 !important;color:#991b1b !important;padding:10px 18px !important;border-radius:25px !important;font-weight:900 !important;cursor:pointer !important;border:2px solid transparent !important;font-size:13px !important;transition:.2s}
+#statsBtn{display:none;position:fixed;bottom:20px;right:20px;z-index:9999;padding:14px 22px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;border:3px solid #fbbf24;border-radius:50px;font-weight:900;cursor:pointer;font-family:'Cairo',sans-serif}
+#dash{display:none;position:fixed;inset:0;z-index:99999;background:#0f172a;overflow-y:auto;padding:20px}
+.sd-card{background:#1e293b;border-radius:15px;padding:15px;border:2px solid #fbbf24;text-align:center}
+.sd-card .num{font-size:28px;font-weight:900;color:#fbbf24}
+.sd-card .lbl{font-size:12px;color:#94a3b8;margin-top:5px}
+.sd-user{background:#f8fafc;border-radius:12px;padding:12px;margin-bottom:8px;border-right:4px solid #3b82f6;color:#0f172a;font-size:13px}
+.sd-btn{padding:8px 16px;border-radius:20px;border:none;font-family:'Cairo',sans-serif;font-weight:900;font-size:12px;cursor:pointer;color:#fff;margin:2px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;color:#e2e8f0;font-size:13px;font-weight:900;margin-bottom:5px}
+.form-group input{width:100%;padding:11px 15px;border:2px solid #475569;border-radius:25px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:600;background:#0f172a;color:#fff}
+.btn-admin{padding:14px 40px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;border-radius:30px;font-family:'Cairo',sans-serif;font-size:16px;font-weight:900;cursor:pointer}
+.copyright-bar{position:fixed;bottom:10px;left:10px;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;padding:8px 15px;border-radius:15px;border:2px solid #fbbf24;font-size:11px;font-weight:700;z-index:100}
+.main-sections-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:25px;margin:25px auto;max-width:1300px;width:100%}
+.main-section-card{border-radius:30px;padding:25px;position:relative;overflow:hidden}
+.main-section-card.education{background:linear-gradient(135deg,#14532d,#166534);border:3px solid #22c55e}
+.main-section-card.research{background:linear-gradient(135deg,#1e3a8a,#1e40af);border:3px solid #3b82f6}
+.main-section-card.ai-section{background:linear-gradient(135deg,#4c1d95,#6d28d9,#8b5cf6);border:3px solid #fbbf24}
+.main-section-icon{font-size:70px;text-align:center;margin-bottom:15px}
+.main-section-title{font-size:22px;font-weight:900;color:#fbbf24;text-align:center;margin-bottom:12px}
+.main-section-subtitle{font-size:14px;color:#cbd5e1;text-align:center;margin-bottom:20px}
+.sub-sections-list{list-style:none;padding:0}
+.sub-sections-list li{background:rgba(255,255,255,.1);padding:14px 20px;border-radius:18px;margin-bottom:10px;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;gap:12px;cursor:pointer}
+.sub-sections-list li:hover{background:rgba(251,191,36,.25)}
+.sub-sections-list li .sub-icon{font-size:26px}
+.sub-sections-list li .arrow{margin-right:auto;color:#fbbf24;font-size:18px}
+.stages-grid,.lessons-stage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px;margin:20px auto;max-width:1100px}
+.stage-card,.lesson-stage-card{background:linear-gradient(135deg,#dc2626,#991b1b);border:3px solid #fbbf24;border-radius:25px;padding:25px;text-align:center;cursor:pointer;color:#fff;transition:transform .3s}
+.stage-card:hover{transform:translateY(-5px)}
+.stage-card .stage-icon,.lesson-stage-card .lesson-stage-icon{font-size:55px;margin-bottom:12px}
+.stage-card .stage-title,.lesson-stage-card .lesson-stage-title{font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:8px}
+.stage-card .stage-desc,.lesson-stage-card .lesson-stage-meta{font-size:13px;color:#cbd5e1}
+.stage-card.middle{background:linear-gradient(135deg,#f59e0b,#b45309)}
+.stage-card.high{background:linear-gradient(135deg,#7c3aed,#4c1d95)}
+.stage-card.university{background:linear-gradient(135deg,#1e40af,#1e3a8a)}
+.stage-card.book-card{background:linear-gradient(135deg,#16a34a,#14532d)}
+.nav-buttons{display:flex;gap:15px;margin:20px 0;justify-content:center;flex-wrap:wrap}
+.nav-btn{flex:1;max-width:200px;padding:15px;border:none;border-radius:60px;font-weight:bold;font-size:17px;cursor:pointer;font-family:'Cairo',sans-serif}
+.nav-btn.prev{background:#3b82f6;color:#fff}
+.nav-btn.next{background:#22c55e;color:#fff}
+.nav-btn.exit-sections{background:#f59e0b;color:#fff}
+.nav-btn.exit-final{background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:2px solid #fbbf24}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed}
+.progress-container{background:#334155;height:10px;border-radius:10px;overflow:hidden;margin:15px auto;max-width:900px}
+.progress-fill{background:linear-gradient(90deg,#fbbf24,#22c55e);height:100%;transition:width .3s}
+.back-btn{background:#334155;color:#fff;padding:14px 25px;border-radius:40px;border:none;cursor:pointer;font-weight:bold;font-family:'Cairo',sans-serif;margin:15px 0;font-size:15px;margin-left:8px}
+.back-btn.exit-platform-btn{background:linear-gradient(135deg,#dc2626,#991b1b);border:2px solid #fbbf24}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.92);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.slide-card{background:linear-gradient(135deg,#fff9e6,#fff2cc);border-radius:25px;padding:25px;margin:15px 0;color:#1e293b;border-right:8px solid #ff9800}
+.slide-card .note{background:#fff3cd;color:#856404;padding:12px;border-radius:20px;margin:10px 0;text-align:center;font-size:15px;border-right:4px solid #ffc107}
+.slide-card .dialogue{margin:15px 0;line-height:1.9;font-size:17px}
+.slide-card .children{color:#2196f3;font-weight:bold;font-size:17px;background:#e3f2fd;padding:12px 18px;border-radius:25px;margin:10px 0;display:block}
+.slide-card .computer{color:#e91e63;font-weight:bold;font-size:17px;background:#fce4ec;padding:12px 18px;border-radius:25px;margin:10px 0;display:block}
+.slide-card .translation-box{background:#e8eaf6;padding:12px;border-radius:20px;margin:10px 0;text-align:center;font-size:14px;border-right:4px solid #3f51b5}
+.slide-card .image-box{background:#e0f7fa;text-align:center;margin:15px 0;padding:15px;border-radius:25px}
+.slide-card .image-box img{max-width:100%;max-height:200px;border-radius:15px;margin:5px}
+.slide-card .image-row{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;align-items:center}
+.translation-ar{color:#d32f2f;font-weight:bold}
+.translation-fr{color:#1e88e5;font-weight:bold}
+.translation-en{color:#43a047;font-weight:bold}
+.btn-speak{background:#d32f2f;color:#fff;padding:6px 14px;border:none;border-radius:20px;cursor:pointer;margin:3px;font-size:12px;font-weight:bold}
+.btn-speak-fr{background:#1e88e5}
+.btn-speak-en{background:#43a047}
+.book-slide-container{background:#f8fafc;border-radius:25px;padding:25px;margin:15px 0;color:#1e293b}
+.book-slide-number{display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:6px 18px;border-radius:20px;font-size:14px;font-weight:bold;margin-bottom:20px}
+.book-slide-title{font-size:26px;font-weight:900;color:#dc2626;text-align:center;margin-bottom:20px;line-height:1.4}
+.book-image-box{background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-radius:25px;padding:20px;margin:20px 0;text-align:center;border:3px dashed #3b82f6}
+.book-image-box img{max-width:100%;max-height:280px;border-radius:15px}
+.book-text{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:20px 25px;border-radius:20px;margin:15px 0;border-right:6px solid #f59e0b;font-size:16px;line-height:2;color:#78350f;font-weight:600}
+.book-translation{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-radius:20px;padding:18px;margin:15px 0;text-align:center;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.book-translation-item{background:#fff;padding:10px;border-radius:15px}
+.book-translation-label{font-size:11px;color:#94a3b8;margin-bottom:5px;font-weight:bold}
+.book-translation-ar{color:#dc2626;font-size:17px;font-weight:900}
+.book-translation-fr{color:#1e88e5;font-size:15px;font-weight:700}
+.book-translation-en{color:#16a34a;font-size:15px;font-weight:700}
+.book-speak-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.btn-book-speak{padding:10px 22px;border:none;border-radius:30px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:14px;font-weight:900;color:#fff}
+.btn-book-speak-ar{background:linear-gradient(135deg,#dc2626,#991b1b)}
+.btn-book-speak-fr{background:linear-gradient(135deg,#1e88e5,#0d47a1)}
+.btn-book-speak-en{background:linear-gradient(135deg,#16a34a,#15803d)}
+.book-video-section{background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:30px;padding:25px;margin:25px 0;color:#fff;border:3px solid #fbbf24}
+.book-video-title{text-align:center;font-size:24px;font-weight:900;color:#fbbf24;margin-bottom:20px}
+.book-video-card{background:rgba(255,255,255,.05);border-radius:20px;padding:18px;margin-bottom:20px}
+.book-video-card-title{font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:12px}
+.book-video-box{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:15px;margin:12px 0}
+.book-video-box iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.python-code{background:#1e293b;color:#e2e8f0;padding:20px;border-radius:15px;margin:15px 0;font-family:'Courier New',monospace;font-size:15px;line-height:1.8;border-left:6px solid #fbbf24;overflow-x:auto;direction:ltr;text-align:left}
+.python-code .keyword{color:#f472b6;font-weight:bold}
+.python-code .string{color:#fbbf24}
+.python-code .number{color:#60a5fa}
+.python-code .comment{color:#94a3b8;font-style:italic}
+.python-code .function{color:#34d399}
+.python-code .output{background:#0f172a;padding:10px 15px;border-radius:10px;margin-top:10px;color:#22c55e;font-weight:bold}
+.book-explanation{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-radius:20px;padding:20px 25px;margin:15px 0;border-right:6px solid #10b981;color:#064e3b}
+.book-explanation-title{font-size:16px;font-weight:900;color:#047857;margin-bottom:10px}
+@media(max-width:768px){.main-sections-grid{grid-template-columns:1fr}body{padding:10px}}
+</style>
+<body>
+
+<button id="statsBtn" onclick="sdOpen()">📊 الإحصائيات</button>
+
+<div id="dash">
+    <div style="max-width:1100px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:20px;">
+            <h1 style="color:#fbbf24;font-size:22px;">📊 إحصائيات المنصة</h1>
+            <button onclick="document.getElementById('dash').style.display='none'" class="sd-btn" style="background:#dc2626;margin-top:10px;">✖ إغلاق</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px;">
+            <div class="sd-card"><div class="num" id="nU">-</div><div class="lbl">👥 مسجل</div></div>
+            <div class="sd-card"><div class="num" id="nV">-</div><div class="lbl">🎭 زائر</div></div>
+            <div class="sd-card"><div class="num" id="nS">-</div><div class="lbl">💎 مشترك</div></div>
+            <div class="sd-card"><div class="num" id="nT">-</div><div class="lbl">✨ زوار اليوم</div></div>
+        </div>
+        <input id="q" placeholder="🔍 ابحث..." oninput="renderActiveTab()" style="width:100%;padding:12px;border-radius:20px;border:2px solid #475569;background:#1e293b;color:#fff;margin-bottom:15px;font-size:14px;box-sizing:border-box;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;">
+            <button id="tabUsersBtn" onclick="showTabUsers()" class="sd-btn" style="background:#3b82f6;">👥 المسجلون</button>
+            <button id="tabVisitorsBtn" onclick="showTabVisitors()" class="sd-btn" style="background:#64748b;">🎭 الزوار</button>
+            <button onclick="exportUsers()" class="sd-btn" style="background:#16a34a;">📥 Excel المسجلين</button>
+            <button onclick="sdLoad()" class="sd-btn" style="background:#8b5cf6;">🔄 تحديث</button>
+        </div>
+        <div id="list" style="margin-top:20px;"></div>
+    </div>
+</div>
+
+<div id="userStatusBanner" class="visitor">
+    <div class="banner-content">
+        <span id="bannerIcon">🎭</span>
+        <span id="bannerText">مرحباً — أنت زائر</span>
+        <button class="banner-btn btn-register" id="bannerRegisterBtn" onclick="scrollToRegister()">🔑 سجّل مجاناً</button>
+        <button class="banner-btn btn-logout" id="bannerLogoutBtn" onclick="logoutUser()" style="display:none;">🚪 خروج</button>
+        <button class="banner-btn btn-exit-platform" id="bannerExitBtn" onclick="exitPlatform()">⏻ خروج من المنصة</button>
+    </div>
+</div>
+
+<div class="container">
+
+<div id="pageWelcome">
+    <div class="logo-wrapper">
+        <div class="outer-ring"></div>
+        <div class="rotating-flags">
+            <svg viewBox="0 0 185 185"><defs><g id="tunisiaFlag"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="white" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="white"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="white"/></g></defs><use xlink:href="#tunisiaFlag" x="92" y="12"/><use xlink:href="#tunisiaFlag" x="160" y="54"/><use xlink:href="#tunisiaFlag" x="160" y="132"/><use xlink:href="#tunisiaFlag" x="92" y="174"/><use xlink:href="#tunisiaFlag" x="24" y="132"/><use xlink:href="#tunisiaFlag" x="24" y="54"/></svg>
+        </div>
+        <div class="screen-wrapper">
+            <div class="screen-body"><img src="https://i.postimg.cc/HWS05DXt/zayd8.jpg" alt="شعار"></div>
+            <div class="screen-stand"></div>
+            <div class="screen-base"></div>
+        </div>
+    </div>
+    <div class="marquee-bar"><marquee>🌟 منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس 🌟 محمد زايد - خبير دولي - تونس 🇹🇳 🌟</marquee></div>
+    <div class="welcome-card">
+        <h2>مرحباً بكم في منصة زايد</h2>
+        <div class="slogan">🚀 سجّلوا مجاناً — اغتنموا الفرصة 🚀</div>
+        <div class="audience"><span>🧒 أطفال</span><span>🧑 شباب</span><span>👨‍🏫 أساتذة</span><span>👨‍🎓 معلمين</span><span>👨‍👩‍👧 أولياء</span><span>🔬 باحثين</span><span>♿ ذوي الاحتياجات</span></div>
+        <div class="buttons-row">
+            <button class="btn-register-main" onclick="scrollToRegister()">🔑 سجّلوا مجاناً</button>
+            <button class="btn-welcome" id="welcomeBtn" onclick="playWelcome()">🔊 استمع للترحيب</button>
+            <button class="btn-stop" id="stopBtn" onclick="stopWelcome()">⏹️ إيقاف</button>
+        </div>
+        <div class="status-box" id="statusBox">اضغط "استمع للترحيب"</div>
+    </div>
+
+    <div id="visitorGateway">
+        <div style="text-align:center;font-size:45px;">👋</div>
+        <h2>🔑 التسجيل المجاني</h2>
+        <p class="gw-sub">أدخل بياناتك كاملة وصحيحة — التسجيل مجاني تماماً<br>📚 للدخول إلى: التعليم، البحث العلمي، الذكاء الاصطناعي، تعليم اللغة العربية، والكتب</p>
+        <div class="gw-err" id="gwError"></div>
+        <input class="gw-input" id="gwName" placeholder="👤 الاسم الكامل *">
+        <input class="gw-input" id="gwProfession" placeholder="💼 المهنة *">
+        <input class="gw-input" id="gwSpecialty" placeholder="🎯 الاختصاص *">
+        <input class="gw-input" id="gwEmail" type="email" placeholder="📧 البريد الإلكتروني *">
+        <input class="gw-input" id="gwPhone" type="tel" placeholder="📱 رقم الواتساب *">
+        <input class="gw-input" id="gwCountry" placeholder="🌍 بلد الإقامة *" value="تونس">
+        <input class="gw-input" id="gwCity" placeholder="🏙️ المدينة *">
+        <div class="radio-group" id="gwCategories"></div>
+        <button class="gw-submit" id="gwSubmitBtn" onclick="submitVisitorGateway()">🔑 ابدأ الآن مجاناً</button>
+        <div class="gw-admin-area">
+            <button class="gw-admin-link" onclick="showAdminLogin()">👑 دخول المشرف</button>
+            <button class="gw-admin-link" onclick="showExistingUserLogin()">👤 لدي حساب — دخول</button>
+        </div>
+    </div>
+</div>
+
+<div id="pageHome" class="hide">
+    <div class="welcome-card" style="margin-bottom:20px;"><h2>🌟 مرحباً <span id="welcomeName"></span> 🌟</h2><p style="font-size:14px; margin-top:8px;">اختر القسم</p></div>
+    <div id="trialCounter"></div>
+    <div class="main-sections-grid">
+        <div class="main-section-card education">
+            <div class="main-section-icon">🎓</div>
+            <div class="main-section-title">قسم التعليم والتكوين والتربية</div>
+            <div class="main-section-subtitle">التعليم • التكوين • التدريب</div>
+            <ul class="sub-sections-list">
+                <li onclick="showChildrenTech()"><span class="sub-icon">📖</span> التربية التكنولوجية <span class="arrow">◀</span></li>
+                <li onclick="showArabicSection()"><span class="sub-icon">🌙</span> تعليم اللغة العربية <span class="arrow">◀</span></li>
+                <li onclick="showGamesSection()"><span class="sub-icon">🎮</span> الألعاب <span class="arrow">◀</span></li>
+                <li onclick="showWorkshopsSection()"><span class="sub-icon">🔧</span> الورشات <span class="arrow">◀</span></li>
+                <li onclick="showScientificLessons()"><span class="sub-icon">🧠</span> الدروس العلمية <span class="arrow">◀</span></li>
+            </ul>
+        </div>
+        <div class="main-section-card research">
+            <div class="main-section-icon">🔬</div>
+            <div class="main-section-title">قسم البحث العلمي</div>
+            <div class="main-section-subtitle">البحث • الندوات • المراجع</div>
+            <ul class="sub-sections-list">
+                <li onclick="showLecturesSection()"><span class="sub-icon">🎤</span> المحاضرات <span class="arrow">◀</span></li>
+                <li onclick="showFullDictionary()"><span class="sub-icon">📖</span> المنجد <span class="arrow">◀</span></li>
+                <li onclick="showBooksSection()"><span class="sub-icon">📚</span> الكتب <span class="arrow">◀</span></li>
+                <li onclick="showAcademicProjects()"><span class="sub-icon">🔬</span> المشاريع <span class="arrow">◀</span></li>
+            </ul>
+        </div>
+        <div class="main-section-card ai-section">
+            <div class="main-section-icon">🧠</div>
+            <div class="main-section-title">قسم الذكاء الاصطناعي</div>
+            <div class="main-section-subtitle">الأدوات • التطبيقات • الورشات التطبيقية</div>
+            <ul class="sub-sections-list">
+                <li onclick="showAISection()"><span class="sub-icon">🤖</span> الذكاء الاصطناعي — 9 مسارات <span class="arrow">◀</span></li>
+                <li onclick="showAICertificates()"><span class="sub-icon">🏆</span> شهادات الذكاء الاصطناعي <span class="arrow">◀</span></li>
+            </ul>
+        </div>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; max-width:800px; margin-left:auto; margin-right:auto;">
+        <button class="btn-admin" style="flex:1; background:linear-gradient(135deg,#334155,#1e293b);" onclick="showProfile()">👤 ملفي</button>
+        <button class="btn-admin" style="flex:1; background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#1e293b;" onclick="showSubscriptionModal()">💎 الاشتراك</button>
+        <button class="btn-admin" style="flex:1; background:linear-gradient(135deg,#dc2626,#991b1b);" onclick="logoutUser()">🚪 خروج</button>
+        <button class="btn-admin" style="flex:1; background:linear-gradient(135deg,#991b1b,#7f1d1d); border:2px solid #fbbf24;" onclick="exitPlatform()">⏻ خروج من المنصة</button>
+    </div>
+</div>
+
+<div id="pageChildrenTech" class="hide" style="max-width:1200px; width:100%;">
+    <button class="back-btn" onclick="goToHome()">🔙 العودة</button>
+    <button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج من المنصة</button>
+    <div class="welcome-card" style="margin:15px 0;"><h2>📖 التربية التكنولوجية</h2><p>اختر المحور</p></div>
+    <div class="stages-grid">
+        <div class="stage-card book-card" onclick="openBook()"><div class="stage-icon">📖</div><div class="stage-title">📚 الأطفال والحاسوب</div><div class="stage-desc">حوار — بقلم محمد زايد</div></div>
+        <div class="stage-card" onclick="openPrimaryStage()"><div class="stage-icon">🧒</div><div class="stage-title">المرحلة الابتدائية</div><div class="stage-desc">الدروس — التربية التكنولوجية</div></div>
+        <div class="stage-card middle" onclick="openMiddleStage()"><div class="stage-icon">🎓</div><div class="stage-title">الإعدادية</div><div class="stage-desc">📝 Microsoft Word</div></div>
+        <div class="stage-card high" onclick="openHighStage()"><div class="stage-icon">🏫</div><div class="stage-title">الثانوية</div><div class="stage-desc">🐍 بايثون</div></div>
+        <div class="stage-card university" onclick="openStage('university')"><div class="stage-icon">🎓</div><div class="stage-title">الجامعية</div><div class="stage-desc">قيد الإعداد</div></div>
+    </div>
+</div>
+
+<div id="pagePrimaryStage" class="hide" style="max-width:1200px; width:100%;">
+    <button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>
+    <button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج من المنصة</button>
+    <div class="welcome-card" style="margin:15px 0;"><h2>🧒 المرحلة الابتدائية</h2><p>اختر الدرس</p></div>
+    <div class="lessons-stage-grid">
+        <div class="lesson-stage-card" onclick="openPrimaryLesson1()">
+            <div class="lesson-stage-icon">📖</div>
+            <div class="lesson-stage-title">الدرس الأول: التعريفات</div>
+            <div class="lesson-stage-meta">📖 33 شريحة • 📝 20 تمرين • 🏆 اختبار • 🎬 فيديوهات</div>
+        </div>
+    </div>
+</div>
+
+<div id="pageMiddleStage" class="hide" style="max-width:1200px; width:100%;">
+    <button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>
+    <button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج من المنصة</button>
+    <div class="welcome-card" style="margin:15px 0;"><h2>🎓 المرحلة الإعدادية</h2></div>
+    <div class="lessons-stage-grid">
+        <div class="lesson-stage-card" onclick="openMiddleLesson1()">
+            <div class="lesson-stage-icon">📝</div>
+            <div class="lesson-stage-title">الدرس الأول: Microsoft Word</div>
+            <div class="lesson-stage-meta">قيد الإعداد</div>
+        </div>
+    </div>
+</div>
+
+<div id="pageHighStage" class="hide" style="max-width:1200px; width:100%;">
+    <button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>
+    <button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج من المنصة</button>
+    <div class="welcome-card" style="margin:15px 0;"><h2>🏫 المرحلة الثانوية — بايثون</h2></div>
+    <div class="lessons-stage-grid">
+        <div class="lesson-stage-card" onclick="openPythonLesson()">
+            <div class="lesson-stage-icon">🐍</div>
+            <div class="lesson-stage-title">الدرس الأول: لغة بايثون</div>
+            <div class="lesson-stage-meta">📖 33 شريحة • 📝 20 تمرين • 🏆 اختبار</div>
+        </div>
+    </div>
+</div>
+
+<div id="pageLessonViewer" class="hide" style="max-width:900px; width:100%;">
+    <div id="lessonViewerContent" style="margin-top:15px;"></div>
+    <div class="nav-buttons">
+        <button class="nav-btn prev" id="lessonPrevBtn" onclick="prevLessonSlide()">▶ السابق</button>
+        <button class="nav-btn exit-sections" onclick="exitToSections()">🏠 الخروج للمحاور</button>
+        <button class="nav-btn exit-final" onclick="exitPlatform()">⏻ خروج من المنصة</button>
+        <button class="nav-btn next" id="lessonNextBtn" onclick="nextLessonSlide()">التالي ◀</button>
+    </div>
+    <div class="progress-container"><div class="progress-fill" id="lessonProgress"></div></div>
+</div>
+
+<div id="pageGames" class="hide" style="max-width:1200px; width:100%;"><button class="back-btn" onclick="goToHome()">🔙 العودة</button><div class="welcome-card" style="margin:15px 0;"><h2>🎮 الألعاب</h2></div><p style="color:#fff;text-align:center;padding:40px;">قريباً...</p></div>
+<div id="pageBooks" class="hide" style="max-width:1100px; width:100%;"><button class="back-btn" onclick="goToHome()">🔙 العودة</button><div class="welcome-card" style="margin:15px 0;"><h2>📚 الكتب</h2></div><p style="color:#fff;text-align:center;padding:40px;">قريباً...</p></div>
+<div id="pageLectures" class="hide" style="max-width:1100px; width:100%;"><button class="back-btn" onclick="goToHome()">🔙 العودة</button><div class="welcome-card" style="margin:15px 0;"><h2>🎤 المحاضرات</h2></div><p style="color:#fff;text-align:center;padding:40px;">قريباً...</p></div>
+<div id="pageAcademicProjects" class="hide" style="max-width:1100px; width:100%;"><button class="back-btn" onclick="goToHome()">🔙 العودة</button><div class="welcome-card" style="margin:15px 0;"><h2>🔬 المشاريع</h2></div><p style="color:#fff;text-align:center;padding:40px;">قريباً...</p></div>
+<div id="pageDictionary" class="hide" style="max-width:1200px; width:100%;"><button class="back-btn" onclick="goToHome()">🔙 العودة</button><div class="welcome-card" style="margin:15px 0;"><h2>📖 المنجد</h2></div><p style="color:#fff;text-align:center;padding:40px;">قريباً...</p></div>
+<div id="pageAISection" class="hide" style="max-width:1200px; width:100%;"><button class="back-btn" onclick="goToHome()">🔙 العودة</button><div class="welcome-card" style="margin:15px 0;"><h2>🧠 الدروس العلمية</h2></div><p style="color:#fff;text-align:center;padding:40px;">قريباً...</p></div>
+<div id="pageWorkshops" class="hide" style="max-width:1200px; width:100%;"><button class="back-btn" onclick="goToHome()">🔙 العودة</button><div class="welcome-card" style="margin:15px 0;"><h2>🔧 الورشات</h2></div><p style="color:#fff;text-align:center;padding:40px;">قريباً...</p></div>
+
+<div id="pageArabic" class="hide" style="max-width:1300px; width:100%;">
+    <button class="back-btn" onclick="goToHome()">🔙 العودة</button>
+    <button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button>
+    <div style="background:linear-gradient(135deg,#0b2b44,#0e3b5e);border-radius:30px;padding:25px;margin-top:15px;border:3px solid #fbbf24;">
+        <div style="text-align:center;padding:25px 20px;background:rgba(0,0,0,.35);border-radius:40px;margin-bottom:25px;"><h1 style="font-size:2rem;color:#fbbf24;">🌙 مركز العربية الحية 🌙</h1></div>
+        <div id="arContainer"></div>
+    </div>
+</div>
+
+<div id="pageAI" class="hide" style="max-width:1300px; width:100%;">
+    <button class="back-btn" onclick="goToHome()">🔙 العودة</button>
+    <button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button>
+    <div style="text-align:center;padding:25px;background:rgba(0,0,0,.35);border-radius:40px;margin:15px 0;border:2px solid rgba(251,191,36,.6);"><h1 style="font-size:2rem;color:#fbbf24;font-weight:900;">🧠 مركز الذكاء الاصطناعي 🧠</h1></div>
+    <div id="aiPathsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:25px;margin:25px 0;"></div>
+</div>
+
+<div id="pageAISlideViewer" class="hide" style="max-width:1100px; width:100%;">
+    <div id="aiSlideCounter" style="text-align:center;color:#fbbf24;font-weight:900;font-size:15px;margin:10px 0;padding:10px;background:rgba(0,0,0,.3);border-radius:20px;max-width:400px;margin-left:auto;margin-right:auto;">🎯 الشريحة 1</div>
+    <div style="background:rgba(0,0,0,.5);height:12px;border-radius:10px;overflow:hidden;margin:20px auto;max-width:1000px;"><div id="aiProgressBar" style="background:linear-gradient(90deg,#fbbf24,#ec4899,#06b6d4,#10b981);height:100%;width:0%;transition:width .5s;"></div></div>
+    <div id="aiSlideContent"></div>
+    <div style="display:flex;gap:15px;margin:25px auto;justify-content:center;flex-wrap:wrap;">
+        <button id="aiPrevBtn" onclick="aiPrevSlide()" style="padding:18px 25px;border:none;border-radius:60px;font-weight:900;font-size:17px;cursor:pointer;font-family:Cairo;background:linear-gradient(135deg,#3b82f6,#1e40af);color:#fff;">▶ السابق</button>
+        <button onclick="exitAIToPaths()" style="padding:18px 25px;border:none;border-radius:60px;font-weight:900;font-size:17px;cursor:pointer;font-family:Cairo;background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff;">🏠 المسارات</button>
+        <button onclick="exitPlatform()" style="padding:18px 25px;border:none;border-radius:60px;font-weight:900;font-size:17px;cursor:pointer;font-family:Cairo;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:2px solid #fbbf24;">⏻ خروج</button>
+        <button id="aiNextBtn" onclick="aiNextSlide()" style="padding:18px 25px;border:none;border-radius:60px;font-weight:900;font-size:17px;cursor:pointer;font-family:Cairo;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;">التالي ◀</button>
+    </div>
+</div>
+
+<div id="pageAICertificates" class="hide" style="max-width:1100px; width:100%;"><button class="back-btn" onclick="showAISection()">🔙 العودة</button><div style="text-align:center;padding:25px;background:rgba(0,0,0,.35);border-radius:40px;margin:15px 0;border:2px solid rgba(251,191,36,.6);"><h1 style="font-size:2rem;color:#fbbf24;">🏆 شهادات الذكاء الاصطناعي 🏆</h1></div><div id="aiCertificatesList" style="padding:20px;"></div></div>
+
+<div id="pageAdminLogin" class="hide" style="max-width:600px; width:100%;">
+    <div style="background:#1e293b;border-radius:25px;padding:25px;border:3px solid #fbbf24;margin:0 auto;">
+        <h2 style="text-align:center;color:#fbbf24;font-size:22px;font-weight:900;margin-bottom:15px;">👑 لوحة المشرف</h2>
+        <div class="form-group"><label>كلمة المرور</label><input type="password" id="adminPassInput" onkeypress="if(event.key==='Enter') enterAdmin()" placeholder="أدخل كلمة المرور"></div>
+        <button class="gw-submit" onclick="enterAdmin()">🔓 دخول</button>
+        <button style="background:#334155;margin-top:8px;padding:10px;border-radius:25px;border:none;color:#fff;width:100%;cursor:pointer;font-family:Cairo;font-weight:900;" onclick="backToWelcome()">🔙 العودة</button>
+        <div id="adminErrorMsg" style="display:none; margin-top:15px; padding:12px; background:rgba(220,38,38,.15); border-radius:15px; color:#fca5a5; text-align:center; font-size:13px;"></div>
+    </div>
+</div>
+
+<div id="pageAdmin" class="hide" style="max-width:1300px; width:100%;">
+    <div style="background:#1e293b;border-radius:25px;padding:25px;border:3px solid #fbbf24;max-width:1200px;margin:0 auto;">
+        <h2 style="text-align:center;color:#fbbf24;font-size:22px;font-weight:900;">👑 لوحة المشرف — محمد زايد</h2>
+        <p style="text-align:center;color:#8b5cf6;font-weight:900;margin-bottom:15px;">🟣 أنت في وضع المشرف</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:15px 0;">
+            <button class="sd-btn" style="background:#3b82f6;" onclick="adminGoToSections()">🏠 الأقسام</button>
+            <button class="sd-btn" style="background:#22c55e;" onclick="sdOpen()">📊 الإحصائيات</button>
+            <button class="sd-btn" style="background:#8b5cf6;" onclick="adminRefresh()">🔄 تحديث</button>
+            <button class="sd-btn" style="background:#dc2626;" onclick="logoutAdmin()">🚪 خروج</button>
+            <button class="sd-btn" style="background:#991b1b;border:2px solid #fbbf24;" onclick="exitPlatform()">⏻ خروج من المنصة</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="subscriptionModal" class="modal-overlay">
+    <div style="background:#1e293b;border-radius:25px;padding:25px;max-width:500px;width:100%;border:3px solid #fbbf24;">
+        <div style="text-align:center;margin-bottom:15px;"><div style="font-size:50px;">💎</div><h2 style="color:#fbbf24;font-size:22px;">اشترك سنوياً</h2></div>
+        <div style="background:linear-gradient(135deg,#fbbf24,#ff8c00);color:#1e293b;padding:20px;border-radius:15px;text-align:center;margin-bottom:15px;"><div style="font-size:48px;font-weight:900;">50</div><div>سنوياً</div><div>د.ت / $ / €</div></div>
+        <a href="https://wa.me/21655335477" target="_blank" style="display:block;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;padding:12px;border-radius:25px;text-align:center;text-decoration:none;font-weight:bold;margin-bottom:10px;">💬 واتساب</a>
+        <button onclick="closeSubscriptionModal()" style="width:100%;background:#334155;color:#fff;padding:12px;border-radius:25px;border:none;cursor:pointer;font-weight:bold;font-family:Cairo;">إغلاق</button>
+    </div>
+</div>
+
+<div class="copyright-bar">
+    <div>© 2026 — جميع الحقوق محفوظة</div>
+    <div><strong>محمد زايد</strong> — تونس 🇹🇳</div>
+    <div>📱 +21655335477</div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, query, orderBy, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const app = initializeApp({
+    apiKey: "AIzaSyA8LK52iXBPZFbqHnXyaAsldgqcjz7Bj4o",
+    authDomain: "zaied-plateform.firebaseapp.com",
+    projectId: "zaied-plateform",
+    storageBucket: "zaied-plateform.firebasestorage.app",
+    messagingSenderId: "703013673948",
+    appId: "1:703013673948:web:585875a9a69312cfe48d19"
+});
+const db = getFirestore(app);
+
+window.sendWhatsApp = async function(message, userData) {
+    try {
+        var payload = {
+            access_key: '23f532ab-bd1b-4362-b980-2bab75c5b48b',
+            subject: userData ? ('🎓 تسجيل جديد: ' + userData.name) : '🎓 إشعار من منصة زايد',
+            from_name: 'منصة زايد',
+            email: 'zeidoun2021@gmail.com',
+            message: message || 'إشعار'
+        };
+        if (userData) {
+            payload['الاسم الكامل'] = userData.name || '';
+            payload['المهنة'] = userData.profession || '';
+            payload['الاختصاص'] = userData.specialty || '';
+            payload['البريد الإلكتروني'] = userData.email || '';
+            payload['الهاتف'] = userData.whatsapp || '';
+            payload['بلد الإقامة'] = userData.country || '';
+            payload['المدينة'] = userData.city || '';
+            payload['الفئة'] = userData.category || '';
+            payload['التاريخ'] = userData.date || '';
+        }
+        var r = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        var d = await r.json();
+        console.log('📧 Web3Forms:', d.success);
+        return d.success;
+    } catch(e) { console.error('📧 خطأ:', e); return false; }
+};
+
+window.fbSaveUser = async function(user) {
+    try {
+        var ref = await addDoc(collection(db, "users"), Object.assign({}, user, { createdAt: serverTimestamp(), savedAt: new Date().toISOString() }));
+        return ref.id;
+    } catch (e) { console.error(e); return null; }
+};
+window.fbGetAllUsers = async function() {
+    try {
+        var q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+        var s = await getDocs(q);
+        var a = [];
+        s.forEach(function(d) { a.push(Object.assign({ firebaseId: d.id }, d.data())); });
+        return a;
+    } catch (e) {
+        try {
+            var s2 = await getDocs(collection(db, "users"));
+            var a2 = [];
+            s2.forEach(function(d) { a2.push(Object.assign({ firebaseId: d.id }, d.data())); });
+            return a2;
+        } catch(e2) { return []; }
+    }
+};
+window.fbGetUserByEmail = async function(email) {
+    try {
+        var q = query(collection(db, "users"), where("email", "==", email));
+        var s = await getDocs(q);
+        if (s.empty) return null;
+        var d = s.docs[0];
+        return Object.assign({ firebaseId: d.id }, d.data());
+    } catch (e) { return null; }
+};
+window.fbDeleteUser = async function(id) {
+    try { await deleteDoc(doc(db, "users", id)); return true; } catch (e) { return false; }
+};
+window.fbSaveSubscription = async function(userId, subData) {
+    try {
+        await setDoc(doc(db, "subscriptions", String(userId)), Object.assign({}, subData, { updatedAt: serverTimestamp() }), { merge: true });
+        return true;
+    } catch (e) { return false; }
+};
+window.fbGetAllSubscriptions = async function() {
+    try {
+        var s = await getDocs(collection(db, "subscriptions"));
+        var subs = {};
+        s.forEach(function(d) { subs[d.id] = d.data(); });
+        return subs;
+    } catch (e) { return {}; }
+};
+window.fbSaveVisitor = async function(v) {
+    try {
+        await addDoc(collection(db, "visitors"), Object.assign({}, v, { visitedAt: serverTimestamp() }));
+        return true;
+    } catch (e) { return false; }
+};
+window.fbGetAllVisitors = async function() {
+    try {
+        var q = query(collection(db, "visitors"), orderBy("visitedAt", "desc"));
+        var s = await getDocs(q);
+        var a = [];
+        s.forEach(function(d) { a.push(Object.assign({ firebaseId: d.id }, d.data())); });
+        return a;
+    } catch (e) {
+        try {
+            var s2 = await getDocs(collection(db, "visitors"));
+            var a2 = [];
+            s2.forEach(function(d) { a2.push(Object.assign({ firebaseId: d.id }, d.data())); });
+            return a2;
+        } catch(e2) { return []; }
+    }
+};
+window.fbSaveArabicCertificate = async function(c) {
+    try { var r = await addDoc(collection(db, "arabic_certificates"), Object.assign({}, c, { createdAt: serverTimestamp() })); return r.id; } catch (e) { return null; }
+};
+window.fbSaveAICertificate = async function(c) {
+    try { var r = await addDoc(collection(db, "ai_certificates"), Object.assign({}, c, { createdAt: serverTimestamp() })); return r.id; } catch (e) { return null; }
+};
+window.firebaseReady = true;
+console.log("✅ Firebase Ready");
+</script>
+
+<script>
+var currentUser = null;
+var userStatus = 'visitor';
+var allUsersCache = [];
+var allSubsCache = {};
+var allVisitorsCache = [];
+var isAdminMode = false;
+var ADMIN_PASSWORD = '012345';
+var activeTab = 'users';
+window.currentUser = null;
+window.userStatus = 'visitor';
+window.isAdminMode = false;
+
+var VISITOR_CATEGORIES = [['طفل','🧒','طفل'],['ولي','👨‍👩‍👧','ولي'],['طالب','🎓','طالب'],['أستاذ','👨‍🏫','أستاذ'],['باحث','🔬','باحث'],['خبير','🧠','خبير']];
+
+function initGatewayCategories() {
+    var container = document.getElementById('gwCategories');
+    if (!container) return;
+    container.innerHTML = '';
+    VISITOR_CATEGORIES.forEach(function(c) {
+        var lbl = document.createElement('label');
+        lbl.innerHTML = '<input type="radio" name="gwCat" value="' + c[0] + '" style="display:none;">' + c[1] + ' ' + c[2];
+        lbl.onclick = function() {
+            container.querySelectorAll('label').forEach(function(x) {
+                x.style.background = '#fee2e2';
+                x.style.color = '#991b1b';
+                x.style.borderColor = 'transparent';
+            });
+            lbl.style.background = '#dc2626';
+            lbl.style.color = 'white';
+            lbl.style.borderColor = '#dc2626';
+            lbl.querySelector('input').checked = true;
+        };
+        container.appendChild(lbl);
+    });
+}
+
+async function submitVisitorGateway() {
+    var n = document.getElementById('gwName').value.trim();
+    var p = document.getElementById('gwProfession').value.trim();
+    var sp = document.getElementById('gwSpecialty').value.trim();
+    var e = document.getElementById('gwEmail').value.trim().toLowerCase();
+    var w = document.getElementById('gwPhone').value.trim();
+    var c = document.getElementById('gwCountry').value.trim();
+    var city = document.getElementById('gwCity').value.trim();
+    var cat = (document.querySelector('input[name="gwCat"]:checked') || {}).value || '';
+    var errBox = document.getElementById('gwError');
+    var errs = [];
+    if (!n || n.length < 3) errs.push('الاسم');
+    if (!p || p.length < 2) errs.push('المهنة');
+    if (!sp || sp.length < 2) errs.push('الاختصاص');
+    if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) errs.push('البريد');
+    if (!w || !/^\+?\d{8,15}$/.test(w.replace(/[\s\-]/g, ''))) errs.push('الواتساب');
+    if (!c || c.length < 2) errs.push('البلد');
+    if (!city || city.length < 2) errs.push('المدينة');
+    if (!cat) errs.push('الفئة');
+    if (errs.length > 0) {
+        errBox.style.display = 'block';
+        errBox.innerHTML = '⚠️ يرجى تصحيح: ' + errs.join(' • ');
+        return;
+    }
+    errBox.style.display = 'none';
+    var btn = document.getElementById('gwSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري التسجيل...';
+    try {
+        var existing = await window.fbGetUserByEmail(e);
+        if (existing) {
+            currentUser = existing; window.currentUser = existing;
+            localStorage.setItem('currentUser', JSON.stringify(existing));
+            localStorage.setItem('zaiedVisitorOK', '1');
+            userStatus = existing.subscribed ? 'subscriber' : 'registered';
+            window.userStatus = userStatus;
+            alert('✅ مرحباً بعودتك ' + existing.name + '!');
+            updateUserBanner();
+            moveToSections();
+            return;
+        }
+        var userData = {
+            name: n, profession: p, specialty: sp, email: e,
+            whatsapp: w, country: c, city: city, category: cat,
+            date: new Date().toLocaleString('ar-EG'),
+            status: 'registered', loginCount: 1, subscribed: false, blocked: false
+        };
+        var fbId = await window.fbSaveUser(userData);
+        if (!fbId) { alert('⚠️ خطأ، حاول مجدداً'); return; }
+        userData.firebaseId = fbId;
+        currentUser = userData; window.currentUser = userData;
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        localStorage.setItem('zaiedVisitorOK', '1');
+        localStorage.setItem('logins_' + fbId, '0');
+        userStatus = 'registered'; window.userStatus = 'registered';
+        if (window.sendWhatsApp) {
+            window.sendWhatsApp('🎓 تسجيل جديد\n👤 ' + n + '\n💼 ' + p + '\n🎯 ' + sp + '\n📧 ' + e + '\n📱 ' + w + '\n🌍 ' + c + ' — ' + city + '\n🏷️ ' + cat, userData);
+        }
+        alert('✅ مرحباً ' + n + '! تم تسجيلك بنجاح');
+        updateUserBanner();
+        moveToSections();
+    } catch (err) {
+        errBox.style.display = 'block';
+        errBox.innerHTML = '⚠️ خطأ: ' + err.message;
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🔑 ابدأ الآن مجاناً';
+    }
+}
+
+window.sdOpen = function() { document.getElementById('dash').style.display = 'block'; sdLoad(); };
+window.sdLoad = async function() {
+    try {
+        allUsersCache = await window.fbGetAllUsers();
+        allVisitorsCache = await window.fbGetAllVisitors();
+        allSubsCache = await window.fbGetAllSubscriptions();
+    } catch(e) { console.warn(e); }
+    var today = new Date().toDateString();
+    var todayCount = 0;
+    (allVisitorsCache || []).forEach(function(v) {
+        if (v.visitedAt && v.visitedAt.seconds) {
+            if (new Date(v.visitedAt.seconds * 1000).toDateString() === today) todayCount++;
+        }
+    });
+    document.getElementById('nU').textContent = String(allUsersCache.length);
+    document.getElementById('nV').textContent = String(allVisitorsCache.length);
+    document.getElementById('nS').textContent = String(allUsersCache.filter(function(u){return u.subscribed}).length);
+    document.getElementById('nT').textContent = String(todayCount);
+    renderActiveTab();
+};
+window.showTabUsers = function() {
+    activeTab = 'users';
+    document.getElementById('tabUsersBtn').style.background = '#3b82f6';
+    document.getElementById('tabVisitorsBtn').style.background = '#64748b';
+    renderActiveTab();
+};
+window.showTabVisitors = function() {
+    activeTab = 'visitors';
+    document.getElementById('tabUsersBtn').style.background = '#64748b';
+    document.getElementById('tabVisitorsBtn').style.background = '#3b82f6';
+    renderActiveTab();
+};
+window.renderActiveTab = function() {
+    if (activeTab === 'visitors') renderVisitors();
+    else renderUsers();
+};
+window.renderUsers = function() {
+    var q = (document.getElementById('q').value || '').toLowerCase();
+    var users = allUsersCache.filter(function(u) {
+        if (!q) return true;
+        var s = ((u.name||'')+(u.email||'')+(u.whatsapp||'')+(u.profession||'')+(u.specialty||'')+(u.city||'')+(u.country||'')).toLowerCase();
+        return s.indexOf(q) !== -1;
+    });
+    if (users.length === 0) {
+        document.getElementById('list').innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا نتائج</p>';
+        return;
+    }
+    document.getElementById('list').innerHTML = users.map(function(u, i) {
+        var phone = u.whatsapp || '-';
+        var city = u.city || '-';
+        var country = u.country || '-';
+        var cat = u.category || '-';
+        var logins = localStorage.getItem('logins_' + u.firebaseId) || '0';
+        var subStatus = u.subscribed ? '💎 مشترك' : '✅ مجاني';
+        return '<div class="sd-user"><div style="font-weight:900;color:#dc2626;font-size:15px;">' + (i+1) + '. ' + (u.name || '-') + '</div>' +
+            '<div style="color:#475569;font-size:12px;margin-top:3px;">📧 ' + (u.email || '-') + '</div>' +
+            '<div style="color:#475569;font-size:12px;">📱 ' + phone + ' • 🏙️ ' + city + '</div>' +
+            '<div style="color:#475569;font-size:12px;">💼 ' + (u.profession || '-') + ' • 🎯 ' + (u.specialty || '-') + '</div>' +
+            '<div style="color:#475569;font-size:12px;">🌍 ' + country + ' • 🏷️ ' + cat + '</div>' +
+            '<div style="color:#475569;font-size:12px;">🔢 عدد الدخولات: ' + logins + ' • ' + subStatus + '</div>' +
+            (u.date ? '<div style="color:#94a3b8;font-size:11px;">📅 ' + u.date + '</div>' : '') +
+            '<div style="margin-top:8px;">' +
+            '<button onclick="window.__activateSubscription(\'' + u.firebaseId + '\');renderUsers();" style="padding:5px 12px;background:#22c55e;color:white;border:none;border-radius:15px;font-family:Cairo;font-weight:900;font-size:11px;cursor:pointer;margin-right:5px;">💎 تفعيل الاشتراك</button>' +
+            '<button onclick="window.__resetLoginCount(\'' + u.firebaseId + '\');renderUsers();" style="padding:5px 12px;background:#3b82f6;color:white;border:none;border-radius:15px;font-family:Cairo;font-weight:900;font-size:11px;cursor:pointer;">🔄 تصفير العداد</button>' +
+            '</div></div>';
+    }).join('');
+};
+window.renderVisitors = function() {
+    if (!allVisitorsCache || allVisitorsCache.length === 0) {
+        document.getElementById('list').innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا زوار بعد</p>';
+        return;
+    }
+    document.getElementById('list').innerHTML = allVisitorsCache.map(function(v, i) {
+        return '<div class="sd-user" style="border-right-color:#8b5cf6;"><div style="font-weight:900;color:#8b5cf6;font-size:15px;">' + (i+1) + '. ' + (v.name || '-') + '</div>' +
+            '<div style="color:#475569;font-size:12px;">📱 ' + (v.phone || '-') + '</div>' +
+            '<div style="color:#475569;font-size:12px;">📧 ' + (v.email || '-') + '</div>' +
+            '<div style="color:#475569;font-size:12px;">🌍 ' + (v.country || '-') + ' • 🏙️ ' + (v.city || '-') + '</div>' +
+            '<div style="color:#475569;font-size:12px;">💻 ' + (v.device || '-') + ' • 🌐 ' + (v.browser || '-') + '</div></div>';
+    }).join('');
+};
+window.exportUsers = function() {
+    if (!allUsersCache || allUsersCache.length === 0) { alert('⚠️ لا يوجد مسجلون'); return; }
+    var csv = '\uFEFFالرقم,الاسم,المهنة,الاختصاص,البريد,الهاتف,البلد,المدينة,الفئة,التاريخ,الحالة\n';
+    var clean = function(s) { return String(s || '').replace(/"/g, '""'); };
+    allUsersCache.forEach(function(u, i) {
+        csv += (i+1) + ',"' + clean(u.name) + '","' + clean(u.profession) + '","' + clean(u.specialty) + '","' + clean(u.email) + '","' + clean(u.whatsapp) + '","' + clean(u.country) + '","' + clean(u.city) + '","' + clean(u.category) + '","' + clean(u.date) + '","' + (u.subscribed ? 'مشترك' : 'مسجل') + '"\n';
+    });
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'zaied_users_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+};
+
+function updateUserBanner() {
+    var b = document.getElementById('userStatusBanner');
+    if (!b) return;
+    b.className = userStatus || 'visitor';
+    var i = document.getElementById('bannerIcon');
+    var t = document.getElementById('bannerText');
+    var r = document.getElementById('bannerRegisterBtn');
+    var l = document.getElementById('bannerLogoutBtn');
+    if (userStatus === 'admin') { i.textContent = '👑'; t.textContent = 'مرحباً — أنت المشرف العام'; r.style.display='none'; l.style.display='inline-block'; }
+    else if (userStatus === 'subscriber') { i.textContent = '💎'; t.textContent = 'مرحباً ' + (currentUser ? currentUser.name : ''); r.style.display='none'; l.style.display='inline-block'; }
+    else if (userStatus === 'registered') { i.textContent = '✅'; t.textContent = 'مرحباً ' + (currentUser ? currentUser.name : ''); r.style.display='none'; l.style.display='inline-block'; }
+    else { i.textContent = '🎭'; t.textContent = 'مرحباً — أنت زائر'; r.style.display='inline-block'; l.style.display='none'; }
+}
+function moveToSections() {
+    stopWelcome();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    var home = document.getElementById('pageHome');
+    if (home) home.classList.remove('hide');
+    var wn = document.getElementById('welcomeName');
+    if (wn && currentUser) wn.textContent = currentUser.name;
+    renderTrialCounter();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function renderTrialCounter() {
+    var el = document.getElementById('trialCounter');
+    if (!el) return;
+    if (userStatus === 'subscriber' || isAdminMode) {
+        el.innerHTML = '<div style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;padding:15px;border-radius:20px;text-align:center;border:2px solid #fbbf24;margin-bottom:15px;font-weight:bold;">💎 ' + (isAdminMode ? 'مشرف' : 'مشترك') + '</div>';
+    } else {
+        el.innerHTML = '<div style="background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;padding:15px;border-radius:20px;text-align:center;border:2px solid #fbbf24;margin-bottom:15px;font-weight:bold;">📖 حساب مجاني</div>';
+    }
+}
+function logoutUser() {
+    if (isAdminMode) { logoutAdmin(); return; }
+    if (!confirm('هل تريد الخروج؟')) return;
+    stopWelcome();
+    currentUser = null; window.currentUser = null;
+    userStatus = 'visitor'; window.userStatus = 'visitor';
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('zaiedVisitorOK');
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageWelcome').classList.remove('hide');
+    updateUserBanner();
+}
+function showAdminLogin() {
+    stopWelcome();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageAdminLogin').classList.remove('hide');
+    var inp = document.getElementById('adminPassInput');
+    if (inp) inp.value = '';
+}
+async function enterAdmin() {
+    var p = document.getElementById('adminPassInput').value.trim();
+    var errEl = document.getElementById('adminErrorMsg');
+    if (p !== ADMIN_PASSWORD) {
+        errEl.style.display = 'block';
+        errEl.textContent = '❌ كلمة المرور غير صحيحة';
+        document.getElementById('adminPassInput').value = '';
+        return;
+    }
+    errEl.style.display = 'none';
+    isAdminMode = true; window.isAdminMode = true;
+    userStatus = 'admin'; window.userStatus = 'admin';
+    localStorage.setItem('zaiedVisitorOK', '1');
+    localStorage.setItem('zaiedAdminPermanent', '1');
+    updateUserBanner();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageHome').classList.remove('hide');
+    var wn = document.getElementById('welcomeName');
+    if (wn) wn.textContent = 'المشرف العام';
+    renderTrialCounter();
+    var statsBtn = document.getElementById('statsBtn');
+    if (statsBtn) statsBtn.style.display = 'block';
+    setTimeout(function() { window.sdLoad(); }, 800);
+    alert('👑 مرحباً بك أيها المشرف');
+}
+function logoutAdmin() {
+    if (!confirm('الخروج؟')) return;
+    isAdminMode = false; window.isAdminMode = false;
+    userStatus = currentUser ? (currentUser.subscribed ? 'subscriber' : 'registered') : 'visitor';
+    window.userStatus = userStatus;
+    localStorage.removeItem('zaiedAdminPermanent');
+    updateUserBanner();
+    var statsBtn = document.getElementById('statsBtn');
+    if (statsBtn) statsBtn.style.display = 'none';
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageWelcome').classList.remove('hide');
+}
+function adminGoToSections() {
+    stopWelcome();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageHome').classList.remove('hide');
+    var wn = document.getElementById('welcomeName');
+    if (wn) wn.textContent = 'المشرف العام';
+    renderTrialCounter();
+}
+async function adminRefresh() { await window.sdLoad(); alert('✅ تم التحديث'); }
+function backToWelcome() {
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageWelcome').classList.remove('hide');
+}
+function goToHome() {
+    stopWelcome();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    if (currentUser || isAdminMode) document.getElementById('pageHome').classList.remove('hide');
+    else document.getElementById('pageWelcome').classList.remove('hide');
+}
+function scrollToRegister() {
+    var gw = document.getElementById('visitorGateway');
+    if (gw) gw.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function showSubscriptionModal() { document.getElementById('subscriptionModal').classList.add('active'); }
+function closeSubscriptionModal() { document.getElementById('subscriptionModal').classList.remove('active'); }
+
+function exitPlatform() {
+    if (!confirm('⏻ هل تريد مغادرة المنصة؟')) return;
+    try {
+        if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; }
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        document.querySelectorAll('iframe').forEach(function(f) { f.src = 'about:blank'; });
+        localStorage.clear();
+        sessionStorage.clear();
+    } catch(e) {}
+    window.location.replace('https://www.google.com');
+}
+
+function showProfile() {
+    if (!isAdminMode && !currentUser) { alert('⚠️ سجّل أولاً'); scrollToRegister(); return; }
+    if (isAdminMode) { alert('👑 المشرف\n📝 محمد زايد\n🌍 تونس\n📱 +21655335477'); return; }
+    var st = userStatus === 'subscriber' ? '💎 مشترك' : '✅ مسجل';
+    var logins = localStorage.getItem('logins_' + currentUser.firebaseId) || '0';
+    alert('👤 ' + currentUser.name + '\n📧 ' + currentUser.email + '\n💼 ' + currentUser.profession + '\n🎯 ' + currentUser.specialty + '\n🌍 ' + currentUser.country + ' — ' + (currentUser.city || '') + '\n🏷️ ' + currentUser.category + '\n📱 ' + currentUser.whatsapp + '\n\n🔰 ' + st + '\n🔢 عدد الدخولات: ' + logins);
+}
+function openStage() { alert('📌 قيد الإعداد'); }
+function showExistingUserLogin() {
+    var email = prompt('📧 أدخل بريدك:');
+    if (!email) return;
+    var e = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { alert('⚠️ بريد غير صحيح'); return; }
+    window.fbGetUserByEmail(e).then(function(user) {
+        if (!user) { alert('❌ لا يوجد حساب'); return; }
+        currentUser = user; window.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('zaiedVisitorOK', '1');
+        userStatus = user.subscribed ? 'subscriber' : 'registered';
+        window.userStatus = userStatus;
+        var logins = parseInt(localStorage.getItem('logins_' + user.firebaseId) || '0') + 1;
+        localStorage.setItem('logins_' + user.firebaseId, String(logins));
+        updateUserBanner();
+        if (logins > 2 && !user.subscribed && !isAdminMode) {
+            setTimeout(function() { window.__showSubscriptionRequired(user); }, 500);
+            return;
+        }
+        alert('✅ مرحباً ' + user.name + '!\n🔢 عدد الدخولات: ' + logins + '/2');
+        moveToSections();
+    });
+}
+
+window.__showSubscriptionRequired = function(user) {
+    if (document.getElementById('subRequiredModal')) return;
+    var isTun = user.country && user.country.indexOf('تونس') !== -1;
+    var price = isTun ? '20 دينار تونسي' : '20 دولار أو 20 يورو';
+    var m = document.createElement('div');
+    m.id = 'subRequiredModal';
+    m.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.97);z-index:99999999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Cairo;direction:rtl;overflow-y:auto;';
+    m.innerHTML = '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:30px;padding:35px 30px;max-width:600px;width:100%;border:4px solid #fbbf24;text-align:center;color:white;margin:auto;">' +
+        '<div style="font-size:70px;">💎</div>' +
+        '<h2 style="color:#fbbf24;font-size:26px;margin:15px 0;">اشتراك مطلوب</h2>' +
+        '<p style="font-size:15px;line-height:1.9;color:#cbd5e1;">لقد استنفدت محاولاتك المجانية (2 دخول).<br>للمتابعة، يُرجى الاشتراك السنوي.</p>' +
+        '<div style="background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;padding:20px;border-radius:20px;margin:20px 0;">' +
+        '<div style="font-size:15px;font-weight:900;">💰 الاشتراك السنوي</div>' +
+        '<div style="font-size:28px;font-weight:900;margin:8px 0;">' + price + '</div>' +
+        '<div style="font-size:13px;">' + (isTun ? '🇹🇳 دينار إلكتروني (e-Dinar)' : '🌍 بطاقة بنكية دولية') + '</div></div>' +
+        '<a href="https://wa.me/21655335477?text=' + encodeURIComponent('مرحباً، أرغب في الاشتراك. اسمي: ' + user.name) + '" target="_blank" style="display:block;padding:18px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:40px;text-decoration:none;font-weight:900;font-size:17px;margin-bottom:10px;">💬 اشترك عبر واتساب</a>' +
+        '<button onclick="document.getElementById(\'subRequiredModal\').remove();if(window.logoutUser)logoutUser();" style="width:100%;padding:12px;background:#334155;color:white;border:2px solid #64748b;border-radius:40px;font-family:Cairo;font-weight:900;cursor:pointer;">🚪 خروج</button>' +
+        '</div>';
+    document.body.appendChild(m);
+};
+
+window.__activateSubscription = function(firebaseId) {
+    if (!firebaseId) return false;
+    localStorage.setItem('subscribed_' + firebaseId, '1');
+    var u = currentUser;
+    if (u && u.firebaseId === firebaseId) {
+        u.subscribed = true;
+        localStorage.setItem('currentUser', JSON.stringify(u));
+        currentUser = u; window.currentUser = u;
+        userStatus = 'subscriber'; window.userStatus = 'subscriber';
+        if (window.updateUserBanner) updateUserBanner();
+    }
+    var m = document.getElementById('subRequiredModal');
+    if (m) m.remove();
+    alert('✅ تم تفعيل الاشتراك');
+    return true;
+};
+window.__resetLoginCount = function(firebaseId) {
+    if (!firebaseId) return false;
+    localStorage.setItem('logins_' + firebaseId, '0');
+    alert('✅ تم تصفير العداد');
+    return true;
+};
+
+console.log('✅ الجزء 3-أ جاهز');
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   🌙 قسم اللغة العربية
+   ═══════════════════════════════════════════════════════════ */
+var AR0_LETTERS = [
+    { char: 'أ', name: 'أَلِف', word: 'أَسَد', icon: '🦁', sound: 'أَلِف' },
+    { char: 'ب', name: 'بَاء', word: 'بَيْت', icon: '🏠', sound: 'بَاء' },
+    { char: 'ت', name: 'تَاء', word: 'تُفَّاح', icon: '🍎', sound: 'تَاء' },
+    { char: 'ث', name: 'ثَاء', word: 'ثَعْلَب', icon: '🦊', sound: 'ثَاء' },
+    { char: 'ج', name: 'جِيم', word: 'جَمَل', icon: '🐪', sound: 'جِيم' },
+    { char: 'ح', name: 'حَاء', word: 'حِمَار', icon: '🐴', sound: 'حَاء' },
+    { char: 'خ', name: 'خَاء', word: 'خُبْز', icon: '🍞', sound: 'خَاء' },
+    { char: 'د', name: 'دَال', word: 'دُبّ', icon: '🐻', sound: 'دَال' },
+    { char: 'ذ', name: 'ذَال', word: 'ذِئْب', icon: '🐺', sound: 'ذَال' },
+    { char: 'ر', name: 'رَاء', word: 'رَجُل', icon: '👨', sound: 'رَاء' },
+    { char: 'ز', name: 'زَاي', word: 'زَهْرَة', icon: '🌸', sound: 'زَاي' },
+    { char: 'س', name: 'سِين', word: 'سَمَك', icon: '🐟', sound: 'سِين' },
+    { char: 'ش', name: 'شِين', word: 'شَمْس', icon: '☀️', sound: 'شِين' },
+    { char: 'ص', name: 'صَاد', word: 'صَقْر', icon: '🦅', sound: 'صَاد' },
+    { char: 'ض', name: 'ضَاد', word: 'ضِفْدَع', icon: '🐸', sound: 'ضَاد' },
+    { char: 'ط', name: 'طَاء', word: 'طَائِر', icon: '🐦', sound: 'طَاء' },
+    { char: 'ظ', name: 'ظَاء', word: 'ظَرْف', icon: '✉️', sound: 'ظَاء' },
+    { char: 'ع', name: 'عَيْن', word: 'عَيْن', icon: '👁️', sound: 'عَيْن' },
+    { char: 'غ', name: 'غَيْن', word: 'غُرَاب', icon: '🐦‍⬛', sound: 'غَيْن' },
+    { char: 'ف', name: 'فَاء', word: 'فِيل', icon: '🐘', sound: 'فَاء' },
+    { char: 'ق', name: 'قَاف', word: 'قَمَر', icon: '🌙', sound: 'قَاف' },
+    { char: 'ك', name: 'كَاف', word: 'كِتَاب', icon: '📖', sound: 'كَاف' },
+    { char: 'ل', name: 'لَام', word: 'لَيْمُون', icon: '🍋', sound: 'لَام' },
+    { char: 'م', name: 'مِيم', word: 'مَاء', icon: '💧', sound: 'مِيم' },
+    { char: 'ن', name: 'نُون', word: 'نَجْمَة', icon: '⭐', sound: 'نُون' },
+    { char: 'هـ', name: 'هَاء', word: 'هَاتِف', icon: '📱', sound: 'هَاء' },
+    { char: 'و', name: 'وَاو', word: 'وَرْدَة', icon: '🌹', sound: 'وَاو' },
+    { char: 'ي', name: 'يَاء', word: 'يَد', icon: '✋', sound: 'يَاء' }
+];
+var ar0_learnedLetters = JSON.parse(localStorage.getItem('ar0_learned') || '[]');
+var ar0_currentLetterIndex = 0;
+
+async function ar0_speak(text, repeat, delayMs) {
+    if (!text) return;
+    repeat = repeat || 3; delayMs = delayMs || 700;
+    for (var i = 0; i < repeat; i++) {
+        await speak(text, 'ar', i > 0);
+        if (i < repeat - 1) await new Promise(function(r){ setTimeout(r, delayMs); });
+    }
+}
+function ar0_renderLetters() {
+    var grid = document.getElementById('arLettersGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    AR0_LETTERS.forEach(function(letter, idx) {
+        var learned = ar0_learnedLetters.includes(letter.char);
+        var card = document.createElement('div');
+        card.style.cssText = 'background:' + (learned ? 'linear-gradient(135deg,#16a34a,#15803d)' : 'linear-gradient(135deg,#1e3c72,#2a5298)') + ';border:3px solid #fbbf24;border-radius:20px;padding:15px 10px;text-align:center;cursor:pointer;color:white;';
+        card.innerHTML = '<div style="font-size:3rem;font-weight:900;color:#fbbf24;">' + letter.char + '</div><div style="font-size:1.8rem;">' + letter.icon + '</div><div style="font-size:1rem;font-weight:700;">' + letter.word + '</div>';
+        card.onclick = function() { ar0_openLetter(idx); };
+        grid.appendChild(card);
+    });
+    var fill = document.getElementById('arLettersProgress');
+    var counter = document.getElementById('arLettersCount');
+    if (fill) fill.style.width = (ar0_learnedLetters.length / 28 * 100) + '%';
+    if (counter) counter.textContent = ar0_learnedLetters.length;
+}
+function ar0_openLetter(idx) {
+    ar0_currentLetterIndex = idx;
+    var letter = AR0_LETTERS[idx];
+    var box = document.getElementById('arLetterDetail');
+    if (document.getElementById('arDetailChar')) document.getElementById('arDetailChar').textContent = letter.char;
+    if (document.getElementById('arDetailIcon')) document.getElementById('arDetailIcon').textContent = letter.icon;
+    if (document.getElementById('arDetailWord')) document.getElementById('arDetailWord').textContent = letter.word;
+    if (box) box.style.display = 'flex';
+    ar0_speak(letter.sound, 2, 500).then(function() { ar0_speak(letter.word, 2, 600); });
+}
+function ar0_closeLetterDetail() {
+    var box = document.getElementById('arLetterDetail');
+    if (box) box.style.display = 'none';
+    var letter = AR0_LETTERS[ar0_currentLetterIndex];
+    if (!ar0_learnedLetters.includes(letter.char)) {
+        ar0_learnedLetters.push(letter.char);
+        localStorage.setItem('ar0_learned', JSON.stringify(ar0_learnedLetters));
+        ar0_renderLetters();
+    }
+}
+function ar0_speakCurrentLetter() { ar0_speak(AR0_LETTERS[ar0_currentLetterIndex].sound, 3, 600); }
+function ar0_speakCurrentWord() { ar0_speak(AR0_LETTERS[ar0_currentLetterIndex].word, 3, 600); }
+async function ar0_speakAllLetters() {
+    if (!confirm('🔊 سيتم نطق كل الحروف الـ28. مستعد؟')) return;
+    for (var i = 0; i < AR0_LETTERS.length; i++) {
+        await ar0_speak(AR0_LETTERS[i].sound, 1, 300);
+        await ar0_speak(AR0_LETTERS[i].word, 1, 400);
+        if (!ar0_learnedLetters.includes(AR0_LETTERS[i].char)) ar0_learnedLetters.push(AR0_LETTERS[i].char);
+    }
+    localStorage.setItem('ar0_learned', JSON.stringify(ar0_learnedLetters));
+    ar0_renderLetters();
+    alert('✅ تم نطق كل الحروف!');
+}
+var AR0_PLACEMENT_QUESTIONS = [
+    { text: "ما معنى كلمة 'بَيْت'؟", options: ["مدرسة", "منزل", "مسجد"], level: "A1", correct: 1 },
+    { text: "اختر الجملة الصحيحة: أنا ... إلى المدرسة.", options: ["يذهب", "أذهب", "ذهبت"], level: "A1", correct: 1 },
+    { text: "ما ضد كلمة 'كبير'؟", options: ["صغير", "طويل", "جميل"], level: "A1", correct: 0 },
+    { text: "ما لون السماء؟", options: ["أحمر", "أزرق", "أخضر"], level: "A1", correct: 1 },
+    { text: "كم عدد أيام الأسبوع؟", options: ["5", "7", "10"], level: "A1", correct: 1 },
+    { text: "جمع كلمة 'كِتَاب'؟", options: ["كتب", "كتابات", "كتابين"], level: "A2", correct: 0 },
+    { text: "ما معنى 'الطائر يغرّد'؟", options: ["يطير", "يصوّت", "يأكل"], level: "A2", correct: 1 },
+    { text: "اختر الصحيح: سافرتُ ... القاهرة", options: ["إلى", "على", "في"], level: "A2", correct: 0 },
+    { text: "ما عكس كلمة 'سعيد'؟", options: ["فرحان", "حزين", "نشيط"], level: "A2", correct: 1 },
+    { text: "أكمل: نحن ... الطلاب", options: ["هو", "هم", "نحن"], level: "A2", correct: 1 }
+];
+var ar0_placementAnswers = [];
+function ar0_renderPlacementTest() {
+    var container = document.getElementById('arPlacementQuestions');
+    if (!container) return;
+    if (ar0_placementAnswers.length !== AR0_PLACEMENT_QUESTIONS.length) ar0_placementAnswers = new Array(AR0_PLACEMENT_QUESTIONS.length).fill(null);
+    container.innerHTML = '';
+    AR0_PLACEMENT_QUESTIONS.forEach(function(q, idx) {
+        var saved = ar0_placementAnswers[idx];
+        var levelColor = q.level === 'A1' ? '#22c55e' : '#3b82f6';
+        var optsHtml = '';
+        q.options.forEach(function(opt, oi) {
+            optsHtml += '<div onclick="ar0_selectPlacement(' + idx + ',' + oi + ')" style="background:' + (saved === oi ? '#16a34a' : 'rgba(255,255,255,0.1)') + ';padding:12px;border-radius:15px;cursor:pointer;text-align:center;font-weight:700;color:#fff;border:2px solid ' + (saved === oi ? '#22c55e' : 'transparent') + ';">' + opt + '</div>';
+        });
+        container.innerHTML += '<div style="background:rgba(0,0,0,0.4);border-radius:20px;padding:20px;margin-bottom:15px;border-right:5px solid #f39c12;"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="background:' + levelColor + ';color:#fff;padding:4px 12px;border-radius:15px;font-size:12px;font-weight:900;">' + q.level + '</span><span style="color:#94a3b8;font-size:13px;">سؤال ' + (idx+1) + ' / ' + AR0_PLACEMENT_QUESTIONS.length + '</span></div><div style="color:#fff;font-size:1.1rem;font-weight:700;margin-bottom:12px;">' + q.text + '</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;">' + optsHtml + '</div></div>';
+    });
+}
+function ar0_selectPlacement(qIdx, oIdx) { ar0_placementAnswers[qIdx] = oIdx; ar0_renderPlacementTest(); }
+function ar0_submitPlacementTest() {
+    if (!ar0_placementAnswers.every(function(a){ return a !== null; })) { alert('⚠️ أجب على جميع الأسئلة!'); return; }
+    var scores = { A1: 0, A2: 0 }, totals = { A1: 0, A2: 0 };
+    AR0_PLACEMENT_QUESTIONS.forEach(function(q, idx) { totals[q.level]++; if (ar0_placementAnswers[idx] === q.correct) scores[q.level]++; });
+    var totalCorrect = scores.A1 + scores.A2;
+    var totalQuestions = AR0_PLACEMENT_QUESTIONS.length;
+    var percent = Math.round((totalCorrect / totalQuestions) * 100);
+    var level = 'A1', levelName = 'المبتدئ (A1)';
+    if (scores.A2 / totals.A2 >= 0.6) { level = 'A2'; levelName = 'الأساسي (A2)'; }
+    var studentName = prompt('🎓 أدخل اسمك الكامل:', (currentUser && currentUser.name) || '');
+    if (!studentName || studentName.trim().length < 3) { alert('⚠️ الاسم مطلوب'); return; }
+    studentName = studentName.trim();
+    localStorage.setItem('ar0_studentName', studentName);
+    localStorage.setItem('ar0_placementResult', JSON.stringify({ studentName: studentName, level: level, levelName: levelName, score: totalCorrect, total: totalQuestions, percent: percent, date: new Date().toISOString() }));
+    var el = document.getElementById('arPlacementQuestions');
+    var levelColor = level === 'A2' ? '#3b82f6' : '#22c55e';
+    el.innerHTML = '<div style="background:linear-gradient(135deg,' + levelColor + ',' + levelColor + 'dd);border-radius:25px;padding:30px;text-align:center;color:#fff;"><div style="font-size:5rem;">🎯</div><h2 style="font-size:2rem;">تم تحديد مستواك!</h2><div style="font-size:2.5rem;font-weight:900;color:#fbbf24;margin:20px 0;">' + levelName + '</div><div style="font-size:1.5rem;">✅ ' + totalCorrect + ' / ' + totalQuestions + ' (' + percent + '%)</div></div>';
+    if (window.sendWhatsApp) window.sendWhatsApp('🎓 اختبار عربية\n👤 ' + studentName + '\n📊 ' + levelName);
+}
+function ar0_initTabs() {
+    var tabs = document.querySelectorAll('[data-artab]');
+    tabs.forEach(function(btn) {
+        btn.onclick = function() {
+            var target = btn.getAttribute('data-artab');
+            tabs.forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('#pageArabic .ar-tab-content').forEach(function(c) { c.classList.remove('active-tab'); });
+            var map = { 'level0': 'arTabLevel0', 'placement': 'arTabPlacement' };
+            var el = document.getElementById(map[target]);
+            if (el) el.classList.add('active-tab');
+            if (target === 'level0') ar0_renderLetters();
+            if (target === 'placement') ar0_renderPlacementTest();
+        };
+    });
+}
+function ar0_init() {
+    var container = document.getElementById('arContainer');
+    if (!container) return;
+    container.innerHTML =
+        '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:25px;justify-content:center;">' +
+            '<button class="ar-tab-btn active" data-artab="level0" style="background:linear-gradient(135deg,#f39c12,#e67e22);border:2px solid #fff;padding:12px 26px;border-radius:50px;color:#fff;font-weight:bold;cursor:pointer;font-family:Cairo;">🔤 الحروف</button>' +
+            '<button class="ar-tab-btn" data-artab="placement" style="background:rgba(255,255,255,0.12);border:2px solid transparent;padding:12px 26px;border-radius:50px;color:#fff;font-weight:bold;cursor:pointer;font-family:Cairo;">📝 اختبار المستوى</button>' +
+        '</div>' +
+        '<div id="arTabLevel0" class="ar-tab-content active-tab" style="display:block;background:rgba(255,255,255,0.07);border-radius:30px;padding:25px;margin-bottom:25px;">' +
+            '<h2 style="color:#fbbf24;margin-bottom:10px;">🔤 الحروف الأبجدية</h2>' +
+            '<p style="color:#fff;margin-bottom:15px;">اضغط على أي حرف لسماعه</p>' +
+            '<div style="background:#334155;height:12px;border-radius:10px;overflow:hidden;margin:15px 0;"><div id="arLettersProgress" style="background:linear-gradient(90deg,#fbbf24,#22c55e);height:100%;width:0%;"></div></div>' +
+            '<p style="text-align:center;color:#fff;margin-bottom:15px;"><span id="arLettersCount">0</span> / 28 حرفاً</p>' +
+            '<div id="arLettersGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:15px;"></div>' +
+            '<div style="text-align:center;margin-top:25px;"><button onclick="ar0_speakAllLetters()" style="background:linear-gradient(135deg,#3b82f6,#1e40af);color:#fff;border:none;padding:14px 40px;border-radius:30px;font-family:Cairo;font-weight:900;cursor:pointer;">🔊 نطق كل الحروف</button></div>' +
+        '</div>' +
+        '<div id="arTabPlacement" class="ar-tab-content" style="display:none;background:rgba(255,255,255,0.07);border-radius:30px;padding:25px;">' +
+            '<h2 style="color:#fbbf24;">📝 اختبار تحديد المستوى</h2>' +
+            '<div id="arPlacementQuestions" style="margin-top:15px;"></div>' +
+            '<div style="text-align:center;margin-top:20px;"><button onclick="ar0_submitPlacementTest()" style="background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;border:none;padding:14px 40px;border-radius:30px;font-family:Cairo;font-weight:900;cursor:pointer;">🎯 احسب مستواي</button></div>' +
+        '</div>' +
+        '<div id="arLetterDetail" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.95);z-index:99999;align-items:center;justify-content:center;padding:20px;">' +
+            '<div style="background:linear-gradient(135deg,#1e3c72,#2a5298);border:4px solid #fbbf24;border-radius:30px;padding:35px 30px;max-width:500px;width:100%;text-align:center;color:white;">' +
+                '<div id="arDetailChar" style="font-size:7rem;font-weight:900;color:#fbbf24;">أ</div>' +
+                '<div id="arDetailIcon" style="font-size:4rem;margin:15px 0;">🦁</div>' +
+                '<div id="arDetailWord" style="font-size:2rem;font-weight:900;">أَسَد</div>' +
+                '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px;">' +
+                    '<button onclick="ar0_speakCurrentLetter()" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;padding:15px 30px;border-radius:40px;font-weight:900;cursor:pointer;font-family:Cairo;">🔊 الحرف</button>' +
+                    '<button onclick="ar0_speakCurrentWord()" style="background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;padding:15px 30px;border-radius:40px;font-weight:900;cursor:pointer;font-family:Cairo;">🔊 الكلمة</button>' +
+                    '<button onclick="ar0_closeLetterDetail()" style="background:#334155;color:white;border:none;padding:15px 30px;border-radius:40px;font-weight:900;cursor:pointer;font-family:Cairo;">✖ إغلاق</button>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    ar0_initTabs();
+    ar0_renderLetters();
+}
+function showArabicSection() {
+    if (!isAdminMode && !currentUser) { alert('⚠️ سجّل أولاً'); scrollToRegister(); return; }
+    if (!isAdminMode && !currentUser.subscribed && !isAdminMode) {
+        var logins = parseInt(localStorage.getItem('logins_' + currentUser.firebaseId) || '0');
+        if (logins > 2) { window.__showSubscriptionRequired(currentUser); return; }
+    }
+    stopWelcome();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageArabic').classList.remove('hide');
+    setTimeout(ar0_init, 100);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🧠 قسم الذكاء الاصطناعي — 9 مسارات
+   ═══════════════════════════════════════════════════════════ */
+var aiCurrentPath = null, aiCurrentSlide = 0, aiSlidesArray = [];
+var AI_PATHS = {
+    path1: { icon: '📘', title: 'الأدوات والتطبيقات في التعليم', desc: 'نظرة شاملة على أدوات AI', meta: '📖 5 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:100px;">🧠💡</div><h2 style="color:#fbbf24;font-size:32px;margin:20px 0;">🧠 الذكاء الاصطناعي</h2><p>بقلم: محمد زايد</p></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;text-align:center;margin-bottom:20px;">🎯 التعريف</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:17px;line-height:2;">🧠 تكنولوجيا تحاكي تفكير الإنسان<br>💻 فرع من علوم الحاسوب</div></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;text-align:center;margin-bottom:20px;">🔧 التكنولوجيات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;margin-bottom:15px;">💬 الذكاء التفاعلي — فهم لغة البشر</div><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;">🤖 التعلم الآلي — التعلم من البيانات</div></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;text-align:center;margin-bottom:20px;">🎯 MagicSchool AI</h2><div style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f;padding:25px;border-radius:20px;font-size:17px;line-height:2;">🌟 +5 ملايين مدرس<br>🎁 +80 أداة تربوية</div></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;text-align:center;"><div style="font-size:70px;">🤝</div><h2 style="color:#fbbf24;margin:20px 0;">الخلاصة</h2><p style="font-size:20px;">AI مساعد، وليس بديلاً عن المعلم</p></div>'
+    ]},
+    path2: { icon: '📙', title: 'دليل المعلم الشامل', desc: 'ورشة تطبيقية بـ 10 أدوات', meta: '📖 3 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:100px;">👨‍🏫🤖</div><h2 style="color:#fbbf24;font-size:28px;">📙 دليل المعلم</h2></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;text-align:center;margin-bottom:20px;">✨ فوائد AI</h2><div style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#064e3b;padding:25px;border-radius:20px;font-size:17px;line-height:2.3;">⏰ توفير الوقت<br>🎨 محتوى احترافي<br>📈 تفاعل الطلبة</div></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;text-align:center;margin-bottom:20px;">🛠️ التطبيقات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;margin-bottom:12px;">📝 MagicSchool AI</div><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;">🎨 Canva Education</div></div>'
+    ]},
+    path3: { icon: '📗', title: 'من الفكرة إلى الدرس الجاهز', desc: 'إنتاج درس تفاعلي كامل', meta: '📖 4 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:100px;">🚀📚</div><h2 style="color:#fbbf24;font-size:28px;">📗 من الفكرة إلى الدرس</h2></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;text-align:center;margin-bottom:20px;">🎨 Ideogram</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;">🎨 توليد الصور — ideogram.ai</div></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;text-align:center;margin-bottom:20px;">🔊 ElevenLabs</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;">🔊 تحويل النص إلى صوت</div></div>',
+        '<div style="background:linear-gradient(135deg,#1e1b4b,#4c1d95);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;text-align:center;margin-bottom:20px;">🎓 مشروع</h2><div style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f;padding:25px;border-radius:20px;font-size:17px;line-height:2;">🎯 إنتاج درس تفاعلي كامل</div></div>'
+    ]},
+    path4: { icon: '🌙', title: 'اللغة العربية والذكاء الاصطناعي', desc: 'محاضرة شاملة عن حضور العربية في العصر الرقمي', meta: '📖 6 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#0b2b44,#0e3b5e);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:80px;">🌙🧠</div><h2 style="color:#fbbf24;font-size:28px;">اللغة العربية والذكاء الاصطناعي</h2><p>محمد زايد — خبير دولي</p></div>',
+        '<div style="background:linear-gradient(135deg,#0b2b44,#0e3b5e);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🌍 اللغة العربية في العالم</h2><div style="background:rgba(255,255,255,.1);padding:25px;border-radius:15px;text-align:center;"><div style="font-size:60px;color:#fbbf24;font-weight:900;">371,400,000</div><div>متكلم في 22 دولة</div></div></div>',
+        '<div style="background:linear-gradient(135deg,#0b2b44,#0e3b5e);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">⭐ خصائص اللغة العربية</h2><ul style="line-height:2.2;font-size:17px;padding-right:25px;"><li>أوسع لغة — 12 مليون كلمة</li><li>الإيجاز والاختصار</li><li>النحو والصرف</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#0b2b44,#0e3b5e);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">💻 اللسانيات الرقمية</h2><p style="font-size:16px;line-height:1.9;">فرع من اللسانيات يستخدم التكنولوجيا الرقمية لدراسة اللغة (NLP).</p></div>',
+        '<div style="background:linear-gradient(135deg,#0b2b44,#0e3b5e);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🤖 دور AI في العربية</h2><ul style="line-height:2.1;font-size:16px;padding-right:25px;"><li>معالجة النصوص العربية</li><li>الترجمة الآلية</li><li>تصحيح الأخطاء</li><li>تحويل النص إلى كلام</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#0b2b44,#0e3b5e);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;text-align:center;"><div style="font-size:60px;">🎓</div><h2 style="color:#fbbf24;">الخاتمة</h2><p>اللغة العربية تمتلك مقومات كبيرة للنجاح في العصر الرقمي</p></div>'
+    ]},
+    path5: { icon: '🤖', title: 'الذكاء الاصطناعي وتطبيقاته', desc: 'نظرة شاملة على AI', meta: '📖 5 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#4c1d95,#6d28d9);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:80px;">🤖💡</div><h2 style="color:#fbbf24;font-size:28px;">الذكاء الاصطناعي وتطبيقاته</h2></div>',
+        '<div style="background:linear-gradient(135deg,#4c1d95,#6d28d9);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">📖 التعريف</h2><ul style="line-height:2.2;font-size:17px;padding-right:25px;"><li>محاكاة تفكير الإنسان</li><li>حل المشاكل واتخاذ القرارات</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#4c1d95,#6d28d9);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🔧 الأنواع</h2><ul style="line-height:2.2;font-size:17px;padding-right:25px;"><li>التعلم الآلي</li><li>التعلم العميق</li><li>الشبكات العصبية</li><li>معالجة اللغات الطبيعية</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#4c1d95,#6d28d9);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🎯 التطبيقات</h2><ul style="line-height:2.1;font-size:16px;padding-right:25px;"><li>التعليم الذكي</li><li>الترجمة</li><li>الروبوتات</li><li>السيارات الذاتية</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#4c1d95,#6d28d9);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;text-align:center;"><div style="font-size:60px;">🎓</div><h2 style="color:#fbbf24;">شكراً</h2><p>محمد زايد — 📱 +21655335477</p></div>'
+    ]},
+    path6: { icon: '🔬', title: 'تأثير تقنيات AI في البحث العلمي', desc: 'نظرة تحليلية', meta: '📖 5 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:80px;">🔬🧠</div><h2 style="color:#fbbf24;font-size:26px;">تأثير AI في البحث العلمي</h2><p>محمد زايد</p></div>',
+        '<div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">📖 المقدمة</h2><p style="font-size:17px;line-height:1.9;">البداية: 1950 على يد آلان تورينغ.</p></div>',
+        '<div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🧠 AI مقابل الإنسان</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;"><div style="background:rgba(139,92,246,.2);padding:20px;border-radius:15px;"><strong>🤖 AI:</strong><br>مهام متكررة<br>تحليل البيانات</div><div style="background:rgba(251,191,36,.2);padding:20px;border-radius:15px;"><strong>🧑 الإنسان:</strong><br>وعي ومشاعر<br>فهم معقد</div></div></div>',
+        '<div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">📊 النتائج</h2><p style="font-size:16px;">ازداد عدد المقالات العلمية التي تستخدم AI:</p><div style="display:flex;gap:20px;justify-content:center;align-items:center;margin-top:20px;"><div style="background:rgba(255,255,255,.1);padding:25px;border-radius:15px;text-align:center;"><div style="font-size:40px;color:#fbbf24;font-weight:900;">1130</div><div>2003</div></div><div style="font-size:30px;color:#fbbf24;">➡️</div><div style="background:rgba(34,197,94,.2);padding:25px;border-radius:15px;text-align:center;"><div style="font-size:40px;color:#22c55e;font-weight:900;">16000</div><div>2024</div></div></div></div>',
+        '<div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;text-align:center;"><div style="font-size:80px;">🙏</div><h2 style="color:#fbbf24;">شكراً</h2><p>محمد زايد — 📱 +21655335477</p></div>'
+    ]},
+    path7: { icon: '📡', title: 'اللغة العربية وتكنولوجيات الاتصال', desc: 'حوسبة اللغة العربية', meta: '📖 5 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#065f46,#047857);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:80px;">🌙💻</div><h2 style="color:#fbbf24;font-size:26px;">اللغة العربية والتكنولوجيات</h2></div>',
+        '<div style="background:linear-gradient(135deg,#065f46,#047857);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">📊 إحصائيات</h2><ul style="line-height:2;font-size:16px;padding-right:25px;"><li>العربية: المرتبة الرابعة</li><li>237 مليون مستخدم إنترنت</li><li>5.2% من المستخدمين</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#065f46,#047857);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">📚 المحتوى الرقمي</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;"><div style="background:rgba(34,197,94,.2);padding:20px;border-radius:15px;text-align:center;"><div style="font-size:44px;color:#22c55e;font-weight:900;">&lt;1%</div><div>المحتوى العربي</div></div><div style="background:rgba(220,38,38,.2);padding:20px;border-radius:15px;text-align:center;"><div style="font-size:44px;color:#ef4444;font-weight:900;">58%</div><div>المحتوى الإنجليزي</div></div></div></div>',
+        '<div style="background:linear-gradient(135deg,#065f46,#047857);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">⚠️ النقائص</h2><ul style="line-height:2.1;font-size:16px;padding-right:25px;"><li>التأخير في الاستخدام</li><li>بعثرة الجهود</li><li>ضعف الاستثمار</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#065f46,#047857);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;text-align:center;"><div style="font-size:80px;">🙏</div><h2 style="color:#fbbf24;">شكراً</h2><p>www.dala.org.tn</p></div>'
+    ]},
+    path8: { icon: '🎓', title: 'اللغة العربية وتطوير التعليم بالAI', desc: 'كيف يطور AI تعليم العربية', meta: '📖 5 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#be185d,#9d174d);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:80px;">🎓🌙</div><h2 style="color:#fbbf24;font-size:26px;">اللغة العربية وتطوير التعليم</h2></div>',
+        '<div style="background:linear-gradient(135deg,#be185d,#9d174d);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🌍 العربية في العالم</h2><ul style="line-height:2.1;font-size:16px;padding-right:25px;"><li>22 دولة رسمية</li><li>371.4 مليون متكلم</li><li>المرتبة السادسة عالمياً</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#be185d,#9d174d);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🎯 AI في التعليم</h2><ul style="line-height:2.1;font-size:15px;padding-right:25px;"><li>منصات تفاعلية (Duolingo)</li><li>تصحيح تلقائي (Qalam.ai)</li><li>تحليل مستوى اللغة</li><li>محتوى مخصص (GPT)</li><li>واقع معزز (VR/AR)</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#be185d,#9d174d);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">📚 المستويات</h2><div style="background:rgba(34,197,94,.2);padding:15px;border-radius:15px;margin-bottom:10px;"><strong>1️⃣ مبتدئ:</strong> قطرب، Read Along</div><div style="background:rgba(59,130,246,.2);padding:15px;border-radius:15px;margin-bottom:10px;"><strong>2️⃣ متوسط:</strong> Nahla wa Nahil، ChatGPT</div><div style="background:rgba(251,191,36,.2);padding:15px;border-radius:15px;"><strong>3️⃣ متقدم:</strong> GPT، AraBERT</div></div>',
+        '<div style="background:linear-gradient(135deg,#be185d,#9d174d);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;text-align:center;"><div style="font-size:80px;">🙏</div><h2 style="color:#fbbf24;">شكراً</h2><p>محمد زايد</p></div>'
+    ]},
+    path9: { icon: '🔒', title: 'الأمن السيبراني والذكاء الاصطناعي', desc: 'حماية الفضاء الرقمي', meta: '📖 4 شرائح', slides: [
+        '<div style="background:linear-gradient(135deg,#991b1b,#7f1d1d);border:4px solid #fbbf24;border-radius:30px;padding:40px;text-align:center;color:#fff;"><div style="font-size:80px;">🔒🤖</div><h2 style="color:#fbbf24;font-size:28px;">الأمن السيبراني والذكاء الاصطناعي</h2></div>',
+        '<div style="background:linear-gradient(135deg,#991b1b,#7f1d1d);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🔒 الأمن السيبراني</h2><p style="font-size:16px;">تكنولوجيات لحماية المؤسسات والأشخاص من الهجمات.</p></div>',
+        '<div style="background:linear-gradient(135deg,#991b1b,#7f1d1d);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;"><h2 style="color:#fbbf24;margin-bottom:20px;">🛡️ الحماية</h2><ul style="line-height:2.1;font-size:16px;padding-right:25px;"><li>جدران الحماية</li><li>مرشحات DNS</li><li>مضادات الفيروسات</li></ul></div>',
+        '<div style="background:linear-gradient(135deg,#991b1b,#7f1d1d);border:4px solid #fbbf24;border-radius:30px;padding:40px;color:#fff;text-align:center;"><div style="font-size:80px;">🙏</div><h2 style="color:#fbbf24;">شكراً</h2><p>محمد زايد — 📱 +21655335477</p></div>'
+    ]}
+};
+
+function showAISection() {
+    if (!isAdminMode && !currentUser) { alert('⚠️ سجّل أولاً'); scrollToRegister(); return; }
+    if (!isAdminMode && currentUser && !currentUser.subscribed) {
+        var logins = parseInt(localStorage.getItem('logins_' + currentUser.firebaseId) || '0');
+        if (logins > 2) { window.__showSubscriptionRequired(currentUser); return; }
+    }
+    stopWelcome();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageAI').classList.remove('hide');
+    renderAIPathsList();
+}
+function renderAIPathsList() {
+    var container = document.getElementById('aiPathsContainer');
+    if (!container) return;
+    var html = '';
+    Object.keys(AI_PATHS).forEach(function(key) {
+        var p = AI_PATHS[key];
+        html += '<div onclick="openAIPath(\'' + key + '\')" style="background:linear-gradient(135deg,#6d28d9,#4c1d95);border:3px solid #fbbf24;border-radius:25px;padding:30px 25px;text-align:center;cursor:pointer;color:white;"><div style="font-size:75px;margin-bottom:18px;">' + p.icon + '</div><div style="font-size:20px;font-weight:900;color:#fbbf24;margin-bottom:12px;">' + p.title + '</div><div style="font-size:14px;color:#e2e8f0;font-weight:600;margin-bottom:15px;">' + p.desc + '</div><div style="padding:12px;background:rgba(0,0,0,0.35);border-radius:15px;font-size:13px;font-weight:700;color:#fbbf24;">' + p.meta + '</div></div>';
+    });
+    container.innerHTML = html;
+}
+function openAIPath(pathId) {
+    if (!isAdminMode && !currentUser) { alert('⚠️ سجّل أولاً'); scrollToRegister(); return; }
+    aiCurrentPath = pathId; aiCurrentSlide = 0;
+    aiSlidesArray = AI_PATHS[pathId].slides;
+    renderAISlide();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageAISlideViewer').classList.remove('hide');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function renderAISlide() {
+    if (!aiSlidesArray || aiSlidesArray.length === 0) return;
+    document.getElementById('aiSlideContent').innerHTML = aiSlidesArray[aiCurrentSlide];
+    document.getElementById('aiProgressBar').style.width = ((aiCurrentSlide + 1) / aiSlidesArray.length) * 100 + '%';
+    document.getElementById('aiSlideCounter').textContent = '🎯 الشريحة ' + (aiCurrentSlide + 1) + ' من ' + aiSlidesArray.length;
+    var prevBtn = document.getElementById('aiPrevBtn');
+    var nextBtn = document.getElementById('aiNextBtn');
+    if (prevBtn) prevBtn.disabled = aiCurrentSlide === 0;
+    if (nextBtn) { nextBtn.disabled = false; nextBtn.textContent = aiCurrentSlide === aiSlidesArray.length - 1 ? '🏁 النهاية' : 'التالي ◀'; }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function aiNextSlide() { if (aiCurrentSlide < aiSlidesArray.length - 1) { aiCurrentSlide++; renderAISlide(); } else alert('🎉 أكملت المسار!'); }
+function aiPrevSlide() { if (aiCurrentSlide > 0) { aiCurrentSlide--; renderAISlide(); } }
+function exitAIToPaths() {
+    if (window.currentAudio) { try { window.currentAudio.pause(); } catch(e){} }
+    if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch(e){} }
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageAI').classList.remove('hide');
+    renderAIPathsList();
+}
+function showAICertificates() {
+    if (!isAdminMode && !currentUser) { alert('⚠️ سجّل أولاً'); scrollToRegister(); return; }
+    stopWelcome();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageAICertificates').classList.remove('hide');
+    document.getElementById('aiCertificatesList').innerHTML = '<div style="text-align:center;padding:50px 20px;color:#fff;"><div style="font-size:80px;">🎓</div><h2 style="color:#fbbf24;">قريباً</h2></div>';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🔗 ربط الدوال على window
+   ═══════════════════════════════════════════════════════════ */
+window.submitVisitorGateway = submitVisitorGateway;
+window.initGatewayCategories = initGatewayCategories;
+window.updateUserBanner = updateUserBanner;
+window.moveToSections = moveToSections;
+window.renderTrialCounter = renderTrialCounter;
+window.logoutUser = logoutUser;
+window.showAdminLogin = showAdminLogin;
+window.enterAdmin = enterAdmin;
+window.logoutAdmin = logoutAdmin;
+window.adminGoToSections = adminGoToSections;
+window.adminRefresh = adminRefresh;
+window.backToWelcome = backToWelcome;
+window.goToHome = goToHome;
+window.scrollToRegister = scrollToRegister;
+window.showSubscriptionModal = showSubscriptionModal;
+window.closeSubscriptionModal = closeSubscriptionModal;
+window.exitPlatform = exitPlatform;
+window.showProfile = showProfile;
+window.openStage = openStage;
+window.showExistingUserLogin = showExistingUserLogin;
+window.showArabicSection = showArabicSection;
+window.ar0_openLetter = ar0_openLetter;
+window.ar0_closeLetterDetail = ar0_closeLetterDetail;
+window.ar0_speakCurrentLetter = ar0_speakCurrentLetter;
+window.ar0_speakCurrentWord = ar0_speakCurrentWord;
+window.ar0_speakAllLetters = ar0_speakAllLetters;
+window.ar0_selectPlacement = ar0_selectPlacement;
+window.ar0_submitPlacementTest = ar0_submitPlacementTest;
+window.showAISection = showAISection;
+window.openAIPath = openAIPath;
+window.aiNextSlide = aiNextSlide;
+window.aiPrevSlide = aiPrevSlide;
+window.exitAIToPaths = exitAIToPaths;
+window.showAICertificates = showAICertificates;
+
+console.log('✅ الجزء 4-أ جاهز');
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   🛡️ نظام الحماية الثلاثي:
+   1. شريط تحذيري للزوار
+   2. إشعار المشرف بالبريد
+   3. اشتراك إجباري بعد محاولتين
+   ═══════════════════════════════════════════════════════════ */
+(function () {
+    'use strict';
+
+    var MAX_FREE_LOGINS = 2;
+    var PRICE_TND = 20;
+    var PRICE_USD = 20;
+    var PRICE_EUR = 20;
+    var WHATSAPP_ADMIN = '21655335477';
+    var EDINAR_NUMBER = 'اضف رقم e-Dinar هنا';
+
+    function getUser() {
+        try { return JSON.parse(localStorage.getItem('currentUser') || 'null'); }
+        catch (e) { return null; }
+    }
+    function isAdmin() {
+        return window.isAdminMode === true ||
+               localStorage.getItem('zaiedAdminPermanent') === '1';
+    }
+    function isRegistered() {
+        return !!(getUser() || isAdmin());
+    }
+    function isSubscribed() {
+        var u = getUser();
+        if (!u) return false;
+        return u.subscribed === true ||
+               localStorage.getItem('subscribed_' + u.firebaseId) === '1';
+    }
+    function isTunisian(u) {
+        return u && u.country && u.country.indexOf('تونس') !== -1;
+    }
+
+    /* ═══ 1️⃣ الشريط التحذيري للزوار ═══ */
+    function showVisitorBanner() {
+        if (isRegistered()) {
+            var old = document.getElementById('visitorBanner');
+            if (old) { old.remove(); document.body.classList.remove('has-visitor-banner'); }
+            return;
+        }
+        if (document.getElementById('visitorBanner')) return;
+
+        var style = document.createElement('style');
+        style.textContent =
+            '@keyframes vShine{0%{background-position:-200% center}100%{background-position:200% center}}' +
+            '@keyframes vScroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}' +
+            '#visitorBanner{background:linear-gradient(90deg,#f59e0b,#fbbf24,#fcd34d,#fbbf24,#f59e0b);' +
+            'background-size:200% auto;animation:vShine 3s linear infinite}' +
+            '#visitorBanner .vb-marquee{display:inline-block;white-space:nowrap;animation:vScroll 22s linear infinite}' +
+            'body.has-visitor-banner{padding-top:70px!important}';
+        document.head.appendChild(style);
+
+        var b = document.createElement('div');
+        b.id = 'visitorBanner';
+        b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999999;padding:14px 20px;display:flex;align-items:center;gap:15px;border-bottom:4px solid #dc2626;box-shadow:0 4px 20px rgba(0,0,0,0.3);direction:rtl;font-family:Cairo,sans-serif;';
+        b.innerHTML = '<div style="flex:1;overflow:hidden;height:30px;position:relative;"><div class="vb-marquee" style="font-size:17px;font-weight:900;color:#7f1d1d;line-height:30px;">🔒 لا يمكنك الدخول إلى المنصة إلا بعد التسجيل &nbsp;•&nbsp; التسجيل مجاني تماماً &nbsp;•&nbsp; سجّل الآن واستمتع بكل المحتوى &nbsp;•&nbsp; 🔒 لا يمكنك الدخول إلا بعد التسجيل</div></div><button onclick="window.__goRegister()" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fff;border-radius:25px;padding:8px 20px;font-family:Cairo,sans-serif;font-weight:900;cursor:pointer;font-size:15px;white-space:nowrap;box-shadow:0 4px 15px rgba(34,197,94,0.6);">🔑 سجّل الآن مجاناً</button>';
+        document.body.appendChild(b);
+        document.body.classList.add('has-visitor-banner');
+    }
+
+    window.__goRegister = function () {
+        var el = document.getElementById('gwName') ||
+                 document.getElementById('regName') ||
+                 document.getElementById('visitorGateway');
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(function () {
+                var inp = document.getElementById('gwName');
+                if (inp) try { inp.focus(); } catch (e) {}
+            }, 700);
+        }
+    };
+
+    /* ═══ 2️⃣ مراقبة الحالة ═══ */
+    function watchState() {
+        setInterval(function () {
+            if (isRegistered()) {
+                var b = document.getElementById('visitorBanner');
+                if (b) { b.remove(); document.body.classList.remove('has-visitor-banner'); }
+            } else {
+                if (!document.getElementById('visitorBanner')) showVisitorBanner();
+            }
+            if (isSubscribed()) {
+                var m = document.getElementById('subRequiredModal');
+                if (m) m.remove();
+            }
+        }, 1500);
+    }
+
+    /* ═══ 3️⃣ اعتراض الدوال المحمية ═══ */
+    var PROTECTED = [
+        'showChildrenTech', 'showArabicSection', 'showGamesSection', 'showWorkshopsSection',
+        'showScientificLessons', 'showBooksSection', 'showLecturesSection',
+        'showAcademicProjects', 'showFullDictionary', 'showAISection',
+        'showAICertificates', 'openBook', 'openPrimaryStage', 'openPrimaryLesson1',
+        'openMiddleStage', 'openMiddleLesson1', 'openHighStage', 'openPythonLesson',
+        'showProfile', 'openStage'
+    ];
+
+    function hookProtected() {
+        PROTECTED.forEach(function (name) {
+            var original = window[name];
+            if (typeof original !== 'function') return;
+            if (original.__hooked) return;
+
+            var wrapped = function () {
+                if (!isRegistered()) {
+                    window.__goRegister();
+                    return;
+                }
+                var u = getUser();
+                if (!isAdmin() && u && !isSubscribed()) {
+                    var c = parseInt(localStorage.getItem('logins_' + u.firebaseId) || '0');
+                    if (c > MAX_FREE_LOGINS) {
+                        window.__showSubscriptionRequired(u);
+                        return;
+                    }
+                }
+                return original.apply(this, arguments);
+            };
+            wrapped.__hooked = true;
+            window[name] = wrapped;
+        });
+    }
+
+    /* ═══ 4️⃣ التهيئة ═══ */
+    function init() {
+        console.log('🛡️ تفعيل نظام الحماية الثلاثي...');
+        if (!isRegistered()) showVisitorBanner();
+        setTimeout(function () { hookProtected(); }, 2500);
+        setTimeout(function () { hookProtected(); }, 5000);
+        watchState();
+        console.log('✅ الحماية جاهزة — 20 TND/20 USD/20 EUR');
+        console.log('🔑 __activateSubscription("id") — __resetLoginCount("id")');
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 2000); });
+    } else {
+        setTimeout(init, 2000);
+    }
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   🔊 نظام النطق
+   ═══════════════════════════════════════════════════════════ */
+window.currentAudio = null;
+window.isPlaying = false;
+window.stopRequested = false;
+function speak(text, lang, isCont) {
+    return new Promise(function(resolve) {
+        if (!text || !text.trim()) { resolve(); return; }
+        if (!isCont) {
+            try {
+                if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; }
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+            } catch(e) {}
+        }
+        var langMap = { ar: 'ar-SA', fr: 'fr-FR', en: 'en-US' };
+        var targetLang = langMap[lang] || 'ar-SA';
+        var targetCode = lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar');
+        var done = false;
+        var finish = function() { if (!done) { done = true; resolve(); } };
+
+        if (window.speechSynthesis) {
+            var voices = window.speechSynthesis.getVoices();
+            var voice = voices.find(function(v) {
+                return v.lang && v.lang.toLowerCase().indexOf(targetCode) === 0;
+            });
+            if (voice) {
+                var u = new SpeechSynthesisUtterance(text);
+                u.lang = targetLang; u.voice = voice; u.rate = 0.85;
+                u.onend = finish;
+                u.onerror = function() { tryGoogle(); };
+                try { window.speechSynthesis.speak(u); return; } catch(e) {}
+            }
+        }
+        tryGoogle();
+        function tryGoogle() {
+            try {
+                var audio = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&q=' +
+                    encodeURIComponent(text) + '&tl=' + targetCode + '&client=tw-ob&ttsspeed=0.85');
+                window.currentAudio = audio;
+                audio.onended = function() { window.currentAudio = null; finish(); };
+                audio.onerror = finish;
+                var p = audio.play(); if (p && p.catch) p.catch(finish);
+            } catch(e) { finish(); }
+        }
+    });
+}
+window.speak = speak;
+window.speakBook = speak;
+
+function updateStatus(t) { var e = document.getElementById('statusBox'); if (e) e.innerText = t; }
+function resetWelcomeBtn() {
+    window.isPlaying = false; window.stopRequested = false;
+    var w = document.getElementById('welcomeBtn'); var s = document.getElementById('stopBtn');
+    if (w) w.style.display = 'inline-block';
+    if (s) s.classList.remove('visible');
+}
+async function playWelcome() {
+    if (window.isPlaying) { stopWelcome(); return; }
+    window.isPlaying = true; window.stopRequested = false;
+    document.getElementById('welcomeBtn').style.display = 'none';
+    document.getElementById('stopBtn').classList.add('visible');
+    updateStatus("🎙️ الترحيب...");
+    await speak("مرحباً بكم في منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس.", 'ar');
+    await speak("منصة تعليمية للأطفال والشباب والأساتذة والمعلمين والأولياء والباحثين وذوي الاحتياجات الخاصة.", 'ar', true);
+    await speak("سجلوا دون مقابل واغتنموا الفرصة للحاق بالركب.", 'ar', true);
+    await speak("Bienvenue sur la plateforme Zaied.", 'fr');
+    await speak("Welcome to Zaied Platform.", 'en');
+    updateStatus("✅ اكتمل"); resetWelcomeBtn();
+}
+function stopWelcome() {
+    window.stopRequested = true;
+    if (window.currentAudio) { try { window.currentAudio.pause(); } catch(e){} window.currentAudio = null; }
+    if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch(e){} }
+    window.isPlaying = false;
+    updateStatus("⏹️ تم الإيقاف"); resetWelcomeBtn();
+}
+window.playWelcome = playWelcome;
+window.stopWelcome = stopWelcome;
+window.updateStatus = updateStatus;
+
+/* ═══════════════════════════════════════════════════════════
+   📚 دروس (قسم التربية التكنولوجية — بدون تغيير)
+   ═══════════════════════════════════════════════════════════ */
+var originalBookSlides = [];
+var originalExamQuestions = [];
+var primaryLesson1Slides = [];
+var primaryExercisesData = [];
+var primaryFinalExamData = [];
+var primaryLessonVideosSection = '';
+var pythonLessonSlides = [];
+var pythonExercisesData = [];
+var pythonExamData = [];
+var pythonVideosSection = '';
+
+var currentLessonType = null, currentLessonSlide = 0, currentSlidesArray = [];
+var currentExerciseIndex = 0, exerciseAttempts = {}, exerciseScore = 0, exerciseMistakes = [];
+var selectedMatchLeft = null, matchPairsState = {};
+var currentExamIndex = 0, examAnswers = [], currentExercisesSet = [], currentExamSet = [];
+
+function openBook() {
+    if (!currentUser && !isAdminMode) { window.__goRegister(); return; }
+    if (!isAdminMode && currentUser && !currentUser.subscribed) {
+        var logins = parseInt(localStorage.getItem('logins_' + currentUser.firebaseId) || '0');
+        if (logins > 2) { window.__showSubscriptionRequired(currentUser); return; }
+    }
+    alert('📖 كتاب الأطفال والحاسوب\n\nقيد الإعداد');
+}
+function openPrimaryStage() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pagePrimaryStage').classList.remove('hide'); }
+function openPrimaryLesson1() {
+    if (!currentUser && !isAdminMode) { window.__goRegister(); return; }
+    if (!isAdminMode && currentUser && !currentUser.subscribed) {
+        var logins = parseInt(localStorage.getItem('logins_' + currentUser.firebaseId) || '0');
+        if (logins > 2) { window.__showSubscriptionRequired(currentUser); return; }
+    }
+    alert('🧒 الدرس الأول — الابتدائي\n\nقيد الإعداد');
+}
+function openMiddleStage() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageMiddleStage').classList.remove('hide'); }
+function openMiddleLesson1() { alert('📝 درس Microsoft Word\n\nقيد الإعداد'); }
+function openHighStage() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageHighStage').classList.remove('hide'); }
+function openPythonLesson() {
+    if (!currentUser && !isAdminMode) { window.__goRegister(); return; }
+    if (!isAdminMode && currentUser && !currentUser.subscribed) {
+        var logins = parseInt(localStorage.getItem('logins_' + currentUser.firebaseId) || '0');
+        if (logins > 2) { window.__showSubscriptionRequired(currentUser); return; }
+    }
+    alert('🐍 درس بايثون\n\nقيد الإعداد');
+}
+function nextLessonSlide() { alert('قيد الإعداد'); }
+function prevLessonSlide() { alert('قيد الإعداد'); }
+function exitToSections() { stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageChildrenTech').classList.remove('hide'); }
+
+window.openBook = openBook;
+window.openPrimaryStage = openPrimaryStage;
+window.openPrimaryLesson1 = openPrimaryLesson1;
+window.openMiddleStage = openMiddleStage;
+window.openMiddleLesson1 = openMiddleLesson1;
+window.openHighStage = openHighStage;
+window.openPythonLesson = openPythonLesson;
+window.nextLessonSlide = nextLessonSlide;
+window.prevLessonSlide = prevLessonSlide;
+window.exitToSections = exitToSections;
+window.showChildrenTech = function() {
+    if (!currentUser && !isAdminMode) { window.__goRegister(); return; }
+    stopWelcome();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageChildrenTech').classList.remove('hide');
+};
+window.showGamesSection = function() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageGames').classList.remove('hide'); };
+window.showWorkshopsSection = function() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageWorkshops').classList.remove('hide'); };
+window.showScientificLessons = function() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageAISection').classList.remove('hide'); };
+window.showBooksSection = function() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageBooks').classList.remove('hide'); };
+window.showLecturesSection = function() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageLectures').classList.remove('hide'); };
+window.showAcademicProjects = function() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageAcademicProjects').classList.remove('hide'); };
+window.showFullDictionary = function() { if (!currentUser && !isAdminMode) { window.__goRegister(); return; } stopWelcome(); document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); }); document.getElementById('pageDictionary').classList.remove('hide'); };
+
+/* ═══════════════════════════════════════════════════════════
+   🚀 التهيئة النهائية
+   ═══════════════════════════════════════════════════════════ */
+window.addEventListener('load', async function() {
+    var stored = localStorage.getItem('currentUser');
+    var adminPerm = localStorage.getItem('zaiedAdminPermanent') === '1';
+    initGatewayCategories();
+    if (adminPerm) {
+        isAdminMode = true; window.isAdminMode = true;
+        userStatus = 'admin'; window.userStatus = 'admin';
+        var statsBtn = document.getElementById('statsBtn');
+        if (statsBtn) statsBtn.style.display = 'block';
+        setTimeout(function() { window.sdLoad(); }, 800);
+    } else if (stored) {
+        try {
+            var u = JSON.parse(stored);
+            if (u && u.email) {
+                var fresh = await window.fbGetUserByEmail(u.email);
+                if (fresh) {
+                    currentUser = fresh; window.currentUser = fresh;
+                    userStatus = fresh.subscribed ? 'subscriber' : 'registered';
+                    window.userStatus = userStatus;
+                } else {
+                    currentUser = u; window.currentUser = u;
+                    userStatus = 'registered'; window.userStatus = 'registered';
+                }
+            }
+        } catch (err) { console.warn(err); }
+    }
+    updateUserBanner();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    if (currentUser || isAdminMode) {
+        document.getElementById('pageHome').classList.remove('hide');
+        var wn = document.getElementById('welcomeName');
+        if (wn && currentUser) wn.textContent = currentUser.name;
+        if (wn && isAdminMode) wn.textContent = 'المشرف العام';
+        renderTrialCounter();
+    } else {
+        document.getElementById('pageWelcome').classList.remove('hide');
+    }
+    try {
+        var today = new Date().toDateString();
+        if (localStorage.getItem('zaied_last_visit') !== today && window.fbSaveVisitor) {
+            await window.fbSaveVisitor({
+                name: (currentUser && currentUser.name) || 'زائر',
+                phone: (currentUser && currentUser.whatsapp) || '',
+                email: (currentUser && currentUser.email) || '',
+                country: (currentUser && currentUser.country) || '',
+                city: (currentUser && currentUser.city) || '',
+                device: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+                browser: (navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)\/[\d.]+/) || ['Unknown'])[0],
+                date: today
+            });
+            localStorage.setItem('zaied_last_visit', today);
+        }
+    } catch(e) { console.warn(e); }
+    console.log('🎉 منصة زايد جاهزة');
+    console.log('🔑 كلمة مرور المشرف: 012345');
+});
+
+window.addEventListener('click', function(e) {
+    var modal = document.getElementById('subscriptionModal');
+    if (modal && e.target === modal) closeSubscriptionModal();
+});
+</script>
+</body>
+<script>
+/* ═══════════════════════════════════════════════════════
+   🛠️ الإصلاحات النهائية: الإشعارات + عرض القوائم
+   ═══════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    // ═══ 1️⃣ إصلاح إرسال الإشعارات ═══
+    window.sendWhatsApp = async function(message, userData) {
+        try {
+            var body = message || 'إشعار';
+            if (userData) {
+                body = '📋 بيانات المسجل الجديد:\n' +
+                       '━━━━━━━━━━━━━━━━━━━━\n' +
+                       '👤 الاسم: ' + (userData.name || '-') + '\n' +
+                       '💼 المهنة: ' + (userData.profession || '-') + '\n' +
+                       '🎯 الاختصاص: ' + (userData.specialty || '-') + '\n' +
+                       '📧 البريد: ' + (userData.email || '-') + '\n' +
+                       '📱 الواتساب: ' + (userData.whatsapp || '-') + '\n' +
+                       '🌍 البلد: ' + (userData.country || '-') + '\n' +
+                       '🏙️ المدينة: ' + (userData.city || '-') + '\n' +
+                       '🏷️ الفئة: ' + (userData.category || '-') + '\n' +
+                       '📅 التاريخ: ' + (userData.date || new Date().toLocaleString('ar-EG')) + '\n' +
+                       '━━━━━━━━━━━━━━━━━━━━';
+            }
+            var r = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    access_key: '23f532ab-bd1b-4362-b980-2bab75c5b48b',
+                    subject: userData ? '🎓 تسجيل جديد: ' + userData.name : '🎓 إشعار من منصة زايد',
+                    from_name: 'منصة زايد',
+                    email: 'zeidoun2021@gmail.com',
+                    message: body
+                })
+            });
+            var d = await r.json();
+            console.log('📧 الإرسال:', d.success ? '✅' : '❌');
+            return d.success;
+        } catch(e) { console.error('📧 خطأ:', e); return false; }
+    };
+
+    // ═══ 2️⃣ إصلاح عرض قائمة المسجلين ═══
+    window.renderUsers = function() {
+        var list = document.getElementById('list');
+        if (!list) return;
+        list.innerHTML = '';
+        var q = (document.getElementById('q').value || '').toLowerCase();
+        var users = (window.allUsersCache || []).filter(function(u) {
+            if (!q) return true;
+            var s = ((u.name||'')+(u.email||'')+(u.whatsapp||'')+(u.profession||'')+(u.specialty||'')+(u.city||'')+(u.country||'')).toLowerCase();
+            return s.indexOf(q) !== -1;
+        });
+        if (users.length === 0) {
+            list.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا نتائج</p>';
+            return;
+        }
+        users.forEach(function(u, i) {
+            var logins = localStorage.getItem('logins_' + u.firebaseId) || '0';
+            var subStatus = u.subscribed ? '💎 مشترك' : '✅ مجاني';
+            var div = document.createElement('div');
+            div.className = 'sd-user';
+            div.style.cssText = 'background:#f8fafc;border-radius:12px;padding:12px;margin-bottom:8px;border-right:4px solid #3b82f6;color:#0f172a;font-size:13px;';
+            div.innerHTML = '<div style="font-weight:900;color:#dc2626;font-size:15px;">' + (i+1) + '. ' + (u.name || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;margin-top:3px;">📧 ' + (u.email || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">📱 ' + (u.whatsapp || '-') + ' • 🏙️ ' + (u.city || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">💼 ' + (u.profession || '-') + ' • 🎯 ' + (u.specialty || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">🌍 ' + (u.country || '-') + ' • 🏷️ ' + (u.category || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">🔢 عدد الدخولات: ' + logins + ' • ' + subStatus + '</div>' +
+                (u.date ? '<div style="color:#94a3b8;font-size:11px;">📅 ' + u.date + '</div>' : '') +
+                '<div style="margin-top:8px;">' +
+                '<button onclick="window.__activateSubscription(\'' + u.firebaseId + '\');window.renderUsers();" style="padding:5px 12px;background:#22c55e;color:white;border:none;border-radius:15px;font-family:Cairo;font-weight:900;font-size:11px;cursor:pointer;margin-right:5px;">💎 تفعيل الاشتراك</button>' +
+                '<button onclick="window.__resetLoginCount(\'' + u.firebaseId + '\');window.renderUsers();" style="padding:5px 12px;background:#3b82f6;color:white;border:none;border-radius:15px;font-family:Cairo;font-weight:900;font-size:11px;cursor:pointer;">🔄 تصفير</button>' +
+                '</div>';
+            list.appendChild(div);
+        });
+    };
+
+    // ═══ 3️⃣ إصلاح عرض قائمة الزوار ═══
+    window.renderVisitors = function() {
+        var list = document.getElementById('list');
+        if (!list) return;
+        list.innerHTML = '';
+        var visitors = window.allVisitorsCache || [];
+        if (visitors.length === 0) {
+            list.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا زوار بعد</p>';
+            return;
+        }
+        visitors.forEach(function(v, i) {
+            var time = v.visitedAt && v.visitedAt.seconds ? new Date(v.visitedAt.seconds*1000).toLocaleString('ar-EG') : '';
+            var div = document.createElement('div');
+            div.className = 'sd-user';
+            div.style.cssText = 'background:#f8fafc;border-radius:12px;padding:12px;margin-bottom:8px;border-right:4px solid #8b5cf6;color:#0f172a;font-size:13px;';
+            div.innerHTML = '<div style="font-weight:900;color:#8b5cf6;font-size:15px;">' + (i+1) + '. ' + (v.name || 'زائر') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">📱 ' + (v.phone || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">📧 ' + (v.email || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">🌍 ' + (v.country || '-') + ' • 🏙️ ' + (v.city || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">💻 ' + (v.device || '-') + ' • 🌐 ' + (v.browser || '-') + '</div>' +
+                (time ? '<div style="color:#94a3b8;font-size:11px;">📅 ' + time + '</div>' : '');
+            list.appendChild(div);
+        });
+    };
+
+    // ═══ 4️⃣ التحميل التلقائي للبيانات ═══
+    window.sdLoad = async function() {
+        try {
+            var u = await window.fbGetAllUsers();
+            var v = await window.fbGetAllVisitors();
+            window.allUsersCache = u;
+            window.allVisitorsCache = v;
+            var t = new Date().toDateString();
+            var tv = v.filter(function(x) {
+                return x.visitedAt && x.visitedAt.seconds && new Date(x.visitedAt.seconds*1000).toDateString() === t;
+            });
+            var el;
+            el = document.getElementById('nU'); if (el) el.textContent = u.length;
+            el = document.getElementById('nV'); if (el) el.textContent = v.length;
+            el = document.getElementById('nS'); if (el) el.textContent = u.filter(function(x){ return x.subscribed; }).length;
+            el = document.getElementById('nT'); if (el) el.textContent = tv.length;
+            window.renderUsers();
+            console.log('✅ تم تحديث البيانات:', u.length, 'مسجل •', v.length, 'زائر');
+        } catch(e) { console.error('❌ خطأ في التحميل:', e); }
+    };
+
+    console.log('✅ الإصلاحات النهائية جاهزة — كل شيء يعمل الآن');
+})();
+</script>
+</html>
