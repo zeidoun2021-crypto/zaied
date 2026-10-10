@@ -1841,4 +1841,178 @@ window.enterAdmin = async function(){ var p = document.getElementById('adminPass
 console.log('✅ نظام منع المشرف من الإحصائيات جاهز');
 })();
 </script>
+    <script>
+/* ═══════════════════════════════════════════════════════
+   🛠️ الإصلاحات النهائية الكاملة — نسخة 2026
+   1. حفظ بيانات الزوار الكاملة
+   2. منع المشرف من الإحصائيات
+   3. ربط التسجيل بقائمة الزوار
+   4. إغلاق جلسة المشرف تلقائياً (15 دقيقة)
+   5. زر إغلاق يدوي للجلسة
+   ═══════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    var ADMIN_TIMEOUT = 15 * 60 * 1000; // 15 دقيقة
+
+    function isAdminNow() {
+        return window.isAdminMode === true ||
+               sessionStorage.getItem('zaiedAdminSession') === '1' ||
+               window.userStatus === 'admin';
+    }
+
+    /* ═══ 1️⃣ حفظ بيانات الزوار الكاملة ═══ */
+    window.logVisit = async function() {
+        try {
+            var today = new Date().toDateString();
+            if (localStorage.getItem('zaied_last_visit') === today) return;
+            if (isAdminNow()) { console.log('👑 مشرف — لن يُسجَّل'); return; }
+            var u = null;
+            try { u = JSON.parse(localStorage.getItem('currentUser') || 'null'); } catch(e) {}
+            var visitorData = {
+                name: (u && u.name) || 'زائر جديد',
+                phone: (u && u.whatsapp) || '',
+                email: (u && u.email) || '',
+                country: (u && u.country) || '',
+                city: (u && u.city) || '',
+                category: (u && u.category) || '',
+                profession: (u && u.profession) || '',
+                specialty: (u && u.specialty) || '',
+                device: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'هاتف' : 'حاسوب',
+                browser: (navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)/) || ['غير معروف'])[0],
+                date: today,
+                isRegistered: !!(u && u.email)
+            };
+            if (window.fbSaveVisitor) await window.fbSaveVisitor(visitorData);
+            localStorage.setItem('zaied_last_visit', today);
+        } catch(e) {}
+    };
+
+    /* ═══ 2️⃣ منع المشرف من الإحصائيات ═══ */
+    var oSV = window.fbSaveVisitor;
+    window.fbSaveVisitor = async function(v) {
+        if (isAdminNow()) { console.log('👑 مشرف — لن يُسجَّل'); return true; }
+        if (oSV) return oSV.apply(this, arguments);
+        return false;
+    };
+
+    var oSU = window.fbSaveUser;
+    window.fbSaveUser = async function(u) {
+        if (isAdminNow()) { console.log('👑 مشرف — لن يُحفظ كمستخدم'); return 'admin-skip'; }
+        if (oSU) return oSU.apply(this, arguments);
+        return null;
+    };
+
+    /* ═══ 3️⃣ ربط التسجيل بقائمة الزوار ═══ */
+    var oSub = window.submitVisitorGateway;
+    window.submitVisitorGateway = async function() {
+        var r = await (oSub ? oSub.apply(this, arguments) : null);
+        setTimeout(function() {
+            try {
+                var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+                if (u && u.email) {
+                    var visitorData = {
+                        name: u.name, phone: u.whatsapp, email: u.email,
+                        country: u.country, city: u.city, category: u.category,
+                        profession: u.profession, specialty: u.specialty,
+                        device: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'هاتف' : 'حاسوب',
+                        browser: (navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)/) || ['غير معروف'])[0],
+                        date: new Date().toDateString(), isRegistered: true
+                    };
+                    if (window.fbSaveVisitor) window.fbSaveVisitor(visitorData);
+                    localStorage.setItem('zaied_last_visit', new Date().toDateString());
+                    console.log('✅ تم تسجيل بيانات المسجل في قائمة الزوار');
+                }
+            } catch(e) {}
+        }, 2500);
+        return r;
+    };
+
+    /* ═══ 4️⃣ إغلاق جلسة المشرف تلقائياً ═══ */
+    var lastActivity = Date.now();
+    var timer = null;
+
+    function resetTimer() {
+        lastActivity = Date.now();
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(checkInactivity, ADMIN_TIMEOUT);
+    }
+
+    function checkInactivity() {
+        if (!isAdminNow()) return;
+        if (Date.now() - lastActivity >= ADMIN_TIMEOUT) {
+            closeAdminSession(true);
+        } else { resetTimer(); }
+    }
+
+    function closeAdminSession(silent) {
+        try { sessionStorage.removeItem('zaiedAdminSession'); } catch(e) {}
+        try { localStorage.removeItem('zaiedAdminPermanent'); } catch(e) {}
+        try { localStorage.removeItem('zaied_last_visit'); } catch(e) {}
+        window.isAdminMode = false;
+        window.userStatus = 'visitor';
+        var s = document.getElementById('statsBtn'); if (s) s.style.display = 'none';
+        var d = document.getElementById('dash'); if (d) d.style.display = 'none';
+        document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+        var w = document.getElementById('pageWelcome'); if (w) w.classList.remove('hide');
+        if (window.updateUserBanner) window.updateUserBanner();
+        if (!silent) alert('✅ تم إغلاق جلسة المشرف بنجاح');
+        else console.log('⏰ أُغلقت الجلسة تلقائياً بعد 15 دقيقة');
+    }
+
+    window.closeAdminSession = closeAdminSession;
+
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(function(evt) {
+        document.addEventListener(evt, function() { if (isAdminNow()) resetTimer(); }, { passive: true });
+    });
+
+    /* ═══ 5️⃣ اعتراض دخول المشرف لتشغيل المؤقت ═══ */
+    var oEA = window.enterAdmin;
+    window.enterAdmin = async function() {
+        var p = document.getElementById('adminPassInput');
+        if (p && p.value.trim() === '012345') {
+            try { localStorage.removeItem('zaied_last_visit'); } catch(e) {}
+            sessionStorage.setItem('zaiedAdminSession', '1');
+            var r = oEA ? oEA.apply(this, arguments) : null;
+            resetTimer();
+            console.log('👑 جلسة مشرف — ستُغلق تلقائياً بعد 15 دقيقة');
+            return r;
+        }
+        if (oEA) return oEA.apply(this, arguments);
+    };
+
+    /* ═══ 6️⃣ زر إغلاق يدوي ═══ */
+    function addCloseBtn() {
+        if (!isAdminNow()) return;
+        var hp = document.getElementById('pageHome');
+        if (!hp || hp.classList.contains('hide')) return;
+        if (document.getElementById('closeAdminBtn')) return;
+        var wc = hp.querySelector('.welcome-card');
+        if (!wc) return;
+        var b = document.createElement('button');
+        b.id = 'closeAdminBtn';
+        b.innerHTML = '🚪 إغلاق جلسة المشرف نهائياً';
+        b.style.cssText = 'display:block;margin:15px auto;padding:14px 28px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo,sans-serif;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 6px 20px rgba(220,38,38,0.5);';
+        b.onclick = function() {
+            if (confirm('⚠️ إغلاق جلسة المشرف؟')) {
+                closeAdminSession(false);
+                setTimeout(function() { location.reload(); }, 500);
+            }
+        };
+        wc.appendChild(b);
+    }
+    setInterval(addCloseBtn, 2000);
+
+    /* ═══ 7️⃣ إغلاق عند مغادرة الصفحة ═══ */
+    window.addEventListener('beforeunload', function() {
+        if (isAdminNow()) { try { sessionStorage.removeItem('zaiedAdminSession'); } catch(e) {} }
+    });
+
+    console.log('✅ الإصلاحات النهائية الكاملة مطبقة');
+    console.log('   👑 منع المشرف من الإحصائيات');
+    console.log('   📋 بيانات كاملة للزوار');
+    console.log('   ⏰ إغلاق تلقائي بعد 15 دقيقة');
+    console.log('   🚪 زر إغلاق يدوي');
+})();
+</script>
 </html>
