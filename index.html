@@ -2015,4 +2015,21 @@ console.log('✅ نظام منع المشرف من الإحصائيات جاهز
     console.log('   🚪 زر إغلاق يدوي');
 })();
 </script>
+    <script>
+/* ═══ 📢 تحديث نص الشريط التحذيري ═══ */
+(function() {
+    'use strict';
+    var NEW_TEXT = '🔔 تم تحديث المنصة — قائمة الزوار الآن تعرض <strong>المسجلين الفعليين فقط</strong> &nbsp;•&nbsp; سجّل من جديد حتى لو كنت مسجلاً سابقاً &nbsp;•&nbsp; التسجيل مجاني تماماً &nbsp;•&nbsp; 🔔 سجّل الآن';
+    function updateBannerText() {
+        var marquee = document.querySelector('#visitorBanner .vb-marquee');
+        if (marquee) {
+            if (marquee.innerHTML !== NEW_TEXT) {
+                marquee.innerHTML = NEW_TEXT;
+            }
+        }
+    }
+    setInterval(updateBannerText, 500);
+    console.log('✅ سيتم تحديث نص الشريط تلقائياً');
+})();
+</script>
 </html>
