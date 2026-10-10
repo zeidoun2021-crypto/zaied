@@ -2032,4 +2032,111 @@ console.log('✅ نظام منع المشرف من الإحصائيات جاهز
     console.log('✅ سيتم تحديث نص الشريط تلقائياً');
 })();
 </script>
+    <script>
+/* ═══════════════════════════════════════════════════════════
+   🧹 التنظيف التلقائي للزوار — نسخة 2026
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   عند دخول أي زائر جديد:
+   ✅ يُمسح cache القديم
+   ✅ تُحمَّل نسخة جديدة من الموقع
+   ❌ لا يمس حساب المستخدم أو المشرف
+   ═══════════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    // ⚠️ غيّر هذا الرقم كلما أردت تنظيفاً جديداً للجميع
+    var CACHE_VERSION = 'v2026-02';
+
+    // 🔍 هل أنا زائر جديد (غير مسجل وغير مشرف)؟
+    function isNewVisitor() {
+        try {
+            if (window.isAdminMode === true) return false;
+            if (sessionStorage.getItem('zaiedAdminSession') === '1') return false;
+            if (localStorage.getItem('currentUser')) return false;
+            if (localStorage.getItem('zaiedAdminPermanent') === '1') return false;
+            return true;
+        } catch(e) { return false; }
+    }
+
+    // 🧹 تنظيف كاش الزوار فقط (لا يمس المستخدمين)
+    function cleanVisitorCache() {
+        var currentVersion = localStorage.getItem('zaied_cache_version');
+        if (currentVersion === CACHE_VERSION) {
+            console.log('✅ الكاش محدّث');
+            return false;
+        }
+
+        console.log('🧹 تنظيف كاش الزوار القديم...');
+
+        // ─── امسح فقط ما يخص الزوار ───
+        var visitorKeysToClear = [
+            'zaied_last_visit',
+            'visitorAttempts',
+            'visitorBanner_dismissed',
+            'zaied_cache_version'
+        ];
+
+        // امسح مفاتيح الزوار
+        visitorKeysToClear.forEach(function(key) {
+            try { localStorage.removeItem(key); } catch(e) {}
+        });
+
+        // امسح أي مفاتيح مؤقتة تبدأ بـ "_temp"
+        try {
+            Object.keys(localStorage).forEach(function(key) {
+                if (key.indexOf('_temp_visitor') === 0 ||
+                    key.indexOf('_visitor_temp') === 0 ||
+                    key.indexOf('zaied_visitor_') === 0) {
+                    localStorage.removeItem(key);
+                }
+            });
+        } catch(e) {}
+
+        // امسح sessionStorage (بدون لمس المشرف)
+        try {
+            var adminSession = sessionStorage.getItem('zaiedAdminSession');
+            sessionStorage.clear();
+            if (adminSession) sessionStorage.setItem('zaiedAdminSession', adminSession);
+        } catch(e) {}
+
+        // احفظ نسخة الكاش الجديدة
+        try { localStorage.setItem('zaied_cache_version', CACHE_VERSION); } catch(e) {}
+
+        console.log('✅ تم تنظيف كاش الزوار — النسخة الجديدة: ' + CACHE_VERSION);
+        return true;
+    }
+
+    // 🚀 التهيئة
+    function init() {
+        if (isNewVisitor()) {
+            var cleaned = cleanVisitorCache();
+            if (cleaned) {
+                // أعد تحميل الصفحة لضمان كاش نظيف 100%
+                console.log('🔄 جاري إعادة التحميل...');
+                setTimeout(function() {
+                    try {
+                        var url = new URL(window.location.href);
+                        url.searchParams.set('_v', CACHE_VERSION);
+                        window.location.replace(url.toString());
+                    } catch(e) {
+                        window.location.reload();
+                    }
+                }, 500);
+                return;
+            }
+        } else {
+            console.log('👤 مستخدم مسجل أو مشرف — لا حاجة لتنظيف الكاش');
+        }
+    }
+
+    // انتظر تحميل الصفحة
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(init, 800); });
+    } else {
+        setTimeout(init, 800);
+    }
+
+    console.log('✅ نظام التنظيف التلقائي للزوار جاهز');
+})();
+</script>
 </html>
