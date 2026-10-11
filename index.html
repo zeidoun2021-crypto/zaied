@@ -2480,7 +2480,177 @@ console.log('✅ نظام منع المشرف من الإحصائيات جاهز
     console.log('✅ النظام النهائي جاهز');
 })();
 </script>
-   
+   <script>
+/* ═══ 🛡️ التحقق الكامل — اسم ثلاثي + واتساب + إلزام + 3 محاولات ═══ */
+(function() {
+    'use strict';
+    var MAX_TRIES = 3;
+
+    function showErr(fieldId, errId, msg) {
+        var field = document.getElementById(fieldId);
+        if (!field) return;
+        var err = document.getElementById(errId);
+        if (!err) {
+            err = document.createElement('div');
+            err.id = errId;
+            err.style.cssText = 'color:#dc2626;background:#fee2e2;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;margin-top:5px;text-align:center;';
+            field.parentNode.insertBefore(err, field.nextSibling);
+        }
+        err.textContent = msg;
+        err.style.display = 'block';
+    }
+    function hideErr(errId) {
+        var err = document.getElementById(errId);
+        if (err) { err.style.display = 'none'; err.textContent = ''; }
+    }
+    function toLatin(s) {
+        return String(s).replace(/[٠-٩]/g, function(c) { return '٠١٢٣٤٥٦٧٨٩'.indexOf(c); })
+                         .replace(/[۰-۹]/g, function(c) { return '۰۱۲۳۴۵۶۷۸۹'.indexOf(c); });
+    }
+
+    function attachPhoneValidation() {
+        var ph = document.getElementById('gwPhone');
+        if (!ph || ph.dataset.validated === '1') return;
+        ph.dataset.validated = '1';
+        ph.addEventListener('input', function() {
+            var v = this.value;
+            var clean = toLatin(v).replace(/[^\d\+\s\-]/g, '');
+            if (v !== clean) this.value = clean;
+            var digits = clean.replace(/[\s\-\+]/g, '');
+            if (digits.length === 0) { hideErr('gwPhoneError'); return; }
+            if (digits.length < 6) { showErr('gwPhone', 'gwPhoneError', 'الرقم قصير جداً (6 أرقام على الأقل)'); return; }
+            if (digits.length > 15) { showErr('gwPhone', 'gwPhoneError', 'الرقم طويل جداً (15 رقماً كحد أقصى)'); return; }
+            hideErr('gwPhoneError');
+        });
+        ph.addEventListener('paste', function() {
+            var self = this;
+            setTimeout(function() { self.value = toLatin(self.value).replace(/[^\d\+\s\-]/g, ''); }, 10);
+        });
+    }
+
+    function attachNameValidation() {
+        var nm = document.getElementById('gwName');
+        if (!nm || nm.dataset.validated === '1') return;
+        nm.dataset.validated = '1';
+        nm.addEventListener('input', function() {
+            var v = this.value.trim();
+            if (v.length === 0) { hideErr('gwNameError'); return; }
+            var words = v.split(/\s+/).filter(function(w) { return w.length > 0; });
+            if (words.length < 3) { showErr('gwName', 'gwNameError', 'الاسم يجب أن يكون ثلاثياً على الأقل'); return; }
+            if (words.length > 6) { showErr('gwName', 'gwNameError', 'الاسم طويل جداً (6 كلمات كحد أقصى)'); return; }
+            if (!/^[\u0600-\u06FFa-zA-Z\s]+$/.test(v)) { showErr('gwName', 'gwNameError', 'أحرف عربية أو لاتينية فقط'); return; }
+            hideErr('gwNameError');
+        });
+    }
+
+    window.__tries = 0;
+    window.submitVisitorGateway = async function() {
+        attachPhoneValidation();
+        attachNameValidation();
+
+        var n = (document.getElementById('gwName').value||'').trim();
+        var p = (document.getElementById('gwProfession').value||'').trim();
+        var sp = (document.getElementById('gwSpecialty').value||'').trim();
+        var e = (document.getElementById('gwEmail').value||'').trim().toLowerCase();
+        var wRaw = (document.getElementById('gwPhone').value||'').trim();
+        var w = toLatin(wRaw).replace(/[^\d\+\s\-]/g, '');
+        if (wRaw !== w) document.getElementById('gwPhone').value = w;
+        var c = (document.getElementById('gwCountry').value||'').trim();
+        var city = (document.getElementById('gwCity').value||'').trim();
+        var cat = (document.querySelector('input[name="gwCat"]:checked')||{}).value||'';
+        var errBox = document.getElementById('gwError');
+        var errs = [];
+
+        var words = n.split(/\s+/).filter(function(x) { return x.length > 0; });
+        if (words.length < 3) errs.push('الاسم (ثلاثي على الأقل)');
+        if (!p || p.length < 2) errs.push('المهنة');
+        if (!sp || sp.length < 2) errs.push('الاختصاص');
+        if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) errs.push('البريد الإلكتروني');
+        var phoneDigits = w.replace(/[\s\-\+]/g, '');
+        if (phoneDigits.length < 6 || phoneDigits.length > 15) errs.push('رقم الواتساب (6-15 رقم)');
+        if (!c || c.length < 2) errs.push('البلد');
+        if (!city || city.length < 2) errs.push('المدينة');
+        if (!cat) errs.push('الفئة');
+
+        if (errs.length > 0) {
+            window.__tries++;
+            var rem = MAX_TRIES - window.__tries;
+            if (errBox) {
+                errBox.style.display = 'block';
+                errBox.innerHTML = '⚠️ البيانات غير مكتملة<br><br>الحقول الناقصة:<br>• ' + errs.join('<br>• ') + '<br><br>👈 يُرجى إكمال جميع الحقول للمتابعة.';
+            }
+            if (window.__tries >= MAX_TRIES) {
+                alert('🕊️ شكراً لزيارتك منصة زايد\n\n━━━━━━━━━━━━━━━━━━━━\n\nلم تكتمل البيانات المطلوبة.\n\nيُرجى المحاولة لاحقاً بعد تجهيز بياناتك.\n\nستُغلق الجلسة الآن بأمان.');
+                try { sessionStorage.clear(); localStorage.clear(); } catch(e) {}
+                setTimeout(function() { window.location.replace('https://www.google.com'); }, 500);
+                return false;
+            }
+            alert('⚠️ البيانات غير مكتملة\n\nالحقول الناقصة:\n• ' + errs.join('\n• ') + '\n\n📌 المحاولات المتبقية: ' + rem + '\n\n👈 يُرجى إكمال جميع الحقول.');
+            return false;
+        }
+
+        window.__tries = 0;
+        var btn = document.getElementById('gwSubmitBtn');
+        if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري التسجيل...'; }
+
+        try {
+            var existing = await window.fbGetUserByEmail(e);
+            if (existing) {
+                window.currentUser = existing;
+                localStorage.setItem('currentUser', JSON.stringify(existing));
+                localStorage.setItem('zaiedVisitorOK', '1');
+                window.userStatus = existing.subscribed ? 'subscriber' : 'registered';
+                if (window.updateUserBanner) window.updateUserBanner();
+                alert('✅ مرحباً بعودتك ' + existing.name + '!');
+                if (window.moveToSections) window.moveToSections();
+                return true;
+            }
+
+            var userData = {
+                name: n, profession: p, specialty: sp, email: e,
+                whatsapp: w, country: c, city: city, category: cat,
+                date: new Date().toLocaleString('ar-EG'),
+                status: 'registered', loginCount: 1, subscribed: false, blocked: false
+            };
+            var fbId = await window.fbSaveUser(userData);
+            if (!fbId) {
+                alert('⚠️ خطأ في التسجيل');
+                if (btn) { btn.disabled = false; btn.textContent = '🔑 ابدأ الآن مجاناً'; }
+                return false;
+            }
+            userData.firebaseId = fbId;
+            window.currentUser = userData;
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            localStorage.setItem('zaiedVisitorOK', '1');
+            localStorage.setItem('logins_' + fbId, '0');
+            window.userStatus = 'registered';
+            if (window.sendWhatsApp) {
+                window.sendWhatsApp('🎓 تسجيل جديد\n👤 ' + n + '\n💼 ' + p + '\n🎯 ' + sp + '\n📧 ' + e + '\n📱 ' + w + '\n🌍 ' + c + ' — ' + city + '\n🏷️ ' + cat, userData);
+            }
+            alert('✅ مرحباً ' + n + '! تم تسجيلك بنجاح');
+            if (window.updateUserBanner) window.updateUserBanner();
+            if (window.moveToSections) window.moveToSections();
+            return true;
+        } catch (err) {
+            if (errBox) { errBox.style.display = 'block'; errBox.innerHTML = '⚠️ خطأ: ' + err.message; }
+            if (btn) { btn.disabled = false; btn.textContent = '🔑 ابدأ الآن مجاناً'; }
+            return false;
+        }
+    };
+
+    function initValidation() {
+        attachPhoneValidation();
+        attachNameValidation();
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(initValidation, 1500); });
+    } else {
+        setTimeout(initValidation, 1500);
+    }
+
+    console.log('✅ النظام الكامل: اسم ثلاثي + واتساب + إلزام + 3 محاولات');
+})();
+</script>
     
     </html>
   
