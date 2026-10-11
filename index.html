@@ -3652,6 +3652,62 @@ setInterval(function() {
 
 console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 تمرين + اختبار + شهادة');
 </script>
+    <script>
+/* ═══════════════════════════════════════════════════════════
+   🔊 زر "اقرأ الشرح بالعربية" — تلقائي لكل شريحة
+   ═══════════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    function addSpeakButton() {
+        var content = document.getElementById('lessonViewerContent');
+        if (!content) return;
+
+        var bookText = content.querySelector('.book-text');
+        if (!bookText) return;
+        if (content.querySelector('.auto-slide-speak')) return;
+
+        var text = bookText.textContent.trim();
+        if (!text || text.length < 5) return;
+
+        var wrap = document.createElement('div');
+        wrap.style.cssText = 'text-align:center;margin:15px 0;';
+        wrap.innerHTML = '<button type="button" class="auto-slide-speak btn-speak" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:white;padding:12px 28px;border-radius:30px;border:3px solid #fbbf24;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 4px 15px rgba(220,38,38,0.4);">🔊 اقرأ الشرح بالعربية</button>';
+
+        var btn = wrap.querySelector('button');
+        btn.onclick = function() {
+            if (btn.innerHTML.indexOf('⏹️') !== -1) {
+                try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch(e) {}
+                try { if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; } } catch(e) {}
+                btn.innerHTML = '🔊 اقرأ الشرح بالعربية';
+                return;
+            }
+            btn.innerHTML = '⏹️ جاري النطق...';
+            speak(text, 'ar').then(function() {
+                btn.innerHTML = '🔊 اقرأ الشرح بالعربية';
+            });
+        };
+
+        bookText.parentNode.insertBefore(wrap, bookText.nextSibling);
+    }
+
+    function initObserver() {
+        var viewer = document.getElementById('lessonViewerContent');
+        if (viewer && !viewer.__speakObs) {
+            viewer.__speakObs = new MutationObserver(function() {
+                setTimeout(addSpeakButton, 200);
+            });
+            viewer.__speakObs.observe(viewer, { childList: true, subtree: true });
+        }
+    }
+
+    setInterval(function() { initObserver(); addSpeakButton(); }, 500);
+    setTimeout(initObserver, 1000);
+    setTimeout(addSpeakButton, 1500);
+
+    console.log('✅ زر "اقرأ الشرح بالعربية" جاهز — تلقائي لكل شريحة');
+})();
+</script>
     
     </html>
   
