@@ -3128,7 +3128,97 @@ console.log('✅ كتاب الأطفال جاهز — 19 شريحة + 50 سؤا�
     console.log('✅ كود تصحيح صور RAM/ROM جاهز');
 })();
 </script>
-    
+    <script>
+/* ═══════════════════════════════════════════════════════════
+   🔊 زر نطق تلقائي تحت كل صورة — نسخة دائمة
+   ═══════════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    function getLabel(img) {
+        var src = (img.getAttribute('src') || '').toLowerCase();
+        var alt = (img.getAttribute('alt') || '').trim();
+        var map = [
+            ['ram-cpu', 'المعالج والذاكرة'],
+            ['ram', 'ذاكرة RAM'],
+            ['rom', 'ذاكرة ROM'],
+            ['cpu', 'المعالج'],
+            ['mrkzyt', 'المعالج'],
+            ['camera', 'الكاميرا الرقمية'],
+            ['camescope', 'الكاميسكوب'],
+            ['souris', 'الفأرة'],
+            ['fart', 'الفأرة'],
+            ['clavier', 'لوحة المفاتيح'],
+            ['mfatyh', 'لوحة المفاتيح'],
+            ['monitor', 'الشاشة'],
+            ['shasht', 'الشاشة'],
+            ['laser', 'الطابعة'],
+            ['imprimante', 'الطابعة'],
+            ['tab', 'الطابعة'],
+            ['scanner', 'الماسح'],
+            ['modem', 'الموديم'],
+            ['mwdym', 'الموديم'],
+            ['microphone', 'المصدح'],
+            ['plotter', 'الراسم'],
+            ['rasm', 'الراسم'],
+            ['slb', 'القرص الصلب'],
+            ['lyzry', 'القرص الليزري'],
+            ['peripheriques', 'اللواحق'],
+            ['connecteurs', 'النواقل'],
+            ['carte', 'البطاقات الإلكترونية'],
+            ['internet', 'الشبكات'],
+            ['cloud', 'الحوسبة السحابية'],
+            ['cyber', 'الأمن الرقمي'],
+            ['ai.jpg', 'الذكاء الاصطناعي'],
+            ['programmation', 'البرمجة'],
+            ['matricielle', 'طابعة إبرية'],
+            ['jet-dencre', 'طابعة نفاثة'],
+            ['lmsyt', 'الشاشة اللمسية'],
+            ['rswmyt', 'اللوحة الرسومية'],
+            ['swrt-zayd', 'المؤلف'],
+            ['alatfal', 'التربية التكنولوجية'],
+            ['haswb', 'الحاسوب'],
+            ['qalam', 'القلم الضوئي']
+        ];
+        for (var i = 0; i < map.length; i++) {
+            if (src.indexOf(map[i][0]) !== -1) return map[i][1];
+        }
+        return alt || 'صورة توضيحية';
+    }
+
+    function addButtons() {
+        var imgs = document.querySelectorAll('#lessonViewerContent img');
+        imgs.forEach(function(img) {
+            if (img.dataset.btnAdded === '1') return;
+            img.dataset.btnAdded = '1';
+            var label = getLabel(img);
+            var wrap = document.createElement('div');
+            wrap.style.cssText = 'text-align:center;margin:10px 0;';
+            wrap.innerHTML = '<button type="button" class="btn-speak" style="background:linear-gradient(135deg,#16a34a,#15803d);color:white;padding:10px 22px;border-radius:25px;border:2px solid #fbbf24;font-family:Cairo;font-weight:900;font-size:14px;cursor:pointer;">🔊 ' + label + '</button>';
+            var btn = wrap.querySelector('button');
+            btn.onclick = function() { speak(label, 'ar'); };
+            if (img.parentNode) img.parentNode.insertBefore(wrap, img.nextSibling);
+        });
+    }
+
+    function initObserver() {
+        var viewer = document.getElementById('lessonViewerContent');
+        if (viewer && !viewer.__imgObserver) {
+            viewer.__imgObserver = new MutationObserver(function() {
+                setTimeout(addButtons, 100);
+            });
+            viewer.__imgObserver.observe(viewer, { childList: true, subtree: true });
+        }
+    }
+
+    setInterval(function() { initObserver(); addButtons(); }, 500);
+    setTimeout(initObserver, 1000);
+    setTimeout(addButtons, 1500);
+    setTimeout(addButtons, 3000);
+
+    console.log('✅ زر النطق التلقائي تحت كل صورة — جاهز');
+})();
+</script>
     
     </html>
   
