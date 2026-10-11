@@ -3074,6 +3074,60 @@ window.submitOriginalExam = function() {
 
 console.log('✅ كتاب الأطفال جاهز — 19 شريحة + 50 سؤال مع أزرار النطق');
 </script>
+    <script>
+/* ═══ 🖼️ تصحيح صورة الشريحة 7-8 (RAM و ROM) ═══ */
+(function() {
+    'use strict';
+    function fixSlide() {
+        if (!window.originalBookSlides || !window.originalBookSlides.length) {
+            setTimeout(fixSlide, 500);
+            return;
+        }
+        var ramUrl = 'https://i.postimg.cc/zBBzZW0f/RAM.jpg';
+        var romUrl = 'https://i.postimg.cc/vH96NF4P/ROM.jpg';
+        var newSlide = '<div class="slide-card">' +
+            '<div class="note">📖 صفحة 7-8</div>' +
+            '<div class="image-box">' +
+                '<div class="image-row">' +
+                    '<img src="' + ramUrl + '" alt="RAM" style="max-height:200px;border-radius:15px;">' +
+                    '<img src="' + romUrl + '" alt="ROM" style="max-height:200px;border-radius:15px;">' +
+                '</div>' +
+            '</div>' +
+            '<div class="dialogue">' +
+                '<div class="computer">💻 الحاسوب: الذاكرة الحية (RAM) لا تحتفظ بالمعطيات عند انقطاع الكهرباء، أما الذاكرة الميتة (ROM) فهي لا تضيع المعطيات.</div>' +
+            '</div>' +
+            '<div class="translation-box">' +
+                '<span class="translation-ar">💾 RAM (ذاكرة حية)</span> | ' +
+                '<span class="translation-fr">mémoire vive</span> | ' +
+                '<span class="translation-en">Random Access Memory</span><br>' +
+                '<span class="translation-ar">💾 ROM (ذاكرة ميتة)</span> | ' +
+                '<span class="translation-fr">mémoire morte</span> | ' +
+                '<span class="translation-en">Read Only Memory</span>' +
+            '</div>' +
+            '<div>' +
+                '<button class="btn-speak" onclick="speak(\'الذاكرة الحية لا تحتفظ بالبيانات\', \'ar\')">🔊 عربي</button> ' +
+                '<button class="btn-speak btn-speak-fr" onclick="speak(\'mémoire vive\', \'fr\')">🔊 Français</button> ' +
+                '<button class="btn-speak btn-speak-en" onclick="speak(\'RAM\', \'en\')">🔊 English</button>' +
+            '</div>' +
+        '</div>';
+        for (var i = 0; i < window.originalBookSlides.length; i++) {
+            var slide = window.originalBookSlides[i];
+            if (slide.indexOf('RAM') !== -1 && slide.indexOf('ROM') !== -1 && slide.indexOf('mémoire') !== -1) {
+                window.originalBookSlides[i] = newSlide;
+                console.log('✅ تم تصحيح الشريحة 7-8 — الصور الصحيحة (RAM و ROM)');
+                return;
+            }
+        }
+        console.log('⚠️ لم يتم العثور على شريحة RAM/ROM');
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(fixSlide, 1000); });
+    } else {
+        setTimeout(fixSlide, 1000);
+    }
+    console.log('✅ كود تصحيح صور RAM/ROM جاهز');
+})();
+</script>
     
     
     </html>
