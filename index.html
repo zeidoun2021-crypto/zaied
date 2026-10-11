@@ -2923,6 +2923,157 @@ window.submitOriginalExam = function() {
 
 console.log('✅ كتاب الأطفال جاهز — 19 شريحة + 50 سؤال مع أزرار النطق');
 </script>
+    <script>
+/* ═══════════════════════════════════════════════════════════
+   📖 كتاب الأطفال والحاسوب — 19 شريحة كاملة مع أزرار النطق
+   ═══════════════════════════════════════════════════════════ */
+window.originalBookSlides = [
+`<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 1</div><div class="image-box"><img src="https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg" alt="الأطفال والحاسوب"></div><div style="font-size:28px; font-weight:bold; margin:20px 0">📚 الأطفال والحاسوب</div><div style="font-size:18px">• بقلم: محمد زايد خبير دولي في التقنيات الحاسوبية / • أستاذ جامعي</div><div class="translation-box"><span class="translation-ar">🖥️ حاسوب</span> | <span class="translation-fr">ordinateur</span> | <span class="translation-en">Computer</span></div><div><button class="btn-speak" onclick="speak('حاسوب', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('ordinateur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Computer', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 2</div><div class="image-box"><img src="https://i.postimg.cc/CKcnB72y/haswb1.jpg" alt="الحاسوب"></div><div class="dialogue"><div class="children">🧒 الأطفال - هيا بنا نتعرف على الحاسوب لنلعب معه.</div><div class="children">🧒 الأطفال - ما اسمك أيها الصديق ؟</div><div class="computer">💻 الحاسوب : لي اسمان الكمبيوتر أو الحاسوب</div><div class="children">🧒 الأطفال: هل يمكن أن تصف لنا نفسك ؟</div><div class="computer">💻 الحاسوب: انني أتكون من جزئين أساسيين: أ - جزء مادي وهو مجموعة من العناصر المصنوعة من المعادن وهو الجزء الذي يعبر عنه بالفرنسية (Matériel) أو بالانقليزية (Hardware). ب - جزء معنوي ويتكون من البرمجيات وهو ما يسمى بالفرنسية (Logiciel) أو بالانقليزية (Software).</div><div class="children">🧒 الأطفال : هل يمكن للجزئين أن ينفصلا عن بعضهما؟</div><div class="computer">💻 الحاسوب: لا أبدا.</div></div><div class="translation-box"><span class="translation-ar">🔧 جزء مادي</span> | <span class="translation-fr">Matériel</span> | <span class="translation-en">Hardware</span><br><span class="translation-ar">📀 جزء معنوي</span> | <span class="translation-fr">Logiciel</span> | <span class="translation-en">Software</span></div><div><button class="btn-speak" onclick="speak('جزء مادي', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Matériel', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Hardware', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 3-4</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/ycZZ66y5/ram-cpu.jpg" alt="المعالج والذاكرة"></div></div><div class="dialogue"><div class="children">🧒 الأطفال : يقال عنك أنك ذكي وسريع في الرياضيات . هل هذا صحيح وكيف ذلك ؟</div><div class="computer">💻 الحاسوب : العناصر الأساسية هي: «المعالج» والذاكرة حيث العنصر الأول يقوم بمعالجة المعلومات التي يدخلها لي الانسان لتستقر في الذاكرة الرئيسية.</div></div><div class="translation-box"><span class="translation-ar">🧠 معالج</span> | <span class="translation-fr">Processeur</span> | <span class="translation-en">Processor</span></div><div><button class="btn-speak" onclick="speak('معالج', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Processeur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Processor', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 5-6</div><div class="image-box"><img src="https://iili.io/C9xVKYv.jpg" alt="مكونات الحاسوب"></div><div class="dialogue"><div class="computer">💻 الحاسوب: انني أتكون من أربعة أجزاء : الوحدة المركزية ، الذاكرات ، الروابط واللواحق.</div><div class="children">🧒 الأطفال: ما هي الوحدة المركزية ؟</div><div class="computer">💻 الحاسوب: الوحدة المركزية هي قلبي النابض وعقلي المفكر.</div></div><div><button class="btn-speak" onclick="speak('الوحدة المركزية', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Unité Centrale', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('CPU', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 7-8</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/V0XXHmHX/1.jpg" alt="RAM"><img src="https://i.ibb.co/twfWWJ42/image.jpg" alt="ROM"></div></div><div class="dialogue"><div class="computer">💻 الحاسوب: ذاكرة تدعى بالميتة أستعملها لتخزين البرمجيات. الذاكرة الحية لا تحتفظ بالمعطيات عند انقطاع الكهرباء أما الذاكرة الميتة فهي لا تضيع المعطيات.</div></div><div class="translation-box"><span class="translation-ar">💾 RAM (ذاكرة حية)</span> | <span class="translation-fr">mémoire vive</span> | <span class="translation-en">Random Access Memory</span><br><span class="translation-ar">💾 ROM (ذاكرة ميتة)</span> | <span class="translation-fr">mémoire morte</span> | <span class="translation-en">Read Only Memory</span></div><div><button class="btn-speak" onclick="speak('الذاكرة الحية', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('mémoire vive', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('RAM', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 9-10</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/CpTk8dfg/camera-numerique.jpg" alt="كاميرا"><img src="https://i.ibb.co/3mcN7f3K/camescope.jpg" alt="كاميسكوب"></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك عناصر أخرى ؟</div><div class="computer">💻 الحاسوب: نعم وهي الوسائط. لإدخال الصورة المتحركة يجب استعمال كاميرا فيديو رقمية أو الكاميسكوب الرقمي.</div></div><div class="translation-box"><span class="translation-ar">📷 كاميرا رقمية</span> | <span class="translation-fr">Caméra numérique</span> | <span class="translation-en">Digital camera</span></div><div><button class="btn-speak" onclick="speak('كاميرا رقمية', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Caméra numérique', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Digital camera', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 11-12</div><div class="image-box"><img src="https://i.postimg.cc/7ZkXt82w/fart.jpg" alt="فأرة"></div><div class="dialogue"><div class="computer">💻 الحاسوب : الفأرة أداة ألحقت بنا مؤخرا عندما أدخلت برمجية "ويندوز" في نظام تشغيلنا.</div></div><div class="translation-box"><span class="translation-ar">🖱️ فأرة</span> = <span class="translation-fr">souris</span> = <span class="translation-en">mouse</span></div><div><button class="btn-speak" onclick="speak('فأرة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('souris', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('mouse', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 13-14</div><div class="image-box"><div class="image-row"><img src="https://iili.io/C9xPrUx.jpg" alt="لوحة مفاتيح"><img src="https://i.ibb.co/YFy4WZqQ/image.jpg" alt="قلم ضوئي"><img src="https://i.ibb.co/XZWmFZSL/image.jpg" alt="شاشة لمسية"></div></div><div class="dialogue"><div class="computer">💻 الحاسوب: هناك ملحقات كلوحة المفاتيح والقلم الضوئي واللوحة الرسمية والشاشة اللمسية.</div></div><div class="translation-box"><span class="translation-ar">⌨️ لوحة مفاتيح</span> = <span class="translation-fr">clavier</span> = <span class="translation-en">keyboard</span><br><span class="translation-ar">✏️ قلم ضوئي</span> = <span class="translation-fr">crayon optique</span> = <span class="translation-en">digital pen</span></div><div><button class="btn-speak" onclick="speak('لوحة المفاتيح', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('clavier', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('keyboard', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 15-20</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/wT3wRQdz/monitor.jpg" alt="شاشة"><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة"><img src="https://i.postimg.cc/cHXcrrD2/microphone-and-speakers.jpg" alt="ميكروفون"></div></div><div class="dialogue"><div class="computer">💻 الحاسوب: الشاشة وسيلة تخاطب بيني وبين الانسان.</div></div><div class="translation-box"><span class="translation-ar">🖥️ شاشة</span> = <span class="translation-fr">Ecran</span> = <span class="translation-en">Screen</span><br><span class="translation-ar">🖨️ طابعة</span> = <span class="translation-fr">Imprimante</span> = <span class="translation-en">Printer</span></div><div><button class="btn-speak" onclick="speak('شاشة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Ecran', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Screen', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 21-24</div><div class="image-box"><img src="https://iili.io/C9xDdb4.jpg" alt="أحجام الشاشات"></div><div class="dialogue"><div class="computer">💻 الحاسوب: تختلف أحجام الشاشات باختلاف التطبيقات. 15 بوصة للتطبيقات العادية و17-21 بوصة للرسوم والصور.</div></div><div class="translation-box"><span class="translation-ar">📺 مختلف أحجام شاشات الحاسوب</span><br><span class="translation-fr">Différents tailles d'écrans pour pc</span><br><span class="translation-en">Different sizes of pc screens</span></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 25-29</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة"></div></div><div class="dialogue"><div class="children">🧒 الأطفال: ما هي قنوات الاخراج ؟</div><div class="computer">💻 الحاسوب: هناك الطابعة. أنواعها: الإبرية، النفاثة للحبر، والليزرية.</div></div><div class="translation-box"><span class="translation-ar">🖨️ طابعة ليزرية</span> | <span class="translation-fr">Imprimante Laser</span> | <span class="translation-en">Laser printer</span></div><div><button class="btn-speak" onclick="speak('طابعة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Imprimante', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Printer', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 30-34</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/CxTbMGhR/scanner.jpg" alt="ماسح"><img src="https://i.postimg.cc/DzDvFgFf/rasm.jpg" alt="راسم"></div></div><div class="dialogue"><div class="computer">💻 الحاسوب: هناك الماسح لإخراج الصور والراسم للخرائط.</div></div><div class="translation-box"><span class="translation-ar">📠 ماسح</span> | <span class="translation-fr">scanner</span> | <span class="translation-en">scanner</span></div><div><button class="btn-speak" onclick="speak('ماسح', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('scanner', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('scanner', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 35-37</div><div class="image-box"><img src="https://i.postimg.cc/R0wsVCxv/modem.jpg" alt="مودم"></div><div class="dialogue"><div class="computer">💻 الحاسوب: يمكن لي أن أتخاطب مع حواسيب أخرى عبر جهاز "موديم".</div></div><div class="translation-box"><span class="translation-ar">📡 مودم</span> = <span class="translation-fr">modem</span> = <span class="translation-en">modem</span></div><div><button class="btn-speak" onclick="speak('مودم', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('modem', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('modem', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 38-40</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/FbLdWngL/image.jpg" alt="قرص صلب"><img src="https://i.ibb.co/DfRFF75T/image.jpg" alt="نظام تشغيل"></div></div><div class="dialogue"><div class="computer">💻 الحاسوب: البرمجيات تنقسم الى: نظام التشغيل والبرمجيات التطبيقية.</div></div><div class="translation-box"><span class="translation-ar">💿 نظام تشغيل</span> | <span class="translation-fr">système d'exploitation</span> | <span class="translation-en">operating system</span></div><div><button class="btn-speak" onclick="speak('نظام تشغيل', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('système exploitation', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('operating system', 'en')">🔊 English</button></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 41-43 — الفيديوهات</div><div class="note" style="font-size:18px;">🎬 انتهى الدرس - إليكم مراجعته عبر فيديو 1 و 2</div><div class="image-box"><iframe width="100%" height="250" src="https://www.youtube.com/embed/3QCgr6IpuvA" allowfullscreen></iframe></div><div class="image-box"><iframe width="100%" height="250" src="https://www.youtube.com/embed/HB4I2CgkcCo" allowfullscreen></iframe></div></div>`,
+`<div class="slide-card"><div class="note">📖 صفحة 44-50 — الاختبار</div><div class="image-box"><div style="font-size:64px;">📝 ✏️ 📚 ⭐</div></div><div class="note" style="font-size:24px; font-weight:bold;">📝 التمارين: 50 سؤالاً - 2 نقاط لكل سؤال - المجموع: 100 نقطة</div><div style="background:#c8e6c9; padding:15px; border-radius:20px; margin:15px 0; text-align:center;">🧠 أجب على الأسئلة الـ50 لتحصل على الشهادة!<br>🌟 حاول أن تحصل على 50/100 فأكثر 🌟</div><div style="text-align:center;"><button onclick="showOriginalExam()" style="background:#22c55e; font-size:18px; padding:12px 30px; border:none; border-radius:40px; color:white; font-weight:bold; cursor:pointer;">🚀 ابدأ الاختبار النهائي 🚀</button></div></div>`
+];
+
+window.originalExamQuestions = ["1. ماهي مكونات الحاسوب؟","2. ما هي المواد التي صنعت منها أجزاء الحاسوب؟","3. ماهي تركيبة الحاسوب الداخلية؟","4. ما هي وظيفة كل جزء داخلي في الحاسوب؟","5. ما هي الذاكرة الرئيسية؟","6. ما دور الذاكرة الرئيسية؟","7. ماهي أنواع الذاكرات عند الحاسوب؟","8. ما هو الفرق بين الذاكرة الحية والذاكرة الميتة؟","9. ما هي الروابط في الحاسوب؟","10. كيف نسمي الروابط أيضا وما دورها؟","11. ما هي اللواحق؟","12. ما هي مهمة كل لاحق؟","13. ماهي اللواحق التي تمكننا التفاعل مع الحاسوب؟","14. كيف نستخدم الفأرة؟","15. ماهي اللواحق الأخرى؟","16. ما دور لوحة المفاتيح؟","17. ما هو القلم الإلكتروني؟ ما هو اسمه الثاني؟","18. متى نستخدم القلم الضوئي؟","19. متى نستخدم اللوحة الرسومية؟","20. كيف شكل اللوحة الرسومية؟","21. ما هي الشاشة اللمسية؟","22. كيف تشتغل الشاشة اللمسية ومتى نستخدمها؟","23. أين نجد الشاشات اللمسية؟","24. ماهو دور الشاشات في الحاسوب؟","25. هل هناك نوع واحد من الشاشات؟ وما هي أحجامها؟","26. ما دور الطابعة؟ وما هي أنواعها؟","27. متى نستخدم الطابعة؟","28. كيف نكلم الحاسوب؟","29. كيف نسمع ما يقول الحاسوب عندما يجيب؟","30. ما هي العلاقة بين شاشة التلفزة والحاسوب؟","31. متى نحتاج لشاشة التلفزة عندما نتعامل مع الحاسوب؟","32. ماهي مختلف ملحقات الحاسوب؟","33. ما دور كل واحد من ملحقات الحاسوب؟","34. الطابعات هي لواحق إخراج؟ كيف ذلك؟","35. ما هي أنواع المعلومات التي تخرجها الطابعات؟","36. ما هو الماسح؟","37. متى نستخدم الماسح؟","38. ما هو الراسم؟","39. متى نستخدم الراسم؟ ما هي وظيفته؟","40. هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟ كيف؟","41. ما هو الجهاز الذي يمكنه من التخاطب مع حواسيب أخرى؟","42. كيف يستطيع الحاسوب التحاور مع الإنسان؟","43. ما هي العناصر الضرورية التي تمكن الحاسوب من التحاور مع الإنسان؟","44. ما دور الأقراص الليزرية؟","45. ماذا تحتوي الأقراص الليزرية؟","46. ما هو نظام التشغيل؟ اذكر مثالاً عليه.","47. ما الفرق بين البرمجيات (Software) والنظام المادي (Hardware)؟","48. كيف يتم تثبيت برنامج على الحاسوب؟","49. ما هي وظيفة المعالج (CPU)؟","50. ما الفرق بين RAM و ROM؟"];
+
+/* ═══ دالة النطق المحسّنة (تدعم النصوص الطويلة) ═══ */
+window.speak = function(text, lang, isCont) {
+    return new Promise(function(resolve) {
+        if (!text || !text.trim()) { resolve(); return; }
+        var t = String(text).trim();
+        if (!isCont) {
+            try {
+                if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; }
+                if (window.speechSynthesis) { window.speechSynthesis.cancel(); }
+            } catch(e) {}
+        }
+        var langMap = { ar: 'ar-SA', fr: 'fr-FR', en: 'en-US' };
+        var targetLang = langMap[lang] || 'ar-SA';
+        var langCode = lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar');
+        function splitText(s) {
+            var chunks = [], max = 180, words = s.split(/\s+/), cur = '';
+            for (var i = 0; i < words.length; i++) {
+                if ((cur + ' ' + words[i]).trim().length <= max) { cur = (cur + ' ' + words[i]).trim(); }
+                else { if (cur) chunks.push(cur); cur = words[i]; }
+            }
+            if (cur) chunks.push(cur);
+            return chunks;
+        }
+        var chunks = splitText(t);
+        function playNext(idx) {
+            if (idx >= chunks.length) { resolve(); return; }
+            var chunk = chunks[idx];
+            try {
+                if (window.speechSynthesis) {
+                    var voices = window.speechSynthesis.getVoices();
+                    var voice = voices.find(function(v) { return v.lang && v.lang.toLowerCase().indexOf(langCode) === 0; });
+                    if (voice) {
+                        var u = new SpeechSynthesisUtterance(chunk);
+                        u.lang = targetLang; u.voice = voice; u.rate = 0.85;
+                        u.onend = function() { playNext(idx + 1); };
+                        u.onerror = function() { playGoogle(chunk, idx); };
+                        window.speechSynthesis.speak(u); return;
+                    }
+                }
+                playGoogle(chunk, idx);
+            } catch(e) { playGoogle(chunk, idx); }
+        }
+        function playGoogle(chunk, idx) {
+            try {
+                var url = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' + encodeURIComponent(chunk) + '&tl=' + langCode + '&client=tw-ob&ttsspeed=0.85';
+                var audio = new Audio(url);
+                window.currentAudio = audio;
+                audio.onended = function() { window.currentAudio = null; playNext(idx + 1); };
+                audio.onerror = function() { playNext(idx + 1); };
+                var p = audio.play(); if (p && p.catch) p.catch(function() { playNext(idx + 1); });
+            } catch(e) { playNext(idx + 1); }
+        }
+        playNext(0);
+    });
+};
+
+/* ═══ فتح الكتاب ═══ */
+window.openBook = function() {
+    var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    if (!u && !window.isAdminMode) { window.__goRegister(); return; }
+    if (!window.isAdminMode && u && !u.subscribed) {
+        var logins = parseInt(localStorage.getItem('logins_' + u.firebaseId) || '0');
+        if (logins > 2) { window.__showSubscriptionRequired(u); return; }
+    }
+    window.__bookSlide = 0;
+    window.renderBookSlide();
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p) { p.classList.add('hide'); });
+    document.getElementById('pageLessonViewer').classList.remove('hide');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.renderBookSlide = function() {
+    var content = document.getElementById('lessonViewerContent');
+    if (!content) return;
+    content.innerHTML = window.originalBookSlides[window.__bookSlide];
+    document.getElementById('lessonProgress').style.width = ((window.__bookSlide + 1) / window.originalBookSlides.length) * 100 + '%';
+    var prevBtn = document.getElementById('lessonPrevBtn');
+    var nextBtn = document.getElementById('lessonNextBtn');
+    if (prevBtn) prevBtn.disabled = window.__bookSlide === 0;
+    if (nextBtn) nextBtn.textContent = window.__bookSlide === window.originalBookSlides.length - 1 ? '🏁 النهاية' : 'التالي ◀';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.nextLessonSlide = function() {
+    if (window.__bookSlide < window.originalBookSlides.length - 1) { window.__bookSlide++; window.renderBookSlide(); }
+    else alert('🎉 أكملت الكتاب! يمكنك البدء بالاختبار');
+};
+window.prevLessonSlide = function() {
+    if (window.__bookSlide > 0) { window.__bookSlide--; window.renderBookSlide(); }
+};
+
+window.showOriginalExam = function() {
+    var html = '<div style="max-width:900px;margin:20px auto;background:#1e293b;border-radius:25px;padding:25px;color:white;"><div style="text-align:center;font-size:26px;font-weight:900;color:#fbbf24;margin-bottom:15px;">🏆 الاختبار النهائي — 50 سؤالاً</div><p style="text-align:center;color:#cbd5e1;margin-bottom:20px;">50 × 2 = 100<br><strong style="color:#22c55e;">النجاح: 50/100 🎓</strong></p>';
+    window.originalExamQuestions.forEach(function(q, i) {
+        html += '<div style="background:#f8fafc;color:#0f172a;border-radius:15px;padding:15px;margin-bottom:12px;border-right:5px solid #dc2626;"><div style="font-weight:900;color:#dc2626;font-size:13px;margin-bottom:6px;">السؤال ' + (i+1) + '</div><div style="font-weight:700;margin-bottom:10px;">' + q + '</div><textarea id="origAns_' + i + '" rows="2" style="width:100%;padding:10px;border-radius:12px;border:2px solid #cbd5e1;font-family:Cairo;font-size:14px;box-sizing:border-box;"></textarea></div>';
+    });
+    html += '<div style="text-align:center;margin-top:25px;"><button onclick="submitOriginalExam()" style="padding:12px 30px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;">📤 تسليم</button> <button onclick="openBook()" style="padding:12px 30px;background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;">🔙 العودة</button></div><div id="origExamResult"></div></div>';
+    document.getElementById('lessonViewerContent').innerHTML = html;
+    document.getElementById('lessonProgress').style.width = '100%';
+};
+
+window.submitOriginalExam = function() {
+    var score = 0;
+    for (var i = 0; i < 50; i++) {
+        var el = document.getElementById('origAns_' + i);
+        var ans = el ? el.value.trim() : '';
+        if (ans.length > 20) score += 2;
+        else if (ans.length > 5) score += 1;
+    }
+    var passed = score >= 50;
+    var resultEl = document.getElementById('origExamResult');
+    var html = '<div style="text-align:center;padding:35px;border-radius:25px;margin:20px 0;background:' + (passed ? 'linear-gradient(135deg,#d1fae5,#a7f3d0)' : 'linear-gradient(135deg,#fee2e2,#fecaca)') + ';border:3px solid ' + (passed ? '#16a34a' : '#dc2626') + ';"><div style="font-size:3em;">' + (passed ? '🎉' : '📚') + '</div><div style="font-size:1.3em;font-weight:900;color:' + (passed ? '#15803d' : '#991b1b') + ';">' + (passed ? 'مبروك!' : 'لم تصل إلى 50/100') + '</div><div style="font-size:3em;font-weight:900;color:' + (passed ? '#15803d' : '#991b1b') + ';margin:15px 0;">' + score + '/100</div></div>';
+    if (passed) {
+        var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        var studentName = u ? u.name : 'الطالب';
+        var date = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+        html += '<div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:6px double #b45309;border-radius:25px;padding:35px;text-align:center;margin:25px 0;color:#1e293b;"><div style="font-size:2em;font-weight:900;color:#92400e;">🎓 شهادة نجاح 🎓</div><div style="font-size:1.1em;margin:15px 0;">تشهد منصة زايد بأن</div><div style="font-size:1.8em;font-weight:900;color:#1e293b;border-top:3px solid #b45309;border-bottom:3px solid #b45309;padding:15px;margin:20px auto;max-width:600px;">' + studentName + '</div><div style="font-size:1.1em;line-height:1.9;color:#78350f;">قد أتمّ بنجاح كتاب "الأطفال والحاسوب"<br>بمعدل <strong>' + score + '/100</strong></div><div style="font-size:1.1em;margin:15px 0;color:#78350f;">📅 ' + date + '</div><div style="font-size:4em;">🏆</div><div style="font-size:1.1em;color:#78350f;margin-top:15px;"><strong>محمد زايد</strong><br>خبير دولي — تونس 🇹🇳</div></div><div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:12px 30px;background:linear-gradient(135deg,#16a34a,#15803d);color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;">🖨️ طباعة</button></div>';
+    } else {
+        html += '<div style="text-align:center;margin-top:20px;"><button onclick="showOriginalExam()" style="padding:12px 30px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;">🔄 إعادة</button></div>';
+    }
+    resultEl.innerHTML = html;
+    resultEl.scrollIntoView({ behavior: 'smooth' });
+};
+
+console.log('✅ كتاب الأطفال جاهز — 19 شريحة + 50 سؤال مع أزرار النطق');
+</script>
     
     </html>
   
