@@ -3751,6 +3751,69 @@ console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 �
     console.log('✅ تنقية النطق جاهزة — تعمل دائماً');
 })();
 </script>
+
+    <script>
+/* ═══════════════════════════════════════════════════════════
+   🔊 تنقية النطق — حذف "التعريف العلمي" تلقائياً
+   ═══════════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    function stripPhrases(text) {
+        return String(text)
+            .replace(/التعريف العلمي\s*:?\s*/g, '')
+            .replace(/المفهوم\s*:?\s*/g, '')
+            .replace(/هدف الاستخدام\s*:?\s*/g, '')
+            .replace(/التعريف\s*:?\s*/g, '')
+            .replace(/^\s*[:•\-\.]+\s*/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function fixAllSpeakButtons() {
+        var content = document.getElementById('lessonViewerContent');
+        if (!content) return;
+        var bookText = content.querySelector('.book-text');
+        if (!bookText) return;
+        var cleanText = stripPhrases(bookText.textContent);
+
+        var buttons = content.querySelectorAll('.auto-slide-speak, .clean-read-btn');
+        buttons.forEach(function(btn) {
+            if (btn.dataset.cleanedFinal === '1') return;
+            btn.dataset.cleanedFinal = '1';
+            btn.onclick = function() {
+                if (btn.innerHTML.indexOf('⏹️') !== -1) {
+                    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch(e) {}
+                    try { if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; } } catch(e) {}
+                    btn.innerHTML = '🔊 اقرأ الشرح بالعربية';
+                    return;
+                }
+                btn.innerHTML = '⏹️ جاري النطق...';
+                window.speak(cleanText, 'ar').then(function() {
+                    btn.innerHTML = '🔊 اقرأ الشرح بالعربية';
+                });
+            };
+        });
+    }
+
+    function init() {
+        var v = document.getElementById('lessonViewerContent');
+        if (v && !v.__cleanFinalObs) {
+            v.__cleanFinalObs = new MutationObserver(function() {
+                setTimeout(fixAllSpeakButtons, 250);
+            });
+            v.__cleanFinalObs.observe(v, { childList: true, subtree: true });
+        }
+        fixAllSpeakButtons();
+    }
+
+    setInterval(init, 800);
+    setTimeout(init, 500);
+    setTimeout(init, 2000);
+
+    console.log('✅ تنقية النطق جاهزة دائماً');
+})();
+</script>
     
     </html>
   
