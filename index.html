@@ -4070,6 +4070,106 @@ console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 �
     console.log('✅ نظام الإعدادية جاهز — دائم على GitHub');
 })();
 </script>
+    <script>
+/* ═══ 🎓 الدرس 1 إعدادية: أخلاقيات استخدام التكنولوجيات ═══ */
+(function() {
+    'use strict';
+    
+    window.MIDDLE_ETHICS_SLIDES = [
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:40px;color:white;text-align:center;border:4px solid #fbbf24;"><div style="font-size:80px;">🛡️</div><h2 style="color:#fbbf24;font-size:28px;">أخلاقيات استخدام التكنولوجيات</h2><p style="font-size:18px;">المواطنة الرقمية والسلوك المسؤول</p></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;text-align:center;">🎯 أهداف الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:2;font-size:16px;"><ol style="padding-right:25px;"><li>فهم معنى الأخلاقيات الرقمية</li><li>التمييز بين البيانات والمعلومات</li><li>التعرف على الجرائم الإلكترونية</li><li>تطبيق المبادئ الأخلاقية</li><li>حماية الخصوصية</li><li>احترام الملكية الفكرية</li><li>مواجهة التنمر الإلكتروني</li></ol></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">📖 مقدمة</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:2;font-size:15px;"><p>في عصر التكنولوجيا، نستخدم الأجهزة الإلكترونية يومياً في:</p><ul style="padding-right:25px;margin-top:15px;"><li>📚 التعلم والدراسة</li><li>💬 التواصل الاجتماعي</li><li>🎮 الترفيه</li><li>🛒 التسوق</li></ul><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-top:15px;border-right:4px solid #3b82f6;"><strong>⚠️ لكن:</strong> هل نستخدمها بمسؤولية؟ هنا يأتي دور الأخلاقيات الرقمية.</div></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">🔬 التعريف</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:2;font-size:15px;"><h3 style="color:#dc2626;">📖 التعريف العلمي:</h3><p style="margin:10px 0;">مجموعة القواعد والمبادئ التي تحكم سلوك المستخدم عند تعامله مع الأجهزة الرقمية.</p><h3 style="color:#dc2626;margin-top:20px;">🎯 المفهوم:</h3><p>المواطنة الرقمية = سلوك مسؤول في الفضاء الإلكتروني.</p><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-top:15px;border-right:4px solid #f59e0b;"><strong>💡 مثال:</strong> قبل نشر تعليق، اسأل: هل هو محترم؟ صحيح؟ مفيد؟</div></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">📊 البيانات vs المعلومات</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:18px;border-radius:12px;margin-bottom:15px;border-right:5px solid #f59e0b;"><h3 style="color:#92400e;">📊 البيانات (Data)</h3><p>حقائق خام ليس لها معنى.</p><p><strong>المثال:</strong> الأرقام 15, 20, 18, 17 — ماذا تعني؟</p></div><div style="background:#d1fae5;padding:18px;border-radius:12px;border-right:5px solid #10b981;"><h3 style="color:#065f46;">💡 المعلومات (Information)</h3><p>البيانات بعد معالجتها.</p><p><strong>المثال:</strong> علامات الرياضيات: 15, 20, 18, 17 → المعدل 17.5</p></div></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">⚙️ المكونات</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:18px;border-radius:12px;margin-bottom:15px;border-right:5px solid #3b82f6;"><h3 style="color:#1e40af;">🔧 المادية (Hardware)</h3><p>كل ما يُلمَس:</p><ul style="padding-right:25px;"><li>🧠 المعالج (CPU)</li><li>💾 الذاكرة (RAM)</li><li>💿 القرص الصلب</li><li>🖥️ الشاشة</li><li>⌨️ لوحة المفاتيح</li></ul></div><div style="background:#fef3c7;padding:18px;border-radius:12px;border-right:5px solid #f59e0b;"><h3 style="color:#92400e;">💿 البرمجية (Software)</h3><p>كل ما لا يُلمَس:</p><ul style="padding-right:25px;"><li>🪟 نظام التشغيل</li><li>📝 Word, Excel</li><li>🌐 المتصفحات</li><li>🎮 الألعاب</li></ul></div></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">🚫 الجرائم الإلكترونية</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:1.9;font-size:15px;"><h3 style="color:#dc2626;">📖 التعريف:</h3><p style="margin:10px 0 15px 0;">كل فعل جرمته القوانين ويضر بالآخرين.</p><h3 style="color:#dc2626;">⚠️ الأنواع:</h3><div style="background:#fee2e2;padding:12px;border-radius:10px;margin-top:10px;border-right:4px solid #dc2626;"><strong>🔓 الاختراق:</strong> الدخول غير المصرح به.</div><div style="background:#fee2e2;padding:12px;border-radius:10px;margin-top:8px;border-right:4px solid #dc2626;"><strong>💾 سرقة البيانات:</strong> نسخ المعلومات دون إذن.</div><div style="background:#fee2e2;padding:12px;border-radius:10px;margin-top:8px;border-right:4px solid #dc2626;"><strong>🎭 انتحال الشخصية:</strong> التنكر بهوية غيرك.</div><div style="background:#fee2e2;padding:12px;border-radius:10px;margin-top:8px;border-right:4px solid #dc2626;"><strong>💣 البرامج الخبيثة:</strong> فيروسات.</div></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">💎 المبادئ الأخلاقية</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;line-height:1.8;font-size:15px;"><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-bottom:10px;border-right:4px solid #3b82f6;"><strong>1️⃣ الخصوصية:</strong> حماية البيانات الشخصية.</div><div style="background:#d1fae5;padding:12px;border-radius:10px;margin-bottom:10px;border-right:4px solid #10b981;"><strong>2️⃣ الملكية الفكرية:</strong> احترام حقوق المؤلف.</div><div style="background:#fef3c7;padding:12px;border-radius:10px;margin-bottom:10px;border-right:4px solid #f59e0b;"><strong>3️⃣ الأمان الرقمي:</strong> كلمات مرور قوية.</div><div style="background:#e0e7ff;padding:12px;border-radius:10px;margin-bottom:10px;border-right:4px solid #6366f1;"><strong>4️⃣ النزاهة:</strong> عدم نشر معلومات مضللة.</div><div style="background:#fce7f3;padding:12px;border-radius:10px;border-right:4px solid #ec4899;"><strong>5️⃣ الاحترام:</strong> عدم التنمر.</div></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:50px;color:white;text-align:center;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;font-size:32px;margin-bottom:20px;">🔑 القاعدة الذهبية</h2><div style="background:white;color:#1e293b;padding:30px;border-radius:20px;font-size:22px;"><strong>🤔 فكّر قبل أن تنشر</strong><p style="margin-top:20px;font-size:16px;color:#475569;">كل ما تنشره يترك <strong style="color:#dc2626;">بصمة رقمية</strong> دائمة.</p></div><div style="margin-top:25px;background:rgba(255,255,255,0.15);padding:20px;border-radius:15px;font-size:16px;line-height:1.9;"><strong>اسأل نفسك:</strong><br>✅ هل هذا صحيح؟<br>✅ هل هو محترم؟<br>❌ هل سيؤذي أحداً؟</div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">🛡️ حماية الخصوصية</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:1.9;font-size:15px;"><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🔒 كلمات مرور قوية:</strong><br>8+ أحرف + أرقام + رموز<br>❌ 123456 | ✅ MyP@ss2026!</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🌐 إعدادات الخصوصية:</strong> اضبط من يرى منشوراتك</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>📵 لا تشارك موقعك</strong></div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>🔐 التحقق بخطوتين</strong></div></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">©️ الملكية الفكرية</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:1.9;font-size:15px;"><div style="background:#d1fae5;padding:18px;border-radius:12px;margin-bottom:15px;border-right:5px solid #16a34a;"><h3 style="color:#065f46;">✅ الصحيح</h3><ul style="padding-right:25px;"><li>ذكر اسم المؤلف</li><li>ذكر المصدر والرابط</li><li>طلب الإذن</li></ul></div><div style="background:#fee2e2;padding:18px;border-radius:12px;border-right:5px solid #dc2626;"><h3 style="color:#991b1b;">❌ الخاطئ</h3><ul style="padding-right:25px;"><li>نسخ دون ذكر المصدر</li><li>استخدام صور دون إذن</li><li>تحميل برامج مقرصنة</li></ul></div></div></div>',
+'<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:30px;padding:35px;color:white;border:4px solid #fbbf24;"><h2 style="color:#fbbf24;">👊 التنمر الإلكتروني</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:1.9;font-size:15px;"><h3 style="color:#dc2626;">📖 التعريف:</h3><p>استخدام الإنترنت لإيذاء شخص آخر.</p><h3 style="color:#dc2626;margin-top:15px;">🚨 ماذا تفعل؟</h3><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-top:10px;border-right:4px solid #3b82f6;"><strong>1️⃣ لا ترد</strong></div><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-top:8px;border-right:4px solid #3b82f6;"><strong>2️⃣ احفظ الأدلة (لقطات شاشة)</strong></div><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-top:8px;border-right:4px solid #3b82f6;"><strong>3️⃣ أخبر شخصاً بالغاً</strong></div><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-top:8px;border-right:4px solid #3b82f6;"><strong>4️⃣ احظر وأبلغ</strong></div></div></div>'
+    ];
+
+    window.__mIdx = 0;
+
+    window.__mRender = function() {
+        var content = document.getElementById('customContent');
+        if (!content) return;
+        content.innerHTML = window.MIDDLE_ETHICS_SLIDES[window.__mIdx];
+        var counter = document.getElementById('customCounter');
+        if (counter) counter.textContent = '🛡️ الشريحة ' + (window.__mIdx + 1) + ' من ' + window.MIDDLE_ETHICS_SLIDES.length;
+        var prog = document.getElementById('customProgress');
+        if (prog) prog.style.width = ((window.__mIdx + 1) / window.MIDDLE_ETHICS_SLIDES.length * 100) + '%';
+        var prev = document.getElementById('customPrev');
+        if (prev) { prev.disabled = window.__mIdx === 0; prev.style.opacity = window.__mIdx === 0 ? '0.4' : '1'; }
+        var next = document.getElementById('customNext');
+        if (next) next.textContent = window.__mIdx === window.MIDDLE_ETHICS_SLIDES.length - 1 ? '🏁 النهاية' : 'التالي ◀';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.__mNext = function() {
+        if (window.__mIdx < window.MIDDLE_ETHICS_SLIDES.length - 1) {
+            window.__mIdx++;
+            window.__mRender();
+        } else {
+            alert('🎉 انتهى الدرس!');
+        }
+    };
+
+    window.__mPrev = function() {
+        if (window.__mIdx > 0) {
+            window.__mIdx--;
+            window.__mRender();
+        }
+    };
+
+    window.openMiddleLesson = function(key) {
+        if (key !== 'ethics') { alert('قيد الإعداد'); return; }
+        var old = document.getElementById('customMiddleViewer');
+        if (old) old.remove();
+        window.__mIdx = 0;
+        var overlay = document.createElement('div');
+        overlay.id = 'customMiddleViewer';
+        overlay.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;';
+        overlay.innerHTML = 
+            '<div style="max-width:900px;margin:20px auto;">' +
+                '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">' +
+                    '<button onclick="document.getElementById(\'customMiddleViewer\').remove()" style="padding:12px 25px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:14px;cursor:pointer;">🔙 العودة للدروس</button>' +
+                    '<div id="customCounter" style="flex:1;padding:12px 20px;background:rgba(0,0,0,0.4);border-radius:40px;color:#fbbf24;font-weight:900;text-align:center;border:2px solid #fbbf24;">🛡️ الشريحة 1 من 12</div>' +
+                '</div>' +
+                '<div style="height:12px;background:rgba(0,0,0,0.5);border-radius:10px;overflow:hidden;margin-bottom:20px;">' +
+                    '<div id="customProgress" style="height:100%;background:linear-gradient(90deg,#fbbf24,#22c55e);width:8.33%;transition:width 0.4s;"></div>' +
+                '</div>' +
+                '<div id="customContent"></div>' +
+                '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:25px;">' +
+                    '<button id="customPrev" onclick="window.__mPrev()" style="padding:15px 30px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">▶ السابق</button>' +
+                    '<button onclick="document.getElementById(\'customMiddleViewer\').remove()" style="padding:15px 30px;background:#334155;color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🏠 خروج</button>' +
+                    '<button id="customNext" onclick="window.__mNext()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(overlay);
+        window.__mRender();
+    };
+
+    function buildMiddleStage() {
+        var stage = document.getElementById('pageMiddleStage');
+        if (!stage) return;
+        stage.innerHTML = '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button><button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button><div class="welcome-card" style="margin:15px 0;"><h2>🎓 دروس الإعدادية</h2><p>5 دروس تفاعلية كاملة</p></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;padding:20px;"><div onclick="window.openMiddleLesson(\'ethics\')" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;"><div style="font-size:60px;margin-bottom:15px;">🛡️</div><div style="font-size:20px;font-weight:900;color:#fbbf24;margin-bottom:10px;">أخلاقيات استخدام التكنولوجيات</div><div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ ابدأ الدرس</div></div><div onclick="alert(\'قريباً\')" style="background:linear-gradient(135deg,#065f46,#10b981);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;opacity:0.7;"><div style="font-size:60px;margin-bottom:15px;">💻</div><div style="font-size:20px;font-weight:900;color:#fbbf24;margin-bottom:10px;">بيئة العمل</div><div style="background:#64748b;padding:8px;border-radius:15px;font-weight:900;">⏳ قريباً</div></div></div>';
+    }
+
+    var observer = new MutationObserver(function() {
+        var stage = document.getElementById('pageMiddleStage');
+        if (stage && !stage.querySelector('.welcome-card h2')?.textContent?.includes('دروس الإعدادية')) {
+            buildMiddleStage();
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(buildMiddleStage, 1500);
+    setTimeout(buildMiddleStage, 3000);
+
+    console.log('✅ نظام الإعدادية جاهز');
+})();
+</script>
     
     </html>
   
