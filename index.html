@@ -3814,6 +3814,79 @@ console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 �
     console.log('✅ تنقية النطق جاهزة دائماً');
 })();
 </script>
+    <script>
+/* ═══════════════════════════════════════════════════════════
+   🎯 الإصلاحات النهائية الدائمة — دفعة واحدة
+   1. استبدال صورة الشريحة 5 (RAM فقط)
+   2. تنقية النطق (حذف "التعريف العلمي")
+   ═══════════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    /* ═══ 1️⃣ استبدال صورة RAM ═══ */
+    var ramImg = 'https://i.postimg.cc/zBBzZW0f/RAM.jpg';
+    function replaceRamImage() {
+        if (window.originalBookSlides) {
+            window.originalBookSlides = window.originalBookSlides.map(function(slide) {
+                if (slide.indexOf('الذاكرة الحية (RAM)') !== -1 && slide.indexOf('hyt-wmytt') !== -1) {
+                    return slide.replace(/https:\/\/i\.postimg\.cc\/5NZs1bKy\/hyt-wmytt\.jpg/g, ramImg);
+                }
+                return slide;
+            });
+        }
+        if (window.primaryLesson1Slides) {
+            window.primaryLesson1Slides = window.primaryLesson1Slides.map(function(slide) {
+                if (slide.indexOf('الذاكرة الحية (RAM)') !== -1 && slide.indexOf('hyt-wmytt') !== -1) {
+                    return slide.replace(/https:\/\/i\.postimg\.cc\/5NZs1bKy\/hyt-wmytt\.jpg/g, ramImg);
+                }
+                return slide;
+            });
+        }
+    }
+
+    /* ═══ 2️⃣ تنقية النطق ═══ */
+    function stripPhrases(t) {
+        return String(t)
+            .replace(/<strong>التعريف العلمي:<\/strong>\s*/g, '')
+            .replace(/<strong>المفهوم:<\/strong>\s*/g, '')
+            .replace(/<strong>هدف الاستخدام:<\/strong>\s*/g, '')
+            .replace(/<strong>التعريف:<\/strong>\s*/g, '')
+            .replace(/التعريف العلمي:\s*/g, '')
+            .replace(/المفهوم:\s*/g, '')
+            .replace(/هدف الاستخدام:\s*/g, '')
+            .replace(/التعريف:\s*/g, '');
+    }
+
+    function cleanArrays() {
+        var count = 0;
+        ['originalBookSlides', 'primaryLesson1Slides', 'pythonLessonSlides'].forEach(function(name) {
+            if (!window[name] || !window[name].length) return;
+            for (var i = 0; i < window[name].length; i++) {
+                if (typeof window[name][i] === 'string' &&
+                    (window[name][i].indexOf('التعريف العلمي') !== -1 ||
+                     window[name][i].indexOf('المفهوم:') !== -1 ||
+                     window[name][i].indexOf('هدف الاستخدام') !== -1)) {
+                    window[name][i] = stripPhrases(window[name][i]);
+                    count++;
+                }
+            }
+        });
+        return count;
+    }
+
+    function applyFixes() {
+        replaceRamImage();
+        cleanArrays();
+    }
+
+    setTimeout(applyFixes, 800);
+    setTimeout(applyFixes, 2000);
+    setTimeout(applyFixes, 4000);
+    setInterval(applyFixes, 5000);
+
+    console.log('✅ الإصلاحات النهائية الدائمة جاهزة');
+})();
+</script>
     
     </html>
   
