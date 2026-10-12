@@ -3708,6 +3708,49 @@ console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 �
     console.log('✅ زر "اقرأ الشرح بالعربية" جاهز — تلقائي لكل شريحة');
 })();
 </script>
+    <script>
+/* ═══════════════════════════════════════════════════════════
+   🔊 تنقية النطق — حذف العبارات المتكررة
+   ═══════════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    function cleanText(text) {
+        if (typeof text !== 'string') return text;
+        return text
+            .replace(/التعريف العلمي\s*:?\s*/g, '')
+            .replace(/المفهوم\s*:?\s*/g, '')
+            .replace(/هدف الاستخدام\s*:?\s*/g, '')
+            .replace(/التعريف\s*:?\s*/g, '')
+            .replace(/^\s*[:•\-\.]+\s*/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function hookSpeak() {
+        if (!window.speak || window.speak.__cleaned) return;
+        var oldSpeak = window.speak;
+        var newSpeak = function(text, lang, isCont) {
+            if (lang === 'ar' || !lang) {
+                text = cleanText(text);
+            }
+            return oldSpeak.call(this, text, lang, isCont);
+        };
+        newSpeak.__cleaned = true;
+        window.speak = newSpeak;
+        window.speakBook = newSpeak;
+        console.log('✅ تم تنقية دالة النطق — حذف "التعريف العلمي"');
+    }
+
+    hookSpeak();
+    setTimeout(hookSpeak, 500);
+    setTimeout(hookSpeak, 1500);
+    setTimeout(hookSpeak, 3000);
+    setInterval(hookSpeak, 2000);
+
+    console.log('✅ تنقية النطق جاهزة — تعمل دائماً');
+})();
+</script>
     
     </html>
   
