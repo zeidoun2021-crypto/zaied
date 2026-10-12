@@ -4442,6 +4442,93 @@ console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 �
     console.log('✅ Enforcer — النظام القديم مُلغى');
 })();
 </script>
+    <script>
+(function() {
+    'use strict';
+    
+    /* 1) حذف القديم */
+    try {
+        delete window.MIDDLE_ETHICS_SLIDES;
+        delete window.middleLessonEthicsSlides;
+        delete window.middleLessonEthicsExercises;
+        delete window.middleLessonEthicsExam;
+        delete window.__mNext;
+        delete window.__mPrev;
+        delete window.__mRender;
+    } catch(e) {}
+    
+    /* 2) الدروس الجديدة */
+    var LESSONS = {
+        '1.1': {
+            icon: '💻',
+            title: 'الحاسوب: صديقي الجديد',
+            slides: [
+                '<div style="text-align:center;padding:30px;color:white;"><div style="font-size:100px;">💻</div><h1 style="color:#fbbf24;font-size:32px;margin:20px 0;">الحاسوب: صديقي الجديد</h1><p style="color:#cbd5e1;font-size:18px;">الدرس 1 من 3</p></div>',
+                '<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;margin-bottom:20px;">🤔 ما هو الحاسوب؟</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;font-size:17px;line-height:2;"><p style="font-size:20px;font-weight:900;color:#dc2626;">جهاز إلكتروني يساعدنا في:</p><ul style="padding-right:25px;line-height:2.2;margin-top:15px;"><li>📝 كتابة الدروس</li><li>🎨 الرسم</li><li>🌐 الاتصال بالعالم</li><li>📚 البحث عن المعلومات</li></ul></div></div>',
+                '<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;margin-bottom:20px;">🔧 المكونات المادية</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;margin-bottom:15px;"><strong style="color:#dc2626;">🧠 المعالج (CPU)</strong><p>دماغ الحاسوب</p></div><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;margin-bottom:15px;"><strong style="color:#3b82f6;">💾 الذاكرة (RAM)</strong><p>ذاكرة مؤقتة</p></div><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;"><strong style="color:#10b981;">💿 القرص الصلب</strong><p>يحفظ الملفات دائماً</p></div></div>',
+                '<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;margin-bottom:20px;">⌨️ الإدخال والإخراج</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;margin-bottom:15px;"><h3 style="color:#22c55e;">الإدخال</h3><ul><li>⌨️ لوحة المفاتيح</li><li>🖱️ الفأرة</li></ul></div><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;"><h3 style="color:#3b82f6;">الإخراج</h3><ul><li>🖥️ الشاشة</li><li>🖨️ الطابعة</li></ul></div></div>',
+                '<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;margin-bottom:20px;">📊 ملخص الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:15px;line-height:2;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:10px;"><strong>1️⃣</strong> الحاسوب جهاز إلكتروني</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:10px;"><strong>2️⃣</strong> المكونات: معالج، ذاكرة، قرص</div><div style="background:#d1fae5;padding:15px;border-radius:12px;"><strong>3️⃣</strong> الإدخال والإخراج</div></div></div>'
+            ]
+        }
+    };
+    
+    /* 3) فتح الدرس */
+    window.__showLesson = function(id) {
+        var l = LESSONS[id];
+        if (!l) return;
+        var old = document.getElementById('myViewer');
+        if (old) old.remove();
+        var ov = document.createElement('div');
+        ov.id = 'myViewer';
+        ov.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e293b);z-index:999999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;';
+        ov.innerHTML = '<div style="max-width:900px;margin:20px auto;"><button onclick="document.getElementById(\'myViewer\').remove()" style="padding:12px 25px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;cursor:pointer;margin-bottom:20px;">🔙 العودة</button><div id="myCounter" style="padding:12px 20px;background:rgba(0,0,0,0.4);border-radius:40px;color:#fbbf24;font-weight:900;text-align:center;border:2px solid #fbbf24;margin-bottom:20px;"></div><div id="myContent"></div><div id="myNav" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:25px;"></div></div>';
+        document.body.appendChild(ov);
+        
+        var i = 0;
+        function render() {
+            document.getElementById('myContent').innerHTML = l.slides[i];
+            document.getElementById('myCounter').textContent = '📖 الشريحة ' + (i + 1) + ' من ' + l.slides.length;
+            var nav = '';
+            if (i > 0) nav += '<button onclick="window.__myPrev()" style="padding:15px 30px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">▶ السابق</button>';
+            nav += '<button onclick="document.getElementById(\'myViewer\').remove()" style="padding:15px 30px;background:#334155;color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🏠 خروج</button>';
+            if (i < l.slides.length - 1) nav += '<button onclick="window.__myNext()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button>';
+            else nav += '<button onclick="alert(\'🎉 انتهى الدرس!\')" style="padding:15px 30px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">📝 التمارين</button>';
+            document.getElementById('myNav').innerHTML = nav;
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+        window.__myNext = function() { if (i < l.slides.length - 1) { i++; render(); } };
+        window.__myPrev = function() { if (i > 0) { i--; render(); } };
+        render();
+    };
+    
+    /* 4) بناء صفحة الإعدادية */
+    window.buildMiddleStage = function() {
+        var stage = document.getElementById('pageMiddleStage');
+        if (!stage) return;
+        stage.innerHTML = '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>' +
+            '<div class="welcome-card" style="margin:15px 0;"><h2>📚 الإعلامية — السنة السابعة إعدادي</h2><p>دروس تدريجية</p></div>' +
+            '<div style="padding:20px;">' +
+            '<div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border:3px solid #fbbf24;border-radius:20px;padding:25px;text-align:center;cursor:pointer;color:white;max-width:400px;margin:0 auto;" onclick="window.__showLesson(\'1.1\')">' +
+            '<div style="font-size:60px;margin-bottom:15px;">💻</div>' +
+            '<div style="font-size:20px;font-weight:900;color:#fbbf24;margin-bottom:10px;">الحاسوب: صديقي الجديد</div>' +
+            '<div style="font-size:14px;color:#e2e8f0;margin-bottom:15px;">5 شرائح</div>' +
+            '<div style="background:#22c55e;padding:10px;border-radius:15px;font-weight:900;">✅ ابدأ الدرس</div>' +
+            '</div></div>';
+    };
+    
+    /* 5) منع أي محاولة لإرجاع القديم */
+    setInterval(function() {
+        var stage = document.getElementById('pageMiddleStage');
+        if (!stage) return;
+        if (stage.innerHTML.indexOf('الحاسوب: صديقي الجديد') === -1) {
+            window.buildMiddleStage();
+        }
+    }, 1000);
+    
+    setTimeout(window.buildMiddleStage, 500);
+    console.log('✅ النظام الجديد فعّال — يمنع القديم');
+})();
+</script>
     
     </html>
   
