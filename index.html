@@ -4170,6 +4170,208 @@ console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 �
     console.log('✅ نظام الإعدادية جاهز');
 })();
 </script>
+    <script>
+/* ═══════════════════════════════════════════════════════════
+   📚 نظام الدروس التدريجية — إعلامية السنة السابعة إعدادي
+   الوحدة 1: بيئة العمل المعلوماتية
+   ═══════════════════════════════════════════════════════════ */
+(function() {
+    'use strict';
+
+    window.ML_LESSONS = {
+        '1.1': {
+            id: '1.1', unit: 'الوحدة 1: بيئة العمل المعلوماتية',
+            title: 'الحاسوب: صديقي الجديد', icon: '💻',
+            desc: 'نتعرف على مكونات الحاسوب المادية', passScore: 6,
+            slides: [
+`<div style="text-align:center;padding:30px 20px;"><div style="font-size:100px;margin-bottom:20px;">💻</div><h1 style="color:#fbbf24;font-size:32px;margin-bottom:15px;">الحاسوب: صديقي الجديد</h1><p style="color:#cbd5e1;font-size:18px;line-height:1.8;">الوحدة 1: بيئة العمل المعلوماتية</p><div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:20px;margin-top:25px;display:inline-block;"><p style="font-size:16px;color:#fbbf24;font-weight:900;">📖 الدرس 1 من 3</p></div><div style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f;padding:20px;border-radius:20px;margin-top:30px;max-width:600px;margin-left:auto;margin-right:auto;"><strong style="font-size:18px;">🎯 الهدف من الدرس:</strong><br><span style="font-size:16px;">أن تتعرف على مكونات الحاسوب وتفهم وظيفة كل جزء</span></div></div>`,
+`<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🤔 ما هو الحاسوب؟</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:17px;line-height:2;"><p style="font-size:20px;font-weight:900;color:#dc2626;margin-bottom:15px;">الحاسوب = جهاز إلكتروني يساعدنا</p><p style="margin-bottom:10px;">🌟 ماذا يمكننا أن نفعل به؟</p><ul style="padding-right:25px;line-height:2.2;"><li>📝 كتابة الدروس والواجبات</li><li>🎨 الرسم والتصميم</li><li>🎮 اللعب والتعلم</li><li>🌐 الاتصال بالعالم</li><li>📚 البحث عن المعلومات</li><li>📸 حفظ الصور والفيديوهات</li></ul></div><div style="background:#dbeafe;padding:20px;border-radius:15px;margin-top:20px;border-right:5px solid #3b82f6;"><strong style="color:#1e40af;font-size:16px;">💡 معلومة:</strong><p style="margin-top:8px;color:#1e293b;font-size:15px;">كلمة "حاسوب" تأتي من فعل "حسَب" — لأنه يقوم بالحسابات!</p></div></div>`,
+`<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🔧 المكونات المادية</h2><p style="text-align:center;color:#cbd5e1;margin-bottom:20px;font-size:15px;">كل ما يمكننا لمسه في الحاسوب</p><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;margin-bottom:15px;border-right:5px solid #dc2626;"><div style="display:flex;align-items:center;gap:15px;"><div style="font-size:50px;">🧠</div><div><strong style="color:#dc2626;font-size:18px;">المعالج (CPU)</strong><p style="margin-top:5px;font-size:15px;">دماغ الحاسوب — يفكر ويحسب ويحل المشاكل</p></div></div></div><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;margin-bottom:15px;border-right:5px solid #3b82f6;"><div style="display:flex;align-items:center;gap:15px;"><div style="font-size:50px;">💾</div><div><strong style="color:#3b82f6;font-size:18px;">الذاكرة (RAM)</strong><p style="margin-top:5px;font-size:15px;">ذاكرة مؤقتة — مثل الطاولة التي نعمل عليها</p></div></div></div><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;border-right:5px solid #10b981;"><div style="display:flex;align-items:center;gap:15px;"><div style="font-size:50px;">💿</div><div><strong style="color:#10b981;font-size:18px;">القرص الصلب (HDD)</strong><p style="margin-top:5px;font-size:15px;">خزانة الملفات — تحفظ المعلومات بشكل دائم</p></div></div></div></div>`,
+`<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">⌨️ أجهزة الإدخال والإخراج</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px;"><div style="background:linear-gradient(135deg,#22c55e,#16a34a);padding:20px;border-radius:20px;text-align:center;color:white;"><div style="font-size:50px;">⌨️</div><strong style="font-size:18px;">الإدخال</strong><p style="margin-top:8px;font-size:14px;">نعطيها للحاسوب</p></div><div style="background:linear-gradient(135deg,#3b82f6,#1e40af);padding:20px;border-radius:20px;text-align:center;color:white;"><div style="font-size:50px;">🖥️</div><strong style="font-size:18px;">الإخراج</strong><p style="margin-top:8px;font-size:14px;">يعطينا الحاسوب</p></div></div><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;"><h3 style="color:#16a34a;margin-bottom:12px;font-size:17px;">✅ أجهزة الإدخال:</h3><ul style="padding-right:20px;line-height:2;font-size:15px;"><li>⌨️ لوحة المفاتيح</li><li>🖱️ الفأرة</li><li>🎤 المصدح</li><li>📷 الكاميرا</li></ul></div><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;margin-top:15px;"><h3 style="color:#1e40af;margin-bottom:12px;font-size:17px;">✅ أجهزة الإخراج:</h3><ul style="padding-right:20px;line-height:2;font-size:15px;"><li>🖥️ الشاشة</li><li>🖨️ الطابعة</li><li>🔊 السماعات</li></ul></div></div>`,
+`<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📊 ملخص الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:2;font-size:16px;"><p style="font-size:18px;font-weight:900;color:#dc2626;margin-bottom:20px;">✨ ما تعلمناه اليوم:</p><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:10px;border-right:5px solid #f59e0b;"><strong>1️⃣</strong> الحاسوب = جهاز إلكتروني يساعدنا في كثير من المهام</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:10px;border-right:5px solid #3b82f6;"><strong>2️⃣</strong> المكونات المادية = كل ما نلمسه (معالج، ذاكرة، قرص صلب)</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:10px;border-right:5px solid #10b981;"><strong>3️⃣</strong> أجهزة الإدخال = نعطيها للحاسوب (لوحة مفاتيح، فأرة)</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;border-right:5px solid #6366f1;"><strong>4️⃣</strong> أجهزة الإخراج = يعطينا الحاسوب (شاشة، طابعة)</div><div style="background:linear-gradient(135deg,#fef3c7,#fde68a);padding:20px;border-radius:15px;margin-top:20px;text-align:center;"><strong style="color:#92400e;font-size:17px;">🎯 الآن سنختبر ما تعلمناه!</strong></div></div></div>`
+            ],
+            exercises: [
+{ type: 'mcq', q: 'ما هو المكون الذي يُعد "دماغ الحاسوب"؟', options: ['الشاشة', 'المعالج (CPU)', 'الذاكرة', 'لوحة المفاتيح'], correct: 1, points: 2, feedback: { correct: '✅ أحسنت! المعالج هو دماغ الحاسوب.', wrong: '❌ المعالج (CPU) هو دماغ الحاسوب.' } },
+{ type: 'mcq', q: 'أي من هذه الأجهزة يُعتبر جهاز إدخال؟', options: ['الطابعة', 'الشاشة', 'الفأرة', 'السماعات'], correct: 2, points: 2, feedback: { correct: '✅ ممتاز! الفأرة جهاز إدخال.', wrong: '❌ الفأرة هي جهاز الإدخال.' } },
+{ type: 'tf', q: 'القرص الصلب يحفظ الملفات بشكل دائم حتى بعد إطفاء الحاسوب.', correct: true, points: 2, feedback: { correct: '✅ صحيح! مثل خزانة الكتب.', wrong: '❌ خطأ. القرص الصلب فعلاً يحفظ الملفات بشكل دائم.' } },
+{ type: 'fill', q: 'أكمل: نرى الصور على ______، ونطبع المستندات بالـ ______.', accepted: [['الشاشة', 'الطابعة'], ['شاشة', 'طابعة']], points: 2, feedback: { correct: '✅ ممتاز!', wrong: '❌ الإجابة: الشاشة والطابعة.' } },
+{ type: 'mcq', q: 'ما الفرق بين الذاكرة (RAM) والقرص الصلب؟', options: ['لا فرق', 'الذاكرة مؤقتة والقرص دائم', 'الذاكرة أكبر', 'القرص أسرع'], correct: 1, points: 2, feedback: { correct: '✅ أحسنت!', wrong: '❌ الذاكرة مؤقتة، القرص دائم.' } }
+            ]
+        },
+        '1.2': { id: '1.2', unit: 'الوحدة 1', title: 'البرامج: روح الحاسوب', icon: '💿', desc: 'نتعرف على البرمجيات ونظام التشغيل', comingSoon: true },
+        '1.3': { id: '1.3', unit: 'الوحدة 1', title: 'الملفات والمجلدات', icon: '📁', desc: 'نتعلم تنظيم الملفات', comingSoon: true }
+    };
+
+    window.__mlState = null;
+    window.__mlGetScore = function(id) { try { return parseInt(localStorage.getItem('ml_score_' + id) || '0'); } catch(e) { return 0; } };
+    window.__mlSaveScore = function(id, s) { try { var p = window.__mlGetScore(id); if (s > p) localStorage.setItem('ml_score_' + id, String(s)); } catch(e) {} };
+    window.__mlIsPassed = function(id) { return window.__mlGetScore(id) >= (window.ML_LESSONS[id] || {}).passScore; };
+
+    window.buildMiddleStage = function() {
+        var stage = document.getElementById('pageMiddleStage');
+        if (!stage) return;
+        var html = '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button><button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button><div class="welcome-card" style="margin:15px 0;"><h2>📚 الإعلامية — السنة السابعة إعدادي</h2><p>دروس تدريجية مع تمارين وتقييم</p></div><div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border:3px solid #fbbf24;border-radius:20px;padding:20px;margin:15px;color:white;"><h3 style="color:#fbbf24;font-size:20px;margin-bottom:15px;">🎯 الوحدة 1: بيئة العمل المعلوماتية</h3><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">';
+        ['1.1', '1.2', '1.3'].forEach(function(id) {
+            var l = window.ML_LESSONS[id]; if (!l) return;
+            var s = window.__mlGetScore(id), p = window.__mlIsPassed(id), cs = l.comingSoon;
+            var bg = cs ? 'linear-gradient(135deg,#475569,#334155)' : 'linear-gradient(135deg,#1e3a8a,#2563eb)';
+            var op = cs ? '0.7' : '1', cur = cs ? 'not-allowed' : 'pointer';
+            html += '<div onclick="' + (cs ? 'alert(\'قيد الإعداد\')' : 'window.openMiddleLesson(\'' + id + '\')') + '" style="background:' + bg + ';border:3px solid #fbbf24;border-radius:20px;padding:25px;text-align:center;cursor:' + cur + ';color:white;opacity:' + op + ';">';
+            html += '<div style="font-size:60px;margin-bottom:15px;">' + l.icon + '</div>';
+            html += '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">' + l.title + '</div>';
+            html += '<div style="font-size:13px;color:#e2e8f0;margin-bottom:15px;">' + l.desc + '</div>';
+            if (cs) html += '<div style="background:#64748b;padding:8px;border-radius:15px;font-weight:900;">⏳ قريباً</div>';
+            else if (p) html += '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ نجحت (' + s + '/10)</div>';
+            else if (s > 0) html += '<div style="background:#f59e0b;padding:8px;border-radius:15px;font-weight:900;">📊 ' + s + '/10 — أعد</div>';
+            else html += '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">▶ ابدأ الدرس</div>';
+            html += '</div>';
+        });
+        html += '</div></div>';
+        stage.innerHTML = html;
+    };
+
+    window.openMiddleLesson = function(id) {
+        var l = window.ML_LESSONS[id];
+        if (!l || l.comingSoon) { alert('قيد الإعداد'); return; }
+        window.__mlState = { lessonId: id, mode: 'slides', slideIndex: 0, exerciseIndex: 0, score: 0 };
+        var old = document.getElementById('mlViewer'); if (old) old.remove();
+        var ov = document.createElement('div');
+        ov.id = 'mlViewer';
+        ov.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);z-index:99999999;overflow-y:auto;padding:15px;direction:rtl;font-family:Cairo;';
+        ov.innerHTML = '<div style="max-width:900px;margin:15px auto;"><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;align-items:center;"><button onclick="window.__mlClose()" style="padding:10px 20px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;font-size:13px;cursor:pointer;">🔙 العودة</button><div id="mlCounter" style="flex:1;padding:10px 20px;background:rgba(0,0,0,0.4);border-radius:30px;color:#fbbf24;font-weight:900;text-align:center;border:2px solid #fbbf24;font-size:14px;"></div><div id="mlScore" style="padding:10px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:30px;color:white;font-weight:900;font-size:14px;">🎯 0</div></div><div style="height:10px;background:rgba(0,0,0,0.5);border-radius:10px;overflow:hidden;margin-bottom:20px;"><div id="mlProgress" style="height:100%;background:linear-gradient(90deg,#fbbf24,#22c55e);width:0%;transition:width 0.4s;"></div></div><div id="mlContent"></div><div id="mlNav" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:25px;"></div></div>';
+        document.body.appendChild(ov);
+        window.__mlRender();
+    };
+
+    window.__mlClose = function() { var v = document.getElementById('mlViewer'); if (v) v.remove(); window.buildMiddleStage(); };
+
+    window.__mlRender = function() {
+        var st = window.__mlState; if (!st) return;
+        var l = window.ML_LESSONS[st.lessonId];
+        var c = document.getElementById('mlContent'), n = document.getElementById('mlNav');
+        var ct = document.getElementById('mlCounter'), pg = document.getElementById('mlProgress'), se = document.getElementById('mlScore');
+        var totalPts = l.exercises.reduce(function(s, e) { return s + e.points; }, 0);
+
+        if (st.mode === 'slides') {
+            c.innerHTML = l.slides[st.slideIndex];
+            if (ct) ct.textContent = l.icon + ' الشريحة ' + (st.slideIndex + 1) + ' من ' + l.slides.length;
+            if (pg) pg.style.width = ((st.slideIndex + 1) / (l.slides.length + l.exercises.length) * 100) + '%';
+            if (se) se.textContent = '🎯 ' + st.score + '/' + totalPts;
+            var nh = '';
+            if (st.slideIndex > 0) nh += '<button onclick="window.__mlPrev()" style="padding:15px 30px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">▶ السابق</button>';
+            nh += '<button onclick="window.__mlClose()" style="padding:15px 30px;background:#334155;color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🏠 خروج</button>';
+            if (st.slideIndex < l.slides.length - 1) nh += '<button onclick="window.__mlNext()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button>';
+            else nh += '<button onclick="window.__mlNext()" style="padding:15px 30px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">📝 ابدأ التمارين</button>';
+            n.innerHTML = nh;
+        } else if (st.mode === 'exercises') {
+            if (st.exerciseIndex >= l.exercises.length) { window.__mlShowResult(); return; }
+            var ex = l.exercises[st.exerciseIndex];
+            if (ct) ct.textContent = '📝 التمرين ' + (st.exerciseIndex + 1) + ' من ' + l.exercises.length;
+            if (pg) pg.style.width = ((l.slides.length + st.exerciseIndex) / (l.slides.length + l.exercises.length) * 100) + '%';
+            if (se) se.textContent = '🎯 ' + st.score + '/' + totalPts;
+            var h = '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border:3px solid #fbbf24;border-radius:25px;padding:30px;color:white;">';
+            h += '<div style="text-align:center;margin-bottom:20px;"><span style="background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;padding:8px 20px;border-radius:25px;font-weight:900;font-size:14px;">✏️ التمرين ' + (st.exerciseIndex + 1) + ' — ' + ex.points + ' نقاط</span></div>';
+            h += '<div style="background:white;color:#1e293b;padding:20px;border-radius:15px;font-size:17px;font-weight:700;margin-bottom:20px;text-align:center;">' + ex.q + '</div>';
+            if (ex.type === 'mcq') {
+                h += '<div id="mlOptions" style="display:flex;flex-direction:column;gap:12px;">';
+                ex.options.forEach(function(o, i) { h += '<button onclick="window.__mlAnsMCQ(' + i + ')" style="padding:15px 20px;background:white;color:#1e293b;border:3px solid #cbd5e1;border-radius:15px;font-family:Cairo;font-weight:700;font-size:16px;text-align:right;cursor:pointer;">' + String.fromCharCode(65 + i) + '. ' + o + '</button>'; });
+                h += '</div>';
+            } else if (ex.type === 'tf') {
+                h += '<div id="mlOptions" style="display:flex;gap:15px;justify-content:center;"><button onclick="window.__mlAnsTF(true)" style="padding:20px 40px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:20px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;">✅ صحيح</button><button onclick="window.__mlAnsTF(false)" style="padding:20px 40px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:20px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;">❌ خطأ</button></div>';
+            } else if (ex.type === 'fill') {
+                h += '<div id="mlOptions" style="display:flex;flex-direction:column;gap:12px;"><input type="text" id="mlFill1" placeholder="الفراغ الأول..." style="padding:15px;border:3px solid #3b82f6;border-radius:15px;font-family:Cairo;font-size:16px;text-align:center;"><input type="text" id="mlFill2" placeholder="الفراغ الثاني..." style="padding:15px;border:3px solid #3b82f6;border-radius:15px;font-family:Cairo;font-size:16px;text-align:center;"><button onclick="window.__mlAnsFill()" style="padding:15px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:15px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">✅ تحقق</button></div>';
+            }
+            h += '<div id="mlFeedback" style="margin-top:20px;"></div></div>';
+            c.innerHTML = h;
+            n.innerHTML = '';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.__mlNext = function() {
+        var st = window.__mlState, l = window.ML_LESSONS[st.lessonId];
+        if (st.mode === 'slides') {
+            if (st.slideIndex < l.slides.length - 1) { st.slideIndex++; window.__mlRender(); }
+            else { st.mode = 'exercises'; st.exerciseIndex = 0; window.__mlRender(); }
+        }
+    };
+
+    window.__mlPrev = function() {
+        var st = window.__mlState;
+        if (st.mode === 'slides' && st.slideIndex > 0) { st.slideIndex--; window.__mlRender(); }
+    };
+
+    window.__mlAnsMCQ = function(sel) {
+        var st = window.__mlState, l = window.ML_LESSONS[st.lessonId], ex = l.exercises[st.exerciseIndex];
+        var ok = sel === ex.correct, fb = document.getElementById('mlFeedback');
+        var opts = document.querySelectorAll('#mlOptions button');
+        opts.forEach(function(b, i) { b.disabled = true; b.style.cursor = 'default'; if (i === ex.correct) { b.style.background = '#d1fae5'; b.style.borderColor = '#16a34a'; b.style.color = '#15803d'; } else if (i === sel && !ok) { b.style.background = '#fee2e2'; b.style.borderColor = '#dc2626'; b.style.color = '#991b1b'; } });
+        if (ok) st.score += ex.points;
+        fb.innerHTML = '<div style="padding:20px;background:' + (ok ? '#d1fae5' : '#fef3c7') + ';color:' + (ok ? '#15803d' : '#78350f') + ';border:3px solid ' + (ok ? '#16a34a' : '#f59e0b') + ';border-radius:15px;text-align:center;font-weight:700;font-size:15px;line-height:1.7;">' + (ok ? ex.feedback.correct : ex.feedback.wrong) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlContinue()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';
+        var se = document.getElementById('mlScore'); if (se) se.textContent = '🎯 ' + st.score;
+    };
+
+    window.__mlAnsTF = function(sel) {
+        var st = window.__mlState, l = window.ML_LESSONS[st.lessonId], ex = l.exercises[st.exerciseIndex];
+        var ok = sel === ex.correct, fb = document.getElementById('mlFeedback');
+        var opts = document.querySelectorAll('#mlOptions button');
+        opts.forEach(function(b) { b.disabled = true; b.style.cursor = 'default'; });
+        if (sel) opts[0].style.opacity = '0.5'; else opts[1].style.opacity = '0.5';
+        if (ok) st.score += ex.points;
+        fb.innerHTML = '<div style="padding:20px;background:' + (ok ? '#d1fae5' : '#fef3c7') + ';color:' + (ok ? '#15803d' : '#78350f') + ';border:3px solid ' + (ok ? '#16a34a' : '#f59e0b') + ';border-radius:15px;text-align:center;font-weight:700;font-size:15px;line-height:1.7;">' + (ok ? ex.feedback.correct : ex.feedback.wrong) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlContinue()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';
+        var se = document.getElementById('mlScore'); if (se) se.textContent = '🎯 ' + st.score;
+    };
+
+    window.__mlAnsFill = function() {
+        var st = window.__mlState, l = window.ML_LESSONS[st.lessonId], ex = l.exercises[st.exerciseIndex];
+        var v1 = (document.getElementById('mlFill1').value || '').trim().toLowerCase();
+        var v2 = (document.getElementById('mlFill2').value || '').trim().toLowerCase();
+        var ok = ex.accepted.some(function(p) { return p[0].toLowerCase() === v1 && p[1].toLowerCase() === v2; });
+        var fb = document.getElementById('mlFeedback');
+        if (ok) st.score += ex.points;
+        fb.innerHTML = '<div style="padding:20px;background:' + (ok ? '#d1fae5' : '#fef3c7') + ';color:' + (ok ? '#15803d' : '#78350f') + ';border:3px solid ' + (ok ? '#16a34a' : '#f59e0b') + ';border-radius:15px;text-align:center;font-weight:700;font-size:15px;line-height:1.7;">' + (ok ? ex.feedback.correct : ex.feedback.wrong) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlContinue()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';
+        var se = document.getElementById('mlScore'); if (se) se.textContent = '🎯 ' + st.score;
+    };
+
+    window.__mlContinue = function() { var st = window.__mlState; st.exerciseIndex++; window.__mlRender(); };
+
+    window.__mlShowResult = function() {
+        var st = window.__mlState, l = window.ML_LESSONS[st.lessonId];
+        var tp = l.exercises.reduce(function(s, e) { return s + e.points; }, 0);
+        var pct = Math.round((st.score / tp) * 100), ok = st.score >= l.passScore;
+        window.__mlSaveScore(st.lessonId, st.score);
+        var h = '<div style="background:' + (ok ? 'linear-gradient(135deg,#d1fae5,#a7f3d0)' : 'linear-gradient(135deg,#fef3c7,#fde68a)') + ';border:4px solid ' + (ok ? '#16a34a' : '#f59e0b') + ';border-radius:25px;padding:40px 25px;text-align:center;">';
+        h += '<div style="font-size:80px;margin-bottom:20px;">' + (ok ? '🎉' : '📚') + '</div>';
+        h += '<h2 style="color:' + (ok ? '#15803d' : '#92400e') + ';font-size:28px;margin-bottom:25px;">' + (ok ? 'مبروك! نجحت' : 'لم تنجح هذه المرة') + '</h2>';
+        h += '<div style="font-size:60px;font-weight:900;color:' + (ok ? '#15803d' : '#92400e') + ';margin-bottom:15px;">' + st.score + ' / ' + tp + '</div>';
+        h += '<div style="font-size:22px;color:' + (ok ? '#15803d' : '#92400e') + ';margin-bottom:25px;">النسبة: ' + pct + '%</div>';
+        h += '<p style="color:' + (ok ? '#15803d' : '#92400e') + ';font-size:16px;line-height:1.8;margin-bottom:25px;font-weight:700;">' + (ok ? '✅ لقد فهمت مكونات الحاسوب جيداً!' : '📖 راجع الدرس وأعد المحاولة. النجاح يتطلب ' + l.passScore + ' نقاط.') + '</p>';
+        h += '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:25px;">';
+        if (ok) h += '<button onclick="window.__mlNextLesson()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">📚 الدرس التالي</button>';
+        h += '<button onclick="window.__mlRetry()" style="padding:15px 30px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🔄 إعادة الدرس</button>';
+        h += '<button onclick="window.__mlClose()" style="padding:15px 30px;background:#334155;color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🏠 خروج</button>';
+        h += '</div></div>';
+        document.getElementById('mlContent').innerHTML = h;
+        document.getElementById('mlNav').innerHTML = '';
+    };
+
+    window.__mlRetry = function() { window.openMiddleLesson(window.__mlState.lessonId); };
+
+    window.__mlNextLesson = function() {
+        var cid = window.__mlState.lessonId, order = ['1.1', '1.2', '1.3'];
+        var idx = order.indexOf(cid);
+        if (idx < order.length - 1) {
+            var nid = order[idx + 1];
+            if (window.ML_LESSONS[nid] && !window.ML_LESSONS[nid].comingSoon) window.openMiddleLesson(nid);
+            else { alert('🎉 أحسنت! الدرس التالي قيد الإعداد.'); window.__mlClose(); }
+        } else { alert('🎉 أكملت كل الدروس المتوفرة.'); window.__mlClose(); }
+    };
+
+    setTimeout(window.buildMiddleStage, 1500);
+    setTimeout(window.buildMiddleStage, 3000);
+    console.log('✅ نظام الدروس التدريجية جاهز');
+})();
+</script>
     
     </html>
   
