@@ -4372,6 +4372,76 @@ console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 �
     console.log('✅ نظام الدروس التدريجية جاهز');
 })();
 </script>
+    <script>
+/* ═══ 🧹 مُلغي القديم — يجعل النظام الجديد فقط يعمل ═══ */
+(function() {
+    'use strict';
+    
+    var oldSlides = window.MIDDLE_ETHICS_SLIDES;
+    var oldOpen = window.openMiddleLesson;
+    var oldBuild = window.buildMiddleStage;
+    
+    function killOld() {
+        window.MIDDLE_ETHICS_SLIDES = [];
+        window.middleLessonEthicsSlides = [];
+        window.middleLessonEthicsExercises = [];
+        window.middleLessonEthicsExam = [];
+        window.__mNext = function() {};
+        window.__mPrev = function() {};
+        window.__mRender = function() {};
+        window.__cmNext = function() {};
+        window.__cmPrev = function() {};
+        window.__ethicsSlides = [];
+        window.__renderEthics = function() {};
+    }
+    
+    function enforceNew() {
+        if (!window.ML_LESSONS || !window.ML_LESSONS['1.1']) return false;
+        if (!window.__mlRender || !window.__mlNext) return false;
+        return true;
+    }
+    
+    killOld();
+    
+    var checkCount = 0;
+    var timer = setInterval(function() {
+        killOld();
+        checkCount++;
+        var old = document.getElementById('customMiddleViewer');
+        if (old) old.remove();
+        var oldEthics = document.getElementById('ethicsViewer');
+        if (oldEthics) oldEthics.remove();
+        if (checkCount % 4 === 0 && enforceNew() && window.buildMiddleStage) {
+            var stage = document.getElementById('pageMiddleStage');
+            if (stage) stage.dataset.built = '';
+            window.buildMiddleStage();
+        }
+        if (checkCount > 60) clearInterval(timer);
+    }, 500);
+    
+    setTimeout(function() {
+        var old = document.getElementById('customMiddleViewer');
+        if (old) old.remove();
+        var stage = document.getElementById('pageMiddleStage');
+        if (stage) {
+            stage.dataset.built = '';
+            if (window.buildMiddleStage) window.buildMiddleStage();
+        }
+    }, 1500);
+    
+    setTimeout(function() {
+        var old = document.getElementById('customMiddleViewer');
+        if (old) old.remove();
+        var stage = document.getElementById('pageMiddleStage');
+        if (stage) {
+            stage.dataset.built = '';
+            if (window.buildMiddleStage) window.buildMiddleStage();
+        }
+    }, 3500);
+    
+    console.log('✅ Enforcer — النظام القديم مُلغى');
+})();
+</script>
     
     </html>
   
