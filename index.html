@@ -5052,6 +5052,32 @@ setTimeout(rebuild, 1500);
 console.log('✅ المرحلة الإعدادية الرسمية جاهزة — 7 / 8 / 9');
 })();
 </script>
-    
+    <script>
+/* 🛑 إيقاف الوميض — يجعل FIXER2 القديم يتوقف */
+(function(){
+'use strict';
+var MARKER = 'صديقي الجديد';
+
+function patch(){
+  var s = document.getElementById('pageMiddleStage');
+  if(!s) return;
+  var h = s.innerHTML || '';
+  if(h.length < 30) return;
+  
+  // هل المحتوى الجديد (3 بطاقات)؟
+  var hasThree = h.indexOf('السنة الثامنة') !== -1 || h.indexOf('Scratch') !== -1 || h.indexOf('IoT') !== -1;
+  // هل فيه علامة FIXER2؟
+  var hasMarker = h.indexOf(MARKER) !== -1;
+  
+  // إذا كان المحتوى الجديد ولا يحتوي العلامة → أضفها (بشكل مخفي)
+  if(hasThree && !hasMarker){
+    s.innerHTML = h + '<span style="display:none">' + MARKER + '</span>';
+  }
+}
+
+setInterval(patch, 25);
+console.log('🛑 مثبّت الوميض نشط');
+})();
+</script>
     </html>
   
