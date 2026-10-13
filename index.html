@@ -5079,5 +5079,70 @@ setInterval(patch, 25);
 console.log('🛑 مثبّت الوميض نشط');
 })();
 </script>
+<script>
+/* 🛑 الحل النهائي — يوقف FIXER2 تماماً */
+(function(){
+'use strict';
+
+// 1) أوقف كل المؤقتات السابقة (FIXER2 يستخدم setInterval)
+for (var i = 1; i < 99999; i++) {
+  try { window.clearInterval(i); } catch(e) {}
+  try { window.clearTimeout(i); } catch(e) {}
+}
+
+// 2) اعترض الكتابة في pageMiddleStage لمنع FIXER2 من التعديل
+var el = document.getElementById('pageMiddleStage');
+if (el) {
+  var _desc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+  Object.defineProperty(el, 'innerHTML', {
+    configurable: true,
+    get: function(){ return _desc.get.call(this); },
+    set: function(v){
+      var s = String(v);
+      // امنع FIXER2 من كتابة محتواه القديم (بطاقة واحدة بصديقي الجديد)
+      if (s.indexOf('صديقي الجديد') !== -1 &&
+          s.indexOf('السنة الثامنة') === -1 &&
+          s.indexOf('Scratch') === -1 &&
+          s.indexOf('IoT') === -1) {
+        return;
+      }
+      _desc.set.call(this, s);
+    }
+  });
+}
+
+// 3) أعِد بناء المحتوى الصحيح (3 بطاقات) بعد 200ms
+setTimeout(function(){
+  var s = document.getElementById('pageMiddleStage');
+  if (!s) return;
+  s.innerHTML =
+    '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>' +
+    '<button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button>' +
+    '<div class="welcome-card" style="margin:15px 0;"><h2>🎓 دروس الإعدادية — الإعلامية</h2><p>وفق البرنامج الرسمي التونسي</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;padding:20px;">' +
+      '<div onclick="window.__showLesson(\'7.1\')" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
+        '<div style="font-size:60px;margin-bottom:15px;">💻</div>' +
+        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة السابعة</div>' +
+        '<div style="font-size:15px;margin-bottom:15px;">الحاسوب ونظام التشغيل</div>' +
+        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
+      '</div>' +
+      '<div onclick="window.__showLesson(\'8.1\')" style="background:linear-gradient(135deg,#065f46,#10b981);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
+        '<div style="font-size:60px;margin-bottom:15px;">🐱</div>' +
+        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة الثامنة</div>' +
+        '<div style="font-size:15px;margin-bottom:15px;">البرمجة المرئية بـ Scratch</div>' +
+        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
+      '</div>' +
+      '<div onclick="window.__showLesson(\'9.1\')" style="background:linear-gradient(135deg,#7c3aed,#4c1d95);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
+        '<div style="font-size:60px;margin-bottom:15px;">📡</div>' +
+        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة التاسعة</div>' +
+        '<div style="font-size:15px;margin-bottom:15px;">الأجهزة المتصلة (IoT)</div>' +
+        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
+      '</div>' +
+    '</div>';
+}, 200);
+
+console.log('🛑 FIXER2 موقوف — الوميض انتهى');
+})();
+</script>
     </html>
   
