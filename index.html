@@ -4788,6 +4788,18 @@ setInterval(function(){
   console.log('✅ الدرس الكامل جاهز — 20 شريحة + 15 تمرين');
 })();
 </script>
+    <script>
+/* 🔗 ربط البطاقة بالدرس الكامل */
+setInterval(function(){
+  var s = document.getElementById('pageMiddleStage');
+  if(!s) return;
+  var card = s.querySelector('div[onclick*="alert"]');
+  if(card && window.__showLesson){
+    card.setAttribute('onclick', "window.__showLesson('1.1')");
+  }
+}, 250);
+console.log('🔗 تم ربط البطاقة بالدرس');
+</script>
     
     </html>
   
