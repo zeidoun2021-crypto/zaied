@@ -4595,5 +4595,18 @@ setInterval(function(){
   }
 }, 150);
 </script>
+    <script>
+(function(){
+  var NEW='<button class="back-btn" onclick="showChildrenTech()">\u{1F519} العودة</button><button class="back-btn exit-platform-btn" onclick="exitPlatform()">\u26FB خروج</button><div class="welcome-card" style="margin:15px 0;"><h2>\u{1F393} دروس الإعدادية</h2><p>الحاسوب: صديقي الجديد</p></div><div style="padding:20px;"><div onclick="alert(\'\u0633\u064A\u0641\u062A\u062D \u0627\u0644\u062F\u0631\u0633\')" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border:3px solid #fbbf24;border-radius:20px;padding:25px;text-align:center;cursor:pointer;color:white;max-width:400px;margin:0 auto;"><div style="font-size:60px;margin-bottom:15px;">\u{1F4BB}</div><div style="font-size:20px;font-weight:900;color:#fbbf24;margin-bottom:10px;">\u0627\u0644\u062D\u0627\u0633\u0648\u0628: \u0635\u062F\u064A\u0642\u064A \u0627\u0644\u062C\u062F\u064A\u062F</div><div style="background:#22c55e;padding:10px;border-radius:15px;font-weight:900;">\u2705 \u0627\u0628\u062F\u0623 \u0627\u0644\u062F\u0631\u0633</div></div></div>';
+  setInterval(function(){
+    var s=document.getElementById('pageMiddleStage');
+    if(!s||!s.innerHTML)return;
+    if(s.innerHTML.indexOf('\u0635\u062F\u064A\u0642\u064A \u0627\u0644\u062C\u062F\u064A\u062F')===-1){
+      s.innerHTML=NEW;
+    }
+  },200);
+  console.log('\u2705 FIXER2 ACTIVE');
+})();
+</script>
     </html>
   
