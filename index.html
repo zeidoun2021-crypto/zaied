@@ -4566,5 +4566,34 @@ console.log('✅ الدرس الابتدائي جاهز — 33 شريحة + 20 �
     console.log('🛡️ المُلزم النهائي فعّال');
 })();
 </script>
+    <script>
+/* 🛡️ الإصلاح النهائي — يمنع كل الأنظمة القديمة */
+setInterval(function(){
+  var s = document.getElementById('pageMiddleStage');
+  if(!s || !s.innerHTML || s.innerHTML.length < 30) return;
+  if(s.innerHTML.indexOf('صديقي الجديد') === -1){
+    s.innerHTML =
+      '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>' +
+      '<div class="welcome-card" style="margin:15px 0;">' +
+        '<h2>🎓 دروس الإعدادية — الإعلامية</h2>' +
+        '<p>الحاسوب: صديقي الجديد</p>' +
+      '</div>' +
+      '<div style="padding:20px;">' +
+        '<div onclick="window.__showLesson && window.__showLesson(\'1.1\')" ' +
+             'style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border:3px solid #fbbf24;' +
+                    'border-radius:20px;padding:25px;text-align:center;cursor:pointer;' +
+                    'color:white;max-width:400px;margin:0 auto;">' +
+          '<div style="font-size:60px;margin-bottom:15px;">💻</div>' +
+          '<div style="font-size:20px;font-weight:900;color:#fbbf24;margin-bottom:10px;">' +
+            'الحاسوب: صديقي الجديد</div>' +
+          '<div style="font-size:14px;color:#e2e8f0;margin-bottom:15px;">' +
+            '5 شرائح تفاعلية</div>' +
+          '<div style="background:#22c55e;padding:10px;border-radius:15px;font-weight:900;">' +
+            '✅ ابدأ الدرس</div>' +
+        '</div>' +
+      '</div>';
+  }
+}, 150);
+</script>
     </html>
   
