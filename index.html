@@ -4800,6 +4800,28 @@ setInterval(function(){
 }, 250);
 console.log('🔗 تم ربط البطاقة بالدرس');
 </script>
+    <script>
+/* 🔗 الإصلاح النهائي: ربط البطاقة بالدرس الكامل */
+(function(){
+  function fix(){
+    var s = document.getElementById('pageMiddleStage');
+    if(!s) return;
+    var cards = s.querySelectorAll('div[onclick]');
+    cards.forEach(function(c){
+      var oc = c.getAttribute('onclick') || '';
+      if(oc.indexOf('alert') !== -1 && c.innerHTML.indexOf('صديقي الجديد') !== -1){
+        c.setAttribute('onclick', "window.__showLesson('1.1')");
+        // تحديث النص "5 شرائح" → "20 شريحة و15 تمرين"
+        c.innerHTML = c.innerHTML
+          .replace('5 شرائح تفاعلية', '20 شريحة + 15 تمرين')
+          .replace('5 شرائح', '20 شريحة + 15 تمرين');
+      }
+    });
+  }
+  setInterval(fix, 300);
+  console.log('🔗 المربط النهائي فعّال');
+})();
+</script>
     
     </html>
   
