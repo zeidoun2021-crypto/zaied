@@ -4822,7 +4822,60 @@ console.log('🔗 تم ربط البطاقة بالدرس');
   console.log('🔗 المربط النهائي فعّال');
 })();
 </script>
-
+<script>
+/* 🎯 أزرار التنقل الثابتة — تعمل مع أي درس مفتوح */
+(function(){
+  'use strict';
+  
+  setInterval(function(){
+    // هل يوجد درس مفتوح؟
+    var ov = document.getElementById('myViewer') 
+           || document.getElementById('mlViewer') 
+           || document.getElementById('customMiddleViewer');
+    
+    var bar = document.getElementById('fixedNavBar');
+    
+    if (!ov) {
+      if (bar) bar.remove();
+      return;
+    }
+    
+    if (bar) return; // موجود بالفعل
+    
+    bar = document.createElement('div');
+    bar.id = 'fixedNavBar';
+    bar.style.cssText = 'position:fixed;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:2147483647;background:rgba(15,23,42,0.98);padding:12px 20px;border-radius:50px;border:3px solid #fbbf24;box-shadow:0 8px 30px rgba(0,0,0,0.7);';
+    
+    bar.innerHTML = 
+      '<button id="fnbPrev" style="padding:12px 24px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">▶ السابق</button>' +
+      '<button id="fnbNext" style="padding:12px 24px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">التالي ◀</button>' +
+      '<button id="fnbClose" style="padding:12px 24px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">🏠 خروج</button>';
+    
+    document.body.appendChild(bar);
+    
+    document.getElementById('fnbPrev').onclick = function(){
+      var fns = [window.__mlPrev, window.__p, window.prevLessonSlide, window.__mPrev, window.__myPrev, window.__cmPrev];
+      for (var i = 0; i < fns.length; i++) { if (typeof fns[i] === 'function') { fns[i](); return; } }
+    };
+    
+    document.getElementById('fnbNext').onclick = function(){
+      var fns = [window.__mlNext, window.__n, window.nextLessonSlide, window.__mNext, window.__myNext, window.__cmNext];
+      for (var i = 0; i < fns.length; i++) { if (typeof fns[i] === 'function') { fns[i](); return; } }
+    };
+    
+    document.getElementById('fnbClose').onclick = function(){
+      ['myViewer','mlViewer','customMiddleViewer','ethicsViewer'].forEach(function(id){
+        var v = document.getElementById(id); if (v) v.remove();
+      });
+      if (bar) bar.remove();
+    };
+    
+    console.log('✅ أزرار التنقل ظهرت');
+  }, 300);
+  
+  console.log('🎯 نظام الأزرار الثابتة جاهز');
+})();
+</script>
     
     </html>
   
