@@ -4788,361 +4788,41 @@ setInterval(function(){
   console.log('✅ الدرس الكامل جاهز — 20 شريحة + 15 تمرين');
 })();
 </script>
-<script>
-/* ═══════════════════════════════════════════════════════
-   📚 المرحلة الإعدادية الرسمية — 7 / 8 / 9
-   وفق البرنامج الرسمي التونسي (2019)
-   ═══════════════════════════════════════════════════════ */
-(function(){
-'use strict';
-
-/* ═══════════════════════════════════════════════════════
-   📘 الدرس 7.1: الحاسوب ونظام التشغيل (السنة السابعة)
-   ═══════════════════════════════════════════════════════ */
-var S7 = [
-'<div style="text-align:center;padding:40px 20px;"><div style="font-size:100px;">💻</div><h1 style="color:#fbbf24;font-size:34px;margin:20px 0;">الحاسوب ونظام التشغيل</h1><p style="color:#cbd5e1;font-size:20px;">الوحدة 1: بيئة العمل المعلوماتية</p><div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:20px;margin-top:30px;display:inline-block;"><p style="color:#fbbf24;font-weight:900;">📖 السنة السابعة إعدادي</p><p style="color:#cbd5e1;">بقلم: محمد زايد</p></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🎯 أهداف الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:2;"><p style="font-weight:900;color:#dc2626;margin-bottom:15px;">في نهاية هذا الدرس، ستكون قادراً على:</p><ol style="padding-right:25px;"><li>✅ التعرف على المكونات الأساسية للحاسوب</li><li>✅ التمييز بين المكونات المادية والبرمجية</li><li>✅ فهم وظائف نظام التشغيل</li><li>✅ التعامل مع سطح المكتب والنوافذ</li><li>✅ إدارة الملفات والمجلدات</li><li>✅ التعرف على وسائط التخزين</li></ol></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🔬 المكونات الأساسية</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:16px;line-height:2;"><div style="background:#fef3c7;padding:18px;border-radius:12px;border-right:5px solid #f59e0b;margin-bottom:15px;"><h3 style="color:#92400e;">🔧 المكونات المادية (Hardware):</h3><p style="margin-top:8px;">كل ما يمكن لمسه: المعالج، الذاكرة، القرص الصلب، الشاشة، لوحة المفاتيح، الفأرة، الطابعة.</p></div><div style="background:#dbeafe;padding:18px;border-radius:12px;border-right:5px solid #3b82f6;"><h3 style="color:#1e40af;">💿 المكونات البرمجية (Software):</h3><p style="margin-top:8px;">كل ما لا يمكن لمسه: نظام التشغيل، البرامج التطبيقية.</p></div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">⚙️ نظام التشغيل</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:16px;line-height:2;"><div style="background:#d1fae5;padding:20px;border-radius:15px;border-right:5px solid #10b981;"><h3 style="color:#065f46;">📖 التعريف:</h3><p style="margin-top:10px;">البرنامج الرئيسي الذي يدير موارد الحاسوب ويتحكم في جميع العمليات.</p></div><div style="background:#e0e7ff;padding:20px;border-radius:15px;margin-top:15px;"><h3 style="color:#3730a3;">🎯 وظائفه:</h3><ul style="padding-right:25px;margin-top:10px;"><li>إدارة الملفات والمجلدات</li><li>إدارة الذاكرة</li><li>إدارة الأجهزة الطرفية</li><li>تشغيل البرامج التطبيقية</li></ul></div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-top:15px;text-align:center;"><strong style="color:#92400e;">أمثلة: Windows, Linux, macOS, Android</strong></div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🖥️ سطح المكتب والنوافذ</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🖼️ سطح المكتب:</strong> الواجهة الرئيسية التي تظهر بعد تشغيل الحاسوب</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>📁 أيقونات:</strong> رموز تمثل البرامج والملفات</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>📊 شريط المهام:</strong> يعرض البرامج المفتوحة والوقت</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>🪟 النوافذ:</strong> إطارات قابلة للتحريك والتصغير والتكبير</div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">📁 إدارة الملفات والمجلدات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>📄 الملف:</strong> وحدة تخزين للبيانات (نص، صورة، فيديو)</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>📁 المجلد:</strong> حاوية لتنظيم الملفات</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>✂️ العمليات:</strong> إنشاء، إعادة تسمية، نسخ، نقل، حذف</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>📂 المسار:</strong> العنوان الكامل للملف: <span style="font-family:monospace;direction:ltr;">C:\\Users\\Documents\\file.txt</span></div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">💾 وسائط التخزين</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>💿 القرص الصلب (HDD/SSD):</strong> تخزين دائم داخل الحاسوب</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>💾 القرص الليزري (CD/DVD):</strong> تخزين بصري</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🔌 ذاكرة USB (Clé USB):</strong> تخزين محمول</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>☁️ التخزين السحابي:</strong> تخزين عبر الإنترنت (Google Drive)</div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">📊 ملخص الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>1️⃣</strong> الحاسوب = مكونات مادية + برمجية</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>2️⃣</strong> نظام التشغيل يدير كل موارد الحاسوب</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>3️⃣</strong> سطح المكتب والنوافذ واجهة المستخدم</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>4️⃣</strong> إدارة الملفات والمجلدات ضرورية للتنظيم</div><div style="background:#fce7f3;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>5️⃣</strong> وسائط التخزين متنوعة: HDD, USB, CD, Cloud</div><div style="background:linear-gradient(135deg,#fef3c7,#fde68a);padding:20px;border-radius:15px;margin-top:20px;text-align:center;"><strong style="color:#92400e;font-size:17px;">🎯 الآن حان وقت التمارين!</strong></div></div></div>'
-];
-
-var E7 = [
-{t:'mcq',q:'ما هو التعريف العلمي للحاسوب؟',o:['جهاز كهربائي','جهاز إلكتروني رقمي','آلة حاسبة','جهاز اتصال'],c:1,p:2},
-{t:'mcq',q:'أي مما يلي يُعد من المكونات المادية؟',o:['Windows','Word','المعالج','Google Chrome'],c:2,p:2},
-{t:'mcq',q:'ما وظيفة نظام التشغيل؟',o:['الطباعة','إدارة موارد الحاسوب','الرسم','تصفح الإنترنت'],c:1,p:2},
-{t:'mcq',q:'أين تُخزن الملفات بشكل دائم؟',o:['RAM','ROM','القرص الصلب','المعالج'],c:2,p:2},
-{t:'tf',q:'الملف هو وحدة تخزين للبيانات.',c:true,p:2},
-{t:'tf',q:'المجلد لا يمكن أن يحتوي على ملفات.',c:false,p:2},
-{t:'tf',q:'ذاكرة USB تستخدم للتخزين المحمول.',c:true,p:2},
-{t:'fill',q:'البرنامج المسؤول عن إدارة موارد الحاسوب يسمى ______.',a:[['نظام التشغيل','système']],p:2},
-{t:'fill',q:'الواجهة الرئيسية التي تظهر بعد تشغيل الحاسوب تسمى ______.',a:[['سطح المكتب']],p:2},
-{t:'fill',q:'العنوان الكامل للملف يسمى ______.',a:[['المسار','path']],p:2},
-{t:'match',q:'صل بين المكون ونوعه:',pairs:[{l:'المعالج',r:'مادي'},{l:'Windows',r:'برمجي'},{l:'RAM',r:'مادي'},{l:'Word',r:'برمجي'}],p:2},
-{t:'match',q:'صل بين الوسيط ووظيفته:',pairs:[{l:'HDD',r:'تخزين دائم'},{l:'USB',r:'تخزين محمول'},{l:'RAM',r:'تخزين مؤقت'},{l:'Cloud',r:'تخزين عبر الإنترنت'}],p:2}
-];
-
-/* ═══════════════════════════════════════════════════════
-   📗 الدرس 8.1: البرمجة المرئية بـ Scratch (السنة الثامنة)
-   ═══════════════════════════════════════════════════════ */
-var S8 = [
-'<div style="text-align:center;padding:40px 20px;"><div style="font-size:100px;">🐱</div><h1 style="color:#fbbf24;font-size:34px;margin:20px 0;">البرمجة المرئية بـ Scratch</h1><p style="color:#cbd5e1;font-size:20px;">الوحدة 2: التفكير الحسابي</p><div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:20px;margin-top:30px;display:inline-block;"><p style="color:#fbbf24;font-weight:900;">📖 السنة الثامنة إعدادي</p><p style="color:#cbd5e1;">بقلم: محمد زايد</p></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🎯 أهداف الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:2;"><ol style="padding-right:25px;"><li>✅ التعرف على بيئة Scratch</li><li>✅ فهم الكائنات والخلفيات</li><li>✅ استخدام اللبنات البرمجية</li><li>✅ التحكم في الأحداث والحركة</li><li>✅ استخدام التكرار (الحلقات)</li><li>✅ إنشاء قصة متحركة أو لعبة بسيطة</li></ol></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🐱 ما هو Scratch؟</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:16px;line-height:2;"><div style="background:#dbeafe;padding:20px;border-radius:15px;border-right:5px solid #3b82f6;"><h3 style="color:#1e40af;">📖 التعريف:</h3><p style="margin-top:10px;">لغة برمجة مرئية تعتمد على السحب والإفلات لإنشاء قصص وألعاب ورسوم متحركة.</p></div><div style="background:#d1fae5;padding:20px;border-radius:15px;margin-top:15px;"><h3 style="color:#065f46;">🎯 مميزاته:</h3><ul style="padding-right:25px;margin-top:10px;"><li>سهل للمبتدئين</li><li>لا يحتاج كتابة أكواد معقدة</li><li>تعلّم باللعب</li><li>مجاني ومتاح على: scratch.mit.edu</li></ul></div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🖥️ واجهة Scratch</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🎨 منطقة اللبنات:</strong> تحتوي على جميع اللبنات مصنفة حسب اللون</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>📝 منطقة السكريبت:</strong> حيث نرتب اللبنات لبناء البرنامج</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🐱 منطقة الكائنات:</strong> تعرض الكائنات (Sprites)</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>🎬 المنصة (Stage):</strong> حيث تظهر النتائج</div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🧩 أنواع اللبنات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🔵 الحركة (Motion):</strong> تحريك الكائن</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🎨 المظهر (Looks):</strong> تغيير المظهر والأقوال</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🔊 الصوت (Sound):</strong> تشغيل الأصوات</div><div style="background:#fce7f3;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #ec4899;"><strong>⚡ الأحداث (Events):</strong> بدء البرنامج</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #6366f1;"><strong>🔁 التحكم (Control):</strong> التكرار والانتظار</div><div style="background:#fecaca;padding:15px;border-radius:12px;border-right:5px solid #ef4444;"><strong>🟠 الإحساس (Sensing):</strong> التفاعل مع المستخدم</div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🔁 التكرار (الحلقات)</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;border-right:5px solid #3b82f6;margin-bottom:15px;"><p><strong>كرر (X) مرة:</strong> تكرار مجموعة لبنات عدداً محدداً من المرات</p></div><div style="background:#d1fae5;padding:15px;border-radius:12px;border-right:5px solid #10b981;margin-bottom:15px;"><p><strong>كرر باستمرار:</strong> تكرار اللبنات إلى ما لا نهاية</p></div><div style="background:#fef3c7;padding:15px;border-radius:12px;border-right:5px solid #f59e0b;"><p><strong>مثال:</strong> تحريك القط 10 خطوات ثم انتظار ثانية، وتكرار ذلك</p></div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🎮 مشروع تطبيقي</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;font-size:15px;line-height:1.9;"><p style="font-weight:900;color:#dc2626;margin-bottom:15px;text-align:center;">إنشاء لعبة بسيطة: القط يطارد الكرة</p><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>1️⃣</strong> اختر خلفية مناسبة</div><div style="background:#d1fae5;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>2️⃣</strong> أضف كائناً (كرة)</div><div style="background:#fef3c7;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>3️⃣</strong> برمج الكرة لتتحرك عشوائياً</div><div style="background:#fce7f3;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>4️⃣</strong> برمج القط ليتحرك نحو الكرة</div><div style="background:#e0e7ff;padding:12px;border-radius:10px;"><strong>5️⃣</strong> أضف نظام نقاط</div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">📊 ملخص الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>1️⃣</strong> Scratch لغة برمجة مرئية بالسحب والإفلات</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>2️⃣</strong> الواجهة: لبنات + سكريبت + كائنات + منصة</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>3️⃣</strong> أنواع اللبنات: حركة، مظهر، صوت، أحداث، تحكم</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>4️⃣</strong> التكرار: كرر X مرة / كرر باستمرار</div><div style="background:#fce7f3;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>5️⃣</strong> إنشاء مشاريع تفاعلية (قصص، ألعاب)</div><div style="background:linear-gradient(135deg,#fef3c7,#fde68a);padding:20px;border-radius:15px;margin-top:20px;text-align:center;"><strong style="color:#92400e;font-size:17px;">🎯 الآن حان وقت التمارين!</strong></div></div></div>'
-];
-
-var E8 = [
-{t:'mcq',q:'ما هو Scratch؟',o:['لعبة','لغة برمجة مرئية','متصفح','نظام تشغيل'],c:1,p:2},
-{t:'mcq',q:'أين نجد منصة Scratch؟',o:['scratch.mit.edu','google.com','facebook.com','youtube.com'],c:0,p:2},
-{t:'mcq',q:'ما وظيفة لبنة "كرر X مرة"؟',o:['التحريك','التكرار','الصوت','الانتظار'],c:1,p:2},
-{t:'mcq',q:'أي لبنة تُستخدم لبدء البرنامج؟',o:['تحرك','قل','عند النقر على العلم','انتظر'],c:2,p:2},
-{t:'tf',q:'Scratch يحتاج كتابة أكواد معقدة.',c:false,p:2},
-{t:'tf',q:'الكائن في Scratch يسمى Sprite.',c:true,p:2},
-{t:'tf',q:'لبنة "كرر باستمرار" تكرر اللبنات إلى ما لا نهاية.',c:true,p:2},
-{t:'fill',q:'لغة البرمجة المرئية التي نستخدمها تسمى ______.',a:[['Scratch','سكراتش']],p:2},
-{t:'fill',q:'لبنة ______ تُستخدم لتكرار اللبنات.',a:[['كرر']],p:2},
-{t:'fill',q:'المنصة التي تظهر فيها النتائج تسمى ______.',a:[['Stage','المنصة']],p:2},
-{t:'match',q:'صل بين اللبنة ووظيفتها:',pairs:[{l:'الحركة',r:'تحريك الكائن'},{l:'المظهر',r:'تغيير الشكل'},{l:'الصوت',r:'تشغيل الأصوات'},{l:'التحكم',r:'التكرار'}],p:2},
-{t:'match',q:'صل بين العنصر وموقعه:',pairs:[{l:'اللبنات',r:'يسار'},{l:'السكريبت',r:'وسط'},{l:'الكائنات',r:'أسفل يمين'},{l:'المنصة',r:'أعلى يمين'}],p:2}
-];
-
-/* ═══════════════════════════════════════════════════════
-   📕 الدرس 9.1: الأجهزة المتصلة (IoT) - السنة التاسعة
-   ═══════════════════════════════════════════════════════ */
-var S9 = [
-'<div style="text-align:center;padding:40px 20px;"><div style="font-size:100px;">📡</div><h1 style="color:#fbbf24;font-size:34px;margin:20px 0;">الأجهزة المتصلة (IoT)</h1><p style="color:#cbd5e1;font-size:20px;">الوحدة 3: إنترنت الأشياء</p><div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:20px;margin-top:30px;display:inline-block;"><p style="color:#fbbf24;font-weight:900;">📖 السنة التاسعة إعدادي</p><p style="color:#cbd5e1;">بقلم: محمد زايد</p></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🎯 أهداف الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:2;"><ol style="padding-right:25px;"><li>✅ فهم مفهوم الأجهزة المتصلة (IoT)</li><li>✅ التمييز بين الأجهزة المتصلة وغير المتصلة</li><li>✅ التعرف على الحساسات والمشغلات</li><li>✅ فهم تقنيات الاتصال (Wi-Fi, Bluetooth)</li><li>✅ التعرف على مجالات تطبيق IoT</li><li>✅ برمجة جهاز Micro:bit بسيط</li></ol></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">📡 ما هو IoT؟</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:16px;line-height:2;"><div style="background:#dbeafe;padding:20px;border-radius:15px;border-right:5px solid #3b82f6;"><h3 style="color:#1e40af;">📖 التعريف:</h3><p style="margin-top:10px;">إنترنت الأشياء (Internet of Things) هو ربط الأجهزة اليومية بالإنترنت لتبادل البيانات والتحكم عن بعد.</p></div><div style="background:#d1fae5;padding:20px;border-radius:15px;margin-top:15px;"><h3 style="color:#065f46;">🎯 أمثلة:</h3><ul style="padding-right:25px;margin-top:10px;"><li>الساعة الذكية</li><li>كاميرا المراقبة</li><li>المصباح الذكي</li><li>الثلاجة الذكية</li></ul></div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🔧 الحساسات والمشغلات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:18px;border-radius:12px;margin-bottom:15px;border-right:5px solid #3b82f6;"><h3 style="color:#1e40af;">📥 الحساسات (Capteurs):</h3><p style="margin-top:8px;">تقيس الظواهر الفيزيائية وتحولها إلى إشارات رقمية.</p><ul style="padding-right:25px;margin-top:10px;"><li>حساس الحرارة</li><li>حساس الضوء</li><li>حساس الحركة</li><li>حساس الغاز</li></ul></div><div style="background:#d1fae5;padding:18px;border-radius:12px;border-right:5px solid #10b981;"><h3 style="color:#065f46;">📤 المشغلات (Actionneurs):</h3><p style="margin-top:8px;">تحول الإشارات الرقمية إلى أفعال فيزيائية.</p><ul style="padding-right:25px;margin-top:10px;"><li>المصباح</li><li>المحرك</li><li>الصفارة</li><li>المروحة</li></ul></div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">📶 تقنيات الاتصال</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>📶 Wi-Fi:</strong> اتصال لاسلكي بمدى متوسط (منزل، مدرسة)</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🔵 Bluetooth:</strong> اتصال قصير المدى بين الأجهزة</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>📡 Radio:</strong> اتصال بعيد المدى</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>📱 NFC:</strong> اتصال قريب جداً (الدفع الإلكتروني)</div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">🌍 مجالات تطبيق IoT</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🏠 المنزل الذكي:</strong> إضاءة، تكييف، أمن</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🏥 الصحة:</strong> مراقبة المرضى عن بعد</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🚗 النقل:</strong> السيارات الذكية</div><div style="background:#fce7f3;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #ec4899;"><strong>🌾 الزراعة:</strong> الري الذكي</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;border-right:5px solid #6366f1;"><strong>🏭 الصناعة:</strong> الصيانة التنبؤية</div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">💻 برمجة Micro:bit</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;font-size:15px;"><p style="margin-bottom:15px;font-weight:900;color:#dc2626;">مثال: عرض درجة الحرارة</p><div style="background:#1e293b;color:#e2e8f0;padding:15px;border-radius:12px;font-family:monospace;font-size:13px;direction:ltr;text-align:left;border-left:6px solid #fbbf24;"><span style="color:#94a3b8;"># برنامج Micro:bit</span><br><span style="color:#f472b6;">عند</span> <span style="color:#34d399;">البدء</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f472b6;">اعرض</span> <span style="color:#fbbf24;">"مرحباً"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f472b6;">أظهر</span> <span style="color:#34d399;">درجة الحرارة</span></div></div></div>',
-'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:26px;margin-bottom:20px;text-align:center;">📊 ملخص الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>1️⃣</strong> IoT = ربط الأجهزة بالإنترنت</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>2️⃣</strong> الحساسات تقيس والمشغلات تنفذ</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>3️⃣</strong> تقنيات الاتصال: Wi-Fi, Bluetooth, Radio</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>4️⃣</strong> مجالات التطبيق: منزل، صحة، زراعة، صناعة</div><div style="background:#fce7f3;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>5️⃣</strong> برمجة الأجهزة المتصلة (Micro:bit)</div><div style="background:linear-gradient(135deg,#fef3c7,#fde68a);padding:20px;border-radius:15px;margin-top:20px;text-align:center;"><strong style="color:#92400e;font-size:17px;">🎯 الآن حان وقت التمارين!</strong></div></div></div>'
-];
-
-var E9 = [
-{t:'mcq',q:'ماذا يعني IoT؟',o:['إنترنت الأشياء','تكنولوجيا المعلومات','شبكة محلية','برمجة'],c:0,p:2},
-{t:'mcq',q:'ما وظيفة الحساس (Capteur)؟',o:['التحريك','القياس','الإضاءة','الصوت'],c:1,p:2},
-{t:'mcq',q:'ما وظيفة المشغل (Actionneur)؟',o:['القياس','التنفيذ','الاتصال','التخزين'],c:1,p:2},
-{t:'mcq',q:'أي تقنية اتصال تُستخدم للمسافات القصيرة؟',o:['Wi-Fi','Bluetooth','Radio','Satellite'],c:1,p:2},
-{t:'tf',q:'الساعة الذكية مثال على جهاز متصل.',c:true,p:2},
-{t:'tf',q:'الحساس يحول الإشارات إلى أفعال فيزيائية.',c:false,p:2},
-{t:'tf',q:'Wi-Fi تقنية اتصال لاسلكي.',c:true,p:2},
-{t:'fill',q:'الجهاز الذي يقيس الظواهر الفيزيائية يسمى ______.',a:[['حساس','capteur']],p:2},
-{t:'fill',q:'الجهاز الذي ينفذ الأوامر يسمى ______.',a:[['مشغل','actionneur']],p:2},
-{t:'fill',q:'تقنية الاتصال قصيرة المدى تسمى ______.',a:[['Bluetooth','بلوتوث']],p:2},
-{t:'match',q:'صل بين الجهاز ونوعه:',pairs:[{l:'حساس الحرارة',r:'حساس'},{l:'المصباح',r:'مشغل'},{l:'حساس الضوء',r:'حساس'},{l:'المحرك',r:'مشغل'}],p:2},
-{t:'match',q:'صل بين التقنية والمدى:',pairs:[{l:'Wi-Fi',r:'متوسط'},{l:'Bluetooth',r:'قصير'},{l:'Radio',r:'بعيد'},{l:'NFC',r:'قريب جداً'}],p:2}
-];
-
-/* ═══════════════════════════════════════════════════════
-   🎯 محرك العرض الموحد
-   ═══════════════════════════════════════════════════════ */
-var LESSONS = {
-  '7.1': {slides:S7, exercises:E7, title:'الحاسوب ونظام التشغيل', icon:'💻'},
-  '8.1': {slides:S8, exercises:E8, title:'البرمجة المرئية بـ Scratch', icon:'🐱'},
-  '9.1': {slides:S9, exercises:E9, title:'الأجهزة المتصلة (IoT)', icon:'📡'}
-};
-
-window.__showLesson = function(id){
-  var L = LESSONS[id];
-  if(!L){alert('الدرس غير موجود'); return;}
-  var old = document.getElementById('myViewer'); if(old) old.remove();
-  var ov = document.createElement('div'); ov.id = 'myViewer';
-  ov.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);z-index:999999999;overflow-y:auto;padding:15px;direction:rtl;font-family:Cairo;';
-  var tp = L.exercises.reduce(function(s,e){return s+e.p;},0);
-  ov.innerHTML = '<div style="max-width:900px;margin:15px auto;"><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;align-items:center;"><button onclick="document.getElementById(\'myViewer\').remove()" style="padding:12px 22px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;font-size:13px;cursor:pointer;">🔙 العودة</button><div id="myCounter" style="flex:1;padding:12px 18px;background:rgba(0,0,0,0.4);border-radius:30px;color:#fbbf24;font-weight:900;text-align:center;border:2px solid #fbbf24;font-size:14px;"></div><div id="myScore" style="padding:12px 18px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:30px;color:white;font-weight:900;font-size:14px;">🎯 0/'+tp+'</div></div><div style="height:10px;background:rgba(0,0,0,0.5);border-radius:10px;overflow:hidden;margin-bottom:20px;"><div id="myProgress" style="height:100%;background:linear-gradient(90deg,#fbbf24,#22c55e);width:0%;transition:width 0.4s;"></div></div><div id="myContent"></div><div id="myNav" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:25px;"></div></div>';
-  document.body.appendChild(ov);
-
-  var si=0, ei=0, sc=0, mSel=null, mState={}, totalItems = L.slides.length + L.exercises.length + 1;
-
-  function render(){
-    var c=document.getElementById('myContent'), n=document.getElementById('myNav'), ct=document.getElementById('myCounter'), pg=document.getElementById('myProgress'), se=document.getElementById('myScore');
-    if(si < L.slides.length){
-      c.innerHTML = L.slides[si];
-      ct.textContent = '📖 الشريحة ' + (si+1) + ' من ' + totalItems;
-      pg.style.width = ((si+1)/totalItems*100) + '%';
-      var nh = '';
-      if(si>0) nh += '<button onclick="window.__n(\'p\')" style="padding:15px 30px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">▶ السابق</button>';
-      nh += '<button onclick="document.getElementById(\'myViewer\').remove()" style="padding:15px 30px;background:#334155;color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">🏠 خروج</button>';
-      if(si < L.slides.length-1) nh += '<button onclick="window.__n(\'n\')" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">التالي ◀</button>';
-      else nh += '<button onclick="window.__n(\'n\')" style="padding:15px 30px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">📝 ابدأ التمارين</button>';
-      n.innerHTML = nh;
-    } else if(si === L.slides.length && ei < L.exercises.length){
-      var ex = L.exercises[ei];
-      ct.textContent = '📝 التمرين ' + (ei+1) + ' من ' + L.exercises.length;
-      pg.style.width = ((L.slides.length + ei)/totalItems*100) + '%';
-      se.textContent = '🎯 ' + sc + '/' + tp;
-      var h = '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border:3px solid #fbbf24;border-radius:25px;padding:30px;color:white;">';
-      h += '<div style="text-align:center;margin-bottom:20px;"><span style="background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;padding:8px 20px;border-radius:25px;font-weight:900;font-size:14px;">✏️ السؤال ' + (ei+1) + ' — ' + ex.p + ' نقاط</span></div>';
-      h += '<div style="background:white;color:#1e293b;padding:20px;border-radius:15px;font-size:17px;font-weight:700;margin-bottom:20px;text-align:center;">' + ex.q + '</div>';
-      if(ex.t === 'mcq'){
-        h += '<div id="opts" style="display:flex;flex-direction:column;gap:12px;">';
-        ex.o.forEach(function(o,i){h += '<button onclick="window.__mcq('+i+')" style="padding:15px 20px;background:white;color:#1e293b;border:3px solid #cbd5e1;border-radius:15px;font-family:Cairo;font-weight:700;font-size:16px;text-align:right;cursor:pointer;">' + String.fromCharCode(65+i) + '. ' + o + '</button>';});
-        h += '</div>';
-      } else if(ex.t === 'tf'){
-        h += '<div id="opts" style="display:flex;gap:15px;justify-content:center;"><button onclick="window.__tf(true)" style="padding:20px 40px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:20px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;">✅ صحيح</button><button onclick="window.__tf(false)" style="padding:20px 40px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:20px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;">❌ خطأ</button></div>';
-      } else if(ex.t === 'fill'){
-        h += '<div id="opts" style="display:flex;flex-direction:column;gap:12px;"><input type="text" id="fi" placeholder="اكتب إجابتك..." style="padding:15px;border:3px solid #3b82f6;border-radius:15px;font-family:Cairo;font-size:16px;text-align:center;"><button onclick="window.__fill()" style="padding:15px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:15px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">✅ تحقق</button></div>';
-      } else if(ex.t === 'match'){
-        h += '<div id="opts" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">';
-        h += '<div><strong style="color:#fbbf24;display:block;margin-bottom:10px;">📌 العمود 1:</strong>';
-        ex.pairs.forEach(function(p,i){var sel=mSel===i, mt=mState[i]!==undefined; h += '<div onclick="window.__ml('+i+')" style="cursor:pointer;padding:12px;margin-bottom:8px;background:' + (mt?'#d1fae5':(sel?'#fef3c7':'white')) + ';color:#1e293b;border:2px solid ' + (sel?'#f59e0b':(mt?'#10b981':'#cbd5e1')) + ';border-radius:12px;font-weight:700;">' + p.l + (mt?' ✅':'') + '</div>';});
-        h += '</div><div><strong style="color:#22c55e;display:block;margin-bottom:10px;">🎯 العمود 2:</strong>';
-        ex.pairs.forEach(function(p,i){var mt=false; for(var k in mState){if(mState[k]===i){mt=true;break;}} h += '<div onclick="window.__mr('+i+')" style="cursor:pointer;padding:12px;margin-bottom:8px;background:' + (mt?'#d1fae5':'white') + ';color:#1e293b;border:2px solid ' + (mt?'#10b981':'#cbd5e1') + ';border-radius:12px;font-weight:700;">' + p.r + (mt?' ✅':'') + '</div>';});
-        h += '</div></div><div style="text-align:center;margin-top:20px;" id="mBtn"><button onclick="window.__msubmit()" style="padding:12px 30px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;">✅ تحقق</button></div>';
-      }
-      h += '<div id="fb" style="margin-top:20px;"></div></div>';
-      c.innerHTML = h;
-      n.innerHTML = '';
-    } else {
-      var pct = Math.round((sc/tp)*100), ok = pct >= 60;
-      var r = '<div style="background:' + (ok?'linear-gradient(135deg,#d1fae5,#a7f3d0)':'linear-gradient(135deg,#fef3c7,#fde68a)') + ';border:4px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:25px;padding:40px 25px;text-align:center;">';
-      r += '<div style="font-size:90px;">' + (ok?'🎉':'📚') + '</div>';
-      r += '<h2 style="color:' + (ok?'#15803d':'#92400e') + ';font-size:30px;margin:20px 0;">' + (ok?'مبروك! نجحت':'أعد المحاولة') + '</h2>';
-      r += '<div style="font-size:64px;font-weight:900;color:' + (ok?'#15803d':'#92400e') + ';">' + sc + ' / ' + tp + '</div>';
-      r += '<div style="font-size:24px;margin:15px 0;">' + pct + '%</div>';
-      r += '<div style="margin-top:25px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">';
-      if(ok) r += '<button onclick="window.print()" style="padding:15px 30px;background:linear-gradient(135deg,#16a34a,#15803d);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🖨️ طباعة الشهادة</button>';
-      r += '<button onclick="document.getElementById(\'myViewer\').remove()" style="padding:15px 30px;background:#334155;color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🏠 خروج</button></div></div>';
-      c.innerHTML = r;
-      n.innerHTML = '';
-      pg.style.width = '100%';
-      ct.textContent = '🏆 النتيجة النهائية';
-    }
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-
-  window.__n = function(dir){ if(dir==='p' && si>0){si--; render();} else if(dir==='n'){ if(si < L.slides.length-1){si++; render();} else if(si===L.slides.length-1){si++; ei=0; render();} } };
-
-  window.__mcq = function(sel){
-    var ex=L.exercises[ei], ok=sel===ex.c, fb=document.getElementById('fb');
-    document.querySelectorAll('#opts button').forEach(function(b,i){b.disabled=true; if(i===ex.c){b.style.background='#d1fae5';b.style.borderColor='#16a34a';} else if(i===sel&&!ok){b.style.background='#fee2e2';b.style.borderColor='#dc2626';}});
-    if(ok) sc += ex.p;
-    fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border:3px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ أحسنت!':'❌ الإجابة: ' + ex.o[ex.c]) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__nx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';
-    document.getElementById('myScore').textContent = '🎯 ' + sc + '/' + tp;
-  };
-
-  window.__tf = function(sel){
-    var ex=L.exercises[ei], ok=sel===ex.c, fb=document.getElementById('fb');
-    document.querySelectorAll('#opts button').forEach(function(b){b.disabled=true;});
-    if(ok) sc += ex.p;
-    fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border:3px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ صحيح!':'❌ الإجابة: ' + (ex.c?'صحيح':'خطأ')) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__nx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';
-    document.getElementById('myScore').textContent = '🎯 ' + sc + '/' + tp;
-  };
-
-  window.__fill = function(){
-    var ex=L.exercises[ei], v=(document.getElementById('fi').value||'').trim().toLowerCase();
-    var ok=ex.a.some(function(arr){return arr.some(function(x){return x.toLowerCase()===v;});});
-    var fb=document.getElementById('fb');
-    if(ok) sc += ex.p;
-    fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border:3px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ صحيح!':'❌ الإجابة: ' + ex.a[0][0]) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__nx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';
-    document.getElementById('myScore').textContent = '🎯 ' + sc + '/' + tp;
-  };
-
-  window.__ml = function(i){ mSel=i; render(); };
-  window.__mr = function(i){ if(mSel===null){alert('اختر من العمود الأول'); return;} mState[mSel]=i; mSel=null; render(); };
-  window.__msubmit = function(){
-    var ex=L.exercises[ei], ok=0;
-    ex.pairs.forEach(function(p,i){if(mState[i]===i) ok++;});
-    var fb=document.getElementById('fb');
-    if(ok===ex.pairs.length){sc += ex.p; fb.innerHTML='<div style="padding:20px;background:#d1fae5;color:#15803d;border:3px solid #16a34a;border-radius:15px;text-align:center;font-weight:900;">✅ ممتاز!</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__nx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';}
-    else fb.innerHTML='<div style="padding:20px;background:#fef3c7;color:#78350f;border:3px solid #f59e0b;border-radius:15px;text-align:center;font-weight:900;">⚠️ ' + ok + '/' + ex.pairs.length + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__nx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';
-    document.getElementById('myScore').textContent = '🎯 ' + sc + '/' + tp;
-  };
-
-  window.__nx = function(){ ei++; mSel=null; mState={}; render(); };
-
-  render();
-};
-
-/* ═══════════════════════════════════════════════════════
-   🏗️ بناء صفحة الإعدادية بثلاث بطاقات
-   ═══════════════════════════════════════════════════════ */
-function rebuild(){
-  var s = document.getElementById('pageMiddleStage');
-  if(!s || s.dataset.done3 === '1') return;
-  s.dataset.done3 = '1';
-  s.innerHTML =
-    '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>' +
-    '<button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button>' +
-    '<div class="welcome-card" style="margin:15px 0;"><h2>🎓 دروس الإعدادية — الإعلامية</h2><p>وفق البرنامج الرسمي التونسي</p></div>' +
-    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;padding:20px;">' +
-      '<div onclick="window.__showLesson(\'7.1\')" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
-        '<div style="font-size:60px;margin-bottom:15px;">💻</div>' +
-        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة السابعة</div>' +
-        '<div style="font-size:15px;margin-bottom:15px;">الحاسوب ونظام التشغيل</div>' +
-        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
-      '</div>' +
-      '<div onclick="window.__showLesson(\'8.1\')" style="background:linear-gradient(135deg,#065f46,#10b981);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
-        '<div style="font-size:60px;margin-bottom:15px;">🐱</div>' +
-        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة الثامنة</div>' +
-        '<div style="font-size:15px;margin-bottom:15px;">البرمجة المرئية بـ Scratch</div>' +
-        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
-      '</div>' +
-      '<div onclick="window.__showLesson(\'9.1\')" style="background:linear-gradient(135deg,#7c3aed,#4c1d95);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
-        '<div style="font-size:60px;margin-bottom:15px;">📡</div>' +
-        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة التاسعة</div>' +
-        '<div style="font-size:15px;margin-bottom:15px;">الأجهزة المتصلة (IoT)</div>' +
-        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
-      '</div>' +
-    '</div>';
-}
-
+    <script>
+/* 🔗 ربط البطاقة بالدرس الكامل */
 setInterval(function(){
   var s = document.getElementById('pageMiddleStage');
   if(!s) return;
-  if(s.innerHTML.indexOf('Scratch') === -1 && s.innerHTML.indexOf('IoT') === -1){
-    s.dataset.done3 = '';
-    rebuild();
+  var card = s.querySelector('div[onclick*="alert"]');
+  if(card && window.__showLesson){
+    card.setAttribute('onclick', "window.__showLesson('1.1')");
   }
-}, 500);
-
-setTimeout(rebuild, 300);
-setTimeout(rebuild, 1500);
-
-console.log('✅ المرحلة الإعدادية الرسمية جاهزة — 7 / 8 / 9');
-})();
+}, 250);
+console.log('🔗 تم ربط البطاقة بالدرس');
 </script>
     <script>
-/* 🛑 إيقاف الوميض — يجعل FIXER2 القديم يتوقف */
+/* 🔗 الإصلاح النهائي: ربط البطاقة بالدرس الكامل */
 (function(){
-'use strict';
-var MARKER = 'صديقي الجديد';
-
-function patch(){
-  var s = document.getElementById('pageMiddleStage');
-  if(!s) return;
-  var h = s.innerHTML || '';
-  if(h.length < 30) return;
-  
-  // هل المحتوى الجديد (3 بطاقات)؟
-  var hasThree = h.indexOf('السنة الثامنة') !== -1 || h.indexOf('Scratch') !== -1 || h.indexOf('IoT') !== -1;
-  // هل فيه علامة FIXER2؟
-  var hasMarker = h.indexOf(MARKER) !== -1;
-  
-  // إذا كان المحتوى الجديد ولا يحتوي العلامة → أضفها (بشكل مخفي)
-  if(hasThree && !hasMarker){
-    s.innerHTML = h + '<span style="display:none">' + MARKER + '</span>';
-  }
-}
-
-setInterval(patch, 25);
-console.log('🛑 مثبّت الوميض نشط');
-})();
-</script>
-<script>
-/* 🛑 الحل النهائي — يوقف FIXER2 تماماً */
-(function(){
-'use strict';
-
-// 1) أوقف كل المؤقتات السابقة (FIXER2 يستخدم setInterval)
-for (var i = 1; i < 99999; i++) {
-  try { window.clearInterval(i); } catch(e) {}
-  try { window.clearTimeout(i); } catch(e) {}
-}
-
-// 2) اعترض الكتابة في pageMiddleStage لمنع FIXER2 من التعديل
-var el = document.getElementById('pageMiddleStage');
-if (el) {
-  var _desc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
-  Object.defineProperty(el, 'innerHTML', {
-    configurable: true,
-    get: function(){ return _desc.get.call(this); },
-    set: function(v){
-      var s = String(v);
-      // امنع FIXER2 من كتابة محتواه القديم (بطاقة واحدة بصديقي الجديد)
-      if (s.indexOf('صديقي الجديد') !== -1 &&
-          s.indexOf('السنة الثامنة') === -1 &&
-          s.indexOf('Scratch') === -1 &&
-          s.indexOf('IoT') === -1) {
-        return;
+  function fix(){
+    var s = document.getElementById('pageMiddleStage');
+    if(!s) return;
+    var cards = s.querySelectorAll('div[onclick]');
+    cards.forEach(function(c){
+      var oc = c.getAttribute('onclick') || '';
+      if(oc.indexOf('alert') !== -1 && c.innerHTML.indexOf('صديقي الجديد') !== -1){
+        c.setAttribute('onclick', "window.__showLesson('1.1')");
+        // تحديث النص "5 شرائح" → "20 شريحة و15 تمرين"
+        c.innerHTML = c.innerHTML
+          .replace('5 شرائح تفاعلية', '20 شريحة + 15 تمرين')
+          .replace('5 شرائح', '20 شريحة + 15 تمرين');
       }
-      _desc.set.call(this, s);
-    }
-  });
-}
-
-// 3) أعِد بناء المحتوى الصحيح (3 بطاقات) بعد 200ms
-setTimeout(function(){
-  var s = document.getElementById('pageMiddleStage');
-  if (!s) return;
-  s.innerHTML =
-    '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>' +
-    '<button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button>' +
-    '<div class="welcome-card" style="margin:15px 0;"><h2>🎓 دروس الإعدادية — الإعلامية</h2><p>وفق البرنامج الرسمي التونسي</p></div>' +
-    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;padding:20px;">' +
-      '<div onclick="window.__showLesson(\'7.1\')" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
-        '<div style="font-size:60px;margin-bottom:15px;">💻</div>' +
-        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة السابعة</div>' +
-        '<div style="font-size:15px;margin-bottom:15px;">الحاسوب ونظام التشغيل</div>' +
-        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
-      '</div>' +
-      '<div onclick="window.__showLesson(\'8.1\')" style="background:linear-gradient(135deg,#065f46,#10b981);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
-        '<div style="font-size:60px;margin-bottom:15px;">🐱</div>' +
-        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة الثامنة</div>' +
-        '<div style="font-size:15px;margin-bottom:15px;">البرمجة المرئية بـ Scratch</div>' +
-        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
-      '</div>' +
-      '<div onclick="window.__showLesson(\'9.1\')" style="background:linear-gradient(135deg,#7c3aed,#4c1d95);border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
-        '<div style="font-size:60px;margin-bottom:15px;">📡</div>' +
-        '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">السنة التاسعة</div>' +
-        '<div style="font-size:15px;margin-bottom:15px;">الأجهزة المتصلة (IoT)</div>' +
-        '<div style="background:#22c55e;padding:8px;border-radius:15px;font-weight:900;">✅ 8 شرائح + 12 تمرين</div>' +
-      '</div>' +
-    '</div>';
-}, 200);
-
-console.log('🛑 FIXER2 موقوف — الوميض انتهى');
+    });
+  }
+  setInterval(fix, 300);
+  console.log('🔗 المربط النهائي فعّال');
 })();
 </script>
+
+    
     </html>
   
