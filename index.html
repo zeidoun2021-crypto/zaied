@@ -5304,6 +5304,145 @@ console.log('✅ المرحلة الابتدائية الكاملة جاهزة �
   console.log('✅ عداد الزوار ظاهر');
 })();
 </script>
+<script>
+/* ═══════════════════════════════════════════════════════
+   📊 لوحة إحصائيات نظيفة — مستقلة تماماً
+   ═══════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  var loaded = false;
+
+  /* 1) اخفِ الزر القديم ولوحة dash القديمة */
+  function hideOld(){
+    var s = document.getElementById('statsBtn');
+    if (s) s.style.display = 'none';
+    var d = document.getElementById('dash');
+    if (d) d.style.display = 'none';
+  }
+  setInterval(hideOld, 500);
+  setTimeout(hideOld, 100);
+
+  /* 2) أضف زرنا الجديد للمشرف فقط */
+  function addNewButton(){
+    if (window.isAdminMode !== true && window.userStatus !== 'admin' && localStorage.getItem('zaiedAdminPermanent') !== '1') return;
+    if (document.getElementById('myStatsBtn')) return;
+    
+    var b = document.createElement('button');
+    b.id = 'myStatsBtn';
+    b.textContent = '📊 إحصائيات المنصة';
+    b.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:99999;padding:14px 22px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo;font-weight:900;cursor:pointer;font-size:14px;box-shadow:0 6px 20px rgba(139,92,246,0.5);';
+    b.onclick = openMyStats;
+    document.body.appendChild(b);
+  }
+  setInterval(addNewButton, 800);
+
+  /* 3) فتح اللوحة */
+  async function openMyStats(){
+    if (document.getElementById('myStatsPanel')) return;
+    
+    var p = document.createElement('div');
+    p.id = 'myStatsPanel';
+    p.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;';
+    p.innerHTML = 
+      '<div style="max-width:1100px;margin:0 auto;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">' +
+          '<h1 style="color:#fbbf24;font-size:24px;">📊 إحصائيات المنصة</h1>' +
+          '<button id="myStatsClose" style="padding:12px 22px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;cursor:pointer;">✖ إغلاق</button>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px;">' +
+          card('myUsersCount','👥','المسجلون','#3b82f6') +
+          card('mySubsCount','💎','المشتركون','#22c55e') +
+          card('myVisitorsCount','🎭','عدد الزيارات','#8b5cf6') +
+          card('myTodayCount','✨','زيارات اليوم','#f59e0b') +
+        '</div>' +
+        '<div id="myUsersList"></div>' +
+      '</div>';
+    document.body.appendChild(p);
+    
+    document.getElementById('myStatsClose').onclick = function(){ p.remove(); };
+    
+    await loadData();
+  }
+
+  function card(id, icon, label, color){
+    return '<div style="background:#1e293b;border:3px solid #fbbf24;border-radius:18px;padding:20px;text-align:center;">' +
+      '<div style="font-size:40px;margin-bottom:10px;">' + icon + '</div>' +
+      '<div id="' + id + '" style="font-size:38px;font-weight:900;color:' + color + ';">-</div>' +
+      '<div style="color:#94a3b8;font-size:13px;margin-top:6px;font-weight:700;">' + label + '</div>' +
+    '</div>';
+  }
+
+  /* 4) تحميل البيانات من Firebase مباشرة */
+  async function loadData(){
+    try {
+      /* المسجلون */
+      var users = [];
+      if (typeof window.fbGetAllUsers === 'function') {
+        users = await window.fbGetAllUsers();
+      }
+      
+      /* الزوار */
+      var visitors = [];
+      if (typeof window.fbGetAllVisitors === 'function') {
+        try { visitors = await window.fbGetAllVisitors(); } catch(e){}
+      }
+      
+      /* المشتركون */
+      var subs = 0;
+      if (typeof window.fbGetAllSubscriptions === 'function') {
+        try {
+          var s = await window.fbGetAllSubscriptions();
+          subs = Object.keys(s || {}).length;
+        } catch(e){}
+      }
+      
+      /* زيارات اليوم */
+      var today = new Date().toDateString();
+      var todayCount = 0;
+      visitors.forEach(function(v){
+        if (v.visitedAt && v.visitedAt.seconds) {
+          if (new Date(v.visitedAt.seconds * 1000).toDateString() === today) todayCount++;
+        }
+      });
+      
+      /* تحديث الأرقام */
+      var el;
+      el = document.getElementById('myUsersCount'); if (el) el.textContent = String(users.length);
+      el = document.getElementById('mySubsCount'); if (el) el.textContent = String(subs);
+      el = document.getElementById('myVisitorsCount'); if (el) el.textContent = String(visitors.length);
+      el = document.getElementById('myTodayCount'); if (el) el.textContent = String(todayCount);
+      
+      /* قائمة المسجلين */
+      var list = document.getElementById('myUsersList');
+      if (list) {
+        if (users.length === 0) {
+          list.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:30px;">لا يوجد مسجلون بعد</p>';
+        } else {
+          list.innerHTML = '<h2 style="color:#fbbf24;font-size:20px;margin-bottom:15px;">👥 قائمة المسجلين (' + users.length + ')</h2>' +
+            users.map(function(u, i){
+              var logins = localStorage.getItem('logins_' + u.firebaseId) || '0';
+              return '<div style="background:#f8fafc;border-radius:12px;padding:14px;margin-bottom:10px;border-right:4px solid #3b82f6;color:#0f172a;font-size:13px;">' +
+                '<div style="font-weight:900;color:#dc2626;font-size:15px;">' + (i+1) + '. ' + (u.name || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;margin-top:4px;">📧 ' + (u.email || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">📱 ' + (u.whatsapp || '-') + ' • 🏙️ ' + (u.city || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">💼 ' + (u.profession || '-') + ' • 🎯 ' + (u.specialty || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">🌍 ' + (u.country || '-') + ' • 🏷️ ' + (u.category || '-') + '</div>' +
+                '<div style="color:#475569;font-size:12px;">🔢 الدخولات: ' + logins + ' • ' + (u.subscribed ? '💎 مشترك' : '✅ مجاني') + '</div>' +
+              '</div>';
+            }).join('');
+        }
+      }
+      
+      console.log('📊 إحصائيات: مسجل=' + users.length + ' زائر=' + visitors.length + ' مشترك=' + subs + ' اليوم=' + todayCount);
+    } catch(e) {
+      console.error('خطأ في التحميل:', e);
+    }
+  }
+
+  console.log('✅ لوحة الإحصائيات النظيفة جاهزة');
+})();
+</script>
     
     </html>
   
