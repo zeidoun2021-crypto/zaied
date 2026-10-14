@@ -5467,6 +5467,156 @@ setInterval(async function(){
   } catch(e) {}
 }, 1500);
 </script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   📧 إشعار البريد + 📋 لوحة بيانات المسجلين
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  
+  var WEB3_KEY = '23f532ab-bd1b-4362-b980-2bab75c5b48b';
+  var ADMIN_EMAIL = 'zeidoun2021@gmail.com';
+  
+  /* ═══ 1) إرسال الإشعار بالبريد ═══ */
+  async function sendEmailNotification(userData) {
+    if (!userData || !userData.email) return false;
+    
+    var message = [
+      '📋 تسجيل جديد في منصة زايد',
+      '═══════════════════════════════',
+      '👤 الاسم الكامل: ' + (userData.name || '-'),
+      '💼 المهنة: ' + (userData.profession || '-'),
+      '🎯 الاختصاص: ' + (userData.specialty || '-'),
+      '📧 البريد الإلكتروني: ' + (userData.email || '-'),
+      '📱 رقم الواتساب: ' + (userData.whatsapp || '-'),
+      '🌍 بلد الإقامة: ' + (userData.country || '-'),
+      '🏙️ المدينة: ' + (userData.city || '-'),
+      '🏷️ الفئة: ' + (userData.category || '-'),
+      '📅 تاريخ التسجيل: ' + (userData.date || new Date().toLocaleString('ar-EG')),
+      '═══════════════════════════════'
+    ].join('\n');
+    
+    try {
+      var r = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify({
+          access_key: WEB3_KEY,
+          subject: '🎓 تسجيل جديد: ' + (userData.name || 'مستخدم'),
+          from_name: 'منصة زايد',
+          email: ADMIN_EMAIL,
+          message: message
+        })
+      });
+      var d = await r.json();
+      console.log('📧 الإشعار:', d.success ? '✅' : '❌');
+      return d.success;
+    } catch(e) {
+      console.error('📧 فشل الإرسال:', e);
+      return false;
+    }
+  }
+  
+  /* ═══ 2) اعتراض حفظ المستخدم — إرسال الإشعار تلقائياً ═══ */
+  function patchSaveUser(){
+    if (window.__saveUserPatched) return;
+    if (typeof window.fbSaveUser !== 'function') return;
+    
+    window.__saveUserPatched = true;
+    var original = window.fbSaveUser;
+    
+    window.fbSaveUser = async function(user){
+      var result = await original.apply(this, arguments);
+      if (result && result !== 'admin-skip' && user && user.email) {
+        sendEmailNotification(user);
+      }
+      return result;
+    };
+    console.log('✅ إشعار البريد مرتبط بحفظ المستخدم');
+  }
+  
+  /* حاول الربط عدة مرات (لضمان التنفيذ) */
+  [500, 1500, 3000, 5000].forEach(function(t){
+    setTimeout(patchSaveUser, t);
+  });
+  
+  /* ═══ 3) لوحة بيانات المسجلين الكاملة ═══ */
+  window.__openUsersPanel = async function(){
+    var users = [];
+    try {
+      if (typeof window.fbGetAllUsers === 'function') {
+        users = await window.fbGetAllUsers();
+      }
+    } catch(e) { console.error(e); }
+    
+    var old = document.getElementById('__usersPanel');
+    if (old) old.remove();
+    
+    var panel = document.createElement('div');
+    panel.id = '__usersPanel';
+    panel.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;';
+    
+    var usersHtml = users.length === 0 
+      ? '<div style="background:#1e293b;border:3px dashed #475569;border-radius:18px;padding:40px;text-align:center;color:#94a3b8;font-size:16px;">لا يوجد مسجلون بعد</div>'
+      : users.map(function(u, i){
+          var logins = localStorage.getItem('logins_' + u.firebaseId) || '0';
+          return '<div style="background:#f8fafc;border-radius:14px;padding:18px;margin-bottom:12px;border-right:5px solid #3b82f6;color:#0f172a;">' +
+            '<div style="font-weight:900;color:#dc2626;font-size:17px;margin-bottom:12px;border-bottom:2px dashed #cbd5e1;padding-bottom:8px;">' + (i+1) + '. ' + (u.name || '-') + '</div>' +
+            '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;font-size:14px;color:#334155;">' +
+              '<div><span style="color:#94a3b8;">📧 البريد:</span> <strong>' + (u.email || '-') + '</strong></div>' +
+              '<div><span style="color:#94a3b8;">📱 الهاتف:</span> <strong>' + (u.whatsapp || '-') + '</strong></div>' +
+              '<div><span style="color:#94a3b8;">💼 المهنة:</span> ' + (u.profession || '-') + '</div>' +
+              '<div><span style="color:#94a3b8;">🎯 الاختصاص:</span> ' + (u.specialty || '-') + '</div>' +
+              '<div><span style="color:#94a3b8;">🌍 البلد:</span> ' + (u.country || '-') + '</div>' +
+              '<div><span style="color:#94a3b8;">🏙️ المدينة:</span> ' + (u.city || '-') + '</div>' +
+              '<div><span style="color:#94a3b8;">🏷️ الفئة:</span> ' + (u.category || '-') + '</div>' +
+              '<div><span style="color:#94a3b8;">🔢 الدخولات:</span> <strong>' + logins + '</strong></div>' +
+              '<div>' + (u.subscribed ? '💎 مشترك' : '✅ مجاني') + '</div>' +
+              '<div style="color:#94a3b8;font-size:12px;">📅 ' + (u.date || '-') + '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+    
+    panel.innerHTML = 
+      '<div style="max-width:1200px;margin:0 auto;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">' +
+          '<h1 style="color:#fbbf24;font-size:24px;">📋 بيانات المسجلين</h1>' +
+          '<button id="__upClose" style="padding:12px 22px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;cursor:pointer;">✖ إغلاق</button>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px;">' +
+          '<div style="background:#1e293b;border:3px solid #fbbf24;border-radius:18px;padding:20px;text-align:center;">' +
+            '<div style="font-size:48px;font-weight:900;color:#3b82f6;">' + users.length + '</div>' +
+            '<div style="color:#94a3b8;font-size:14px;margin-top:6px;">👥 إجمالي المسجلين</div>' +
+          '</div>' +
+          '<div style="background:#1e293b;border:3px solid #fbbf24;border-radius:18px;padding:20px;text-align:center;">' +
+            '<div style="font-size:48px;font-weight:900;color:#22c55e;">' + users.filter(function(x){return x.subscribed;}).length + '</div>' +
+            '<div style="color:#94a3b8;font-size:14px;margin-top:6px;">💎 المشتركون</div>' +
+          '</div>' +
+        '</div>' +
+        usersHtml +
+      '</div>';
+    
+    document.body.appendChild(panel);
+    document.getElementById('__upClose').onclick = function(){ panel.remove(); };
+  };
+  
+  /* ═══ 4) زر للمشرف فقط ═══ */
+  setInterval(function(){
+    var isAdmin = window.isAdminMode === true || window.userStatus === 'admin' || localStorage.getItem('zaiedAdminPermanent') === '1';
+    if (!isAdmin) return;
+    if (document.getElementById('__usersBtn')) return;
+    
+    var btn = document.createElement('button');
+    btn.id = '__usersBtn';
+    btn.textContent = '📋 بيانات المسجلين';
+    btn.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:99999;padding:14px 22px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:#fff;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo;font-weight:900;cursor:pointer;font-size:14px;box-shadow:0 6px 20px rgba(59,130,246,0.5);';
+    btn.onclick = window.__openUsersPanel;
+    document.body.appendChild(btn);
+  }, 1000);
+  
+  console.log('✅ وحدة الإشعار والبيانات جاهزة');
+})();
+</script>
     
     </html>
   
