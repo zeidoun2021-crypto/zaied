@@ -5799,6 +5799,82 @@ console.log('✅ بطاقات الإحصائيات قابلة للنقر');
   }, 200);
 })();
 </script>
+<script>
+(function(){
+'use strict';
+
+/* ═══════════════ 1) التسجيل الإلزامي ═══════════════ */
+function isReg(){
+  try {
+    var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    return !!(u && u.email) || window.isAdminMode === true;
+  } catch(e){ return false; }
+}
+
+document.addEventListener('mousedown', function(e){
+  if (isReg()) return;
+  var t = e.target.closest('.stage-card, .lesson-stage-card, .sub-sections-list li');
+  if (!t) return;
+  e.preventDefault(); e.stopPropagation();
+  var gw = document.getElementById('visitorGateway');
+  if (gw) {
+    gw.scrollIntoView({behavior:'smooth', block:'center'});
+    setTimeout(function(){ var i = document.getElementById('gwName'); if(i) i.focus(); }, 500);
+  }
+}, true);
+
+setInterval(function(){
+  if (isReg()) return;
+  document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
+    if (p.id !== 'pageWelcome') p.classList.add('hide');
+  });
+  var w = document.getElementById('pageWelcome'); if (w) w.classList.remove('hide');
+  var s = document.getElementById('statsBtn'); if (s) s.style.display = 'none';
+}, 500);
+
+/* ═══════════════ 2) بيانات المسجلين في جدول واضح ═══════════════ */
+setInterval(async function(){
+  var dash = document.getElementById('dash');
+  if (!dash || dash.style.display === 'none') return;
+  
+  var list = document.getElementById('list');
+  if (!list) return;
+  
+  try { if (window.fbGetAllUsers) window.allUsersCache = await window.fbGetAllUsers(); } catch(e){}
+  var users = window.allUsersCache || [];
+  
+  var sig = users.length + '|' + users.map(function(u){ return u.email || ''; }).join(',');
+  if (list.dataset.sig === sig) return;
+  list.dataset.sig = sig;
+  
+  var h = '<h2 style="color:#22c55e;font-size:20px;margin:20px 0 15px 0;">👥 قائمة المسجلين (' + users.length + ')</h2>';
+  
+  if (!users.length) {
+    h += '<p style="color:#94a3b8;text-align:center;padding:30px;">لا يوجد مسجلون بعد</p>';
+  } else {
+    users.forEach(function(u, i){
+      h += '<div style="background:#f8fafc;border-radius:14px;padding:18px;margin-bottom:14px;border-right:5px solid #22c55e;color:#0f172a;">';
+      h += '<div style="font-weight:900;color:#dc2626;font-size:17px;margin-bottom:12px;border-bottom:2px dashed #cbd5e1;padding-bottom:8px;">' + (i+1) + '. ' + (u.name || '-') + '</div>';
+      h += '<table style="width:100%;font-size:13px;color:#334155;border-collapse:collapse;">';
+      h += '<tr><td style="padding:5px 0;width:140px;"><b>📧 البريد:</b></td><td>' + (u.email || '-') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0;"><b>📱 الهاتف:</b></td><td>' + (u.whatsapp || '-') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0;"><b>💼 المهنة:</b></td><td>' + (u.profession || '-') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0;"><b>🎯 الاختصاص:</b></td><td>' + (u.specialty || '-') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0;"><b>🌍 البلد:</b></td><td>' + (u.country || '-') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0;"><b>🏙️ المدينة:</b></td><td>' + (u.city || '-') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0;"><b>🏷️ الفئة:</b></td><td>' + (u.category || '-') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0;"><b>📅 التاريخ:</b></td><td>' + (u.date || '-') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0;"><b>🔰 الحالة:</b></td><td>' + (u.subscribed ? '💎 مشترك' : '✅ مجاني') + '</td></tr>';
+      h += '</table></div>';
+    });
+  }
+  
+  list.innerHTML = h;
+}, 3000);
+
+console.log('✅ التسجيل الإلزامي + جدول المسجلين جاهز');
+})();
+</script>
     
     </html>
   
