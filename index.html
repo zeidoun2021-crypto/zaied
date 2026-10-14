@@ -5260,6 +5260,50 @@ console.log('✅ المرحلة الابتدائية الكاملة جاهزة �
   console.log('✅ Click interceptor active');
 })();
 </script>
+<script>
+/* 📊 إظهار عدد الزوار (بدون الأسماء) */
+(function(){
+  'use strict';
+  
+  function fix(){
+    var nV = document.getElementById('nV');
+    var nT = document.getElementById('nT');
+    
+    /* بطاقة "عدد الزيارات" */
+    if (nV && nV.parentElement) {
+      if (nV.parentElement.style.display === 'none') {
+        nV.parentElement.style.display = '';
+      }
+      var l1 = nV.parentElement.querySelector('.lbl');
+      if (l1 && l1.textContent !== '🎭 عدد الزيارات') {
+        l1.textContent = '🎭 عدد الزيارات';
+      }
+    }
+    
+    /* بطاقة "زيارات اليوم" */
+    if (nT && nT.parentElement) {
+      if (nT.parentElement.style.display === 'none') {
+        nT.parentElement.style.display = '';
+      }
+      var l2 = nT.parentElement.querySelector('.lbl');
+      if (l2 && l2.textContent !== '✨ زيارات اليوم') {
+        l2.textContent = '✨ زيارات اليوم';
+      }
+    }
+    
+    /* إخفاء زر قائمة الأسماء فقط */
+    var btn = document.getElementById('tabVisitorsBtn');
+    if (btn && btn.style.display !== 'none') {
+      btn.style.display = 'none';
+    }
+  }
+  
+  /* حلقة سريعة جداً — تعمل 60 مرة في الثانية */
+  (function loop(){ fix(); requestAnimationFrame(loop); })();
+  
+  console.log('✅ عداد الزوار ظاهر');
+})();
+</script>
     
     </html>
   
