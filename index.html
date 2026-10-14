@@ -5718,6 +5718,42 @@ setInterval(function(){
   });
 },1000);
 </script>
+<script>
+/* 📊 بطاقات الإحصائيات — قابلة للنقر (نهائي) */
+document.addEventListener('click', function(e){
+  var card = e.target.closest('#dash .sd-card');
+  if (!card) return;
+  var lblEl = card.querySelector('.lbl');
+  if (!lblEl) return;
+  var lbl = lblEl.textContent || '';
+  var u = window.allUsersCache || [], v = window.allVisitorsCache || [];
+  var d, t, col;
+  if (lbl.indexOf('اليوم') !== -1) {
+    d = v.filter(function(x){ return x.visitedAt && x.visitedAt.seconds && new Date(x.visitedAt.seconds*1000).toDateString() === new Date().toDateString(); });
+    t = '✨ زوار اليوم'; col = '#f59e0b';
+  } else if (lbl.indexOf('الزيارات') !== -1) {
+    d = v; t = '🎭 كل الزيارات'; col = '#8b5cf6';
+  } else if (lbl.indexOf('مشترك') !== -1) {
+    d = u.filter(function(x){ return x.subscribed; }); t = '💎 المشتركون'; col = '#22c55e';
+  } else {
+    d = u; t = '👥 المسجلون'; col = '#3b82f6';
+  }
+  var old = document.getElementById('_dp'); if (old) old.remove();
+  var p = document.createElement('div'); p.id = '_dp';
+  p.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;color:#fff';
+  var h = '<div style="max-width:900px;margin:0 auto"><div style="display:flex;justify-content:space-between;margin-bottom:15px"><h1 style="color:' + col + ';margin:0">' + t + ' (' + d.length + ')</h1><button id="_dc" style="padding:10px 20px;background:#dc2626;color:#fff;border:none;border-radius:20px;font-family:Cairo;font-weight:900;cursor:pointer">✖ إغلاق</button></div>';
+  if (!d.length) h += '<p style="color:#94a3b8;text-align:center;padding:40px">لا توجد بيانات</p>';
+  d.slice().reverse().forEach(function(x, i){
+    var dt = x.visitedAt && x.visitedAt.seconds ? new Date(x.visitedAt.seconds*1000).toLocaleString('ar-EG') : (x.date || '-');
+    h += '<div style="background:#f8fafc;color:#0f172a;padding:12px;margin:6px 0;border-radius:10px;border-right:4px solid ' + col + ';font-size:13px"><b style="color:' + col + ';font-size:15px">' + (i+1) + '. ' + (x.name || 'زائر') + '</b><br>📧 ' + (x.email || '-') + ' • 📱 ' + (x.whatsapp || x.phone || '-') + '<br>🌍 ' + (x.country || '-') + ' — ' + (x.city || '-') + '<br><span style="font-size:11px;color:#94a3b8">📅 ' + dt + '</span></div>';
+  });
+  h += '</div>';
+  p.innerHTML = h;
+  document.body.appendChild(p);
+  document.getElementById('_dc').onclick = function(){ p.remove(); };
+}, true);
+console.log('✅ بطاقات الإحصائيات قابلة للنقر');
+</script>
     
     </html>
   
