@@ -6104,6 +6104,55 @@ console.log('🔒 مراقب الحقول الإلزامي جاهز');
   console.log('✅ إصلاح: زر المشرف + الوميض');
 })();
 </script>
+<style>
+/* إخفاء شريط الزوار نهائياً — يوقف الوميض */
+#visitorBanner { display: none !important; visibility: hidden !important; }
+</style>
+
+<script>
+(function(){
+  'use strict';
+  
+  /* 🎯 اعتراض دالة focus — لتعطيل القفز القسري */
+  var _origFocus = HTMLInputElement.prototype.focus;
+  HTMLInputElement.prototype.focus = function(){
+    if(window.__noAutoFocus && this.closest && this.closest('#visitorGateway')){
+      return;
+    }
+    return _origFocus.apply(this, arguments);
+  };
+  
+  /* 🔓 فتح صفحة المشرف عند النقر على .gw-admin-area */
+  document.addEventListener('pointerdown', function(e){
+    var t = e.target;
+    if(!t || !t.closest || !t.closest('.gw-admin-area')) return;
+    
+    /* عطّل القفز القسري لمدة 60 ثانية */
+    window.__noAutoFocus = true;
+    setTimeout(function(){ window.__noAutoFocus = false; }, 60000);
+    
+    /* امنع أي سكريبت آخر من رؤية النقرة */
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    
+    /* أخفِ كل الصفحات وافتح صفحة المشرف */
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
+      p.classList.add('hide');
+    });
+    var ap = document.getElementById('pageAdminLogin');
+    if(ap) ap.classList.remove('hide');
+    
+    setTimeout(function(){
+      var pw = document.getElementById('adminPassInput');
+      if(pw) _origFocus.call(pw);
+    }, 300);
+    
+    return false;
+  }, true);
+  
+  console.log('✅ إصلاح: وميض + مؤشر + زر المشرف');
+})();
+</script>
     
     </html>
   
