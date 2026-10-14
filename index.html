@@ -5214,6 +5214,52 @@ console.log('✅ المرحلة الابتدائية الكاملة جاهزة �
   console.log('🔧 Fixer نشط');
 })();
 </script>
+<script>
+(function(){
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (!t || !t.id) return;
+    if (t.id === 'fnbNext'){
+      e.stopPropagation();
+      e.preventDefault();
+      if (document.getElementById('mvCounter') && typeof window.__pn === 'function') {
+        window.__pn('n'); return false;
+      }
+      if (window.__mlState && window.__mlState.lessonId && typeof window.__mlRender === 'function') {
+        var s = window.__mlState, l = window.ML_LESSONS && window.ML_LESSONS[s.lessonId];
+        if (l && s.mode === 'slides' && s.slideIndex < l.slides.length - 1) {
+          s.slideIndex++; window.__mlRender();
+        } else if (l && s.mode === 'slides') {
+          s.mode = 'exercises'; s.exerciseIndex = 0; window.__mlRender();
+        }
+        return false;
+      }
+      return false;
+    }
+    if (t.id === 'fnbPrev'){
+      e.stopPropagation();
+      e.preventDefault();
+      if (document.getElementById('mvCounter') && typeof window.__pn === 'function') {
+        window.__pn('p'); return false;
+      }
+      if (window.__mlState && window.__mlState.mode === 'slides' && window.__mlState.slideIndex > 0) {
+        window.__mlState.slideIndex--; window.__mlRender();
+      }
+      return false;
+    }
+    if (t.id === 'fnbClose'){
+      e.stopPropagation();
+      e.preventDefault();
+      ['myViewer','mlViewer','customMiddleViewer'].forEach(function(id){
+        var v = document.getElementById(id); if (v) v.remove();
+      });
+      var b = document.getElementById('fixedNavBar'); if (b) b.remove();
+      return false;
+    }
+  }, true);
+  console.log('✅ Click interceptor active');
+})();
+</script>
     
     </html>
   
