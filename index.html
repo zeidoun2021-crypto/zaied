@@ -5617,6 +5617,80 @@ setInterval(async function(){
   console.log('✅ وحدة الإشعار والبيانات جاهزة');
 })();
 </script>
+<script>
+(function(){
+  'use strict';
+  setInterval(function(){
+    var isAdmin = window.isAdminMode === true || window.userStatus === 'admin' || localStorage.getItem('zaiedAdminPermanent') === '1';
+    if (!isAdmin) return;
+    if (document.getElementById('__fullDataBtn')) return;
+    var btn = document.createElement('button');
+    btn.id = '__fullDataBtn';
+    btn.textContent = '📋 كل البيانات';
+    btn.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:99999;padding:14px 22px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo;font-weight:900;cursor:pointer;font-size:14px;box-shadow:0 6px 20px rgba(34,197,94,0.5);';
+    btn.onclick = async function(){
+      var old = document.getElementById('__fullPanel'); if (old) old.remove();
+      var p = document.createElement('div'); p.id = '__fullPanel';
+      p.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;color:white;';
+      p.innerHTML = '<div style="text-align:center;padding:50px;color:#fbbf24;font-size:20px;">⏳ جاري التحميل...</div>';
+      document.body.appendChild(p);
+      
+      var u=[], v=[], s={};
+      try { u = await window.fbGetAllUsers(); } catch(e){}
+      try { v = await window.fbGetAllVisitors(); } catch(e){}
+      try { s = await window.fbGetAllSubscriptions(); } catch(e){}
+      
+      var h = '<div style="max-width:1100px;margin:0 auto">';
+      h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">';
+      h += '<h1 style="color:#fbbf24;font-size:24px;margin:0">📋 كل البيانات</h1>';
+      h += '<button id="__fpClose" style="padding:12px 22px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;cursor:pointer">✖ إغلاق</button>';
+      h += '</div>';
+      
+      h += '<h2 style="color:#fbbf24;font-size:20px;margin:20px 0 10px">👥 المسجلون (' + u.length + ')</h2>';
+      if (!u.length) h += '<p style="color:#94a3b8;text-align:center;padding:20px">لا مسجلون</p>';
+      u.forEach(function(x,i){
+        h += '<div style="background:#f8fafc;color:#0f172a;padding:14px;margin:8px 0;border-radius:10px;border-right:5px solid #3b82f6;font-size:13px">';
+        h += '<b style="color:#dc2626;font-size:15px">' + (i+1) + '. ' + (x.name||'-') + '</b><br>';
+        h += '📧 ' + (x.email||'-') + ' • 📱 ' + (x.whatsapp||'-') + '<br>';
+        h += '💼 ' + (x.profession||'-') + ' • 🎯 ' + (x.specialty||'-') + '<br>';
+        h += '🌍 ' + (x.country||'-') + ' • 🏙️ ' + (x.city||'-') + ' • 🏷️ ' + (x.category||'-');
+        h += '</div>';
+      });
+      
+      h += '<h2 style="color:#fbbf24;font-size:20px;margin:20px 0 10px">💎 المشتركون</h2>';
+      var sl = u.filter(function(x){ return x.subscribed || s[x.firebaseId]; });
+      if (!sl.length) h += '<p style="color:#94a3b8;text-align:center;padding:20px">لا مشتركين</p>';
+      sl.forEach(function(x,i){
+        h += '<div style="background:#d1fae5;color:#0f172a;padding:14px;margin:8px 0;border-radius:10px;border-right:5px solid #22c55e;font-size:13px">';
+        h += '<b style="color:#16a34a;font-size:15px">' + (i+1) + '. ' + (x.name||'-') + '</b><br>';
+        h += '📧 ' + (x.email||'-') + ' • 📱 ' + (x.whatsapp||'-') + '<br>';
+        h += '🌍 ' + (x.country||'-') + ' — ' + (x.city||'-');
+        h += '</div>';
+      });
+      
+      h += '<h2 style="color:#fbbf24;font-size:20px;margin:20px 0 10px">🎭 الزوار (' + v.length + ')</h2>';
+      if (!v.length) h += '<p style="color:#94a3b8;text-align:center;padding:20px">لا زوار</p>';
+      v.slice().reverse().forEach(function(x,i){
+        var d = x.visitedAt && x.visitedAt.seconds ? new Date(x.visitedAt.seconds*1000).toLocaleString('ar-EG') : (x.date||'-');
+        h += '<div style="background:#ede9fe;color:#0f172a;padding:12px;margin:8px 0;border-radius:10px;border-right:5px solid #8b5cf6;font-size:13px">';
+        h += '<b style="color:#7c3aed;font-size:14px">' + (i+1) + '. ' + (x.name||'زائر') + '</b><br>';
+        h += '📱 ' + (x.phone||'-') + ' • 📧 ' + (x.email||'-') + '<br>';
+        h += '🌍 ' + (x.country||'-') + ' — ' + (x.city||'-') + '<br>';
+        h += '💻 ' + (x.device||'-') + ' • 🌐 ' + (x.browser||'-') + '<br>';
+        h += '<span style="color:#94a3b8;font-size:11px">📅 ' + d + '</span>';
+        h += '</div>';
+      });
+      
+      h += '</div>';
+      p.innerHTML = h;
+      document.getElementById('__fpClose').onclick = function(){ p.remove(); };
+      console.log('📊 البيانات: مسجلين=' + u.length + ' مشتركين=' + sl.length + ' زوار=' + v.length);
+    };
+    document.body.appendChild(btn);
+  }, 1000);
+  console.log('✅ زر كل البيانات جاهز');
+})();
+</script>
     
     </html>
   
