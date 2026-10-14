@@ -6025,6 +6025,43 @@ window.addEventListener('load', function(){
 console.log('🔒 مراقب الحقول الإلزامي جاهز');
 })();
 </script>
+<script>
+/* 🔓 استثناء المشرف من النظام الإلزامي */
+(function(){
+  'use strict';
+  var adminRequested = false;
+  
+  /* رصد النقر على زر المشرف */
+  document.addEventListener('mousedown', function(e){
+    if(e.target.closest && e.target.closest('.gw-admin-area')){
+      adminRequested = true;
+      setTimeout(function(){ adminRequested = false; }, 10000);
+    }
+  }, true);
+  
+  /* اجعل الأزرار فعّالة دائماً */
+  setInterval(function(){
+    document.querySelectorAll('.gw-admin-area button, .gw-admin-link').forEach(function(b){
+      b.style.pointerEvents = 'auto';
+      b.style.opacity = '1';
+      b.disabled = false;
+    });
+    
+    /* إذا طلب المشرف — اعرض صفحة الدخول */
+    if(adminRequested){
+      var p = document.getElementById('pageAdminLogin');
+      var w = document.getElementById('pageWelcome');
+      if(p) p.classList.remove('hide');
+      if(w) w.classList.add('hide');
+      
+      var pw = document.getElementById('adminPassInput');
+      if(pw && document.activeElement !== pw){
+        setTimeout(function(){ pw.focus(); }, 100);
+      }
+    }
+  }, 150);
+})();
+</script>
     
     </html>
   
