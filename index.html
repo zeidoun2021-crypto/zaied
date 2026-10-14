@@ -6230,6 +6230,67 @@ body.has-visitor-banner{padding-top:15px !important;}
   console.log('✅ إصلاح شامل: وميض + مؤشر + زر المشرف');
 })();
 </script>
+<script>
+(function(){
+  'use strict';
+  
+  /* علَم دائم — لا يمكن إلغاؤه */
+  var _locked = true;
+  try {
+    Object.defineProperty(window, '__noAutoFocus', {
+      get: function(){ return _locked; },
+      set: function(v){ /* تجاهل أي محاولة لإلغاء القفل */ }
+    });
+  } catch(e){}
+  
+  /* اعتراض focus على كل عناصر #visitorGateway فقط */
+  var _origFocus = HTMLElement.prototype.focus;
+  HTMLElement.prototype.focus = function(){
+    /* إذا العنصر داخل #visitorGateway ولا هو adminPassInput — ارفض */
+    try {
+      var inGw = this.closest && this.closest('#visitorGateway');
+      var isAdmin = this.id === 'adminPassInput' || this.closest('#pageAdminLogin');
+      if (inGw && !isAdmin) return;
+    } catch(e){}
+    return _origFocus.apply(this, arguments);
+  };
+  
+  /* عند النقر على منطقة المشرف — اقفل القفل وأفتح الصفحة */
+  document.addEventListener('pointerdown', function(e){
+    var t = e.target;
+    if(!t || !t.closest || !t.closest('.gw-admin-area')) return;
+    
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    
+    /* أخفِ كل الصفحات */
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
+      p.classList.add('hide');
+    });
+    
+    /* افتح صفحة المشرف */
+    var ap = document.getElementById('pageAdminLogin');
+    if(ap) ap.classList.remove('hide');
+    
+    /* ركّز على كلمة المرور */
+    setTimeout(function(){
+      var pw = document.getElementById('adminPassInput');
+      if(pw) _origFocus.call(pw);
+    }, 350);
+    
+    return false;
+  }, true);
+  
+  /* احذف أي شريط زوار */
+  setInterval(function(){
+    var vb = document.getElementById('visitorBanner');
+    if(vb && vb.parentNode) vb.parentNode.removeChild(vb);
+    document.body.classList.remove('has-visitor-banner');
+  }, 250);
+  
+  console.log('🔒 قفل حقل الاسم + زر المشرف يعمل');
+})();
+</script>
     
     </html>
   
