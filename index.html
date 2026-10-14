@@ -6062,6 +6062,48 @@ console.log('🔒 مراقب الحقول الإلزامي جاهز');
   }, 150);
 })();
 </script>
+<script>
+/* 🔓 إصلاح سريع — زر المشرف + إيقاف الوميض */
+(function(){
+  'use strict';
+  
+  /* 1) اجعل زر المشرف يعمل دائماً */
+  document.addEventListener('pointerdown', function(e){
+    var t = e.target;
+    if(t && t.closest && t.closest('.gw-admin-area')){
+      var btn = t.closest('button');
+      if(btn){
+        e.preventDefault();
+        e.stopPropagation();
+        /* فتح صفحة المشرف مباشرة */
+        document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
+        var p = document.getElementById('pageAdminLogin');
+        if(p) p.classList.remove('hide');
+        setTimeout(function(){
+          var pw = document.getElementById('adminPassInput');
+          if(pw) pw.focus();
+        }, 200);
+      }
+    }
+  }, true);
+  
+  /* 2) اجعل الأزرار نشطة دائماً */
+  setInterval(function(){
+    document.querySelectorAll('.gw-admin-area button, .gw-admin-link').forEach(function(b){
+      b.style.pointerEvents = 'auto';
+      b.style.opacity = '1';
+      b.disabled = false;
+    });
+  }, 200);
+  
+  /* 3) إيقاف وميض شريط الزوار — لا نحذفه */
+  var style = document.createElement('style');
+  style.textContent = '#visitorBanner{animation:none !important;}';
+  document.head.appendChild(style);
+  
+  console.log('✅ إصلاح: زر المشرف + الوميض');
+})();
+</script>
     
     </html>
   
