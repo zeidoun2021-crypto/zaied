@@ -5875,6 +5875,156 @@ setInterval(async function(){
 console.log('✅ التسجيل الإلزامي + جدول المسجلين جاهز');
 })();
 </script>
+<script>
+/* 🔒 المراقب — يُلزم الزائر بإكمال الحقول واحداً واحداً */
+(function(){
+'use strict';
+
+/* ترتيب الحقول + شرط الصحة */
+var FIELDS = [
+  { id:'gwName',       ok: function(v){ return v.trim().length >= 3; } },
+  { id:'gwProfession', ok: function(v){ return v.trim().length >= 2; } },
+  { id:'gwSpecialty',  ok: function(v){ return v.trim().length >= 2; } },
+  { id:'gwEmail',      ok: function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); } },
+  { id:'gwPhone',      ok: function(v){ return v.replace(/[\s\-\+]/g,'').length >= 8; } },
+  { id:'gwCountry',    ok: function(v){ return v.trim().length >= 2; } },
+  { id:'gwCity',       ok: function(v){ return v.trim().length >= 2; } }
+];
+
+var current = 0; /* الحقل الحالي */
+
+function isReg(){
+  try {
+    var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    return !!(u && u.email) 
+        || window.isAdminMode === true 
+        || window.userStatus === 'admin'
+        || localStorage.getItem('zaiedAdminPermanent') === '1';
+  } catch(e){ return false; }
+}
+
+function field(){ return document.getElementById(FIELDS[current].id); }
+function isOk(){ var f = field(); return f && FIELDS[current].ok(f.value); }
+
+/* انتقل للحقل التالي */
+function advance(){
+  if(current >= FIELDS.length - 1) return;
+  if(!isOk()) return;
+  current++;
+  var f = field();
+  if(f){ f.focus(); try{ f.select(); }catch(e){} }
+}
+
+/* أعد التركيز على الحقل الحالي */
+function keepFocus(){
+  if(isReg()) return;
+  var f = field();
+  if(!f) return;
+  var active = document.activeElement;
+  if(active !== f){
+    /* إذا كانت النقرة داخل gateway على حقل آخر → اسمح فقط بالحقل الحالي */
+    if(active && active.closest && active.closest('#visitorGateway')){
+      if(FIELDS.some(function(x){ return x.id === active.id; })){
+        /* اسمح بالتنقل داخل gateway فقط للحقل الحالي */
+        f.focus();
+      } else {
+        f.focus();
+      }
+    } else {
+      f.focus();
+    }
+  }
+}
+
+/* إذا حاول الخروج من الحقل قبل ملئه → أعده */
+document.addEventListener('focusout', function(e){
+  if(isReg()) return;
+  var t = e.target;
+  if(!t || !t.id) return;
+  if(FIELDS[current].id !== t.id) return;
+  /* هل الحقل صحيح؟ */
+  if(FIELDS[current].ok(t.value)){
+    advance();
+  } else {
+    setTimeout(function(){ if(!isReg()){ var f = field(); if(f && document.activeElement !== f) f.focus(); } }, 80);
+  }
+}, true);
+
+/* امنع النقرات خارج gateway */
+document.addEventListener('mousedown', function(e){
+  if(isReg()) return;
+  var t = e.target;
+  if(!t) return;
+  if(t.closest && t.closest('#visitorGateway')) return;
+  if(t.closest && t.closest('.gw-admin-area')) return;
+  e.preventDefault(); e.stopPropagation();
+  var f = field(); if(f) f.focus();
+}, true);
+
+/* راقب كل شيء */
+setInterval(function(){
+  if(isReg()){
+    document.body.style.pointerEvents = '';
+    return;
+  }
+
+  /* 1) أخفِ الصفحات الداخلية */
+  document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
+    if(p.id !== 'pageWelcome') p.classList.add('hide');
+  });
+  var w = document.getElementById('pageWelcome');
+  if(w) w.classList.remove('hide');
+
+  /* 2) أخفِ زر الإحصائيات وشريط الزوار */
+  var s = document.getElementById('statsBtn'); if(s) s.style.display = 'none';
+  var vb = document.getElementById('visitorBanner'); if(vb) vb.remove();
+
+  /* 3) عطّل الأزرار خارج gateway */
+  document.querySelectorAll('button, a, .stage-card, .lesson-stage-card, .sub-sections-list li, .main-section-card, .audience span').forEach(function(el){
+    if(el.closest('#visitorGateway')) return;
+    if(el.closest('.gw-admin-area')) return;
+    if(el.dataset.locked === '1') return;
+    el.dataset.locked = '1';
+    el.style.pointerEvents = 'none';
+    el.style.opacity = '0.4';
+  });
+
+  /* 4) مراقبة الحقل الحالي */
+  keepFocus();
+
+  /* 5) إذا الحقل صحيح وتم التركيز على آخر حرف → تقدّم بعد 800ms */
+  var f = field();
+  if(f && f === document.activeElement && isOk()){
+    if(!f.dataset.timer){
+      f.dataset.timer = setTimeout(function(){
+        delete f.dataset.timer;
+        if(!isReg()) advance();
+      }, 800);
+    }
+  }
+
+  /* 6) تمرير إلى gateway */
+  var gw = document.getElementById('visitorGateway');
+  if(gw){
+    var r = gw.getBoundingClientRect();
+    if(r.top > window.innerHeight || r.bottom < 0){
+      gw.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  }
+}, 250);
+
+/* عند التحميل الأول → ركّز على الحقل الأول */
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    if(isReg()) return;
+    current = 0;
+    var f = field(); if(f) f.focus();
+  }, 1500);
+});
+
+console.log('🔒 مراقب الحقول الإلزامي جاهز');
+})();
+</script>
     
     </html>
   
