@@ -5109,6 +5109,67 @@ setTimeout(rebuildPrimary, 1500);
 console.log('✅ المرحلة الابتدائية الكاملة جاهزة — 4 دروس');
 })();
 </script>
+<script>
+/* 🔧 أزرار التنقل الثابتة — الدائمة */
+(function(){
+  'use strict';
+  
+  function createBar(){
+    var old = document.getElementById('fixedNavBar'); if(old) return;
+    var ov = document.getElementById('myViewer') || document.getElementById('mlViewer') || document.getElementById('customMiddleViewer');
+    if(!ov) return;
+    
+    var bar = document.createElement('div');
+    bar.id = 'fixedNavBar';
+    bar.style.cssText = 'position:fixed;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:2147483647;background:rgba(15,23,42,0.98);padding:12px 20px;border-radius:50px;border:3px solid #fbbf24;box-shadow:0 8px 30px rgba(0,0,0,0.7);';
+    bar.innerHTML = 
+      '<button id="fnbPrev" style="padding:12px 24px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">▶ السابق</button>' +
+      '<button id="fnbNext" style="padding:12px 24px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">التالي ◀</button>' +
+      '<button id="fnbClose" style="padding:12px 24px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">🏠 خروج</button>';
+    document.body.appendChild(bar);
+    
+    document.getElementById('fnbPrev').onclick = function(e){
+      e.preventDefault(); e.stopPropagation();
+      var fns = ['__pn', '__mlPrev', '__mPrev', '__myPrev', 'prevLessonSlide'];
+      for(var i=0; i<fns.length; i++){
+        var f = window[fns[i]];
+        if(typeof f === 'function'){ if(fns[i] === '__pn') f('p'); else f(); return; }
+      }
+    };
+    
+    document.getElementById('fnbNext').onclick = function(e){
+      e.preventDefault(); e.stopPropagation();
+      var fns = ['__pn', '__mlNext', '__mNext', '__myNext', 'nextLessonSlide'];
+      for(var i=0; i<fns.length; i++){
+        var f = window[fns[i]];
+        if(typeof f === 'function'){ if(fns[i] === '__pn') f('n'); else f(); return; }
+      }
+    };
+    
+    document.getElementById('fnbClose').onclick = function(e){
+      e.preventDefault(); e.stopPropagation();
+      ['myViewer','mlViewer','customMiddleViewer','ethicsViewer'].forEach(function(id){
+        var v = document.getElementById(id); if(v) v.remove();
+      });
+      var b = document.getElementById('fixedNavBar'); if(b) b.remove();
+    };
+  }
+  
+  setInterval(function(){
+    createBar();
+    var c = document.getElementById('mvCounter');
+    var p = document.getElementById('fnbPrev');
+    if(!c || !p) return;
+    if(/الشريحة 1 /.test(c.textContent) || /التمرين 1 /.test(c.textContent)){
+      p.style.opacity = '0.4'; p.style.pointerEvents = 'none';
+    } else {
+      p.style.opacity = '1'; p.style.pointerEvents = 'auto';
+    }
+  }, 300);
+  
+  console.log('✅ أزرار التنقل الدائمة جاهزة');
+})();
+</script>
     
     </html>
   
