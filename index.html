@@ -5754,6 +5754,51 @@ document.addEventListener('click', function(e){
 }, true);
 console.log('✅ بطاقات الإحصائيات قابلة للنقر');
 </script>
+<script>
+/* 🛡️ حماية نهائية من تسجيل الزوار المتكرر */
+(function(){
+  'use strict';
+  var tries = 0;
+  var t = setInterval(function(){
+    tries++;
+    if (tries > 100) { clearInterval(t); return; }
+    if (typeof window.fbSaveVisitor !== 'function') return;
+    if (window.__visitorGuard) { clearInterval(t); return; }
+    window.__visitorGuard = true;
+    clearInterval(t);
+
+    var original = window.fbSaveVisitor;
+
+    window.fbSaveVisitor = async function(data){
+      var isAdmin = window.isAdminMode === true 
+                 || window.userStatus === 'admin'
+                 || localStorage.getItem('zaiedAdminPermanent') === '1';
+      if (isAdmin) { console.log('👑 مشرف — لن يُسجَّل'); return true; }
+
+      try {
+        var today = new Date().toDateString();
+        if (localStorage.getItem('zaied_visited_' + today) === '1') {
+          return true;
+        }
+      } catch(e){}
+
+      try {
+        var r = await original.call(this, data);
+        try {
+          localStorage.setItem('zaied_visited_' + new Date().toDateString(), '1');
+          localStorage.setItem('zaied_last_visit', new Date().toDateString());
+        } catch(e){}
+        console.log('✅ زائر جديد سُجِّل');
+        return r;
+      } catch(e) {
+        return false;
+      }
+    };
+
+    console.log('🛡️ حماية الزوار مفعّلة');
+  }, 200);
+})();
+</script>
     
     </html>
   
