@@ -6291,6 +6291,54 @@ body.has-visitor-banner{padding-top:15px !important;}
   console.log('🔒 قفل حقل الاسم + زر المشرف يعمل');
 })();
 </script>
+<style>
+#visitorBanner { display: none !important; }
+</style>
+<script>
+(function(){
+  'use strict';
+  
+  /* إخفاء كل الشرائط المزعجة */
+  setInterval(function(){
+    var vb = document.getElementById('visitorBanner');
+    if(vb && vb.parentNode) vb.parentNode.removeChild(vb);
+    var usb = document.getElementById('userStatusBanner');
+    if(usb && usb.style.display !== 'none') usb.style.display = 'none';
+  }, 200);
+  
+  /* عند النقر على منطقة المشرف */
+  document.addEventListener('pointerdown', function(e){
+    var t = e.target;
+    if(!t || !t.closest || !t.closest('.gw-admin-area')) return;
+    
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    
+    /* ⚡ غيّر معرّف حقل الاسم — السكريبت القديم لن يجده */
+    var nf = document.getElementById('gwName');
+    if(nf) nf.id = 'gwName_hidden_' + Date.now();
+    
+    /* أخفِ كل الصفحات */
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
+      p.classList.add('hide');
+    });
+    
+    /* افتح صفحة المشرف */
+    var ap = document.getElementById('pageAdminLogin');
+    if(ap) ap.classList.remove('hide');
+    
+    /* ركّز على كلمة المرور */
+    setTimeout(function(){
+      var pw = document.getElementById('adminPassInput');
+      if(pw) pw.focus();
+    }, 400);
+    
+    return false;
+  }, true);
+  
+  console.log('✅ زر المشرف + إخفاء الشرائط');
+})();
+</script>
     
     </html>
   
