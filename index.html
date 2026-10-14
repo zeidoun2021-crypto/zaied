@@ -6153,6 +6153,83 @@ console.log('🔒 مراقب الحقول الإلزامي جاهز');
   console.log('✅ إصلاح: وميض + مؤشر + زر المشرف');
 })();
 </script>
+<style>
+#visitorBanner{display:none !important;visibility:hidden !important;height:0 !important;overflow:hidden !important;}
+body.has-visitor-banner{padding-top:15px !important;}
+</style>
+<script>
+(function(){
+  'use strict';
+  
+  /* 1) امنع إنشاء #visitorBanner من أساسه */
+  var _append = Node.prototype.appendChild;
+  Node.prototype.appendChild = function(n){
+    if(n && n.id === 'visitorBanner') return n;
+    return _append.apply(this, arguments);
+  };
+  var _insert = Node.prototype.insertBefore;
+  Node.prototype.insertBefore = function(n, r){
+    if(n && n.id === 'visitorBanner') return n;
+    return _insert.apply(this, arguments);
+  };
+  
+  /* 2) علَم دائم — لا يمكن إلغاؤه */
+  var _noAuto = false;
+  try {
+    Object.defineProperty(window, '__noAutoFocus', {
+      get: function(){ return _noAuto; },
+      set: function(v){ if(v) _noAuto = true; }
+    });
+  } catch(e){}
+  
+  /* 3) اعتراض focus/select/click — أي محاولة تُلغى */
+  var _focus = HTMLElement.prototype.focus;
+  HTMLElement.prototype.focus = function(){
+    if(_noAuto) return;
+    return _focus.apply(this, arguments);
+  };
+  var _select = HTMLInputElement.prototype.select;
+  HTMLInputElement.prototype.select = function(){
+    if(_noAuto) return;
+    return _select.apply(this, arguments);
+  };
+  var _click = HTMLElement.prototype.click;
+  HTMLElement.prototype.click = function(){
+    if(_noAuto && this.tagName === 'INPUT') return;
+    return _click.apply(this, arguments);
+  };
+  
+  /* 4) احذف أي شريط زوار موجود فوراً */
+  setInterval(function(){
+    var vb = document.getElementById('visitorBanner');
+    if(vb && vb.parentNode) vb.parentNode.removeChild(vb);
+    document.body.classList.remove('has-visitor-banner');
+  }, 250);
+  
+  /* 5) عند النقر على منطقة المشرف — أوقف كل شيء */
+  document.addEventListener('pointerdown', function(e){
+    var t = e.target;
+    if(!t || !t.closest || !t.closest('.gw-admin-area')) return;
+    _noAuto = true;
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
+      p.classList.add('hide');
+    });
+    var ap = document.getElementById('pageAdminLogin');
+    if(ap) ap.classList.remove('hide');
+    
+    setTimeout(function(){
+      var pw = document.getElementById('adminPassInput');
+      if(pw) _focus.call(pw);
+    }, 300);
+    return false;
+  }, true);
+  
+  console.log('✅ إصلاح شامل: وميض + مؤشر + زر المشرف');
+})();
+</script>
     
     </html>
   
