@@ -5443,6 +5443,30 @@ console.log('✅ المرحلة الابتدائية الكاملة جاهزة �
   console.log('✅ لوحة الإحصائيات النظيفة جاهزة');
 })();
 </script>
+<script>
+setInterval(async function(){
+  var d = document.getElementById('dash');
+  if (!d || d.style.display === 'none') return;
+  var nV = document.getElementById('nV');
+  var nT = document.getElementById('nT');
+  if (!nV || !nT) return;
+  if (nV.textContent !== '-' && nT.textContent !== '-') return;
+  if (typeof window.fbGetAllVisitors !== 'function') return;
+  try {
+    var v = await window.fbGetAllVisitors();
+    var today = new Date().toDateString();
+    var tc = 0;
+    v.forEach(function(x){
+      if (x.visitedAt && x.visitedAt.seconds) {
+        if (new Date(x.visitedAt.seconds*1000).toDateString() === today) tc++;
+      }
+    });
+    nV.textContent = String(v.length);
+    nT.textContent = String(tc);
+    console.log('✅ عداد الزوار: ' + v.length + ' • اليوم: ' + tc);
+  } catch(e) {}
+}, 1500);
+</script>
     
     </html>
   
