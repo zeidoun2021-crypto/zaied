@@ -5170,6 +5170,50 @@ console.log('✅ المرحلة الابتدائية الكاملة جاهزة �
   console.log('✅ أزرار التنقل الدائمة جاهزة');
 })();
 </script>
+<script>
+(function(){
+  'use strict';
+  function fix(){
+    var p = document.getElementById('fnbPrev');
+    var n = document.getElementById('fnbNext');
+    var c = document.getElementById('fnbClose');
+    if (p && !p.__fixed) {
+      p.__fixed = 1;
+      p.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        if (document.getElementById('mvCounter') && typeof window.__pn === 'function') return window.__pn('p');
+        if (window.__mlState && typeof window.__mlPrev === 'function') return window.__mlPrev();
+        if (typeof window.__mPrev === 'function') return window.__mPrev();
+        if (typeof window.__myPrev === 'function') return window.__myPrev();
+        if (typeof window.prevLessonSlide === 'function') return window.prevLessonSlide();
+      };
+    }
+    if (n && !n.__fixed) {
+      n.__fixed = 1;
+      n.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        if (document.getElementById('mvCounter') && typeof window.__pn === 'function') return window.__pn('n');
+        if (window.__mlState && typeof window.__mlNext === 'function') return window.__mlNext();
+        if (typeof window.__mNext === 'function') return window.__mNext();
+        if (typeof window.__myNext === 'function') return window.__myNext();
+        if (typeof window.nextLessonSlide === 'function') return window.nextLessonSlide();
+      };
+    }
+    if (c && !c.__fixed) {
+      c.__fixed = 1;
+      c.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        ['myViewer','mlViewer','customMiddleViewer','ethicsViewer'].forEach(function(i){
+          var v = document.getElementById(i); if (v) v.remove();
+        });
+        var b = document.getElementById('fixedNavBar'); if (b) b.remove();
+      };
+    }
+  }
+  setInterval(fix, 150);
+  console.log('🔧 Fixer نشط');
+})();
+</script>
     
     </html>
   
