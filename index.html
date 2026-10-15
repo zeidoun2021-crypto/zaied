@@ -5469,874 +5469,285 @@ setInterval(async function(){
 </script>
 <script>
 /* ═══════════════════════════════════════════════════════════
-   📧 إشعار البريد + 📋 لوحة بيانات المسجلين
+   🎯 الإعدادية الكاملة — 7 دروس نظيفة (يقفل كل السكريبتات القديمة)
    ═══════════════════════════════════════════════════════════ */
 (function(){
-  'use strict';
-  
-  var WEB3_KEY = '23f532ab-bd1b-4362-b980-2bab75c5b48b';
-  var ADMIN_EMAIL = 'zeidoun2021@gmail.com';
-  
-  /* ═══ 1) إرسال الإشعار بالبريد ═══ */
-  async function sendEmailNotification(userData) {
-    if (!userData || !userData.email) return false;
-    
-    var message = [
-      '📋 تسجيل جديد في منصة زايد',
-      '═══════════════════════════════',
-      '👤 الاسم الكامل: ' + (userData.name || '-'),
-      '💼 المهنة: ' + (userData.profession || '-'),
-      '🎯 الاختصاص: ' + (userData.specialty || '-'),
-      '📧 البريد الإلكتروني: ' + (userData.email || '-'),
-      '📱 رقم الواتساب: ' + (userData.whatsapp || '-'),
-      '🌍 بلد الإقامة: ' + (userData.country || '-'),
-      '🏙️ المدينة: ' + (userData.city || '-'),
-      '🏷️ الفئة: ' + (userData.category || '-'),
-      '📅 تاريخ التسجيل: ' + (userData.date || new Date().toLocaleString('ar-EG')),
-      '═══════════════════════════════'
-    ].join('\n');
-    
-    try {
-      var r = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-        body: JSON.stringify({
-          access_key: WEB3_KEY,
-          subject: '🎓 تسجيل جديد: ' + (userData.name || 'مستخدم'),
-          from_name: 'منصة زايد',
-          email: ADMIN_EMAIL,
-          message: message
-        })
-      });
-      var d = await r.json();
-      console.log('📧 الإشعار:', d.success ? '✅' : '❌');
-      return d.success;
-    } catch(e) {
-      console.error('📧 فشل الإرسال:', e);
-      return false;
-    }
-  }
-  
-  /* ═══ 2) اعتراض حفظ المستخدم — إرسال الإشعار تلقائياً ═══ */
-  function patchSaveUser(){
-    if (window.__saveUserPatched) return;
-    if (typeof window.fbSaveUser !== 'function') return;
-    
-    window.__saveUserPatched = true;
-    var original = window.fbSaveUser;
-    
-    window.fbSaveUser = async function(user){
-      var result = await original.apply(this, arguments);
-      if (result && result !== 'admin-skip' && user && user.email) {
-        sendEmailNotification(user);
-      }
-      return result;
-    };
-    console.log('✅ إشعار البريد مرتبط بحفظ المستخدم');
-  }
-  
-  /* حاول الربط عدة مرات (لضمان التنفيذ) */
-  [500, 1500, 3000, 5000].forEach(function(t){
-    setTimeout(patchSaveUser, t);
-  });
-  
-  /* ═══ 3) لوحة بيانات المسجلين الكاملة ═══ */
-  window.__openUsersPanel = async function(){
-    var users = [];
-    try {
-      if (typeof window.fbGetAllUsers === 'function') {
-        users = await window.fbGetAllUsers();
-      }
-    } catch(e) { console.error(e); }
-    
-    var old = document.getElementById('__usersPanel');
-    if (old) old.remove();
-    
-    var panel = document.createElement('div');
-    panel.id = '__usersPanel';
-    panel.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;';
-    
-    var usersHtml = users.length === 0 
-      ? '<div style="background:#1e293b;border:3px dashed #475569;border-radius:18px;padding:40px;text-align:center;color:#94a3b8;font-size:16px;">لا يوجد مسجلون بعد</div>'
-      : users.map(function(u, i){
-          var logins = localStorage.getItem('logins_' + u.firebaseId) || '0';
-          return '<div style="background:#f8fafc;border-radius:14px;padding:18px;margin-bottom:12px;border-right:5px solid #3b82f6;color:#0f172a;">' +
-            '<div style="font-weight:900;color:#dc2626;font-size:17px;margin-bottom:12px;border-bottom:2px dashed #cbd5e1;padding-bottom:8px;">' + (i+1) + '. ' + (u.name || '-') + '</div>' +
-            '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;font-size:14px;color:#334155;">' +
-              '<div><span style="color:#94a3b8;">📧 البريد:</span> <strong>' + (u.email || '-') + '</strong></div>' +
-              '<div><span style="color:#94a3b8;">📱 الهاتف:</span> <strong>' + (u.whatsapp || '-') + '</strong></div>' +
-              '<div><span style="color:#94a3b8;">💼 المهنة:</span> ' + (u.profession || '-') + '</div>' +
-              '<div><span style="color:#94a3b8;">🎯 الاختصاص:</span> ' + (u.specialty || '-') + '</div>' +
-              '<div><span style="color:#94a3b8;">🌍 البلد:</span> ' + (u.country || '-') + '</div>' +
-              '<div><span style="color:#94a3b8;">🏙️ المدينة:</span> ' + (u.city || '-') + '</div>' +
-              '<div><span style="color:#94a3b8;">🏷️ الفئة:</span> ' + (u.category || '-') + '</div>' +
-              '<div><span style="color:#94a3b8;">🔢 الدخولات:</span> <strong>' + logins + '</strong></div>' +
-              '<div>' + (u.subscribed ? '💎 مشترك' : '✅ مجاني') + '</div>' +
-              '<div style="color:#94a3b8;font-size:12px;">📅 ' + (u.date || '-') + '</div>' +
-            '</div>' +
-          '</div>';
-        }).join('');
-    
-    panel.innerHTML = 
-      '<div style="max-width:1200px;margin:0 auto;">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">' +
-          '<h1 style="color:#fbbf24;font-size:24px;">📋 بيانات المسجلين</h1>' +
-          '<button id="__upClose" style="padding:12px 22px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;cursor:pointer;">✖ إغلاق</button>' +
-        '</div>' +
-        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px;">' +
-          '<div style="background:#1e293b;border:3px solid #fbbf24;border-radius:18px;padding:20px;text-align:center;">' +
-            '<div style="font-size:48px;font-weight:900;color:#3b82f6;">' + users.length + '</div>' +
-            '<div style="color:#94a3b8;font-size:14px;margin-top:6px;">👥 إجمالي المسجلين</div>' +
-          '</div>' +
-          '<div style="background:#1e293b;border:3px solid #fbbf24;border-radius:18px;padding:20px;text-align:center;">' +
-            '<div style="font-size:48px;font-weight:900;color:#22c55e;">' + users.filter(function(x){return x.subscribed;}).length + '</div>' +
-            '<div style="color:#94a3b8;font-size:14px;margin-top:6px;">💎 المشتركون</div>' +
-          '</div>' +
-        '</div>' +
-        usersHtml +
-      '</div>';
-    
-    document.body.appendChild(panel);
-    document.getElementById('__upClose').onclick = function(){ panel.remove(); };
-  };
-  
-  /* ═══ 4) زر للمشرف فقط ═══ */
-  setInterval(function(){
-    var isAdmin = window.isAdminMode === true || window.userStatus === 'admin' || localStorage.getItem('zaiedAdminPermanent') === '1';
-    if (!isAdmin) return;
-    if (document.getElementById('__usersBtn')) return;
-    
-    var btn = document.createElement('button');
-    btn.id = '__usersBtn';
-    btn.textContent = '📋 بيانات المسجلين';
-    btn.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:99999;padding:14px 22px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:#fff;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo;font-weight:900;cursor:pointer;font-size:14px;box-shadow:0 6px 20px rgba(59,130,246,0.5);';
-    btn.onclick = window.__openUsersPanel;
-    document.body.appendChild(btn);
-  }, 1000);
-  
-  console.log('✅ وحدة الإشعار والبيانات جاهزة');
-})();
-</script>
-<script>
-(function(){
-  'use strict';
-  setInterval(function(){
-    var isAdmin = window.isAdminMode === true || window.userStatus === 'admin' || localStorage.getItem('zaiedAdminPermanent') === '1';
-    if (!isAdmin) return;
-    if (document.getElementById('__fullDataBtn')) return;
-    var btn = document.createElement('button');
-    btn.id = '__fullDataBtn';
-    btn.textContent = '📋 كل البيانات';
-    btn.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:99999;padding:14px 22px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo;font-weight:900;cursor:pointer;font-size:14px;box-shadow:0 6px 20px rgba(34,197,94,0.5);';
-    btn.onclick = async function(){
-      var old = document.getElementById('__fullPanel'); if (old) old.remove();
-      var p = document.createElement('div'); p.id = '__fullPanel';
-      p.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;color:white;';
-      p.innerHTML = '<div style="text-align:center;padding:50px;color:#fbbf24;font-size:20px;">⏳ جاري التحميل...</div>';
-      document.body.appendChild(p);
-      
-      var u=[], v=[], s={};
-      try { u = await window.fbGetAllUsers(); } catch(e){}
-      try { v = await window.fbGetAllVisitors(); } catch(e){}
-      try { s = await window.fbGetAllSubscriptions(); } catch(e){}
-      
-      var h = '<div style="max-width:1100px;margin:0 auto">';
-      h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">';
-      h += '<h1 style="color:#fbbf24;font-size:24px;margin:0">📋 كل البيانات</h1>';
-      h += '<button id="__fpClose" style="padding:12px 22px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;cursor:pointer">✖ إغلاق</button>';
-      h += '</div>';
-      
-      h += '<h2 style="color:#fbbf24;font-size:20px;margin:20px 0 10px">👥 المسجلون (' + u.length + ')</h2>';
-      if (!u.length) h += '<p style="color:#94a3b8;text-align:center;padding:20px">لا مسجلون</p>';
-      u.forEach(function(x,i){
-        h += '<div style="background:#f8fafc;color:#0f172a;padding:14px;margin:8px 0;border-radius:10px;border-right:5px solid #3b82f6;font-size:13px">';
-        h += '<b style="color:#dc2626;font-size:15px">' + (i+1) + '. ' + (x.name||'-') + '</b><br>';
-        h += '📧 ' + (x.email||'-') + ' • 📱 ' + (x.whatsapp||'-') + '<br>';
-        h += '💼 ' + (x.profession||'-') + ' • 🎯 ' + (x.specialty||'-') + '<br>';
-        h += '🌍 ' + (x.country||'-') + ' • 🏙️ ' + (x.city||'-') + ' • 🏷️ ' + (x.category||'-');
-        h += '</div>';
-      });
-      
-      h += '<h2 style="color:#fbbf24;font-size:20px;margin:20px 0 10px">💎 المشتركون</h2>';
-      var sl = u.filter(function(x){ return x.subscribed || s[x.firebaseId]; });
-      if (!sl.length) h += '<p style="color:#94a3b8;text-align:center;padding:20px">لا مشتركين</p>';
-      sl.forEach(function(x,i){
-        h += '<div style="background:#d1fae5;color:#0f172a;padding:14px;margin:8px 0;border-radius:10px;border-right:5px solid #22c55e;font-size:13px">';
-        h += '<b style="color:#16a34a;font-size:15px">' + (i+1) + '. ' + (x.name||'-') + '</b><br>';
-        h += '📧 ' + (x.email||'-') + ' • 📱 ' + (x.whatsapp||'-') + '<br>';
-        h += '🌍 ' + (x.country||'-') + ' — ' + (x.city||'-');
-        h += '</div>';
-      });
-      
-      h += '<h2 style="color:#fbbf24;font-size:20px;margin:20px 0 10px">🎭 الزوار (' + v.length + ')</h2>';
-      if (!v.length) h += '<p style="color:#94a3b8;text-align:center;padding:20px">لا زوار</p>';
-      v.slice().reverse().forEach(function(x,i){
-        var d = x.visitedAt && x.visitedAt.seconds ? new Date(x.visitedAt.seconds*1000).toLocaleString('ar-EG') : (x.date||'-');
-        h += '<div style="background:#ede9fe;color:#0f172a;padding:12px;margin:8px 0;border-radius:10px;border-right:5px solid #8b5cf6;font-size:13px">';
-        h += '<b style="color:#7c3aed;font-size:14px">' + (i+1) + '. ' + (x.name||'زائر') + '</b><br>';
-        h += '📱 ' + (x.phone||'-') + ' • 📧 ' + (x.email||'-') + '<br>';
-        h += '🌍 ' + (x.country||'-') + ' — ' + (x.city||'-') + '<br>';
-        h += '💻 ' + (x.device||'-') + ' • 🌐 ' + (x.browser||'-') + '<br>';
-        h += '<span style="color:#94a3b8;font-size:11px">📅 ' + d + '</span>';
-        h += '</div>';
-      });
-      
-      h += '</div>';
-      p.innerHTML = h;
-      document.getElementById('__fpClose').onclick = function(){ p.remove(); };
-      console.log('📊 البيانات: مسجلين=' + u.length + ' مشتركين=' + sl.length + ' زوار=' + v.length);
-    };
-    document.body.appendChild(btn);
-  }, 1000);
-  console.log('✅ زر كل البيانات جاهز');
-})();
-</script>
-<script>
-setInterval(function(){
-  document.querySelectorAll('#dash .sd-card').forEach(function(c){
-    if(c.dataset.b) return; c.dataset.b='1';
-    c.style.cursor='pointer';
-    c.onclick=function(){
-      var lbl=c.querySelector('.lbl').textContent;
-      var u=window.allUsersCache||[], v=window.allVisitorsCache||[];
-      var d, t, col;
-      if(lbl.indexOf('اليوم')!==-1){ d=v.filter(function(x){return x.visitedAt&&x.visitedAt.seconds&&new Date(x.visitedAt.seconds*1000).toDateString()===new Date().toDateString()}); t='✨ زوار اليوم'; col='#f59e0b'; }
-      else if(lbl.indexOf('الزيارات')!==-1){ d=v; t='🎭 كل الزيارات'; col='#8b5cf6'; }
-      else if(lbl.indexOf('مشترك')!==-1){ d=u.filter(function(x){return x.subscribed}); t='💎 المشتركون'; col='#22c55e'; }
-      else { d=u; t='👥 المسجلون'; col='#3b82f6'; }
-      var p=document.getElementById('_dp'); if(p) p.remove();
-      p=document.createElement('div'); p.id='_dp';
-      p.style.cssText='position:fixed;inset:0;background:#0f172a;z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;color:#fff';
-      var h='<div style="max-width:900px;margin:0 auto"><div style="display:flex;justify-content:space-between;margin-bottom:15px"><h1 style="color:'+col+';margin:0">'+t+' ('+d.length+')</h1><button id="_dc" style="padding:10px 20px;background:#dc2626;color:#fff;border:none;border-radius:20px;font-family:Cairo;font-weight:900;cursor:pointer">✖</button></div>';
-      d.slice().reverse().forEach(function(x,i){
-        var dt=x.visitedAt&&x.visitedAt.seconds?new Date(x.visitedAt.seconds*1000).toLocaleString('ar-EG'):(x.date||'-');
-        h+='<div style="background:#f8fafc;color:#0f172a;padding:12px;margin:6px 0;border-radius:10px;border-right:4px solid '+col+'"><b style="color:'+col+'">'+(i+1)+'. '+(x.name||'زائر')+'</b><br>📧 '+(x.email||'-')+' • 📱 '+(x.whatsapp||x.phone||'-')+'<br>🌍 '+(x.country||'-')+' — '+(x.city||'-')+'<br><span style="font-size:11px;color:#94a3b8">📅 '+dt+'</span></div>';
-      });
-      h+='</div>'; p.innerHTML=h; document.body.appendChild(p);
-      document.getElementById('_dc').onclick=function(){p.remove()};
-    };
-  });
-},1000);
-</script>
-<script>
-/* 📊 بطاقات الإحصائيات — قابلة للنقر (نهائي) */
-document.addEventListener('click', function(e){
-  var card = e.target.closest('#dash .sd-card');
-  if (!card) return;
-  var lblEl = card.querySelector('.lbl');
-  if (!lblEl) return;
-  var lbl = lblEl.textContent || '';
-  var u = window.allUsersCache || [], v = window.allVisitorsCache || [];
-  var d, t, col;
-  if (lbl.indexOf('اليوم') !== -1) {
-    d = v.filter(function(x){ return x.visitedAt && x.visitedAt.seconds && new Date(x.visitedAt.seconds*1000).toDateString() === new Date().toDateString(); });
-    t = '✨ زوار اليوم'; col = '#f59e0b';
-  } else if (lbl.indexOf('الزيارات') !== -1) {
-    d = v; t = '🎭 كل الزيارات'; col = '#8b5cf6';
-  } else if (lbl.indexOf('مشترك') !== -1) {
-    d = u.filter(function(x){ return x.subscribed; }); t = '💎 المشتركون'; col = '#22c55e';
-  } else {
-    d = u; t = '👥 المسجلون'; col = '#3b82f6';
-  }
-  var old = document.getElementById('_dp'); if (old) old.remove();
-  var p = document.createElement('div'); p.id = '_dp';
-  p.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:99999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;color:#fff';
-  var h = '<div style="max-width:900px;margin:0 auto"><div style="display:flex;justify-content:space-between;margin-bottom:15px"><h1 style="color:' + col + ';margin:0">' + t + ' (' + d.length + ')</h1><button id="_dc" style="padding:10px 20px;background:#dc2626;color:#fff;border:none;border-radius:20px;font-family:Cairo;font-weight:900;cursor:pointer">✖ إغلاق</button></div>';
-  if (!d.length) h += '<p style="color:#94a3b8;text-align:center;padding:40px">لا توجد بيانات</p>';
-  d.slice().reverse().forEach(function(x, i){
-    var dt = x.visitedAt && x.visitedAt.seconds ? new Date(x.visitedAt.seconds*1000).toLocaleString('ar-EG') : (x.date || '-');
-    h += '<div style="background:#f8fafc;color:#0f172a;padding:12px;margin:6px 0;border-radius:10px;border-right:4px solid ' + col + ';font-size:13px"><b style="color:' + col + ';font-size:15px">' + (i+1) + '. ' + (x.name || 'زائر') + '</b><br>📧 ' + (x.email || '-') + ' • 📱 ' + (x.whatsapp || x.phone || '-') + '<br>🌍 ' + (x.country || '-') + ' — ' + (x.city || '-') + '<br><span style="font-size:11px;color:#94a3b8">📅 ' + dt + '</span></div>';
-  });
-  h += '</div>';
-  p.innerHTML = h;
-  document.body.appendChild(p);
-  document.getElementById('_dc').onclick = function(){ p.remove(); };
-}, true);
-console.log('✅ بطاقات الإحصائيات قابلة للنقر');
-</script>
-<script>
-/* 🛡️ حماية نهائية من تسجيل الزوار المتكرر */
-(function(){
-  'use strict';
-  var tries = 0;
-  var t = setInterval(function(){
-    tries++;
-    if (tries > 100) { clearInterval(t); return; }
-    if (typeof window.fbSaveVisitor !== 'function') return;
-    if (window.__visitorGuard) { clearInterval(t); return; }
-    window.__visitorGuard = true;
-    clearInterval(t);
-
-    var original = window.fbSaveVisitor;
-
-    window.fbSaveVisitor = async function(data){
-      var isAdmin = window.isAdminMode === true 
-                 || window.userStatus === 'admin'
-                 || localStorage.getItem('zaiedAdminPermanent') === '1';
-      if (isAdmin) { console.log('👑 مشرف — لن يُسجَّل'); return true; }
-
-      try {
-        var today = new Date().toDateString();
-        if (localStorage.getItem('zaied_visited_' + today) === '1') {
-          return true;
-        }
-      } catch(e){}
-
-      try {
-        var r = await original.call(this, data);
-        try {
-          localStorage.setItem('zaied_visited_' + new Date().toDateString(), '1');
-          localStorage.setItem('zaied_last_visit', new Date().toDateString());
-        } catch(e){}
-        console.log('✅ زائر جديد سُجِّل');
-        return r;
-      } catch(e) {
-        return false;
-      }
-    };
-
-    console.log('🛡️ حماية الزوار مفعّلة');
-  }, 200);
-})();
-</script>
-<script>
-(function(){
 'use strict';
 
-/* ═══════════════ 1) التسجيل الإلزامي ═══════════════ */
-function isReg(){
-  try {
-    var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
-    return !!(u && u.email) || window.isAdminMode === true;
-  } catch(e){ return false; }
-}
+/* ─── محتوى الدروس الستة الجديدة ─── */
+var NEWL = {};
 
-document.addEventListener('mousedown', function(e){
-  if (isReg()) return;
-  var t = e.target.closest('.stage-card, .lesson-stage-card, .sub-sections-list li');
-  if (!t) return;
-  e.preventDefault(); e.stopPropagation();
-  var gw = document.getElementById('visitorGateway');
-  if (gw) {
-    gw.scrollIntoView({behavior:'smooth', block:'center'});
-    setTimeout(function(){ var i = document.getElementById('gwName'); if(i) i.focus(); }, 500);
-  }
-}, true);
+NEWL['7.2'] = {
+  icon:'📝', title:'معالجة النصوص', year:'السنة السابعة',
+  slides:[
+'<div style="text-align:center;padding:40px 20px;"><div style="font-size:90px;">📝</div><h1 style="color:#fbbf24;font-size:30px;margin:20px 0;">معالجة النصوص</h1><p style="color:#cbd5e1;font-size:18px;">السنة السابعة إعدادي — الوحدة 1</p></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🎯 أهداف الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:2;"><ol style="padding-right:25px;"><li>التعرف على واجهة Word</li><li>إنشاء وحفظ مستند</li><li>تنسيق النصوص</li><li>إدراج الصور والجداول</li><li>استخدام القص والنسخ واللصق</li></ol></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📝 واجهة Word</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>📋 شريط القوائم:</strong> ملف، تحرير، عرض، إدراج</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🔧 شريط الأدوات:</strong> أزرار سريعة للتنسيق</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>📄 منطقة الكتابة:</strong> حيث نكتب النص</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>📊 شريط الحالة:</strong> معلومات المستند</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">✏️ التنسيق</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🅱️ غامق (Gras):</strong> Ctrl + B</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🇮 إيطالي:</strong> Ctrl + I</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🅾️ تسطير:</strong> Ctrl + U</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>🎨 لون الخط:</strong> من شريط الأدوات</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">✂️ القص والنسخ واللصق</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:15px;line-height:1.9;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>✂️ قص:</strong> Ctrl + X</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>📋 نسخ:</strong> Ctrl + C</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>📌 لصق:</strong> Ctrl + V</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>↩️ تراجع:</strong> Ctrl + Z</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🖼️ إدراج صورة</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:10px;">1️⃣ ضع المؤشر في المكان المطلوب</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:10px;">2️⃣ قائمة "إدراج" → "صورة"</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:10px;">3️⃣ اختر الصورة من الحاسوب</div><div style="background:#fce7f3;padding:15px;border-radius:12px;">4️⃣ اضغط "إدراج"</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">💾 الحفظ والطباعة</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>💾 حفظ:</strong> Ctrl + S</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>💾 حفظ باسم:</strong> File → Save As</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>🖨️ معاينة:</strong> File → Print Preview</div><div style="background:#fce7f3;padding:15px;border-radius:12px;"><strong>🖨️ طباعة:</strong> Ctrl + P</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;">1️⃣ واجهة Word: قوائم + أدوات + كتابة</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;">2️⃣ التنسيق: غامق، إيطالي، تسطير</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;">3️⃣ القص والنسخ واللصق</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;">4️⃣ الحفظ والطباعة</div></div></div>'
+  ],
+  exercises:[
+    {t:'mcq',q:'ما اختصار الحفظ؟',o:['Ctrl+B','Ctrl+S','Ctrl+V','Ctrl+Z'],c:1,p:2},
+    {t:'mcq',q:'ما اختصار النسخ؟',o:['Ctrl+X','Ctrl+C','Ctrl+V','Ctrl+Z'],c:1,p:2},
+    {t:'mcq',q:'ما اختصار اللصق؟',o:['Ctrl+X','Ctrl+C','Ctrl+V','Ctrl+Z'],c:2,p:2},
+    {t:'tf',q:'Ctrl+X يحذف وينسخ.',c:true,p:2},
+    {t:'tf',q:'لا يمكن إدراج صورة في Word.',c:false,p:2},
+    {t:'fill',q:'لتغميق النص نستخدم Ctrl + ______.',a:[['B']],p:2},
+    {t:'fill',q:'لطباعة المستند نستخدم Ctrl + ______.',a:[['P']],p:2},
+    {t:'match',q:'صل بين الاختصار ووظيفته:',pairs:[{l:'Ctrl+C',r:'نسخ'},{l:'Ctrl+V',r:'لصق'},{l:'Ctrl+X',r:'قص'},{l:'Ctrl+Z',r:'تراجع'}],p:2}
+  ]
+};
 
-setInterval(function(){
-  if (isReg()) return;
-  document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
-    if (p.id !== 'pageWelcome') p.classList.add('hide');
-  });
-  var w = document.getElementById('pageWelcome'); if (w) w.classList.remove('hide');
-  var s = document.getElementById('statsBtn'); if (s) s.style.display = 'none';
-}, 500);
+NEWL['7.3'] = {
+  icon:'🌐', title:'الإنترنت والبحث', year:'السنة السابعة',
+  slides:[
+'<div style="text-align:center;padding:40px 20px;"><div style="font-size:90px;">🌐</div><h1 style="color:#fbbf24;font-size:30px;margin:20px 0;">الإنترنت والبحث</h1><p style="color:#cbd5e1;font-size:18px;">السنة السابعة إعدادي</p></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🔍 محرك البحث</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:18px;border-radius:12px;border-right:5px solid #3b82f6;margin-bottom:15px;"><h3 style="color:#1e40af;">📖 التعريف:</h3><p>موقع يسمح بالبحث عن المعلومات على الإنترنت.</p></div><div style="background:#d1fae5;padding:18px;border-radius:12px;border-right:5px solid #10b981;"><h3 style="color:#065f46;">🌐 أشهر المحركات:</h3><ul style="padding-right:25px;margin-top:10px;"><li>Google — الأشهر عالمياً</li><li>Bing — من مايكروسوفت</li><li>DuckDuckGo — يحترم الخصوصية</li></ul></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">💡 نصائح البحث</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🎯 كلمات مفتاحية دقيقة</strong></div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>❌ تجنب الكلمات العامة</strong></div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>✅ تحقق من المصدر</strong></div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>📅 تحقق من تاريخ النشر</strong></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📥 تحميل الموارد</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:15px;line-height:1.9;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>📄 ملف PDF:</strong> زر التحميل</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🖼️ صورة:</strong> زر الفأرة الأيمن → حفظ باسم</div><div style="background:#fee2e2;padding:15px;border-radius:12px;border-right:5px solid #dc2626;"><strong>⚠️ تنبيه:</strong> لا تحمّل من مصادر غير موثوقة!</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🔒 أمان الإنترنت</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fee2e2;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>⚠️ المخاطر:</strong> فيروسات، تصيد، سرقة</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>✅ الوقاية:</strong> كلمات مرور قوية</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;"><strong>🛡️ الحماية:</strong> مضاد فيروسات</div><div style="background:#fef3c7;padding:15px;border-radius:12px;"><strong>💡 القاعدة:</strong> لا تشارك بياناتك</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;">1️⃣ محرك البحث: أداة للبحث</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;">2️⃣ كلمات دقيقة = نتائج أفضل</div><div style="background:#d1fae5;padding:15px;border-radius:12px;">3️⃣ تحميل من مصادر موثوقة</div></div></div>'
+  ],
+  exercises:[
+    {t:'mcq',q:'ما هو محرك البحث؟',o:['لعبة','أداة للبحث على الإنترنت','برنامج','نظام'],c:1,p:2},
+    {t:'mcq',q:'أي محرك بحث يحترم الخصوصية؟',o:['Google','Bing','DuckDuckGo','Yahoo'],c:2,p:2},
+    {t:'tf',q:'يمكن تحميل أي ملف من الإنترنت دون خطر.',c:false,p:2},
+    {t:'tf',q:'الكلمات المفتاحية الدقيقة تعطي نتائج أفضل.',c:true,p:2},
+    {t:'fill',q:'أشهر محرك بحث عالمياً هو ______.',a:[['Google','جوجل']],p:2},
+    {t:'fill',q:'لتحميل صورة ننقر بزر الفأرة ______.',a:[['الأيمن']],p:2}
+  ]
+};
 
-/* ═══════════════ 2) بيانات المسجلين في جدول واضح ═══════════════ */
-setInterval(async function(){
-  var dash = document.getElementById('dash');
-  if (!dash || dash.style.display === 'none') return;
-  
-  var list = document.getElementById('list');
-  if (!list) return;
-  
-  try { if (window.fbGetAllUsers) window.allUsersCache = await window.fbGetAllUsers(); } catch(e){}
-  var users = window.allUsersCache || [];
-  
-  var sig = users.length + '|' + users.map(function(u){ return u.email || ''; }).join(',');
-  if (list.dataset.sig === sig) return;
-  list.dataset.sig = sig;
-  
-  var h = '<h2 style="color:#22c55e;font-size:20px;margin:20px 0 15px 0;">👥 قائمة المسجلين (' + users.length + ')</h2>';
-  
-  if (!users.length) {
-    h += '<p style="color:#94a3b8;text-align:center;padding:30px;">لا يوجد مسجلون بعد</p>';
-  } else {
-    users.forEach(function(u, i){
-      h += '<div style="background:#f8fafc;border-radius:14px;padding:18px;margin-bottom:14px;border-right:5px solid #22c55e;color:#0f172a;">';
-      h += '<div style="font-weight:900;color:#dc2626;font-size:17px;margin-bottom:12px;border-bottom:2px dashed #cbd5e1;padding-bottom:8px;">' + (i+1) + '. ' + (u.name || '-') + '</div>';
-      h += '<table style="width:100%;font-size:13px;color:#334155;border-collapse:collapse;">';
-      h += '<tr><td style="padding:5px 0;width:140px;"><b>📧 البريد:</b></td><td>' + (u.email || '-') + '</td></tr>';
-      h += '<tr><td style="padding:5px 0;"><b>📱 الهاتف:</b></td><td>' + (u.whatsapp || '-') + '</td></tr>';
-      h += '<tr><td style="padding:5px 0;"><b>💼 المهنة:</b></td><td>' + (u.profession || '-') + '</td></tr>';
-      h += '<tr><td style="padding:5px 0;"><b>🎯 الاختصاص:</b></td><td>' + (u.specialty || '-') + '</td></tr>';
-      h += '<tr><td style="padding:5px 0;"><b>🌍 البلد:</b></td><td>' + (u.country || '-') + '</td></tr>';
-      h += '<tr><td style="padding:5px 0;"><b>🏙️ المدينة:</b></td><td>' + (u.city || '-') + '</td></tr>';
-      h += '<tr><td style="padding:5px 0;"><b>🏷️ الفئة:</b></td><td>' + (u.category || '-') + '</td></tr>';
-      h += '<tr><td style="padding:5px 0;"><b>📅 التاريخ:</b></td><td>' + (u.date || '-') + '</td></tr>';
-      h += '<tr><td style="padding:5px 0;"><b>🔰 الحالة:</b></td><td>' + (u.subscribed ? '💎 مشترك' : '✅ مجاني') + '</td></tr>';
-      h += '</table></div>';
-    });
-  }
-  
-  list.innerHTML = h;
-}, 3000);
+NEWL['8.1'] = {
+  icon:'🐱', title:'Scratch — البرمجة المرئية', year:'السنة الثامنة',
+  slides:[
+'<div style="text-align:center;padding:40px 20px;"><div style="font-size:90px;">🐱</div><h1 style="color:#fbbf24;font-size:30px;margin:20px 0;">Scratch — البرمجة المرئية</h1><p style="color:#cbd5e1;font-size:18px;">السنة الثامنة إعدادي — الوحدة 2</p></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🎯 أهداف الدرس</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:2;"><ol style="padding-right:25px;"><li>التعرف على Scratch</li><li>فهم واجهة Scratch</li><li>استخدام اللبنات البرمجية</li><li>إنشاء قصة أو لعبة بسيطة</li></ol></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🐱 ما هو Scratch؟</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:15px;line-height:1.9;"><div style="background:#dbeafe;padding:18px;border-radius:12px;border-right:5px solid #3b82f6;margin-bottom:15px;"><h3 style="color:#1e40af;">📖 التعريف:</h3><p>لغة برمجة مرئية تعتمد على السحب والإفلات لإنشاء قصص وألعاب ورسوم متحركة.</p></div><div style="background:#d1fae5;padding:18px;border-radius:12px;border-right:5px solid #10b981;"><h3 style="color:#065f46;">🎯 مميزاته:</h3><ul style="padding-right:25px;margin-top:10px;"><li>سهل للمبتدئين</li><li>لا يحتاج كتابة أكواد</li><li>مجاني: scratch.mit.edu</li></ul></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🖥️ واجهة Scratch</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🎨 منطقة اللبنات:</strong> مصنّفة بالألوان</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>📝 منطقة السكريبت:</strong> ترتيب اللبنات</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🐱 منطقة الكائنات:</strong> Sprites</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>🎬 المنصة (Stage):</strong> عرض النتائج</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🧩 أنواع اللبنات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🔵 الحركة:</strong> تحريك الكائن</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🎨 المظهر:</strong> تغيير الشكل</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🔊 الصوت:</strong> تشغيل الأصوات</div><div style="background:#fce7f3;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #ec4899;"><strong>⚡ الأحداث:</strong> بدء البرنامج</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;border-right:5px solid #6366f1;"><strong>🔁 التحكم:</strong> الحلقات</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🔁 التكرار</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;border-right:5px solid #3b82f6;margin-bottom:15px;"><p><strong>كرر (X) مرة:</strong> تكرار محدد</p></div><div style="background:#d1fae5;padding:15px;border-radius:12px;border-right:5px solid #10b981;margin-bottom:15px;"><p><strong>كرر باستمرار:</strong> تكرار لا نهائي</p></div><div style="background:#fef3c7;padding:15px;border-radius:12px;border-right:5px solid #f59e0b;"><p><strong>مثال:</strong> القط يتحرك 10 خطوات ثم ينتظر ثانية</p></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🎮 مشروع تطبيقي</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;font-size:15px;line-height:1.9;"><p style="font-weight:900;color:#dc2626;margin-bottom:15px;text-align:center;">لعبة: القط يطارد الكرة</p><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>1️⃣</strong> اختر خلفية</div><div style="background:#d1fae5;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>2️⃣</strong> أضف كرة</div><div style="background:#fef3c7;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>3️⃣</strong> حرّك الكرة عشوائياً</div><div style="background:#fce7f3;padding:12px;border-radius:10px;"><strong>4️⃣</strong> القط يطارد الكرة</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;">1️⃣ Scratch لغة برمجة مرئية</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;">2️⃣ الواجهة: لبنات + سكريبت + كائنات + منصة</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;">3️⃣ أنواع اللبنات: حركة، مظهر، صوت، تحكم</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;">4️⃣ الحلقات للتكرار</div></div></div>'
+  ],
+  exercises:[
+    {t:'mcq',q:'ما هو Scratch؟',o:['لعبة','لغة برمجة مرئية','متصفح','نظام'],c:1,p:2},
+    {t:'mcq',q:'أين نجد Scratch؟',o:['scratch.mit.edu','google.com','facebook.com','yahoo.com'],c:0,p:2},
+    {t:'tf',q:'Scratch يحتاج كتابة أكواد معقدة.',c:false,p:2},
+    {t:'tf',q:'الكائن في Scratch يسمى Sprite.',c:true,p:2},
+    {t:'fill',q:'لغة البرمجة المرئية تسمى ______.',a:[['Scratch','سكراتش']],p:2},
+    {t:'fill',q:'لبنة ______ تُستخدم للتكرار.',a:[['كرر']],p:2},
+    {t:'match',q:'صل بين اللبنة ووظيفتها:',pairs:[{l:'الحركة',r:'تحريك'},{l:'المظهر',r:'تغيير الشكل'},{l:'الصوت',r:'تشغيل'},{l:'التحكم',r:'التكرار'}],p:2}
+  ]
+};
 
-console.log('✅ التسجيل الإلزامي + جدول المسجلين جاهز');
-})();
-</script>
-<script>
-/* 🔒 المراقب — يُلزم الزائر بإكمال الحقول واحداً واحداً */
-(function(){
-'use strict';
+NEWL['8.2'] = {
+  icon:'🔒', title:'الأمن الرقمي', year:'السنة الثامنة',
+  slides:[
+'<div style="text-align:center;padding:40px 20px;"><div style="font-size:90px;">🔒</div><h1 style="color:#fbbf24;font-size:30px;margin:20px 0;">الأمن الرقمي</h1><p style="color:#cbd5e1;font-size:18px;">السنة الثامنة إعدادي</p></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">⚠️ المخاطر الرقمية</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fee2e2;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #dc2626;"><strong>🦠 البرمجيات الخبيثة:</strong> فيروسات، أحصنة طروادة</div><div style="background:#fee2e2;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #dc2626;"><strong>🎣 التصيد (Phishing):</strong> رسائل مزيفة</div><div style="background:#fee2e2;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #dc2626;"><strong>👤 سرقة الهوية:</strong> انتحال شخصية</div><div style="background:#fee2e2;padding:15px;border-radius:12px;border-right:5px solid #dc2626;"><strong>👊 التنمر الإلكتروني</strong></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🛡️ الحماية</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🔑 كلمات مرور قوية:</strong> 8+ أحرف، أرقام، رموز</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🔐 التحقق بخطوتين</strong></div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🔄 تحديث البرامج</strong></div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>🛡️ مضاد الفيروسات</strong></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🔑 كلمة المرور القوية</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fee2e2;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #dc2626;"><strong>❌ سيئة:</strong> 123456, password, abcdef</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>✅ قوية:</strong> MyP@ss2026!, KtB#12xY</div><div style="background:#fef3c7;padding:15px;border-radius:12px;border-right:5px solid #f59e0b;"><strong>💡 نصيحة:</strong> لا تكرر نفس الكلمة في كل المواقع</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🎣 التصيد الإلكتروني</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:15px;line-height:1.9;"><div style="background:#dbeafe;padding:18px;border-radius:12px;border-right:5px solid #3b82f6;margin-bottom:15px;"><p><strong>📖 التعريف:</strong> رسائل مزيفة تطلب منك بياناتك الشخصية</p></div><div style="background:#d1fae5;padding:15px;border-radius:12px;border-right:5px solid #10b981;margin-bottom:12px;"><strong>✅ كيف نكتشفه؟</strong></div><ul style="padding-right:25px;line-height:2;"><li>رابط غريب</li><li>أخطاء إملائية</li><li>استعجال مريب</li><li>طلب كلمة المرور</li></ul></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">👊 التنمر الإلكتروني</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:15px;line-height:1.9;"><p style="margin-bottom:15px;"><strong>📖 التعريف:</strong> استخدام الإنترنت لإيذاء الآخرين</p><p style="margin-bottom:15px;"><strong>🚨 ماذا نفعل؟</strong></p><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>1️⃣</strong> لا ترد</div><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>2️⃣</strong> احفظ الأدلة</div><div style="background:#dbeafe;padding:12px;border-radius:10px;margin-bottom:8px;"><strong>3️⃣</strong> أخبر شخصاً بالغاً</div><div style="background:#dbeafe;padding:12px;border-radius:10px;"><strong>4️⃣</strong> احظر وأبلغ</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fee2e2;padding:15px;border-radius:12px;margin-bottom:12px;">⚠️ المخاطر: فيروسات، تصيد، تنمر</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;">🛡️ الحماية: كلمات قوية، تحديثات</div><div style="background:#dbeafe;padding:15px;border-radius:12px;">💡 القاعدة: لا تشارك بياناتك</div></div></div>'
+  ],
+  exercises:[
+    {t:'mcq',q:'ما هو التصيد (Phishing)؟',o:['لعبة','رسائل مزيفة','برنامج','متصفح'],c:1,p:2},
+    {t:'mcq',q:'ما كلمة المرور القوية؟',o:['123456','password','MyP@ss2026!','abcdef'],c:2,p:2},
+    {t:'tf',q:'التحقق بخطوتين يزيد الأمان.',c:true,p:2},
+    {t:'tf',q:'لا حاجة لتحديث البرامج.',c:false,p:2},
+    {t:'fill',q:'كلمة مرور قوية تحتوي على ______ أحرف على الأقل.',a:[['8']],p:2},
+    {t:'fill',q:'مضاد ______ يحمي من الفيروسات.',a:[['الفيروسات']],p:2}
+  ]
+};
 
-/* ترتيب الحقول + شرط الصحة */
-var FIELDS = [
-  { id:'gwName',       ok: function(v){ return v.trim().length >= 3; } },
-  { id:'gwProfession', ok: function(v){ return v.trim().length >= 2; } },
-  { id:'gwSpecialty',  ok: function(v){ return v.trim().length >= 2; } },
-  { id:'gwEmail',      ok: function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); } },
-  { id:'gwPhone',      ok: function(v){ return v.replace(/[\s\-\+]/g,'').length >= 8; } },
-  { id:'gwCountry',    ok: function(v){ return v.trim().length >= 2; } },
-  { id:'gwCity',       ok: function(v){ return v.trim().length >= 2; } }
-];
+NEWL['9.1'] = {
+  icon:'📡', title:'الأجهزة المتصلة (IoT)', year:'السنة التاسعة',
+  slides:[
+'<div style="text-align:center;padding:40px 20px;"><div style="font-size:90px;">📡</div><h1 style="color:#fbbf24;font-size:30px;margin:20px 0;">الأجهزة المتصلة (IoT)</h1><p style="color:#cbd5e1;font-size:18px;">السنة التاسعة إعدادي</p></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📡 ما هو IoT؟</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:15px;line-height:1.9;"><div style="background:#dbeafe;padding:18px;border-radius:12px;border-right:5px solid #3b82f6;margin-bottom:15px;"><h3 style="color:#1e40af;">📖 التعريف:</h3><p>ربط الأجهزة اليومية بالإنترنت لتبادل البيانات والتحكم عن بعد.</p></div><div style="background:#d1fae5;padding:18px;border-radius:12px;border-right:5px solid #10b981;"><h3 style="color:#065f46;">🎯 أمثلة:</h3><ul style="padding-right:25px;margin-top:10px;"><li>الساعة الذكية</li><li>كاميرا المراقبة</li><li>المصباح الذكي</li></ul></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🔧 الحساسات والمشغلات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:18px;border-radius:12px;margin-bottom:15px;border-right:5px solid #3b82f6;"><h3 style="color:#1e40af;">📥 الحساسات:</h3><p>تقيس الظواهر الفيزيائية.</p><ul style="padding-right:25px;margin-top:10px;"><li>حساس الحرارة</li><li>حساس الضوء</li><li>حساس الحركة</li></ul></div><div style="background:#d1fae5;padding:18px;border-radius:12px;border-right:5px solid #10b981;"><h3 style="color:#065f46;">📤 المشغلات:</h3><p>تنفذ الأفعال الفيزيائية.</p><ul style="padding-right:25px;margin-top:10px;"><li>المصباح</li><li>المحرك</li><li>الصفارة</li></ul></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📶 تقنيات الاتصال</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>📶 Wi-Fi:</strong> اتصال متوسط المدى</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🔵 Bluetooth:</strong> قصير المدى</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>📡 Radio:</strong> بعيد المدى</div><div style="background:#fce7f3;padding:15px;border-radius:12px;border-right:5px solid #ec4899;"><strong>📱 NFC:</strong> قريب جداً</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🌍 مجالات التطبيق</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>🏠 المنزل الذكي:</strong> إضاءة، تكييف</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>🏥 الصحة:</strong> مراقبة المرضى</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>🚗 النقل:</strong> السيارات الذكية</div><div style="background:#fce7f3;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #ec4899;"><strong>🌾 الزراعة:</strong> الري الذكي</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;border-right:5px solid #6366f1;"><strong>🏭 الصناعة</strong></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">💻 برمجة Micro:bit</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;font-size:15px;"><div style="background:#1e293b;color:#e2e8f0;padding:15px;border-radius:12px;font-family:monospace;font-size:13px;direction:ltr;text-align:left;border-left:6px solid #fbbf24;"><span style="color:#f472b6;">عند</span> <span style="color:#34d399;">البدء</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f472b6;">اعرض</span> <span style="color:#fbbf24;">"مرحباً"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f472b6;">أظهر</span> <span style="color:#34d399;">درجة الحرارة</span></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;">1️⃣ IoT = ربط الأجهزة بالإنترنت</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;">2️⃣ الحساسات تقيس، المشغلات تنفذ</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;">3️⃣ الاتصال: Wi-Fi, Bluetooth, Radio</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;">4️⃣ مجالات: منزل، صحة، زراعة، صناعة</div></div></div>'
+  ],
+  exercises:[
+    {t:'mcq',q:'ماذا يعني IoT؟',o:['إنترنت الأشياء','تكنولوجيا المعلومات','شبكة','برمجة'],c:0,p:2},
+    {t:'mcq',q:'ما وظيفة الحساس؟',o:['التحريك','القياس','الإضاءة','الصوت'],c:1,p:2},
+    {t:'mcq',q:'ما وظيفة المشغل؟',o:['القياس','التنفيذ','الاتصال','التخزين'],c:1,p:2},
+    {t:'tf',q:'الساعة الذكية جهاز متصل.',c:true,p:2},
+    {t:'tf',q:'الحساس يحول الإشارات إلى أفعال.',c:false,p:2},
+    {t:'fill',q:'الجهاز الذي يقيس الظواهر يسمى ______.',a:[['حساس','capteur']],p:2},
+    {t:'fill',q:'الجهاز الذي ينفذ الأوامر يسمى ______.',a:[['مشغل','actionneur']],p:2},
+    {t:'match',q:'صل بين الجهاز ونوعه:',pairs:[{l:'حساس الحرارة',r:'حساس'},{l:'المصباح',r:'مشغل'},{l:'حساس الضوء',r:'حساس'},{l:'المحرك',r:'مشغل'}],p:2}
+  ]
+};
 
-var current = 0; /* الحقل الحالي */
+NEWL['9.2'] = {
+  icon:'⚙️', title:'الخوارزميات', year:'السنة التاسعة',
+  slides:[
+'<div style="text-align:center;padding:40px 20px;"><div style="font-size:90px;">⚙️</div><h1 style="color:#fbbf24;font-size:30px;margin:20px 0;">الخوارزميات</h1><p style="color:#cbd5e1;font-size:18px;">السنة التاسعة إعدادي</p></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🧠 ما هي الخوارزمية؟</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;font-size:15px;line-height:1.9;"><div style="background:#dbeafe;padding:18px;border-radius:12px;border-right:5px solid #3b82f6;margin-bottom:15px;"><h3 style="color:#1e40af;">📖 التعريف:</h3><p>مجموعة من الخطوات المنظمة والمحدودة لحل مشكلة معينة.</p></div><div style="background:#d1fae5;padding:18px;border-radius:12px;border-right:5px solid #10b981;"><h3 style="color:#065f46;">💡 مثال:</h3><p>خوارزمية جمع عددين:</p><ol style="padding-right:25px;margin-top:10px;"><li>اقرأ العدد الأول</li><li>اقرأ العدد الثاني</li><li>اجمعهما</li><li>اعرض النتيجة</li></ol></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📋 خصائص الخوارزمية</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>1️⃣ الوضوح:</strong> خطوات لا لبس فيها</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>2️⃣ الترتيب:</strong> خطوات متسلسلة</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>3️⃣ النهاية:</strong> عدد محدود من الخطوات</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;border-right:5px solid #6366f1;"><strong>4️⃣ الفعالية:</strong> يحل المشكلة فعلاً</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📊 المخططات الانسيابية</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #10b981;"><strong>⬭ البيضاوي:</strong> بداية / نهاية</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #3b82f6;"><strong>▭ المستطيل:</strong> عملية</div><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;border-right:5px solid #f59e0b;"><strong>◇ المعين:</strong> شرط (نعم/لا)</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;border-right:5px solid #6366f1;"><strong>▱ متوازي الأضلاع:</strong> إدخال / إخراج</div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🔀 الشروط</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;border-right:5px solid #f59e0b;margin-bottom:15px;"><p><strong>البنية:</strong> إذا (الشرط) → افعل؛ وإلا → افعل آخر</p></div><div style="background:#dbeafe;padding:15px;border-radius:12px;border-right:5px solid #3b82f6;"><p><strong>مثال:</strong> إذا كان العدد أكبر من 10 → اعرض "كبير"، وإلا اعرض "صغير"</p></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">🔁 الحلقات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:20px;font-size:15px;line-height:1.9;"><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:15px;border-right:5px solid #3b82f6;"><p><strong>للـ (لـ كل عنصر):</strong> كرر لعدد محدد</p></div><div style="background:#d1fae5;padding:15px;border-radius:12px;border-right:5px solid #10b981;"><p><strong>بينما (الشرط):</strong> كرر طالما الشرط صحيح</p></div></div></div>',
+'<div style="padding:25px;"><h2 style="color:#fbbf24;font-size:24px;margin-bottom:20px;text-align:center;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:25px;border-radius:20px;line-height:1.9;font-size:15px;"><div style="background:#fef3c7;padding:15px;border-radius:12px;margin-bottom:12px;">1️⃣ الخوارزمية = خطوات منظمة</div><div style="background:#dbeafe;padding:15px;border-radius:12px;margin-bottom:12px;">2️⃣ الخصائص: وضوح، ترتيب، نهاية، فعالية</div><div style="background:#d1fae5;padding:15px;border-radius:12px;margin-bottom:12px;">3️⃣ المخططات: بيضاوي، مستطيل، معين، متوازي</div><div style="background:#e0e7ff;padding:15px;border-radius:12px;">4️⃣ الشروط والحلقات</div></div></div>'
+  ],
+  exercises:[
+    {t:'mcq',q:'ما هي الخوارزمية؟',o:['برنامج','خطوات منظمة لحل مشكلة','لغة برمجة','جهاز'],c:1,p:2},
+    {t:'mcq',q:'ما رمز البداية في المخطط؟',o:['المستطيل','المعين','البيضاوي','متوازي الأضلاع'],c:2,p:2},
+    {t:'mcq',q:'ما رمز الشرط؟',o:['المستطيل','المعين','البيضاوي','متوازي الأضلاع'],c:1,p:2},
+    {t:'tf',q:'الخوارزمية يجب أن تكون واضحة.',c:true,p:2},
+    {t:'fill',q:'الخوارزمية تنتهي بعدد ______ من الخطوات.',a:[['محدود']],p:2},
+    {t:'fill',q:'رمز الشرط في المخطط هو ______.',a:[['المعين']],p:2}
+  ]
+};
 
-function isReg(){
-  try {
-    var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
-    return !!(u && u.email) 
-        || window.isAdminMode === true 
-        || window.userStatus === 'admin'
-        || localStorage.getItem('zaiedAdminPermanent') === '1';
-  } catch(e){ return false; }
-}
+/* ─── محرك عرض موحد ─── */
+window.__showML = function(id){
+  var L = NEWL[id];
+  if (!L) { alert('الدرس غير موجود'); return; }
+  var old = document.getElementById('mlViewer'); if (old) old.remove();
+  var ov = document.createElement('div'); ov.id = 'mlViewer';
+  ov.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e293b);z-index:999999999;overflow-y:auto;padding:15px;direction:rtl;font-family:Cairo;';
+  var tp = L.exercises.reduce(function(s,e){return s+e.p;},0);
+  var totalItems = L.slides.length + L.exercises.length + 1;
+  ov.innerHTML = '<div style="max-width:900px;margin:15px auto;">' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;align-items:center;">' +
+    '<button onclick="document.getElementById(\'mlViewer\').remove()" style="padding:12px 22px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;font-size:13px;cursor:pointer;">🔙 العودة</button>' +
+    '<div id="mc" style="flex:1;padding:12px 18px;background:rgba(0,0,0,0.4);border-radius:30px;color:#fbbf24;font-weight:900;text-align:center;border:2px solid #fbbf24;font-size:14px;"></div>' +
+    '<div id="ms" style="padding:12px 18px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:30px;color:white;font-weight:900;font-size:14px;">🎯 0/'+tp+'</div></div>' +
+    '<div style="height:10px;background:rgba(0,0,0,0.5);border-radius:10px;overflow:hidden;margin-bottom:20px;"><div id="mp" style="height:100%;background:linear-gradient(90deg,#fbbf24,#22c55e);width:0%;transition:width 0.4s;"></div></div>' +
+    '<div id="mco"></div><div id="mn" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:25px;"></div></div>';
+  document.body.appendChild(ov);
 
-function field(){ return document.getElementById(FIELDS[current].id); }
-function isOk(){ var f = field(); return f && FIELDS[current].ok(f.value); }
-
-/* انتقل للحقل التالي */
-function advance(){
-  if(current >= FIELDS.length - 1) return;
-  if(!isOk()) return;
-  current++;
-  var f = field();
-  if(f){ f.focus(); try{ f.select(); }catch(e){} }
-}
-
-/* أعد التركيز على الحقل الحالي */
-function keepFocus(){
-  if(isReg()) return;
-  var f = field();
-  if(!f) return;
-  var active = document.activeElement;
-  if(active !== f){
-    /* إذا كانت النقرة داخل gateway على حقل آخر → اسمح فقط بالحقل الحالي */
-    if(active && active.closest && active.closest('#visitorGateway')){
-      if(FIELDS.some(function(x){ return x.id === active.id; })){
-        /* اسمح بالتنقل داخل gateway فقط للحقل الحالي */
-        f.focus();
-      } else {
-        f.focus();
+  var si=0, ei=0, sc=0, mSel=null, mState={};
+  function render(){
+    var c=document.getElementById('mco'), n=document.getElementById('mn'), ct=document.getElementById('mc'), pg=document.getElementById('mp'), se=document.getElementById('ms');
+    if(si < L.slides.length){
+      c.innerHTML = L.slides[si];
+      ct.textContent = '📖 الشريحة ' + (si+1) + ' من ' + totalItems;
+      pg.style.width = ((si+1)/totalItems*100) + '%';
+      var nh = '';
+      if(si>0) nh += '<button onclick="window.__mlP()" style="padding:15px 30px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">▶ السابق</button>';
+      nh += '<button onclick="document.getElementById(\'mlViewer\').remove()" style="padding:15px 30px;background:#334155;color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">🏠 خروج</button>';
+      if(si < L.slides.length-1) nh += '<button onclick="window.__mlN()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">التالي ◀</button>';
+      else nh += '<button onclick="window.__mlN()" style="padding:15px 30px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">📝 ابدأ التمارين</button>';
+      n.innerHTML = nh;
+    } else if(si === L.slides.length && ei < L.exercises.length){
+      var ex = L.exercises[ei];
+      ct.textContent = '📝 التمرين ' + (ei+1) + ' من ' + L.exercises.length;
+      pg.style.width = ((L.slides.length + ei)/totalItems*100) + '%';
+      se.textContent = '🎯 ' + sc + '/' + tp;
+      var h = '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border:3px solid #fbbf24;border-radius:25px;padding:30px;color:white;">';
+      h += '<div style="text-align:center;margin-bottom:20px;"><span style="background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;padding:8px 20px;border-radius:25px;font-weight:900;font-size:14px;">✏️ السؤال ' + (ei+1) + ' — ' + ex.p + ' نقاط</span></div>';
+      h += '<div style="background:white;color:#1e293b;padding:20px;border-radius:15px;font-size:17px;font-weight:700;margin-bottom:20px;text-align:center;">' + ex.q + '</div>';
+      if(ex.t === 'mcq'){
+        h += '<div id="opts" style="display:flex;flex-direction:column;gap:12px;">';
+        ex.o.forEach(function(o,i){h += '<button onclick="window.__mlM('+i+')" style="padding:15px 20px;background:white;color:#1e293b;border:3px solid #cbd5e1;border-radius:15px;font-family:Cairo;font-weight:700;font-size:16px;text-align:right;cursor:pointer;">' + String.fromCharCode(65+i) + '. ' + o + '</button>';});
+        h += '</div>';
+      } else if(ex.t === 'tf'){
+        h += '<div id="opts" style="display:flex;gap:15px;justify-content:center;"><button onclick="window.__mlT(true)" style="padding:20px 40px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:20px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;">✅ صحيح</button><button onclick="window.__mlT(false)" style="padding:20px 40px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:20px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;">❌ خطأ</button></div>';
+      } else if(ex.t === 'fill'){
+        h += '<div id="opts" style="display:flex;flex-direction:column;gap:12px;"><input type="text" id="fi" placeholder="اكتب إجابتك..." style="padding:15px;border:3px solid #3b82f6;border-radius:15px;font-family:Cairo;font-size:16px;text-align:center;"><button onclick="window.__mlF()" style="padding:15px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:15px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">✅ تحقق</button></div>';
+      } else if(ex.t === 'match'){
+        h += '<div id="opts" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">';
+        h += '<div><strong style="color:#fbbf24;display:block;margin-bottom:10px;">📌 العمود 1:</strong>';
+        ex.pairs.forEach(function(p,i){var sel=mSel===i, mt=mState[i]!==undefined; h += '<div onclick="window.__mlL('+i+')" style="cursor:pointer;padding:12px;margin-bottom:8px;background:' + (mt?'#d1fae5':(sel?'#fef3c7':'white')) + ';color:#1e293b;border:2px solid ' + (sel?'#f59e0b':(mt?'#10b981':'#cbd5e1')) + ';border-radius:12px;font-weight:700;">' + p.l + (mt?' ✅':'') + '</div>';});
+        h += '</div><div><strong style="color:#22c55e;display:block;margin-bottom:10px;">🎯 العمود 2:</strong>';
+        ex.pairs.forEach(function(p,i){var mt=false; for(var k in mState){if(mState[k]===i){mt=true;break;}} h += '<div onclick="window.__mlR('+i+')" style="cursor:pointer;padding:12px;margin-bottom:8px;background:' + (mt?'#d1fae5':'white') + ';color:#1e293b;border:2px solid ' + (mt?'#10b981':'#cbd5e1') + ';border-radius:12px;font-weight:700;">' + p.r + (mt?' ✅':'') + '</div>';});
+        h += '</div></div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlSub()" style="padding:12px 30px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;">✅ تحقق</button></div>';
       }
+      h += '<div id="fb" style="margin-top:20px;"></div></div>';
+      c.innerHTML = h;
+      n.innerHTML = '';
     } else {
-      f.focus();
+      var pct = Math.round((sc/tp)*100), ok = pct >= 60;
+      var r = '<div style="background:' + (ok?'linear-gradient(135deg,#d1fae5,#a7f3d0)':'linear-gradient(135deg,#fef3c7,#fde68a)') + ';border:4px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:25px;padding:40px 25px;text-align:center;">';
+      r += '<div style="font-size:90px;">' + (ok?'🎉':'📚') + '</div>';
+      r += '<h2 style="color:' + (ok?'#15803d':'#92400e') + ';font-size:30px;margin:20px 0;">' + (ok?'مبروك! نجحت':'أعد المحاولة') + '</h2>';
+      r += '<div style="font-size:64px;font-weight:900;color:' + (ok?'#15803d':'#92400e') + ';">' + sc + ' / ' + tp + '</div>';
+      r += '<div style="font-size:24px;margin:15px 0;">' + pct + '%</div>';
+      r += '<div style="margin-top:25px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">';
+      if(ok) r += '<button onclick="window.print()" style="padding:15px 30px;background:linear-gradient(135deg,#16a34a,#15803d);color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🖨️ طباعة الشهادة</button>';
+      r += '<button onclick="document.getElementById(\'mlViewer\').remove()" style="padding:15px 30px;background:#334155;color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🏠 خروج</button></div></div>';
+      c.innerHTML = r;
+      n.innerHTML = '';
+      pg.style.width = '100%';
+      ct.textContent = '🏆 النتيجة النهائية';
     }
+    window.scrollTo({top:0,behavior:'smooth'});
   }
+  window.__mlN = function(){ if(si < L.slides.length-1){si++; render();} else if(si===L.slides.length-1){si++; ei=0; render();} };
+  window.__mlP = function(){ if(si>0){si--; render();} };
+  window.__mlM = function(sel){ var ex=L.exercises[ei], ok=sel===ex.c, fb=document.getElementById('fb'); document.querySelectorAll('#opts button').forEach(function(b,i){b.disabled=true; if(i===ex.c){b.style.background='#d1fae5';b.style.borderColor='#16a34a';} else if(i===sel&&!ok){b.style.background='#fee2e2';b.style.borderColor='#dc2626';}}); if(ok) sc += ex.p; fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border:3px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ أحسنت!':'❌ الإجابة: ' + ex.o[ex.c]) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlX()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>'; document.getElementById('ms').textContent = '🎯 ' + sc + '/' + tp; };
+  window.__mlT = function(sel){ var ex=L.exercises[ei], ok=sel===ex.c, fb=document.getElementById('fb'); document.querySelectorAll('#opts button').forEach(function(b){b.disabled=true;}); if(ok) sc += ex.p; fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border:3px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ صحيح!':'❌ الإجابة: ' + (ex.c?'صحيح':'خطأ')) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlX()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>'; document.getElementById('ms').textContent = '🎯 ' + sc + '/' + tp; };
+  window.__mlF = function(){ var ex=L.exercises[ei], v=(document.getElementById('fi').value||'').trim().toLowerCase(); var ok=ex.a.some(function(arr){return arr.some(function(x){return x.toLowerCase()===v;});}); var fb=document.getElementById('fb'); if(ok) sc += ex.p; fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border:3px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ صحيح!':'❌ الإجابة: ' + ex.a[0][0]) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlX()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>'; document.getElementById('ms').textContent = '🎯 ' + sc + '/' + tp; };
+  window.__mlL = function(i){ mSel=i; render(); };
+  window.__mlR = function(i){ if(mSel===null){alert('اختر من العمود الأول'); return;} mState[mSel]=i; mSel=null; render(); };
+  window.__mlSub = function(){ var ex=L.exercises[ei], ok=0; ex.pairs.forEach(function(p,i){if(mState[i]===i) ok++;}); var fb=document.getElementById('fb'); if(ok===ex.pairs.length){sc += ex.p; fb.innerHTML='<div style="padding:20px;background:#d1fae5;color:#15803d;border:3px solid #16a34a;border-radius:15px;text-align:center;font-weight:900;">✅ ممتاز!</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlX()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>';} else fb.innerHTML='<div style="padding:20px;background:#fef3c7;color:#78350f;border:3px solid #f59e0b;border-radius:15px;text-align:center;font-weight:900;">⚠️ ' + ok + '/' + ex.pairs.length + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlX()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">التالي ◀</button></div>'; document.getElementById('ms').textContent = '🎯 ' + sc + '/' + tp; };
+  window.__mlX = function(){ ei++; mSel=null; mState={}; render(); };
+  render();
+};
+
+/* ─── بناء البطاقات السبعة ─── */
+function buildCards(){
+  return '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>' +
+    '<button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button>' +
+    '<div class="welcome-card" style="margin:15px 0;"><h2>🎓 دروس الإعدادية — الإعلامية</h2><p>7 دروس تفاعلية وفق البرنامج الرسمي</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding:20px;">' +
+      c('7','#1e3a8a,#2563eb','💻','السنة السابعة','7.1 الحاسوب ونظام التشغيل','__showLesson(\'1.1\')') +
+      c('7','#1e3a8a,#2563eb','📝','السنة السابعة','7.2 معالجة النصوص','__showML(\'7.2\')') +
+      c('7','#1e3a8a,#2563eb','🌐','السنة السابعة','7.3 الإنترنت والبحث','__showML(\'7.3\')') +
+      c('8','#065f46,#10b981','🐱','السنة الثامنة','8.1 Scratch — البرمجة المرئية','__showML(\'8.1\')') +
+      c('8','#065f46,#10b981','🔒','السنة الثامنة','8.2 الأمن الرقمي','__showML(\'8.2\')') +
+      c('9','#7c3aed,#4c1d95','📡','السنة التاسعة','9.1 الأجهزة المتصلة (IoT)','__showML(\'9.1\')') +
+      c('9','#7c3aed,#4c1d95','⚙️','السنة التاسعة','9.2 الخوارزميات','__showML(\'9.2\')') +
+    '</div>';
+}
+function c(y, colors, icon, year, title, action){
+  var parts = colors.split(',');
+  return '<div onclick="window.' + action + '" style="background:linear-gradient(135deg,' + parts[0] + ',' + parts[1] + ');border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
+    '<div style="font-size:55px;margin-bottom:15px;">' + icon + '</div>' +
+    '<div style="font-size:14px;color:#fbbf24;font-weight:900;margin-bottom:6px;">' + year + '</div>' +
+    '<div style="font-size:15px;margin-bottom:15px;font-weight:700;">' + title + '</div>' +
+    '<div style="background:#22c55e;padding:10px;border-radius:15px;font-weight:900;">✅ ابدأ الدرس</div>' +
+    '</div>';
 }
 
-/* إذا حاول الخروج من الحقل قبل ملئه → أعده */
-document.addEventListener('focusout', function(e){
-  if(isReg()) return;
-  var t = e.target;
-  if(!t || !t.id) return;
-  if(FIELDS[current].id !== t.id) return;
-  /* هل الحقل صحيح؟ */
-  if(FIELDS[current].ok(t.value)){
-    advance();
-  } else {
-    setTimeout(function(){ if(!isReg()){ var f = field(); if(f && document.activeElement !== f) f.focus(); } }, 80);
-  }
-}, true);
-
-/* امنع النقرات خارج gateway */
-document.addEventListener('mousedown', function(e){
-  if(isReg()) return;
-  var t = e.target;
-  if(!t) return;
-  if(t.closest && t.closest('#visitorGateway')) return;
-  if(t.closest && t.closest('.gw-admin-area')) return;
-  e.preventDefault(); e.stopPropagation();
-  var f = field(); if(f) f.focus();
-}, true);
-
-/* راقب كل شيء */
-setInterval(function(){
-  if(isReg()){
-    document.body.style.pointerEvents = '';
-    return;
-  }
-
-  /* 1) أخفِ الصفحات الداخلية */
-  document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
-    if(p.id !== 'pageWelcome') p.classList.add('hide');
+/* ─── القفل + البناء ─── */
+function lockBuild(){
+  var el = document.getElementById('pageMiddleStage');
+  if (!el) { setTimeout(lockBuild, 300); return; }
+  if (el.__locked) return;
+  el.__locked = true;
+  
+  var origDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+  var allow = false;
+  Object.defineProperty(el, 'innerHTML', {
+    configurable: true,
+    get: function(){ return origDesc.get.call(this); },
+    set: function(v){ if (allow) origDesc.set.call(this, v); }
   });
-  var w = document.getElementById('pageWelcome');
-  if(w) w.classList.remove('hide');
+  
+  allow = true;
+  el.innerHTML = buildCards();
+  allow = false;
+  
+  console.log('🔒 الإعدادية مقفلة بـ 7 بطاقات');
+}
 
-  /* 2) أخفِ زر الإحصائيات وشريط الزوار */
-  var s = document.getElementById('statsBtn'); if(s) s.style.display = 'none';
-  var vb = document.getElementById('visitorBanner'); if(vb) vb.remove();
+lockBuild();
+[500, 1500, 3000, 6000, 10000].forEach(function(t){ setTimeout(lockBuild, t); });
+setInterval(lockBuild, 3000);
 
-  /* 3) عطّل الأزرار خارج gateway */
-  document.querySelectorAll('button, a, .stage-card, .lesson-stage-card, .sub-sections-list li, .main-section-card, .audience span').forEach(function(el){
-    if(el.closest('#visitorGateway')) return;
-    if(el.closest('.gw-admin-area')) return;
-    if(el.dataset.locked === '1') return;
-    el.dataset.locked = '1';
-    el.style.pointerEvents = 'none';
-    el.style.opacity = '0.4';
-  });
-
-  /* 4) مراقبة الحقل الحالي */
-  keepFocus();
-
-  /* 5) إذا الحقل صحيح وتم التركيز على آخر حرف → تقدّم بعد 800ms */
-  var f = field();
-  if(f && f === document.activeElement && isOk()){
-    if(!f.dataset.timer){
-      f.dataset.timer = setTimeout(function(){
-        delete f.dataset.timer;
-        if(!isReg()) advance();
-      }, 800);
-    }
-  }
-
-  /* 6) تمرير إلى gateway */
-  var gw = document.getElementById('visitorGateway');
-  if(gw){
-    var r = gw.getBoundingClientRect();
-    if(r.top > window.innerHeight || r.bottom < 0){
-      gw.scrollIntoView({behavior:'smooth', block:'center'});
-    }
-  }
-}, 250);
-
-/* عند التحميل الأول → ركّز على الحقل الأول */
-window.addEventListener('load', function(){
-  setTimeout(function(){
-    if(isReg()) return;
-    current = 0;
-    var f = field(); if(f) f.focus();
-  }, 1500);
-});
-
-console.log('🔒 مراقب الحقول الإلزامي جاهز');
-})();
-</script>
-<script>
-/* 🔓 استثناء المشرف من النظام الإلزامي */
-(function(){
-  'use strict';
-  var adminRequested = false;
-  
-  /* رصد النقر على زر المشرف */
-  document.addEventListener('mousedown', function(e){
-    if(e.target.closest && e.target.closest('.gw-admin-area')){
-      adminRequested = true;
-      setTimeout(function(){ adminRequested = false; }, 10000);
-    }
-  }, true);
-  
-  /* اجعل الأزرار فعّالة دائماً */
-  setInterval(function(){
-    document.querySelectorAll('.gw-admin-area button, .gw-admin-link').forEach(function(b){
-      b.style.pointerEvents = 'auto';
-      b.style.opacity = '1';
-      b.disabled = false;
-    });
-    
-    /* إذا طلب المشرف — اعرض صفحة الدخول */
-    if(adminRequested){
-      var p = document.getElementById('pageAdminLogin');
-      var w = document.getElementById('pageWelcome');
-      if(p) p.classList.remove('hide');
-      if(w) w.classList.add('hide');
-      
-      var pw = document.getElementById('adminPassInput');
-      if(pw && document.activeElement !== pw){
-        setTimeout(function(){ pw.focus(); }, 100);
-      }
-    }
-  }, 150);
-})();
-</script>
-<script>
-/* 🔓 إصلاح سريع — زر المشرف + إيقاف الوميض */
-(function(){
-  'use strict';
-  
-  /* 1) اجعل زر المشرف يعمل دائماً */
-  document.addEventListener('pointerdown', function(e){
-    var t = e.target;
-    if(t && t.closest && t.closest('.gw-admin-area')){
-      var btn = t.closest('button');
-      if(btn){
-        e.preventDefault();
-        e.stopPropagation();
-        /* فتح صفحة المشرف مباشرة */
-        document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
-        var p = document.getElementById('pageAdminLogin');
-        if(p) p.classList.remove('hide');
-        setTimeout(function(){
-          var pw = document.getElementById('adminPassInput');
-          if(pw) pw.focus();
-        }, 200);
-      }
-    }
-  }, true);
-  
-  /* 2) اجعل الأزرار نشطة دائماً */
-  setInterval(function(){
-    document.querySelectorAll('.gw-admin-area button, .gw-admin-link').forEach(function(b){
-      b.style.pointerEvents = 'auto';
-      b.style.opacity = '1';
-      b.disabled = false;
-    });
-  }, 200);
-  
-  /* 3) إيقاف وميض شريط الزوار — لا نحذفه */
-  var style = document.createElement('style');
-  style.textContent = '#visitorBanner{animation:none !important;}';
-  document.head.appendChild(style);
-  
-  console.log('✅ إصلاح: زر المشرف + الوميض');
-})();
-</script>
-<style>
-/* إخفاء شريط الزوار نهائياً — يوقف الوميض */
-#visitorBanner { display: none !important; visibility: hidden !important; }
-</style>
-
-<script>
-(function(){
-  'use strict';
-  
-  /* 🎯 اعتراض دالة focus — لتعطيل القفز القسري */
-  var _origFocus = HTMLInputElement.prototype.focus;
-  HTMLInputElement.prototype.focus = function(){
-    if(window.__noAutoFocus && this.closest && this.closest('#visitorGateway')){
-      return;
-    }
-    return _origFocus.apply(this, arguments);
-  };
-  
-  /* 🔓 فتح صفحة المشرف عند النقر على .gw-admin-area */
-  document.addEventListener('pointerdown', function(e){
-    var t = e.target;
-    if(!t || !t.closest || !t.closest('.gw-admin-area')) return;
-    
-    /* عطّل القفز القسري لمدة 60 ثانية */
-    window.__noAutoFocus = true;
-    setTimeout(function(){ window.__noAutoFocus = false; }, 60000);
-    
-    /* امنع أي سكريبت آخر من رؤية النقرة */
-    e.stopImmediatePropagation();
-    e.preventDefault();
-    
-    /* أخفِ كل الصفحات وافتح صفحة المشرف */
-    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
-      p.classList.add('hide');
-    });
-    var ap = document.getElementById('pageAdminLogin');
-    if(ap) ap.classList.remove('hide');
-    
-    setTimeout(function(){
-      var pw = document.getElementById('adminPassInput');
-      if(pw) _origFocus.call(pw);
-    }, 300);
-    
-    return false;
-  }, true);
-  
-  console.log('✅ إصلاح: وميض + مؤشر + زر المشرف');
-})();
-</script>
-<style>
-#visitorBanner{display:none !important;visibility:hidden !important;height:0 !important;overflow:hidden !important;}
-body.has-visitor-banner{padding-top:15px !important;}
-</style>
-<script>
-(function(){
-  'use strict';
-  
-  /* 1) امنع إنشاء #visitorBanner من أساسه */
-  var _append = Node.prototype.appendChild;
-  Node.prototype.appendChild = function(n){
-    if(n && n.id === 'visitorBanner') return n;
-    return _append.apply(this, arguments);
-  };
-  var _insert = Node.prototype.insertBefore;
-  Node.prototype.insertBefore = function(n, r){
-    if(n && n.id === 'visitorBanner') return n;
-    return _insert.apply(this, arguments);
-  };
-  
-  /* 2) علَم دائم — لا يمكن إلغاؤه */
-  var _noAuto = false;
-  try {
-    Object.defineProperty(window, '__noAutoFocus', {
-      get: function(){ return _noAuto; },
-      set: function(v){ if(v) _noAuto = true; }
-    });
-  } catch(e){}
-  
-  /* 3) اعتراض focus/select/click — أي محاولة تُلغى */
-  var _focus = HTMLElement.prototype.focus;
-  HTMLElement.prototype.focus = function(){
-    if(_noAuto) return;
-    return _focus.apply(this, arguments);
-  };
-  var _select = HTMLInputElement.prototype.select;
-  HTMLInputElement.prototype.select = function(){
-    if(_noAuto) return;
-    return _select.apply(this, arguments);
-  };
-  var _click = HTMLElement.prototype.click;
-  HTMLElement.prototype.click = function(){
-    if(_noAuto && this.tagName === 'INPUT') return;
-    return _click.apply(this, arguments);
-  };
-  
-  /* 4) احذف أي شريط زوار موجود فوراً */
-  setInterval(function(){
-    var vb = document.getElementById('visitorBanner');
-    if(vb && vb.parentNode) vb.parentNode.removeChild(vb);
-    document.body.classList.remove('has-visitor-banner');
-  }, 250);
-  
-  /* 5) عند النقر على منطقة المشرف — أوقف كل شيء */
-  document.addEventListener('pointerdown', function(e){
-    var t = e.target;
-    if(!t || !t.closest || !t.closest('.gw-admin-area')) return;
-    _noAuto = true;
-    e.stopImmediatePropagation();
-    e.preventDefault();
-    
-    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
-      p.classList.add('hide');
-    });
-    var ap = document.getElementById('pageAdminLogin');
-    if(ap) ap.classList.remove('hide');
-    
-    setTimeout(function(){
-      var pw = document.getElementById('adminPassInput');
-      if(pw) _focus.call(pw);
-    }, 300);
-    return false;
-  }, true);
-  
-  console.log('✅ إصلاح شامل: وميض + مؤشر + زر المشرف');
-})();
-</script>
-<script>
-(function(){
-  'use strict';
-  
-  /* علَم دائم — لا يمكن إلغاؤه */
-  var _locked = true;
-  try {
-    Object.defineProperty(window, '__noAutoFocus', {
-      get: function(){ return _locked; },
-      set: function(v){ /* تجاهل أي محاولة لإلغاء القفل */ }
-    });
-  } catch(e){}
-  
-  /* اعتراض focus على كل عناصر #visitorGateway فقط */
-  var _origFocus = HTMLElement.prototype.focus;
-  HTMLElement.prototype.focus = function(){
-    /* إذا العنصر داخل #visitorGateway ولا هو adminPassInput — ارفض */
-    try {
-      var inGw = this.closest && this.closest('#visitorGateway');
-      var isAdmin = this.id === 'adminPassInput' || this.closest('#pageAdminLogin');
-      if (inGw && !isAdmin) return;
-    } catch(e){}
-    return _origFocus.apply(this, arguments);
-  };
-  
-  /* عند النقر على منطقة المشرف — اقفل القفل وأفتح الصفحة */
-  document.addEventListener('pointerdown', function(e){
-    var t = e.target;
-    if(!t || !t.closest || !t.closest('.gw-admin-area')) return;
-    
-    e.stopImmediatePropagation();
-    e.preventDefault();
-    
-    /* أخفِ كل الصفحات */
-    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
-      p.classList.add('hide');
-    });
-    
-    /* افتح صفحة المشرف */
-    var ap = document.getElementById('pageAdminLogin');
-    if(ap) ap.classList.remove('hide');
-    
-    /* ركّز على كلمة المرور */
-    setTimeout(function(){
-      var pw = document.getElementById('adminPassInput');
-      if(pw) _origFocus.call(pw);
-    }, 350);
-    
-    return false;
-  }, true);
-  
-  /* احذف أي شريط زوار */
-  setInterval(function(){
-    var vb = document.getElementById('visitorBanner');
-    if(vb && vb.parentNode) vb.parentNode.removeChild(vb);
-    document.body.classList.remove('has-visitor-banner');
-  }, 250);
-  
-  console.log('🔒 قفل حقل الاسم + زر المشرف يعمل');
-})();
-</script>
-<style>
-#visitorBanner { display: none !important; }
-</style>
-<script>
-(function(){
-  'use strict';
-  
-  /* إخفاء كل الشرائط المزعجة */
-  setInterval(function(){
-    var vb = document.getElementById('visitorBanner');
-    if(vb && vb.parentNode) vb.parentNode.removeChild(vb);
-    var usb = document.getElementById('userStatusBanner');
-    if(usb && usb.style.display !== 'none') usb.style.display = 'none';
-  }, 200);
-  
-  /* عند النقر على منطقة المشرف */
-  document.addEventListener('pointerdown', function(e){
-    var t = e.target;
-    if(!t || !t.closest || !t.closest('.gw-admin-area')) return;
-    
-    e.stopImmediatePropagation();
-    e.preventDefault();
-    
-    /* ⚡ غيّر معرّف حقل الاسم — السكريبت القديم لن يجده */
-    var nf = document.getElementById('gwName');
-    if(nf) nf.id = 'gwName_hidden_' + Date.now();
-    
-    /* أخفِ كل الصفحات */
-    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
-      p.classList.add('hide');
-    });
-    
-    /* افتح صفحة المشرف */
-    var ap = document.getElementById('pageAdminLogin');
-    if(ap) ap.classList.remove('hide');
-    
-    /* ركّز على كلمة المرور */
-    setTimeout(function(){
-      var pw = document.getElementById('adminPassInput');
-      if(pw) pw.focus();
-    }, 400);
-    
-    return false;
-  }, true);
-  
-  console.log('✅ زر المشرف + إخفاء الشرائط');
+console.log('✅ الإعدادية — 7 دروس نظيفة');
 })();
 </script>
     
