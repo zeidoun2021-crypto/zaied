@@ -6981,3 +6981,136 @@ console.log('✅ النظام النهائي: تسجيل إلزامي (3 محا�
 })();
 </script>
 <!-- END ═══════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════
+     🎯 الإصلاح النهائي: فصل صفحة المشرف + منع تعارض السكريبتات
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+/* 1) انقل pageAdminLogin خارج .container */
+function detachAdminPage(){
+  var ap = document.getElementById('pageAdminLogin');
+  if (!ap) return null;
+  if (ap.parentNode && ap.parentNode !== document.body){
+    document.body.appendChild(ap);
+  }
+  ap.style.cssText =
+    'display:none;position:fixed;top:60px;left:50%;' +
+    'transform:translateX(-50%);z-index:2147483647;' +
+    'max-width:600px;width:90%;';
+  return ap;
+}
+
+/* 2) عرض صفحة المشرف */
+function safeAdminLogin(){
+  document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
+    p.classList.add('hide');
+    p.style.display = 'none';
+  });
+  var w = document.getElementById('pageWelcome');
+  if (w) w.style.display = 'none';
+
+  var ap = detachAdminPage() || document.getElementById('pageAdminLogin');
+  if (!ap){ alert('❌ لم أجد صفحة المشرف'); return; }
+  ap.classList.remove('hide');
+  ap.style.display = 'block';
+
+  var inp = document.getElementById('adminPassInput');
+  if (inp){ inp.value = ''; setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 200); }
+}
+
+/* 3) إدخال كلمة المرور */
+function safeEnterAdmin(){
+  var inp = document.getElementById('adminPassInput');
+  var errEl = document.getElementById('adminErrorMsg');
+  var p = inp ? inp.value.trim() : '';
+
+  if (p !== '012345'){
+    if (errEl){ errEl.style.display='block'; errEl.textContent='❌ كلمة المرور غير صحيحة'; }
+    if (inp) inp.value='';
+    return;
+  }
+
+  if (errEl) errEl.style.display='none';
+  window.isAdminMode = true;
+  window.userStatus = 'admin';
+  localStorage.setItem('zaiedAdminPermanent','1');
+  localStorage.setItem('zaiedVisitorOK','1');
+
+  /* أخفِ اللوحة نهائياً */
+  var ap = document.getElementById('pageAdminLogin');
+  if (ap){
+    ap.style.display = 'none';
+    ap.style.visibility = 'hidden';
+    setTimeout(function(){
+      if (ap && ap.parentNode) ap.parentNode.removeChild(ap);
+    }, 100);
+  }
+
+  var wn = document.getElementById('welcomeName');
+  if (wn) wn.textContent = 'المشرف العام';
+  if (typeof window.updateUserBanner === 'function') try{ window.updateUserBanner(); }catch(e){}
+
+  var sb = document.getElementById('statsBtn');
+  if (sb) sb.style.display = 'block';
+
+  document.querySelectorAll('.container > div[id^="page"]').forEach(function(x){
+    x.classList.add('hide'); x.style.display='none';
+  });
+  var h = document.getElementById('pageHome');
+  if (h){ h.classList.remove('hide'); h.style.display='block'; h.style.visibility='visible'; }
+
+  if (typeof window.sdLoad === 'function') setTimeout(function(){ try{ window.sdLoad(); }catch(e){} }, 500);
+}
+
+/* 4) اربط الدوال */
+window.showAdminLogin = safeAdminLogin;
+window.enterAdmin = safeEnterAdmin;
+
+/* 5) اعتراض النقر */
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var b = t.closest('.gw-admin-area button');
+  if (b && (b.textContent||'').indexOf('المشرف') !== -1){
+    e.preventDefault(); e.stopPropagation();
+    safeAdminLogin();
+  }
+}, true);
+
+/* 6) Enter في الحقل */
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Enter'){
+    var inp = document.getElementById('adminPassInput');
+    var ap = document.getElementById('pageAdminLogin');
+    if (inp && ap && ap.style.display !== 'none' && document.activeElement === inp){
+      e.preventDefault();
+      safeEnterAdmin();
+    }
+  }
+}, true);
+
+/* 7) استعادة الحالة */
+setTimeout(function(){
+  if (localStorage.getItem('zaiedAdminPermanent') === '1'){
+    window.isAdminMode = true;
+    window.userStatus = 'admin';
+    var wn = document.getElementById('welcomeName');
+    if (wn) wn.textContent = 'المشرف العام';
+    var sb = document.getElementById('statsBtn');
+    if (sb) sb.style.display = 'block';
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(x){
+      x.classList.add('hide'); x.style.display='none';
+    });
+    var h = document.getElementById('pageHome');
+    if (h){ h.classList.remove('hide'); h.style.display='block'; }
+  }
+}, 500);
+
+/* 8) فصل الصفحة الآن */
+detachAdminPage();
+
+console.log('✅ الإصلاح النهائي: صفحة المشرف مفصولة ومحمية');
+})();
+</script>
