@@ -6256,6 +6256,728 @@ console.log('✅ الزر الأخضر دائم');
     btn.style.display = isAdmin ? 'block' : 'none';
   }, 500);
 })();
-</script>    
-    </html>
+</script>
+<style>
+/* إخفاء بطاقة "عدد الزيارات" فقط */
+.sd-card:has(#nV) { display: none !important; }
+</style>
+
+<script>
+(function(){
+  'use strict';
   
+  function fixCounters(){
+    /* 1) أخفِ بطاقة "عدد الزيارات" */
+    var nV = document.getElementById('nV');
+    if(nV && nV.parentElement) nV.parentElement.style.display = 'none';
+    
+    /* 2) أخفِ زر "الزوار" */
+    var btn = document.getElementById('tabVisitorsBtn');
+    if(btn) btn.style.display = 'none';
+    
+    /* 3) اجعل بطاقة nT = "مسجلو اليوم" */
+    var nT = document.getElementById('nT');
+    if(nT && nT.parentElement){
+      var lbl = nT.parentElement.querySelector('.lbl');
+      if(lbl) lbl.textContent = '✨ مسجلو اليوم';
+      
+      /* احسب مسجلي اليوم من users */
+      if(window.allUsersCache){
+        var today = new Date().toDateString();
+        var todayReg = window.allUsersCache.filter(function(u){
+          if(!u.savedAt && !u.date) return false;
+          try {
+            var d = u.savedAt ? new Date(u.savedAt) : null;
+            if(d) return d.toDateString() === today;
+            /* fallback: parse date string */
+            return (u.date || '').indexOf(String(new Date().getDate())) !== -1;
+          } catch(e){ return false; }
+        });
+        nT.textContent = String(todayReg.length);
+      }
+    }
+    
+    /* 4) اجعل بطاقة nS = "المشتركون" (موجود) */
+    /* لا شيء — يُحدَّث تلقائياً */
+    
+    /* 5) الشبكة: 3 بطاقات في الوسط */
+    var grid = document.querySelector('#dash div[style*="grid-template-columns"]');
+    if(grid && grid.querySelector('#nU')){
+      grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+      grid.style.maxWidth = '800px';
+      grid.style.marginLeft = 'auto';
+      grid.style.marginRight = 'auto';
+    }
+  }
+  
+  setInterval(fixCounters, 400);
+  fixCounters();
+  setTimeout(fixCounters, 500);
+  setTimeout(fixCounters, 1500);
+  setTimeout(fixCounters, 3000);
+  
+  console.log('✅ 3 عدادات: المسجلون + المشتركون + مسجلو اليوم');
+})();
+</script>
+<script>
+(function(){
+  'use strict';
+  
+  /* اعتراض النقر على "دخول المشرف" */
+  document.addEventListener('pointerdown', function(e){
+    var t = e.target;
+    if(!t || !t.closest) return;
+    var btn = t.closest('.gw-admin-area button');
+    if(!btn) return;
+    if(btn.textContent && btn.textContent.indexOf('المشرف') !== -1){
+      sessionStorage.setItem('__wantAdmin', '1');
+    }
+  }, true);
+  
+  /* إظهار صفحة المشرف كل 100ms إذا كان مطلوباً */
+  setInterval(function(){
+    var ap = document.getElementById('pageAdminLogin');
+    if(!ap) return;
+    if(sessionStorage.getItem('__wantAdmin') !== '1') return;
+    if(ap.classList.contains('hide')){
+      ap.classList.remove('hide');
+      var w = document.getElementById('pageWelcome');
+      if(w) w.classList.add('hide');
+    }
+  }, 100);
+  
+  /* امسح العلم بعد الدخول الناجح */
+  var _enter = window.enterAdmin;
+  if(typeof _enter === 'function' && !_enter.__fixed){
+    var fixed = async function(){
+      var r = await _enter.apply(this, arguments);
+      if(window.isAdminMode === true || window.userStatus === 'admin'){
+        sessionStorage.removeItem('__wantAdmin');
+      }
+      return r;
+    };
+    fixed.__fixed = true;
+    window.enterAdmin = fixed;
+  }
+  
+  console.log('✅ دخول المشرف يعمل');
+})();
+</script>
+<script>
+(function(){
+  'use strict';
+  
+  /* ═══ 1) إصلاح زر دخول المشرف ═══ */
+  document.addEventListener('pointerdown', function(e){
+    var t = e.target;
+    if(!t || !t.closest) return;
+    var btn = t.closest('.gw-admin-area button');
+    if(!btn) return;
+    if(btn.textContent && btn.textContent.indexOf('المشرف') !== -1){
+      sessionStorage.setItem('__wantAdmin', '1');
+    }
+  }, true);
+  
+  setInterval(function(){
+    if(sessionStorage.getItem('__wantAdmin') !== '1') return;
+    var ap = document.getElementById('pageAdminLogin');
+    if(!ap) return;
+    if(ap.classList.contains('hide')){
+      ap.classList.remove('hide');
+      var w = document.getElementById('pageWelcome');
+      if(w) w.classList.add('hide');
+    }
+  }, 100);
+  
+  /* ═══ 2) عدادات نظيفة: المسجلون + المشتركون + مسجلو اليوم ═══ */
+  window.sdLoad = async function(){
+    try {
+      var u = await window.fbGetAllUsers() || [];
+      window.allUsersCache = u;
+      window.allVisitorsCache = [];
+      
+      var today = new Date().toDateString();
+      var todayReg = u.filter(function(x){
+        try {
+          if(x.savedAt) return new Date(x.savedAt).toDateString() === today;
+          if(x.date) return new Date(x.date).toDateString() === today;
+          return false;
+        } catch(e){ return false; }
+      });
+      
+      var set = function(id, v){ var el = document.getElementById(id); if(el) el.textContent = String(v); };
+      set('nU', u.length);
+      set('nV', 0);
+      set('nS', u.filter(function(x){ return x.subscribed; }).length);
+      set('nT', todayReg.length);
+      
+      if(typeof window.renderUsers === 'function') window.renderUsers();
+      console.log('📊 إحصائيات محدّثة: مسجلون=' + u.length + ' — مسجلو اليوم=' + todayReg.length);
+    } catch(e){ console.error(e); }
+  };
+  
+  /* 3) عناوين واضحة للبطاقات */
+  setInterval(function(){
+    var dash = document.getElementById('dash');
+    if(!dash) return;
+    dash.querySelectorAll('.sd-card').forEach(function(c){
+      var lbl = c.querySelector('.lbl');
+      if(!lbl) return;
+      var t = lbl.textContent;
+      if(t.indexOf('زوار اليوم') !== -1) lbl.textContent = '✨ مسجلو اليوم';
+      if(t.indexOf('عدد الزيارات') !== -1) lbl.textContent = '👥 المسجلون';
+      if(t.indexOf('الزيارات') !== -1) lbl.textContent = '👥 المسجلون';
+      if(t.indexOf('زائر') !== -1 && t.indexOf('مسجل') === -1) lbl.textContent = '🎭 الزوار (معطّل)';
+    });
+  }, 500);
+  
+  /* 4) زر "الزوار" معطّل */
+  setInterval(function(){
+    var btn = document.getElementById('tabVisitorsBtn');
+    if(btn) btn.style.display = 'none';
+  }, 500);
+  
+  console.log('✅ الكود النهائي — 3 عدادات + زر مشرف يعمل');
+})();
+</script>    
+<script>
+/* ═══════════════════════════════════════════════════════════
+   🔒 التسجيل الإلزامي — الزائر لا يرى الأقسام أبداً
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+/* ─── 1) إزالة أي وضع زائر سابق ─── */
+document.body.classList.remove('__visitorMode');
+['__visitorCSS','__visitorBadge','__backToBrowse','__regNotice'].forEach(function(id){
+  var el = document.getElementById(id);
+  if (el) el.remove();
+});
+
+/* ─── 2) تجاوز دالة __goRegister (لا يوجد تراجع) ─── */
+window.__goRegister = function(){
+  var el = document.getElementById('gwName') || document.getElementById('visitorGateway');
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+  setTimeout(function(){
+    var inp = document.getElementById('gwName');
+    if (inp) try { inp.focus(); } catch(e){}
+  }, 400);
+};
+
+/* ─── 3) أدوات فحص الحالة ─── */
+function isReg(){
+  try {
+    var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    return !!(u && u.email);
+  } catch(e){ return false; }
+}
+function isAdmin(){
+  return window.isAdminMode === true
+      || localStorage.getItem('zaiedAdminPermanent') === '1'
+      || window.userStatus === 'admin';
+}
+
+/* ─── 4) CSS قوي يمنع ظهور أي صفحة غير pageWelcome ─── */
+if (!document.getElementById('__forceRegCSS')) {
+  var style = document.createElement('style');
+  style.id = '__forceRegCSS';
+  style.textContent =
+    'body.__mustRegister > .container > div[id^="page"]:not(#pageWelcome),' +
+    'body.__mustRegister #pageHome,' +
+    'body.__mustRegister #pageChildrenTech,' +
+    'body.__mustRegister #pagePrimaryStage,' +
+    'body.__mustRegister #pageMiddleStage,' +
+    'body.__mustRegister #pageHighStage,' +
+    'body.__mustRegister #pageLessonViewer,' +
+    'body.__mustRegister #pageGames,' +
+    'body.__mustRegister #pageBooks,' +
+    'body.__mustRegister #pageLectures,' +
+    'body.__mustRegister #pageAcademicProjects,' +
+    'body.__mustRegister #pageDictionary,' +
+    'body.__mustRegister #pageAISection,' +
+    'body.__mustRegister #pageWorkshops,' +
+    'body.__mustRegister #pageArabic,' +
+    'body.__mustRegister #pageAI,' +
+    'body.__mustRegister #pageAISlideViewer,' +
+    'body.__mustRegister #pageAICertificates,' +
+    'body.__mustRegister #pageAdmin,' +
+    'body.__mustRegister #pageAdminLogin' +
+    ' { display: none !important; visibility: hidden !important; }' +
+    'body.__mustRegister #pageWelcome { display: block !important; visibility: visible !important; }';
+  document.head.appendChild(style);
+}
+
+/* ─── 5) التطبيق الدوري (يقاوم كل المؤقتات القديمة) ─── */
+function enforce(){
+  if (isReg() || isAdmin()) {
+    document.body.classList.remove('__mustRegister');
+    return;
+  }
+  document.body.classList.add('__mustRegister');
+
+  var pages = document.querySelectorAll('.container > div[id^="page"]');
+  for (var i = 0; i < pages.length; i++) {
+    var p = pages[i];
+    if (p.id === 'pageWelcome') {
+      p.classList.remove('hide');
+      p.style.display = '';
+      p.style.visibility = '';
+    } else {
+      p.classList.add('hide');
+      p.style.display = 'none';
+    }
+  }
+
+  var s = document.getElementById('statsBtn');
+  if (s) s.style.display = 'none';
+  var d = document.getElementById('dash');
+  if (d) d.style.display = 'none';
+  var rub = document.getElementById('__realUsersBtn');
+  if (rub) rub.style.display = 'none';
+}
+
+setInterval(enforce, 100);
+[50, 200, 500, 1000, 2000, 4000].forEach(function(t){ setTimeout(enforce, t); });
+
+/* ─── 6) شارة "التسجيل إلزامي" فوق النموذج ─── */
+function addNotice(){
+  if (isReg() || isAdmin()) {
+    var old = document.getElementById('__regNotice');
+    if (old) old.remove();
+    return;
+  }
+  if (document.getElementById('__regNotice')) return;
+
+  var gw = document.getElementById('visitorGateway');
+  if (!gw) return;
+
+  var n = document.createElement('div');
+  n.id = '__regNotice';
+  n.style.cssText =
+    'background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;' +
+    'padding:18px 22px;border-radius:18px;text-align:center;' +
+    'border:3px solid #fbbf24;margin-bottom:20px;font-family:Cairo;' +
+    'box-shadow:0 6px 20px rgba(220,38,38,0.4);';
+  n.innerHTML =
+    '<div style="font-size:20px;font-weight:900;margin-bottom:8px;">🔒 التسجيل إلزامي</div>' +
+    '<div style="font-size:14px;line-height:1.8;">' +
+      'للدخول إلى الأقسام والمحتوى، يجب إكمال جميع البيانات أدناه<br>' +
+      '<strong style="color:#fbbf24;">✅ التسجيل مجاني تماماً</strong>' +
+    '</div>';
+
+  var fc = gw.firstElementChild;
+  if (fc) gw.insertBefore(n, fc); else gw.appendChild(n);
+}
+setInterval(addNotice, 400);
+setTimeout(addNotice, 200);
+setTimeout(addNotice, 1000);
+
+/* ─── 7) عند نجاح التسجيل → انتقل للأقسام تلقائياً ─── */
+var lastState = false;
+setInterval(function(){
+  var now = isReg() || isAdmin();
+  if (now && !lastState) {
+    document.body.classList.remove('__mustRegister');
+
+    // امسح كل hide و display:none
+    var pages = document.querySelectorAll('.container > div[id^="page"]');
+    for (var i = 0; i < pages.length; i++) {
+      pages[i].classList.add('hide');
+      pages[i].style.display = '';
+      pages[i].style.visibility = '';
+    }
+    var h = document.getElementById('pageHome');
+    if (h) {
+      h.classList.remove('hide');
+      h.style.display = 'block';
+    }
+
+    // شغّل الانتقال الرسمي
+    if (typeof window.moveToSections === 'function') {
+      try { window.moveToSections(); } catch(e){}
+    } else if (typeof window.updateUserBanner === 'function') {
+      try { window.updateUserBanner(); } catch(e){}
+    }
+
+    // إزالة شارة التنبيه
+    var nn = document.getElementById('__regNotice');
+    if (nn) nn.remove();
+
+    console.log('✅ تم التسجيل — انتقل إلى الأقسام');
+  }
+  lastState = now;
+}, 250);
+
+/* ─── 8) حماية إضافية: اعتراض النقر على أي عنصر داخل الأقسام ─── */
+document.addEventListener('click', function(e){
+  if (isReg() || isAdmin()) return;
+  var t = e.target;
+  if (!t || !t.closest) return;
+
+  // إذا كان المستخدم يحاول النقر على عنصر داخل .container ليس في نموذج التسجيل
+  var inContainer = t.closest('.container');
+  var inGateway = t.closest('#visitorGateway');
+  var inWelcomeCard = t.closest('.welcome-card');
+  var inLogo = t.closest('.logo-wrapper');
+  var inMarquee = t.closest('.marquee-bar');
+  var isBtn = t.closest('button');
+
+  if (inContainer && !inGateway && !inWelcomeCard && !inLogo && !inMarquee) {
+    // منع التنقل
+    e.preventDefault();
+    e.stopPropagation();
+    // وجّهه للنموذج
+    window.__goRegister();
+  }
+}, true);
+
+console.log('🔒 التسجيل الإلزامي مفعّل — الزائر لا يرى الأقسام');
+})();
+</script>
+    </html>
+  <!-- START ═══════════════════════════════════════════════════════ -->
+<!-- 🔒 النظام النهائي: تسجيل إلزامي (3 محاولات) + مشرف + أقسام + إحصائيات -->
+<script>
+(function(){
+'use strict';
+
+/* ═══════════════════════════════════════════════════════════
+   1️⃣  التسجيل الإلزامي: 3 محاولات ثم الطرد
+   ═══════════════════════════════════════════════════════════ */
+
+var MAX_TRIES = 3;
+var WHATSAPP_ADMIN = '21655335477';
+
+if (sessionStorage.getItem('__regTries') === null) sessionStorage.setItem('__regTries', '0');
+if (sessionStorage.getItem('__banned') === null)   sessionStorage.setItem('__banned', '0');
+
+if (sessionStorage.getItem('__banned') === '1'){
+  document.addEventListener('DOMContentLoaded', function(){
+    document.body.innerHTML =
+      '<div style="min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e293b);display:flex;align-items:center;justify-content:center;padding:30px;font-family:Cairo,sans-serif;direction:rtl;color:#fff;">' +
+      '<div style="max-width:560px;background:#1e293b;border:4px solid #dc2626;border-radius:25px;padding:40px 30px;text-align:center;">' +
+      '<div style="font-size:80px;margin-bottom:15px;">🚫</div>' +
+      '<h1 style="color:#dc2626;font-size:26px;margin-bottom:15px;">تم منع الوصول</h1>' +
+      '<p style="font-size:16px;line-height:1.9;color:#cbd5e1;margin-bottom:20px;">لقد تجاوزت الحد الأقصى للمحاولات (3 محاولات).<br>يُرجى التواصل مع الإدارة لإعادة التفعيل.</p>' +
+      '<a href="https://wa.me/' + WHATSAPP_ADMIN + '" target="_blank" style="display:inline-block;padding:14px 30px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border-radius:40px;text-decoration:none;font-weight:900;font-size:15px;border:3px solid #fbbf24;">💬 تواصل مع الإدارة</a>' +
+      '</div></div>';
+  });
+  return;
+}
+
+function isRegistered(){
+  try { var u = JSON.parse(localStorage.getItem('currentUser')||'null'); return !!(u && u.email); }
+  catch(e){ return false; }
+}
+function isAdmin(){
+  return window.isAdminMode === true || localStorage.getItem('zaiedAdminPermanent') === '1';
+}
+
+function validateAll(){
+  var n    = (document.getElementById('gwName')?.value || '').trim();
+  var p    = (document.getElementById('gwProfession')?.value || '').trim();
+  var sp   = (document.getElementById('gwSpecialty')?.value || '').trim();
+  var e    = (document.getElementById('gwEmail')?.value || '').trim().toLowerCase();
+  var w    = (document.getElementById('gwPhone')?.value || '').trim();
+  var c    = (document.getElementById('gwCountry')?.value || '').trim();
+  var city = (document.getElementById('gwCity')?.value || '').trim();
+  var cat  = (document.querySelector('input[name="gwCat"]:checked') || {}).value || '';
+  var errs = [];
+  var words = n.split(/\s+/).filter(function(x){ return x.length>0; });
+  if (words.length < 3) errs.push('الاسم الكامل (ثلاثي على الأقل)');
+  if (!p || p.length < 2) errs.push('المهنة');
+  if (!sp || sp.length < 2) errs.push('الاختصاص');
+  if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) errs.push('البريد الإلكتروني');
+  var digits = w.replace(/[\s\-\+]/g, '');
+  if (digits.length < 6 || digits.length > 15) errs.push('رقم الواتساب');
+  if (!c || c.length < 2) errs.push('البلد');
+  if (!city || city.length < 2) errs.push('المدينة');
+  if (!cat) errs.push('الفئة');
+  return { valid: errs.length === 0, errs: errs };
+}
+
+function showTryAlert(errs, remaining){
+  var box = document.getElementById('gwError');
+  if (box){
+    box.style.display = 'block';
+    box.style.cssText = 'display:block;color:#fff;background:linear-gradient(135deg,#dc2626,#991b1b);padding:16px;border-radius:15px;font-size:14px;margin-bottom:12px;text-align:right;border:3px solid #fbbf24;font-weight:700;line-height:1.7;';
+    box.innerHTML =
+      '<div style="font-size:17px;font-weight:900;margin-bottom:8px;">⚠️ البيانات غير مكتملة</div>' +
+      '<div style="margin-bottom:8px;">الحقول الناقصة:</div>' +
+      '<ul style="padding-right:20px;margin-bottom:10px;">' +
+        errs.map(function(x){ return '<li>' + x + '</li>'; }).join('') +
+      '</ul>' +
+      '<div style="background:rgba(0,0,0,0.3);padding:10px;border-radius:10px;text-align:center;font-size:16px;">' +
+        '📌 <strong>المحاولات المتبقية: ' + remaining + '</strong>' +
+      '</div>';
+  }
+  alert('⚠️ البيانات غير مكتملة!\n\n' + errs.join('\n• ') + '\n\n📌 المحاولات المتبقية: ' + remaining);
+}
+
+function kickOut(){
+  sessionStorage.setItem('__banned', '1');
+  var box = document.getElementById('gwError');
+  if (box){
+    box.style.display = 'block';
+    box.style.cssText = 'display:block;color:#fff;background:linear-gradient(135deg,#7f1d1d,#450a0a);padding:20px;border-radius:15px;font-size:15px;margin-bottom:12px;text-align:center;border:4px solid #fbbf24;font-weight:900;line-height:1.9;';
+    box.innerHTML =
+      '<div style="font-size:50px;margin-bottom:10px;">🚫</div>' +
+      '<div style="font-size:20px;margin-bottom:10px;">تم استنفاد المحاولات</div>' +
+      '<div style="font-size:14px;font-weight:700;">سيتم إخراجك من المنصة الآن...</div>';
+  }
+  alert('🚫 تم استنفاد 3 محاولات.\n\nسيتم إخراجك من المنصة.\n\nللتواصل مع الإدارة: +21655335477');
+  setTimeout(function(){
+    try { localStorage.clear(); sessionStorage.setItem('__banned', '1'); } catch(e){}
+    window.location.replace('https://www.google.com');
+  }, 1500);
+}
+
+window.submitVisitorGateway = async function(){
+  if (sessionStorage.getItem('__banned') === '1'){ kickOut(); return; }
+
+  var v = validateAll();
+  if (!v.valid){
+    var tries = parseInt(sessionStorage.getItem('__regTries') || '0') + 1;
+    sessionStorage.setItem('__regTries', String(tries));
+    var remaining = MAX_TRIES - tries;
+    if (tries >= MAX_TRIES){ kickOut(); return; }
+    showTryAlert(v.errs, remaining);
+    return;
+  }
+  sessionStorage.setItem('__regTries', '0');
+
+  var n    = (document.getElementById('gwName').value || '').trim();
+  var p    = (document.getElementById('gwProfession').value || '').trim();
+  var sp   = (document.getElementById('gwSpecialty').value || '').trim();
+  var e    = (document.getElementById('gwEmail').value || '').trim().toLowerCase();
+  var w    = (document.getElementById('gwPhone').value || '').trim();
+  var c    = (document.getElementById('gwCountry').value || '').trim();
+  var city = (document.getElementById('gwCity').value || '').trim();
+  var cat  = (document.querySelector('input[name="gwCat"]:checked') || {}).value || '';
+
+  var btn = document.getElementById('gwSubmitBtn');
+  if (btn){ btn.disabled = true; btn.textContent = '⏳ جاري التسجيل...'; }
+
+  try {
+    var existing = await window.fbGetUserByEmail(e);
+    if (existing){
+      window.currentUser = existing;
+      localStorage.setItem('currentUser', JSON.stringify(existing));
+      localStorage.setItem('zaiedVisitorOK', '1');
+      window.userStatus = existing.subscribed ? 'subscriber' : 'registered';
+      if (typeof window.updateUserBanner === 'function') window.updateUserBanner();
+      alert('✅ مرحباً بعودتك ' + existing.name + '!');
+      if (typeof window.moveToSections === 'function') window.moveToSections();
+      return true;
+    }
+
+    var userData = {
+      name: n, profession: p, specialty: sp, email: e,
+      whatsapp: w, country: c, city: city, category: cat,
+      date: new Date().toLocaleString('ar-EG'),
+      status: 'registered', loginCount: 1, subscribed: false, blocked: false
+    };
+
+    var fbId = await window.fbSaveUser(userData);
+    if (!fbId){ alert('⚠️ خطأ في التسجيل، حاول مجدداً'); if (btn){ btn.disabled = false; btn.textContent = '🔑 ابدأ الآن مجاناً'; } return false; }
+
+    userData.firebaseId = fbId;
+    window.currentUser = userData;
+    localStorage.setItem('currentUser', JSON.stringify(userData));
+    localStorage.setItem('zaiedVisitorOK', '1');
+    localStorage.setItem('logins_' + fbId, '0');
+    window.userStatus = 'registered';
+
+    if (typeof window.sendWhatsApp === 'function'){
+      window.sendWhatsApp('🎓 تسجيل جديد\n👤 ' + n + '\n💼 ' + p, userData);
+    }
+    alert('✅ مرحباً ' + n + '! تم تسجيلك بنجاح');
+    if (typeof window.updateUserBanner === 'function') window.updateUserBanner();
+    if (typeof window.moveToSections === 'function') window.moveToSections();
+    return true;
+  } catch(err){
+    var box = document.getElementById('gwError');
+    if (box){ box.style.display = 'block'; box.textContent = '⚠️ خطأ: ' + err.message; }
+    if (btn){ btn.disabled = false; btn.textContent = '🔑 ابدأ الآن مجاناً'; }
+    return false;
+  }
+};
+
+function addTriesCounter(){
+  if (isRegistered() || isAdmin()) {
+    var old = document.getElementById('__triesCounter');
+    if (old) old.remove();
+    return;
+  }
+  var gw = document.getElementById('visitorGateway');
+  if (!gw) return;
+  if (document.getElementById('__triesCounter')) return;
+
+  var el = document.createElement('div');
+  el.id = '__triesCounter';
+  el.style.cssText = 'background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;padding:12px 18px;border-radius:15px;text-align:center;border:3px solid #dc2626;margin-bottom:15px;font-weight:900;font-size:14px;';
+  el.innerHTML = '🔒 التسجيل إلزامي — لديك <span id="__triesNum">3</span> محاولات فقط';
+  var fc = gw.firstElementChild;
+  if (fc) gw.insertBefore(el, fc); else gw.appendChild(el);
+}
+setInterval(function(){
+  addTriesCounter();
+  var t = document.getElementById('__triesNum');
+  if (t){
+    var rem = MAX_TRIES - parseInt(sessionStorage.getItem('__regTries') || '0');
+    t.textContent = Math.max(0, rem);
+  }
+}, 500);
+
+/* ═══════════════════════════════════════════════════════════
+   2️⃣  تسلسل: ترحيب → مشرف → كلمة مرور → أقسام + إحصائيات
+   ═══════════════════════════════════════════════════════════ */
+
+if (!document.getElementById('fxFlowCSS')) {
+  var s = document.createElement('style');
+  s.id = 'fxFlowCSS';
+  s.textContent =
+    'body > .container > div[id^="page"] { display: none !important; }' +
+    'body.fx-welcome   #pageWelcome    { display: block !important; }' +
+    'body.fx-adminlogin #pageAdminLogin { display: block !important; }' +
+    'body.fx-home      #pageHome       { display: block !important; }' +
+    'body.fx-home.fx-inner #pageChildrenTech, ' +
+    'body.fx-home.fx-inner #pagePrimaryStage, ' +
+    'body.fx-home.fx-inner #pageMiddleStage, ' +
+    'body.fx-home.fx-inner #pageHighStage, ' +
+    'body.fx-home.fx-inner #pageLessonViewer, ' +
+    'body.fx-home.fx-inner #pageArabic, ' +
+    'body.fx-home.fx-inner #pageAI, ' +
+    'body.fx-home.fx-inner #pageAISlideViewer { display: block !important; }';
+  document.head.appendChild(s);
+}
+
+function showPage(name){
+  var b = document.body;
+  b.classList.remove('fx-welcome', 'fx-adminlogin', 'fx-home');
+  if (name === 'welcome')    b.classList.add('fx-welcome');
+  if (name === 'adminlogin') b.classList.add('fx-adminlogin');
+  if (name === 'home')       b.classList.add('fx-home');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+if (!document.body.classList.contains('fx-home') &&
+    !document.body.classList.contains('fx-adminlogin')) {
+  showPage('welcome');
+}
+
+window.showAdminLogin = function(){
+  document.body.classList.remove('fx-welcome', 'fx-home');
+  showPage('adminlogin');
+  setTimeout(function(){
+    var inp = document.getElementById('adminPassInput');
+    if (inp){ inp.value = ''; try { inp.focus(); } catch(e){} }
+  }, 150);
+};
+
+window.enterAdmin = function(){
+  var inp = document.getElementById('adminPassInput');
+  var errEl = document.getElementById('adminErrorMsg');
+  var p = inp ? inp.value.trim() : '';
+  if (p !== '012345'){
+    if (errEl){ errEl.style.display = 'block'; errEl.textContent = '❌ كلمة المرور غير صحيحة'; }
+    if (inp) inp.value = '';
+    return;
+  }
+  if (errEl) errEl.style.display = 'none';
+  window.isAdminMode = true;
+  window.userStatus = 'admin';
+  localStorage.setItem('zaiedVisitorOK', '1');
+  localStorage.setItem('zaiedAdminPermanent', '1');
+
+  var wn = document.getElementById('welcomeName');
+  if (wn) wn.textContent = 'المشرف العام';
+  if (typeof window.updateUserBanner === 'function') try { window.updateUserBanner(); } catch(e){}
+
+  var sb = document.getElementById('statsBtn');
+  if (sb) sb.style.display = 'block';
+
+  showPage('home');
+  if (typeof window.sdLoad === 'function') setTimeout(function(){ try { window.sdLoad(); } catch(e){} }, 600);
+};
+
+var _origMove = window.moveToSections;
+window.moveToSections = function(){
+  showPage('home');
+  if (typeof _origMove === 'function') try { _origMove(); } catch(e){}
+  setTimeout(function(){ showPage('home'); }, 100);
+};
+
+window.logoutAdmin = function(){
+  if (!confirm('الخروج من لوحة المشرف؟')) return;
+  window.isAdminMode = false;
+  window.userStatus = 'visitor';
+  localStorage.removeItem('zaiedAdminPermanent');
+  localStorage.removeItem('zaiedVisitorOK');
+  var sb = document.getElementById('statsBtn');
+  if (sb) sb.style.display = 'none';
+  if (typeof window.updateUserBanner === 'function') try { window.updateUserBanner(); } catch(e){}
+  showPage('welcome');
+};
+
+window.backToWelcome = function(){ showPage('welcome'); };
+
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var btn = t.closest('.gw-admin-area button');
+  if (!btn) return;
+  if ((btn.textContent || '').indexOf('المشرف') !== -1){
+    e.preventDefault(); e.stopPropagation();
+    window.showAdminLogin();
+  }
+}, true);
+
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && document.body.classList.contains('fx-adminlogin')){
+    var inp = document.getElementById('adminPassInput');
+    if (inp && document.activeElement === inp){ e.preventDefault(); window.enterAdmin(); }
+  }
+}, true);
+
+setInterval(function(){
+  if (window.isAdminMode === true || localStorage.getItem('zaiedAdminPermanent') === '1'){
+    if (!document.body.classList.contains('fx-home')){
+      var ap = document.getElementById('pageAdminLogin');
+      var apVisible = ap && !ap.classList.contains('hide') && ap.style.display !== 'none';
+      if (!apVisible) showPage('home');
+    }
+    var sb = document.getElementById('statsBtn');
+    if (sb) sb.style.display = 'block';
+    return;
+  }
+  try {
+    var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    if (u && u.email && !document.body.classList.contains('fx-home')){
+      var inInner = false;
+      ['pageChildrenTech','pageArabic','pageAI','pageLessonViewer'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el && !el.classList.contains('hide')) inInner = true;
+      });
+      if (!inInner) showPage('home');
+    }
+  } catch(e){}
+}, 500);
+
+setTimeout(function(){
+  if (window.isAdminMode === true || localStorage.getItem('zaiedAdminPermanent') === '1'){
+    window.isAdminMode = true;
+    window.userStatus = 'admin';
+    var wn = document.getElementById('welcomeName');
+    if (wn) wn.textContent = 'المشرف العام';
+    var sb = document.getElementById('statsBtn');
+    if (sb) sb.style.display = 'block';
+    showPage('home');
+    if (typeof window.sdLoad === 'function') try { window.sdLoad(); } catch(e){}
+  }
+}, 800);
+
+console.log('✅ النظام النهائي: تسجيل إلزامي (3 محاولات) + مشرف + أقسام + إحصائيات');
+})();
+</script>
+<!-- END ═══════════════════════════════════════════════════════ -->
