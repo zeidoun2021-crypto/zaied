@@ -6242,6 +6242,20 @@ console.log('✅ الزر الأخضر دائم');
   console.log('🛡️ التسجيل الإلزامي مفعّل');
 })();
 </script>
-    
+
+<script>
+/* 🛡️ زر المسجلين — للمشرف فقط */
+(function(){
+  'use strict';
+  setInterval(function(){
+    var btn = document.getElementById('__realUsersBtn');
+    if(!btn) return;
+    var isAdmin = window.isAdminMode === true 
+                || localStorage.getItem('zaiedAdminPermanent') === '1'
+                || window.userStatus === 'admin';
+    btn.style.display = isAdmin ? 'block' : 'none';
+  }, 500);
+})();
+</script>    
     </html>
   
