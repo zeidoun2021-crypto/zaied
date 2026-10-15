@@ -5794,6 +5794,305 @@ document.addEventListener('pointerdown', function(e){
 console.log('🔗 الأزرار الدائمة جاهزة');
 })();
 </script>
+<script>
+/* 🔗 الأزرار الدائمة — تعمل مع كل الدروس */
+(function(){
+'use strict';
+
+window.__NAV = function(which){
+  var viewer = document.getElementById('myViewer') 
+            || document.getElementById('mlViewer') 
+            || document.getElementById('customMiddleViewer')
+            || document.getElementById('lessonViewer');
+  if (!viewer) return;
+  
+  var isML = (viewer.id === 'mlViewer');
+  var isMy = (viewer.id === 'myViewer');
+  var isCustom = (viewer.id === 'customMiddleViewer');
+  
+  if (which === 'next') {
+    if (isML && typeof window.__mlN === 'function') { window.__mlN(); return; }
+    if (isMy && typeof window.__n === 'function') { window.__n(); return; }
+    if (isCustom && typeof window.__cmNext === 'function') { window.__cmNext(); return; }
+    if (typeof window.__pn === 'function') { window.__pn('n'); return; }
+    if (typeof window.nextLessonSlide === 'function') { window.nextLessonSlide(); return; }
+  }
+  if (which === 'prev') {
+    if (isML && typeof window.__mlP === 'function') { window.__mlP(); return; }
+    if (isMy && typeof window.__p === 'function') { window.__p(); return; }
+    if (isCustom && typeof window.__cmPrev === 'function') { window.__cmPrev(); return; }
+    if (typeof window.__pn === 'function') { window.__pn('p'); return; }
+    if (typeof window.prevLessonSlide === 'function') { window.prevLessonSlide(); return; }
+  }
+  if (which === 'close') {
+    ['myViewer','mlViewer','customMiddleViewer','lessonViewer'].forEach(function(id){
+      var v = document.getElementById(id); if (v) v.remove();
+    });
+    var b = document.getElementById('fixedNavBar'); if (b) b.remove();
+  }
+};
+
+document.addEventListener('pointerdown', function(e){
+  var t = e.target;
+  if (!t || !t.id) return;
+  if (t.id === 'fnbNext')  { e.preventDefault(); e.stopPropagation(); window.__NAV('next'); }
+  if (t.id === 'fnbPrev')  { e.preventDefault(); e.stopPropagation(); window.__NAV('prev'); }
+  if (t.id === 'fnbClose') { e.preventDefault(); e.stopPropagation(); window.__NAV('close'); }
+}, true);
+
+console.log('🔗 الأزرار الدائمة جاهزة');
+})();
+</script>
+<script>
+/* 🔒 الإعدادية النظيفة — النسخة المُحقّقة */
+(function(){
+'use strict';
+
+/* ═══ 1) إنشاء عنصر جديد + قفل ═══ */
+function initMiddle(){
+  var container = document.querySelector('.container');
+  if (!container) { setTimeout(initMiddle, 500); return; }
+  
+  /* اخفِ القديم */
+  document.querySelectorAll('[id^="pageMiddleStage"]').forEach(function(el){
+    if (el.__isNew === true) return;
+    if (el.__hidden === true) return;
+    el.__hidden = true;
+    el.id = 'pageMiddleStage_hidden_' + Math.random().toString(36).slice(2);
+    el.style.cssText = 'display:none!important;visibility:hidden!important;position:absolute!important;left:-99999px!important;';
+  });
+  
+  /* هل عنصرنا موجود؟ */
+  var existing = document.getElementById('pageMiddleStage');
+  if (existing && existing.__isNew === true) return;
+  
+  /* أنشئ جديد */
+  var newEl = document.createElement('div');
+  newEl.id = 'pageMiddleStage';
+  newEl.__isNew = true;
+  newEl.className = 'hide';
+  newEl.style.cssText = 'max-width:1200px;width:100%;';
+  
+  /* 🔒 اقفل innerHTML */
+  var desc = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+  var allow = false;
+  Object.defineProperty(newEl, 'innerHTML', {
+    configurable: true,
+    get: function(){ return desc.get.call(this); },
+    set: function(v){
+      if (allow) { desc.set.call(this, v); return; }
+      console.log('🔒 منع كتابة من سكريبت قديم');
+    }
+  });
+  
+  allow = true;
+  newEl.innerHTML = 
+    '<button class="back-btn" onclick="showChildrenTech()">🔙 العودة</button>' +
+    '<button class="back-btn exit-platform-btn" onclick="exitPlatform()">⏻ خروج</button>' +
+    '<div class="welcome-card" style="margin:15px 0;"><h2>🎓 دروس الإعدادية</h2><p>7 دروس وفق البرنامج الرسمي</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding:20px;">' +
+      mkCard('#1e3a8a,#2563eb','💻','السنة السابعة','7.1 الحاسوب ونظام التشغيل','window.__showLesson(\'1.1\')') +
+      mkCard('#1e3a8a,#2563eb','📝','السنة السابعة','7.2 معالجة النصوص','window.__showML(\'7.2\')') +
+      mkCard('#1e3a8a,#2563eb','🌐','السنة السابعة','7.3 الإنترنت والبحث','window.__showML(\'7.3\')') +
+      mkCard('#065f46,#10b981','🐱','السنة الثامنة','8.1 Scratch','window.__showML(\'8.1\')') +
+      mkCard('#065f46,#10b981','🔒','السنة الثامنة','8.2 الأمن الرقمي','window.__showML(\'8.2\')') +
+      mkCard('#7c3aed,#4c1d95','📡','السنة التاسعة','9.1 IoT','window.__showML(\'9.1\')') +
+      mkCard('#7c3aed,#4c1d95','⚙️','السنة التاسعة','9.2 الخوارزميات','window.__showML(\'9.2\')') +
+    '</div>';
+  allow = false;
+  
+  container.appendChild(newEl);
+  console.log('✅ الإعدادية: 7 بطاقات مقفلة');
+}
+
+function mkCard(colors, icon, year, title, action){
+  var p = colors.split(',');
+  return '<div onclick="' + action + '" style="background:linear-gradient(135deg,' + p[0] + ',' + p[1] + ');border:3px solid #fbbf24;border-radius:22px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
+    '<div style="font-size:55px;margin-bottom:15px;">' + icon + '</div>' +
+    '<div style="font-size:14px;color:#fbbf24;font-weight:900;margin-bottom:6px;">' + year + '</div>' +
+    '<div style="font-size:15px;margin-bottom:15px;font-weight:700;">' + title + '</div>' +
+    '<div style="background:#22c55e;padding:10px;border-radius:15px;font-weight:900;">✅ ابدأ الدرس</div></div>';
+}
+
+setTimeout(initMiddle, 100);
+setInterval(initMiddle, 3000);
+
+/* ═══ 2) محرك عرض 6 دروس ═══ */
+var NEWL = {};
+NEWL['7.2'] = { slides:['<div style="text-align:center;padding:40px;color:white;"><div style="font-size:90px;">📝</div><h1 style="color:#fbbf24;font-size:30px;">معالجة النصوص</h1></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📝 واجهة Word</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">شريط القوائم • شريط الأدوات • منطقة الكتابة</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">✏️ التنسيق</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">Ctrl+B غامق • Ctrl+I إيطالي • Ctrl+U تسطير</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">✂️ القص والنسخ</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">Ctrl+X قص • Ctrl+C نسخ • Ctrl+V لصق • Ctrl+Z تراجع</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">💾 الحفظ والطباعة</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">Ctrl+S حفظ • Ctrl+P طباعة</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">واجهة • تنسيق • قص ونسخ • حفظ</div></div>'],
+exercises:[{t:'mcq',q:'ما اختصار الحفظ؟',o:['Ctrl+B','Ctrl+S','Ctrl+V','Ctrl+Z'],c:1,p:2},{t:'mcq',q:'ما اختصار النسخ؟',o:['Ctrl+X','Ctrl+C','Ctrl+V','Ctrl+Z'],c:1,p:2},{t:'tf',q:'Ctrl+X يحذف وينسخ.',c:true,p:2},{t:'fill',q:'لتغميق النص نستخدم Ctrl + ______.',a:[['B']],p:2},{t:'match',q:'صل:',pairs:[{l:'Ctrl+C',r:'نسخ'},{l:'Ctrl+V',r:'لصق'},{l:'Ctrl+X',r:'قص'},{l:'Ctrl+Z',r:'تراجع'}],p:2}]};
+
+NEWL['7.3'] = { slides:['<div style="text-align:center;padding:40px;color:white;"><div style="font-size:90px;">🌐</div><h1 style="color:#fbbf24;font-size:30px;">الإنترنت والبحث</h1></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🔍 محرك البحث</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">Google • Bing • DuckDuckGo</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">💡 نصائح</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">كلمات دقيقة • تحقق من المصدر • تحقق من التاريخ</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📥 التحميل</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">ملفات PDF • الصور • مصادر موثوقة</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">محرك البحث • النصائح • التحميل</div></div>'],
+exercises:[{t:'mcq',q:'ما محرك البحث الأشهر؟',o:['Google','Bing','DuckDuckGo','Yahoo'],c:0,p:2},{t:'tf',q:'يمكن تحميل أي ملف دون خطر.',c:false,p:2},{t:'fill',q:'لتحميل صورة ننقر بزر الفأرة ______.',a:[['الأيمن']],p:2}]};
+
+NEWL['8.1'] = { slides:['<div style="text-align:center;padding:40px;color:white;"><div style="font-size:90px;">🐱</div><h1 style="color:#fbbf24;font-size:30px;">Scratch</h1></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🐱 التعريف</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">لغة برمجة مرئية • سحب وإفلات • scratch.mit.edu</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🖥️ الواجهة</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">اللبنات • السكريبت • الكائنات • المنصة</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🧩 اللبنات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">الحركة • المظهر • الصوت • الأحداث • التحكم</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🔁 التكرار</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">كرر X مرة • كرر باستمرار</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">Scratch • الواجهة • اللبنات • التكرار</div></div>'],
+exercises:[{t:'mcq',q:'ما هو Scratch؟',o:['لعبة','لغة برمجة مرئية','متصفح','نظام'],c:1,p:2},{t:'tf',q:'Scratch يحتاج أكواد معقدة.',c:false,p:2},{t:'fill',q:'لغة البرمجة المرئية تسمى ______.',a:[['Scratch','سكراتش']],p:2}]};
+
+NEWL['8.2'] = { slides:['<div style="text-align:center;padding:40px;color:white;"><div style="font-size:90px;">🔒</div><h1 style="color:#fbbf24;font-size:30px;">الأمن الرقمي</h1></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">⚠️ المخاطر</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">فيروسات • تصيد • سرقة هوية • تنمر</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🛡️ الحماية</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">كلمات قوية • تحقق بخطوتين • تحديثات • مضاد فيروسات</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🔑 كلمة قوية</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">8+ أحرف • أرقام • رموز</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">👊 التنمر</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">لا ترد • احفظ الأدلة • أخبر شخصاً بالغاً • احظر</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">المخاطر • الحماية • كلمات • التنمر</div></div>'],
+exercises:[{t:'mcq',q:'ما هو التصيد؟',o:['لعبة','رسائل مزيفة','برنامج','متصفح'],c:1,p:2},{t:'tf',q:'التحقق بخطوتين يزيد الأمان.',c:true,p:2},{t:'fill',q:'كلمة مرور قوية تحتوي على ______ أحرف على الأقل.',a:[['8']],p:2}]};
+
+NEWL['9.1'] = { slides:['<div style="text-align:center;padding:40px;color:white;"><div style="font-size:90px;">📡</div><h1 style="color:#fbbf24;font-size:30px;">IoT</h1></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📡 التعريف</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">ربط الأجهزة بالإنترنت • تبادل البيانات</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🔧 الحساسات والمشغلات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">حساسات تقيس • مشغلات تنفذ</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📶 الاتصال</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">Wi-Fi • Bluetooth • Radio • NFC</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🌍 التطبيقات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">منزل • صحة • زراعة • صناعة</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">IoT • حساسات • اتصال • تطبيقات</div></div>'],
+exercises:[{t:'mcq',q:'ما وظيفة الحساس؟',o:['التحريك','القياس','الإضاءة','الصوت'],c:1,p:2},{t:'tf',q:'الساعة الذكية جهاز متصل.',c:true,p:2},{t:'fill',q:'الجهاز الذي يقيس يسمى ______.',a:[['حساس','capteur']],p:2}]};
+
+NEWL['9.2'] = { slides:['<div style="text-align:center;padding:40px;color:white;"><div style="font-size:90px;">⚙️</div><h1 style="color:#fbbf24;font-size:30px;">الخوارزميات</h1></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">🧠 التعريف</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">خطوات منظمة لحل مشكلة</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📋 الخصائص</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">وضوح • ترتيب • نهاية • فعالية</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📊 المخططات</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">بيضاوي • مستطيل • معين • متوازي</div></div>','<div style="padding:25px;color:white;"><h2 style="color:#fbbf24;">📊 ملخص</h2><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;">التعريف • الخصائص • المخططات</div></div>'],
+exercises:[{t:'mcq',q:'ما الخوارزمية؟',o:['برنامج','خطوات لحل مشكلة','لغة','جهاز'],c:1,p:2},{t:'fill',q:'رمز الشرط هو ______.',a:[['المعين']],p:2}]};
+
+/* محرك عرض */
+window.__showML = function(id){
+  var L = NEWL[id];
+  if (!L) { alert('الدرس غير موجود'); return; }
+  var old = document.getElementById('mlViewer'); if (old) old.remove();
+  var ov = document.createElement('div'); ov.id = 'mlViewer';
+  ov.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e293b);z-index:999999999;overflow-y:auto;padding:15px;direction:rtl;font-family:Cairo;';
+  var tp = L.exercises.reduce(function(s,e){return s+e.p;},0);
+  var total = L.slides.length + L.exercises.length + 1;
+  ov.innerHTML = '<div style="max-width:900px;margin:15px auto;"><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;align-items:center;"><button onclick="document.getElementById(\'mlViewer\').remove()" style="padding:12px 22px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:2px solid #fbbf24;border-radius:30px;font-family:Cairo;font-weight:900;font-size:13px;cursor:pointer;">🔙 العودة</button><div id="mvC" style="flex:1;padding:12px 18px;background:rgba(0,0,0,0.4);border-radius:30px;color:#fbbf24;font-weight:900;text-align:center;border:2px solid #fbbf24;font-size:14px;"></div><div id="mvS" style="padding:12px 18px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:30px;color:white;font-weight:900;font-size:14px;">🎯 0/'+tp+'</div></div><div style="height:10px;background:rgba(0,0,0,0.5);border-radius:10px;overflow:hidden;margin-bottom:20px;"><div id="mvP" style="height:100%;background:linear-gradient(90deg,#fbbf24,#22c55e);width:0%;"></div></div><div id="mvContent"></div><div id="mvNav" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:25px;margin-bottom:80px;"></div></div>';
+  document.body.appendChild(ov);
+  
+  var si=0, ei=0, sc=0, mSel=null, mState={};
+  
+  function render(){
+    var c=document.getElementById('mvContent'), n=document.getElementById('mvNav'), ct=document.getElementById('mvC'), pg=document.getElementById('mvP'), se=document.getElementById('mvS');
+    if (si < L.slides.length) {
+      c.innerHTML = L.slides[si];
+      ct.textContent = '📖 الشريحة ' + (si+1) + ' من ' + total;
+      pg.style.width = ((si+1)/total*100) + '%';
+      var nh = '';
+      if(si>0) nh += '<button onclick="window.__mlNP()" style="padding:15px 30px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">▶ السابق</button>';
+      nh += '<button onclick="document.getElementById(\'mlViewer\').remove()" style="padding:15px 30px;background:#334155;color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">🏠 خروج</button>';
+      if(si < L.slides.length-1) nh += '<button onclick="window.__mlNN()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">التالي ◀</button>';
+      else nh += '<button onclick="window.__mlNN()" style="padding:15px 30px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;border:none;border-radius:40px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">📝 ابدأ التمارين</button>';
+      n.innerHTML = nh;
+    } else if (si === L.slides.length && ei < L.exercises.length) {
+      var ex = L.exercises[ei];
+      ct.textContent = '📝 ' + (ei+1) + ' من ' + L.exercises.length;
+      pg.style.width = ((L.slides.length + ei)/total*100) + '%';
+      se.textContent = '🎯 ' + sc + '/' + tp;
+      var h = '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border:3px solid #fbbf24;border-radius:25px;padding:30px;color:white;"><div style="text-align:center;margin-bottom:20px;"><span style="background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;padding:8px 20px;border-radius:25px;font-weight:900;">✏️ السؤال ' + (ei+1) + '</span></div><div style="background:white;color:#1e293b;padding:20px;border-radius:15px;font-size:17px;font-weight:700;margin-bottom:20px;text-align:center;">' + ex.q + '</div>';
+      if (ex.t === 'mcq') {
+        h += '<div id="opts" style="display:flex;flex-direction:column;gap:12px;">';
+        ex.o.forEach(function(o,i){h += '<button onclick="window.__mlM('+i+')" style="padding:15px 20px;background:white;color:#1e293b;border:3px solid #cbd5e1;border-radius:15px;font-family:Cairo;font-weight:700;font-size:16px;text-align:right;cursor:pointer;">' + String.fromCharCode(65+i) + '. ' + o + '</button>';});
+        h += '</div>';
+      } else if (ex.t === 'tf') {
+        h += '<div id="opts" style="display:flex;gap:15px;justify-content:center;"><button onclick="window.__mlT(true)" style="padding:20px 40px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fbbf24;border-radius:20px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;">✅ صحيح</button><button onclick="window.__mlT(false)" style="padding:20px 40px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:20px;font-family:Cairo;font-weight:900;font-size:18px;cursor:pointer;">❌ خطأ</button></div>';
+      } else if (ex.t === 'fill') {
+        h += '<div id="opts" style="display:flex;flex-direction:column;gap:12px;"><input type="text" id="fi" placeholder="اكتب إجابتك..." style="padding:15px;border:3px solid #3b82f6;border-radius:15px;font-family:Cairo;font-size:16px;text-align:center;"><button onclick="window.__mlF()" style="padding:15px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:15px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">✅ تحقق</button></div>';
+      } else if (ex.t === 'match') {
+        h += '<div id="opts" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;"><div>';
+        ex.pairs.forEach(function(p,i){var sel=mSel===i, mt=mState[i]!==undefined; h += '<div onclick="window.__mlL('+i+')" style="cursor:pointer;padding:12px;margin-bottom:8px;background:' + (mt?'#d1fae5':(sel?'#fef3c7':'white')) + ';color:#1e293b;border:2px solid ' + (sel?'#f59e0b':(mt?'#10b981':'#cbd5e1')) + ';border-radius:12px;font-weight:700;">' + p.l + (mt?' ✅':'') + '</div>';});
+        h += '</div><div>';
+        ex.pairs.forEach(function(p,i){var mt=false; for(var k in mState){if(mState[k]===i){mt=true;break;}} h += '<div onclick="window.__mlR('+i+')" style="cursor:pointer;padding:12px;margin-bottom:8px;background:' + (mt?'#d1fae5':'white') + ';color:#1e293b;border:2px solid ' + (mt?'#10b981':'#cbd5e1') + ';border-radius:12px;font-weight:700;">' + p.r + (mt?' ✅':'') + '</div>';});
+        h += '</div></div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlSub()" style="padding:12px 30px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;">✅ تحقق</button></div>';
+      }
+      h += '<div id="fb" style="margin-top:20px;"></div></div>';
+      c.innerHTML = h;
+      n.innerHTML = '';
+    } else {
+      var pct = Math.round((sc/tp)*100), ok = pct >= 60;
+      var r = '<div style="background:' + (ok?'linear-gradient(135deg,#d1fae5,#a7f3d0)':'linear-gradient(135deg,#fef3c7,#fde68a)') + ';border:4px solid ' + (ok?'#16a34a':'#f59e0b') + ';border-radius:25px;padding:40px 25px;text-align:center;"><div style="font-size:90px;">' + (ok?'🎉':'📚') + '</div><h2 style="color:' + (ok?'#15803d':'#92400e') + ';font-size:30px;margin:20px 0;">' + (ok?'مبروك!':'أعد المحاولة') + '</h2><div style="font-size:64px;font-weight:900;color:' + (ok?'#15803d':'#92400e') + ';">' + sc + ' / ' + tp + '</div><div style="font-size:24px;margin:15px 0;">' + pct + '%</div><button onclick="document.getElementById(\'mlViewer\').remove()" style="padding:15px 30px;background:#334155;color:white;border:3px solid #fbbf24;border-radius:40px;font-family:Cairo;font-weight:900;font-size:16px;cursor:pointer;">🏠 خروج</button></div>';
+      c.innerHTML = r;
+      n.innerHTML = '';
+      pg.style.width = '100%';
+      ct.textContent = '🏆 النتيجة';
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  
+  window.__mlNN = function(){ if(si < L.slides.length-1){si++; render();} else if(si===L.slides.length-1){si++; ei=0; render();} };
+  window.__mlNP = function(){ if(si>0){si--; render();} };
+  window.__mlM = function(sel){ var ex=L.exercises[ei], ok=sel===ex.c, fb=document.getElementById('fb'); document.querySelectorAll('#opts button').forEach(function(b,i){b.disabled=true; if(i===ex.c){b.style.background='#d1fae5'; b.style.borderColor='#16a34a';} else if(i===sel&&!ok){b.style.background='#fee2e2'; b.style.borderColor='#dc2626';}}); if(ok) sc += ex.p; fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ أحسنت!':'❌ الإجابة: ' + ex.o[ex.c]) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlNx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;cursor:pointer;">التالي ◀</button></div>'; document.getElementById('mvS').textContent = '🎯 ' + sc + '/' + tp; };
+  window.__mlT = function(sel){ var ex=L.exercises[ei], ok=sel===ex.c, fb=document.getElementById('fb'); document.querySelectorAll('#opts button').forEach(function(b){b.disabled=true;}); if(ok) sc += ex.p; fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ صحيح!':'❌ الإجابة: ' + (ex.c?'صحيح':'خطأ')) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlNx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;cursor:pointer;">التالي ◀</button></div>'; document.getElementById('mvS').textContent = '🎯 ' + sc + '/' + tp; };
+  window.__mlF = function(){ var ex=L.exercises[ei], v=(document.getElementById('fi').value||'').trim().toLowerCase(); var ok=ex.a.some(function(arr){return arr.some(function(x){return x.toLowerCase()===v;});}); var fb=document.getElementById('fb'); if(ok) sc += ex.p; fb.innerHTML = '<div style="padding:20px;background:' + (ok?'#d1fae5':'#fef3c7') + ';color:' + (ok?'#15803d':'#78350f') + ';border-radius:15px;text-align:center;font-weight:900;">' + (ok?'✅ صحيح!':'❌ الإجابة: ' + ex.a[0][0]) + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlNx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;cursor:pointer;">التالي ◀</button></div>'; document.getElementById('mvS').textContent = '🎯 ' + sc + '/' + tp; };
+  window.__mlL = function(i){ mSel=i; render(); };
+  window.__mlR = function(i){ if(mSel===null){alert('اختر من العمود الأول'); return;} mState[mSel]=i; mSel=null; render(); };
+  window.__mlSub = function(){ var ex=L.exercises[ei], ok=0; ex.pairs.forEach(function(p,i){if(mState[i]===i) ok++;}); var fb=document.getElementById('fb'); if(ok===ex.pairs.length){sc += ex.p; fb.innerHTML='<div style="padding:20px;background:#d1fae5;color:#15803d;border-radius:15px;text-align:center;font-weight:900;">✅ ممتاز!</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlNx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;cursor:pointer;">التالي ◀</button></div>';} else fb.innerHTML='<div style="padding:20px;background:#fef3c7;color:#78350f;border-radius:15px;text-align:center;font-weight:900;">⚠️ ' + ok + '/' + ex.pairs.length + '</div><div style="text-align:center;margin-top:20px;"><button onclick="window.__mlNx()" style="padding:15px 30px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:40px;font-family:Cairo;font-weight:900;cursor:pointer;">التالي ◀</button></div>'; document.getElementById('mvS').textContent = '🎯 ' + sc + '/' + tp; };
+  window.__mlNx = function(){ ei++; mSel=null; mState={}; render(); };
+  
+  render();
+};
+
+/* ═══ 3) الأزرار السفلية ═══ */
+window.__NAV = function(which){
+  var v = document.getElementById('mlViewer') || document.getElementById('myViewer') || document.getElementById('customMiddleViewer');
+  if (!v) return;
+  if (which === 'next') {
+    if (v.id === 'mlViewer') {
+      if (typeof window.__mlNN === 'function') { window.__mlNN(); return; }
+    }
+    if (v.id === 'myViewer' && typeof window.__n === 'function') { window.__n(); return; }
+    if (typeof window.__pn === 'function') { window.__pn('n'); return; }
+  }
+  if (which === 'prev') {
+    if (v.id === 'mlViewer') {
+      if (typeof window.__mlNP === 'function') { window.__mlNP(); return; }
+    }
+    if (v.id === 'myViewer' && typeof window.__p === 'function') { window.__p(); return; }
+    if (typeof window.__pn === 'function') { window.__pn('p'); return; }
+  }
+  if (which === 'close') { v.remove(); }
+};
+
+/* أنشئ الشريط مرة واحدة فقط */
+if (!window.__barInterval) {
+  window.__barInterval = setInterval(function(){
+    var viewer = document.getElementById('mlViewer') || document.getElementById('myViewer') || document.getElementById('customMiddleViewer');
+    var oldBar = document.getElementById('fixedNavBar');
+    
+    if (!viewer) {
+      if (oldBar && oldBar.__ours) oldBar.remove();
+      return;
+    }
+    
+    if (oldBar && oldBar.__ours) return;
+    if (oldBar) oldBar.remove();
+    
+    var bar = document.createElement('div');
+    bar.id = 'fixedNavBar';
+    bar.__ours = true;
+    bar.style.cssText = 'position:fixed;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:2147483647;background:rgba(15,23,42,0.98);padding:12px 20px;border-radius:50px;border:3px solid #fbbf24;box-shadow:0 8px 30px rgba(0,0,0,0.7);';
+    bar.innerHTML = 
+      '<button onclick="window.__NAV(\'prev\')" style="padding:12px 24px;background:linear-gradient(135deg,#3b82f6,#1e40af);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">▶ السابق</button>' +
+      '<button onclick="window.__NAV(\'next\')" style="padding:12px 24px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">التالي ◀</button>' +
+      '<button onclick="window.__NAV(\'close\')" style="padding:12px 24px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:none;border-radius:30px;font-family:Cairo;font-weight:900;font-size:15px;cursor:pointer;">🏠 خروج</button>';
+    document.body.appendChild(bar);
+  }, 400);
+}
+
+console.log('✅ الإعدادية نظيفة — 7 بطاقات مقفلة');
+})();
+</script>
+<script>
+(function(){
+  setInterval(function(){
+    var d = document.getElementById('dash');
+    if(!d || d.style.display === 'none') return;
+    if(document.getElementById('__allBtn')) return;
+    var b = document.createElement('button');
+    b.id = '__allBtn';
+    b.textContent = '📋 كل المسجلين والزوار';
+    b.style.cssText = 'position:fixed;bottom:100px;right:20px;z-index:99999999;padding:16px 24px;background:#8b5cf6;color:white;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo;font-weight:900;cursor:pointer;font-size:14px;';
+    b.onclick = async function(){
+      var u = [], v = [];
+      try { u = await window.fbGetAllUsers() || []; } catch(e){}
+      try { v = await window.fbGetAllVisitors() || []; } catch(e){}
+      var all = [];
+      u.forEach(function(x){ all.push({n:x.name||'مسجل',e:x.email||'-',p:x.whatsapp||'-',c:x.country||'-',ct:x.city||'-',t:'مسجل',col:'#22c55e'}); });
+      v.forEach(function(x){ all.push({n:x.name||'زائر',e:x.email||'-',p:x.phone||'-',c:x.country||'-',ct:x.city||'-',t:'زائر',col:'#8b5cf6'}); });
+      var p = document.createElement('div');
+      p.id = '__allPanel';
+      p.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:999999999;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;color:#fff';
+      var h = '<div style="max-width:900px;margin:0 auto"><div style="display:flex;justify-content:space-between;margin-bottom:20px"><h1 style="color:#fbbf24">📋 الكل (' + all.length + ')</h1><button onclick="document.getElementById(\'__allPanel\').remove()" style="padding:12px 24px;background:#dc2626;color:white;border:none;border-radius:25px;font-family:Cairo;font-weight:900;cursor:pointer">✖ إغلاق</button></div>';
+      all.forEach(function(x,i){
+        h += '<div style="background:#f8fafc;color:#0f172a;padding:14px;margin:8px 0;border-radius:12px;border-right:5px solid ' + x.col + '"><b style="color:' + x.col + '">' + (i+1) + '. ' + x.n + '</b> <span style="background:' + x.col + ';color:white;padding:2px 10px;border-radius:12px;font-size:11px">' + x.t + '</span><br>📧 ' + x.e + ' • 📱 ' + x.p + '<br>🌍 ' + x.c + ' — ' + x.ct + '</div>';
+      });
+      h += '</div>';
+      p.innerHTML = h;
+      document.body.appendChild(p);
+    };
+    document.body.appendChild(b);
+  }, 500);
+})();
+</script>
     
     </html>
   
