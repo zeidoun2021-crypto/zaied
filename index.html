@@ -6201,6 +6201,21 @@ setTimeout(makeBtn, 200);
 console.log('✅ A+B+C جاهز');
 })();
 </script>
+<script>
+var b=document.createElement('button');
+b.id='__realUsersBtn';
+b.innerHTML='👥 المسجلون الحقيقيون';
+b.style.cssText='position:fixed;bottom:20px;left:20px;z-index:2147483647;padding:14px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 6px 20px rgba(34,197,94,0.6);';
+b.onclick=async function(){
+  var u=await window.fbGetAllUsers()||[];
+  var h='<div style="position:fixed;inset:0;background:#0f172a;z-index:2147483647;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;color:#fff"><div style="max-width:900px;margin:0 auto"><h1 style="color:#22c55e">👥 المسجلون ('+u.length+')</h1>';
+  u.forEach(function(x,i){h+='<div style="background:#f8fafc;color:#0f172a;padding:14px;margin:8px 0;border-radius:12px;border-right:5px solid #22c55e"><b style="color:#22c55e">'+(i+1)+'. '+(x.name||'-')+'</b><br>📧 '+(x.email||'-')+' • 📱 '+(x.whatsapp||'-')+'<br>🌍 '+(x.country||'-')+' — '+(x.city||'-')+'<br>💼 '+(x.profession||'-')+' • 🎯 '+(x.specialty||'-')+'</div>';});
+  h+='<button onclick="this.closest(\'div\').parentElement.remove()" style="padding:12px 24px;background:#dc2626;color:#fff;border:none;border-radius:25px;font-family:Cairo;font-weight:900;cursor:pointer;margin-top:15px">✖ إغلاق</button></div></div>';
+  var p=document.createElement('div');p.innerHTML=h;document.body.appendChild(p.firstChild);
+};
+document.body.appendChild(b);
+console.log('✅ الزر الأخضر دائم');
+</script>
     
     </html>
   
