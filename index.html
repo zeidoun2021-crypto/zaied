@@ -5750,6 +5750,50 @@ setInterval(lockBuild, 3000);
 console.log('✅ الإعدادية — 7 دروس نظيفة');
 })();
 </script>
+<script>
+/* 🔗 الأزرار الدائمة — تعمل مع كل الدروس */
+(function(){
+'use strict';
+
+window.__NAV = function(which){
+  var viewer = document.getElementById('myViewer') 
+            || document.getElementById('mlViewer') 
+            || document.getElementById('customMiddleViewer')
+            || document.getElementById('lessonViewer');
+  if (!viewer) return;
+  
+  if (which === 'next') {
+    if (typeof window.__n === 'function') { window.__n(); return; }
+    if (typeof window.__mlN === 'function') { window.__mlN(); return; }
+    if (typeof window.__pn === 'function') { window.__pn('n'); return; }
+    if (typeof window.nextLessonSlide === 'function') { window.nextLessonSlide(); return; }
+  }
+  if (which === 'prev') {
+    if (typeof window.__p === 'function') { window.__p(); return; }
+    if (typeof window.__mlP === 'function') { window.__mlP(); return; }
+    if (typeof window.__pn === 'function') { window.__pn('p'); return; }
+    if (typeof window.prevLessonSlide === 'function') { window.prevLessonSlide(); return; }
+  }
+  if (which === 'close') {
+    ['myViewer','mlViewer','customMiddleViewer','lessonViewer'].forEach(function(id){
+      var v = document.getElementById(id); if (v) v.remove();
+    });
+    var b = document.getElementById('fixedNavBar'); if (b) b.remove();
+  }
+};
+
+/* ربط دائم — يعمل حتى لو أُعيد إنشاء الزر */
+document.addEventListener('pointerdown', function(e){
+  var t = e.target;
+  if (!t || !t.id) return;
+  if (t.id === 'fnbNext')  { e.preventDefault(); e.stopPropagation(); window.__NAV('next'); }
+  else if (t.id === 'fnbPrev')  { e.preventDefault(); e.stopPropagation(); window.__NAV('prev'); }
+  else if (t.id === 'fnbClose') { e.preventDefault(); e.stopPropagation(); window.__NAV('close'); }
+}, true);
+
+console.log('🔗 الأزرار الدائمة جاهزة');
+})();
+</script>
     
     </html>
   
