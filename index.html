@@ -6093,6 +6093,114 @@ console.log('✅ الإعدادية نظيفة — 7 بطاقات مقفلة');
   }, 500);
 })();
 </script>
+<script>
+/* 🎯 A+B+C النهائي — يعمل بدون تعارض */
+(function(){
+'use strict';
+
+/* احذف أي نسخة قديمة */
+['__realUsersBtn','__ruPanel','__allBtn','__allPanel','__showListBtn','__regBanner'].forEach(function(id){
+  var el = document.getElementById(id);
+  if(el) el.remove();
+});
+
+/* ═══ C) إشعار بريدي مضمون ═══ */
+window.__forceEmail = async function(u){
+  if(!u || !u.email) return;
+  try {
+    var body = '🎓 تسجيل جديد في منصة زايد\n━━━━━━━━━━━━━━━━━\n' +
+      '👤 الاسم: ' + (u.name||'-') + '\n' +
+      '💼 المهنة: ' + (u.profession||'-') + '\n' +
+      '🎯 الاختصاص: ' + (u.specialty||'-') + '\n' +
+      '📧 البريد: ' + (u.email||'-') + '\n' +
+      '📱 الواتساب: ' + (u.whatsapp||'-') + '\n' +
+      '🌍 البلد: ' + (u.country||'-') + '\n' +
+      '🏙️ المدينة: ' + (u.city||'-') + '\n' +
+      '🏷️ الفئة: ' + (u.category||'-') + '\n' +
+      '📅 التاريخ: ' + new Date().toLocaleString('ar-EG');
+    
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({
+        access_key: '23f532ab-bd1b-4362-b980-2bab75c5b48b',
+        subject: '🎓 تسجيل جديد: ' + (u.name||''),
+        from_name: 'منصة زايد',
+        email: 'zeidoun2021@gmail.com',
+        message: body
+      })
+    });
+    console.log('📧 إشعار مُرسل');
+  } catch(e){ console.log('📧 فشل:', e.message); }
+};
+
+setTimeout(function(){
+  if(typeof window.fbSaveUser !== 'function' || window.__emailHooked) return;
+  window.__emailHooked = true;
+  var orig = window.fbSaveUser;
+  window.fbSaveUser = async function(user){
+    var r = await orig.apply(this, arguments);
+    if(r && r !== 'admin-skip' && user && user.email) window.__forceEmail(user);
+    return r;
+  };
+  console.log('✅ الإشعار مرتبط');
+}, 500);
+
+/* ═══ B) زر عائم + لوحة المسجلين الحقيقيين ═══ */
+window.__showRealUsers = async function(){
+  var u = [];
+  try { u = await window.fbGetAllUsers() || []; } catch(e){}
+  
+  var old = document.getElementById('__ruPanel'); if(old) old.remove();
+  var p = document.createElement('div');
+  p.id = '__ruPanel';
+  p.style.cssText = 'position:fixed;inset:0;background:#0f172a;z-index:2147483647;overflow-y:auto;padding:20px;direction:rtl;font-family:Cairo;color:#fff';
+  var h = '<div style="max-width:900px;margin:0 auto">';
+  h += '<div style="display:flex;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">';
+  h += '<h1 style="color:#22c55e;margin:0">👥 المسجلون الحقيقيون (' + u.length + ')</h1>';
+  h += '<button id="__ruClose" style="padding:12px 24px;background:#dc2626;color:#fff;border:none;border-radius:25px;font-family:Cairo;font-weight:900;cursor:pointer">✖ إغلاق</button></div>';
+  
+  if(!u.length){
+    h += '<p style="text-align:center;color:#94a3b8;padding:40px;font-size:16px">لا مسجلون بعد</p>';
+  } else {
+    u.forEach(function(x,i){
+      h += '<div style="background:#f8fafc;color:#0f172a;padding:18px;margin:10px 0;border-radius:14px;border-right:5px solid #22c55e">';
+      h += '<div style="font-weight:900;color:#22c55e;font-size:18px;margin-bottom:10px;border-bottom:2px dashed #cbd5e1;padding-bottom:8px">' + (i+1) + '. ' + (x.name||'—') + '</div>';
+      h += '<table style="width:100%;font-size:14px;color:#334155;border-collapse:collapse">';
+      h += '<tr><td style="padding:5px 0;width:150px"><b>📧 البريد:</b></td><td>' + (x.email||'—') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0"><b>📱 الهاتف:</b></td><td>' + (x.whatsapp||'—') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0"><b>💼 المهنة:</b></td><td>' + (x.profession||'—') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0"><b>🎯 الاختصاص:</b></td><td>' + (x.specialty||'—') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0"><b>🌍 البلد:</b></td><td>' + (x.country||'—') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0"><b>🏙️ المدينة:</b></td><td>' + (x.city||'—') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0"><b>🏷️ الفئة:</b></td><td>' + (x.category||'—') + '</td></tr>';
+      h += '<tr><td style="padding:5px 0"><b>📅 التاريخ:</b></td><td>' + (x.date||'—') + '</td></tr>';
+      h += '</table></div>';
+    });
+  }
+  h += '</div>';
+  p.innerHTML = h;
+  document.body.appendChild(p);
+  document.getElementById('__ruClose').onclick = function(){ p.remove(); };
+};
+
+function makeBtn(){
+  if(document.getElementById('__realUsersBtn')) return;
+  var b = document.createElement('button');
+  b.id = '__realUsersBtn';
+  b.innerHTML = '👥 المسجلون الحقيقيون';
+  b.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:2147483647;padding:14px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:3px solid #fbbf24;border-radius:50px;font-family:Cairo;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 6px 20px rgba(34,197,94,0.6);';
+  b.onclick = function(e){ if(e) e.stopPropagation(); window.__showRealUsers(); };
+  document.body.appendChild(b);
+  console.log('✅ الزر الأخضر ظهر — أسفل يسار');
+}
+
+setInterval(makeBtn, 500);
+setTimeout(makeBtn, 200);
+
+console.log('✅ A+B+C جاهز');
+})();
+</script>
     
     </html>
   
