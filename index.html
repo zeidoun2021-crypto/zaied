@@ -6216,6 +6216,32 @@ b.onclick=async function(){
 document.body.appendChild(b);
 console.log('✅ الزر الأخضر دائم');
 </script>
+<script>
+(function(){
+  function isReg(){
+    try { var u = JSON.parse(localStorage.getItem('currentUser') || 'null'); return !!(u && u.email); } catch(e){ return false; }
+  }
+  function isAdmin(){
+    return window.isAdminMode === true || localStorage.getItem('zaiedAdminPermanent') === '1';
+  }
+  function check(){
+    if(isReg() || isAdmin()) return;
+    /* أخفِ كل الصفحات ما عدا الترحيب */
+    document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){
+      if(p.id !== 'pageWelcome') p.classList.add('hide');
+    });
+    var w = document.getElementById('pageWelcome');
+    if(w) w.classList.remove('hide');
+    /* أخفِ زر الإحصائيات */
+    var s = document.getElementById('statsBtn');
+    if(s) s.style.display = 'none';
+  }
+  setInterval(check, 400);
+  setTimeout(check, 500);
+  setTimeout(check, 1500);
+  console.log('🛡️ التسجيل الإلزامي مفعّل');
+})();
+</script>
     
     </html>
   
