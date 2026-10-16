@@ -1194,6 +1194,112 @@ window.submitBookExam = function(){
 console.log('✅ كتاب الأطفال جاهز — 16 شريحة + 50 سؤال');
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════
+     🔗 ربط أزرار الأقسام — إصلاح زر التربية التكنولوجية
+     ═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+/* إخفاء كل الصفحات — يشمل صفحة الكتاب */
+function hideAllPages(){
+  var ids = ['pageWelcome','pageAdminLogin','pageHome','pageChildrenTech','pageLessonViewer','pageLessonViewer2'];
+  for (var i = 0; i < ids.length; i++){
+    var p = document.getElementById(ids[i]);
+    if (p) p.classList.add('hide');
+  }
+}
+
+/* فتح صفحة التربية التكنولوجية */
+function openChildrenTechPage(){
+  hideAllPages();
+  
+  var tp = document.getElementById('pageChildrenTech');
+  
+  /* أنشئ الصفحة إذا لم تكن موجودة */
+  if (!tp){
+    tp = document.createElement('div');
+    tp.id = 'pageChildrenTech';
+    tp.className = 'hide';
+    tp.style.cssText = 'max-width:1200px;width:100%;margin:0 auto';
+    tp.innerHTML = 
+      '<div style="text-align:center;margin:20px 0;">' +
+        '<button class="btn btn-gray" style="margin:5px;" onclick="window.goToHome()">🔙 العودة للأقسام</button>' +
+        '<button class="btn btn-red" style="margin:5px;" onclick="window.exitPlatform()">⏻ خروج من المنصة</button>' +
+      '</div>' +
+      '<div class="welcome-card" style="margin:15px 0;">' +
+        '<h2>📖 التربية التكنولوجية</h2>' +
+        '<p>اختر المحور</p>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin:20px 0;">' +
+        
+        /* بطاقة كتاب الأطفال */
+        '<div onclick="window.openBook()" style="background:linear-gradient(135deg,#16a34a,#14532d);border:3px solid #fbbf24;border-radius:25px;padding:25px;text-align:center;cursor:pointer;color:white;">' +
+          '<div style="font-size:60px;margin-bottom:15px;">📖</div>' +
+          '<div style="font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:10px;">📚 الأطفال والحاسوب</div>' +
+          '<div style="font-size:13px;color:#cbd5e1;margin-bottom:15px;">حوار — بقلم محمد زايد</div>' +
+          '<div style="background:#22c55e;padding:10px;border-radius:15px;font-weight:900;">📖 16 شريحة + اختبار</div>' +
+        '</div>' +
+        
+        /* المرحلة الابتدائية */
+        '<div onclick="alert(\'📌 قريباً\')" style="background:linear-gradient(135deg,#475569,#334155);border:3px solid #fbbf24;border-radius:25px;padding:25px;text-align:center;cursor:pointer;color:white;opacity:.7;">' +
+          '<div style="font-size:60px;margin-bottom:15px;">🧒</div>' +
+          '<div style="font-size:18px;font-weight:900;color:#fbbf24;">المرحلة الابتدائية</div>' +
+          '<div style="background:#64748b;padding:10px;border-radius:15px;font-weight:900;margin-top:15px;">⏳ قريباً</div>' +
+        '</div>' +
+        
+        /* الإعدادية */
+        '<div onclick="alert(\'📌 قريباً\')" style="background:linear-gradient(135deg,#475569,#334155);border:3px solid #fbbf24;border-radius:25px;padding:25px;text-align:center;cursor:pointer;color:white;opacity:.7;">' +
+          '<div style="font-size:60px;margin-bottom:15px;">🎓</div>' +
+          '<div style="font-size:18px;font-weight:900;color:#fbbf24;">الإعدادية</div>' +
+          '<div style="background:#64748b;padding:10px;border-radius:15px;font-weight:900;margin-top:15px;">⏳ قريباً</div>' +
+        '</div>' +
+        
+        /* الثانوية */
+        '<div onclick="alert(\'📌 قريباً\')" style="background:linear-gradient(135deg,#475569,#334155);border:3px solid #fbbf24;border-radius:25px;padding:25px;text-align:center;cursor:pointer;color:white;opacity:.7;">' +
+          '<div style="font-size:60px;margin-bottom:15px;">🏫</div>' +
+          '<div style="font-size:18px;font-weight:900;color:#fbbf24;">الثانوية</div>' +
+          '<div style="background:#64748b;padding:10px;border-radius:15px;font-weight:900;margin-top:15px;">⏳ قريباً</div>' +
+        '</div>' +
+      
+      '</div>';
+    
+    var container = document.querySelector('.container');
+    if (container){
+      container.appendChild(tp);
+    } else {
+      document.body.appendChild(tp);
+    }
+  }
+  
+  tp.classList.remove('hide');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ربط الدوال على window */
+window.showChildrenTech = openChildrenTechPage;
+window.openChildrenTech = openChildrenTechPage;
+
+/* دالة goToHome للعودة */
+window.goToHome = function(){
+  hideAllPages();
+  var h = document.getElementById('pageHome');
+  if (h) h.classList.remove('hide');
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+/* Override comingSoon — الأولوية للتربية التكنولوجية */
+window.comingSoon = function(sectionName){
+  if (sectionName === 'التربية التكنولوجية'){
+    openChildrenTechPage();
+    return;
+  }
+  alert('📌 قريباً — ' + sectionName);
+};
+
+console.log('✅ ربط الأقسام — التربية التكنولوجية تعمل');
+})();
+</script>
 
 </body>
 </html>
