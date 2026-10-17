@@ -575,5 +575,16 @@ if(!window.speak){
 console.log('✅ الكتاب والعربية جاهزان');
 })();
 </script>
+<script>
+/* إصلاح زر التربية التكنولوجية */
+window.openChildrenTech = function(){
+  if (!window.isAdminMode && !window.currentUser){
+    alert('⚠️ يجب التسجيل أولاً');
+    return;
+  }
+  window.showPage('pageChildrenTech');
+};
+console.log('✅ زر التربية التكنولوجية يعمل');
+</script>
 </body>
 </html>
