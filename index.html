@@ -483,6 +483,28 @@ var EXAM_QS = ["1. ماهي مكونات الحاسوب؟","2. ما هي الم�
 window.startBookExam=function(){ var c=document.getElementById('bookContent'); var html='<div style="background:#1e293b;border-radius:25px;padding:25px;color:white"><div style="text-align:center;font-size:24px;font-weight:900;color:#fbbf24;margin-bottom:15px">🏆 الاختبار النهائي — 50 سؤالاً</div>'; for(var i=0;i<EXAM_QS.length;i++) html+='<div class="exam-question"><div style="font-weight:900;color:#dc2626;font-size:14px;margin-bottom:6px">السؤال '+(i+1)+'</div><div style="font-weight:700">'+EXAM_QS[i]+'</div><textarea id="examAns_'+i+'" rows="2" placeholder="اكتب إجابتك..."></textarea></div>'; html+='<div style="text-align:center;margin-top:25px"><button onclick="window.submitBookExam()" style="padding:14px 30px;background:#16a34a;color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;font-size:16px;margin:5px">📤 تسليم</button><button onclick="window.openBook()" style="padding:14px 30px;background:#334155;color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer;font-size:16px;margin:5px">🔙 العودة</button></div><div id="examResult"></div></div>'; c.innerHTML=html; };
 window.submitBookExam=function(){ var score=0; for(var i=0;i<50;i++){ var el=document.getElementById('examAns_'+i); var a=el?el.value.trim():''; if(a.length>20) score+=2; else if(a.length>5) score+=1; } var passed=score>=50; var r=document.getElementById('examResult'); var html='<div style="text-align:center;padding:35px;border-radius:25px;margin:20px 0;background:'+(passed?'linear-gradient(135deg,#d1fae5,#a7f3d0);border:3px solid #16a34a;color:#15803d':'linear-gradient(135deg,#fee2e2,#fecaca);border:3px solid #dc2626;color:#991b1b')+';font-weight:900"><div style="font-size:3em">'+(passed?'🎉':'📚')+'</div><div style="font-size:22px;margin:15px 0">'+(passed?'مبروك! نجحت':'لم تصل إلى 50/100')+'</div><div style="font-size:48px;margin:15px 0">'+score+'/100</div></div>'; if(passed){ var u=null; try{u=JSON.parse(localStorage.getItem('currentUser')||'null');}catch(e){} var name=u?u.name:'الطالب'; var date=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'}); html+='<div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:6px double #b45309;border-radius:25px;padding:35px;text-align:center;margin:25px 0;color:#1e293b"><div style="font-size:26px;font-weight:900;color:#92400e">🎓 شهادة نجاح 🎓</div><div style="font-size:16px;margin:15px 0">تشهد منصة زايد بأن</div><div style="font-size:26px;font-weight:900;color:#1e293b;border-top:3px solid #b45309;border-bottom:3px solid #b45309;padding:15px;margin:20px auto;max-width:600px">'+name+'</div><div style="font-size:16px;line-height:1.9;color:#78350f">قد أتمّ بنجاح كتاب "الأطفال والحاسوب"<br>بمعدل <strong>'+score+'/100</strong></div><div style="font-size:16px;margin:15px 0;color:#78350f">📅 '+date+'</div><div style="font-size:4em">🏆</div><div style="font-size:16px;color:#78350f;margin-top:15px"><strong>محمد زايد</strong><br>خبير دولي — تونس 🇹🇳</div></div>'; html+='<div style="text-align:center;margin-top:20px"><button onclick="window.print()" style="padding:14px 30px;background:#16a34a;color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer">🖨️ طباعة</button></div>'; } else { html+='<div style="text-align:center;margin-top:20px"><button onclick="window.startBookExam()" style="padding:14px 30px;background:#dc2626;color:white;border:none;border-radius:40px;font-weight:900;font-family:Cairo;cursor:pointer">🔄 إعادة</button></div>'; } r.innerHTML=html; r.scrollIntoView({behavior:'smooth'}); };
 window.openPrimaryLesson1 = function() { if (!window.isAdminMode && !window.currentUser) { alert('⚠️ سجّل أولاً'); return; } window.showPage('pagePrimaryViewer'); document.getElementById('primaryContent').innerHTML = '<div style="text-align:center;padding:50px;background:#1e293b;border-radius:25px"><h2 style="color:#fbbf24">المرحلة الابتدائية</h2><p style="color:#cbd5e1;margin-top:15px">جاري تحميل الشرائح...</p></div>'; };
+
+// Smart audio override to fix the speech not matching the slide text
+if(!window.speak){
+  var _origSpeak = function(t,l){return new Promise(function(r){if(!t){r();return;}try{if(window.speechSynthesis){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang=(l==='fr'?'fr-FR':l==='en'?'en-US':'ar-SA');u.rate=0.85;u.onend=r;u.onerror=r;window.speechSynthesis.speak(u);}else r();}catch(e){r();}});};
+  window.speak = function(text, lang) {
+      if (lang === 'ar' || !lang) {
+          const bookContent = document.getElementById('bookContent');
+          if (bookContent && !bookContent.classList.contains('hide')) {
+              const dialogue = bookContent.querySelector('.book-dialogue');
+              const bookText = bookContent.querySelector('.book-text');
+              let fullText = '';
+              if (dialogue) fullText = dialogue.textContent;
+              else if (bookText) fullText = bookText.textContent;
+              
+              if (fullText && fullText.trim().length > 10) {
+                  return _origSpeak(fullText.replace(/\s+/g, ' ').trim(), lang);
+              }
+          }
+      }
+      return _origSpeak(text, lang);
+  };
+}
 })();
 </script>
 </body>
