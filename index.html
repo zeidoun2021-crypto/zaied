@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
+<html lang="ar" dir="rtl"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>منصة زايد للتعليم والبحث العلمي بتونس</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&amp;display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
 body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);min-height:100vh;padding:15px 20px 60px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:15px}
@@ -154,7 +153,50 @@ input{user-select:text !important}
 .book-explanation-title{font-size:16px;font-weight:900;color:#047857;margin-bottom:10px}
 @media(max-width:768px){.main-sections-grid{grid-template-columns:1fr}body{padding:10px}}
 </style>
-<body>
+<style id="master-clean-css">
+      /* تصميم الأقسام الستة */
+      body #pageHome .main-sections-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+        margin: 15px auto !important;
+        max-width: 1200px !important;
+        padding: 0 15px !important;
+        align-items: stretch !important;
+      }
+      @media (max-width: 900px) { body #pageHome .main-sections-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+      @media (max-width: 600px) { body #pageHome .main-sections-grid { grid-template-columns: 1fr !important; } }
+      
+      .main-section-card {
+        padding: 15px !important; border-radius: 15px !important; display: flex !important;
+        flex-direction: column !important; box-sizing: border-box !important; height: 100% !important; min-height: 240px !important;
+      }
+      .main-section-icon { font-size: 35px !important; text-align: center !important; margin-bottom: 5px !important; }
+      .main-section-title { font-size: 16px !important; text-align: center !important; margin-bottom: 5px !important; font-weight: 900 !important; color: #fbbf24 !important; }
+      .main-section-subtitle { font-size: 11px !important; text-align: center !important; margin-bottom: 12px !important; color: #cbd5e1 !important; }
+      .sub-sections-list { margin-top: auto !important; padding: 0 !important; display: flex !important; flex-direction: column !important; gap: 6px !important; }
+      .sub-sections-list li { padding: 8px 12px !important; font-size: 13px !important; border-radius: 10px !important; margin-bottom: 0 !important; display: flex !important; align-items: center !important; background: rgba(255,255,255,.1); color:#fff; cursor:pointer; }
+      .sub-sections-list li:hover { background: rgba(251,191,36,.3); }
+      
+      /* شاشة العرض والشرائح */
+      body:has(#pageLessonViewer:not(.hide)) { overflow: hidden !important; }
+      #pageLessonViewer:not(.hide) {
+        position: fixed !important; inset: 0 !important; background: #0f172a !important; z-index: 999999 !important;
+        display: flex !important; flex-direction: column !important; padding: 10px 15px !important;
+      }
+      #lessonViewerContent { flex: 1 !important; overflow-y: auto !important; max-width: 900px !important; width: 100% !important; margin: 0 auto !important; }
+      #pageLessonViewer:not(.hide) .nav-buttons { flex-shrink: 0 !important; display: flex !important; gap: 10px !important; justify-content: center !important; margin: 10px auto 0 !important; width: 100% !important; max-width: 900px !important; }
+      #lessonViewerContent img { max-height: 20vh !important; object-fit: contain !important; }
+      
+      /* شريط الصوت */
+      .book-slide { display: flex !important; flex-direction: column !important; padding: 15px !important; margin: 0 auto !important; }
+      .sticky-audio-bar {
+        order: -1 !important; position: sticky !important; top: 0 !important; z-index: 100 !important;
+        background: rgba(255, 255, 255, 0.95) !important; padding: 8px !important; border-radius: 15px !important;
+        margin-bottom: 15px !important; border: 2px dashed #dc2626 !important; display: flex !important; justify-content: center !important; gap: 8px !important;
+      }
+      .sticky-audio-bar .btn-speak { padding: 6px 14px !important; font-size: 13px !important; margin: 0 !important; }
+    </style></head><body>
 
 <button id="statsBtn" onclick="sdOpen()">📊 الإحصائيات</button>
 
@@ -197,7 +239,7 @@ input{user-select:text !important}
     <div class="logo-wrapper">
         <div class="outer-ring"></div>
         <div class="rotating-flags">
-            <svg viewBox="0 0 185 185"><defs><g id="tunisiaFlag"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="white" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="white"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="white"/></g></defs><use xlink:href="#tunisiaFlag" x="92" y="12"/><use xlink:href="#tunisiaFlag" x="160" y="54"/><use xlink:href="#tunisiaFlag" x="160" y="132"/><use xlink:href="#tunisiaFlag" x="92" y="174"/><use xlink:href="#tunisiaFlag" x="24" y="132"/><use xlink:href="#tunisiaFlag" x="24" y="54"/></svg>
+            <svg viewBox="0 0 185 185"><defs><g id="tunisiaFlag"><circle cx="0" cy="0" r="11" fill="#dc2626"></circle><circle cx="0" cy="0" r="8.5" fill="none" stroke="white" stroke-width="1"></circle><circle cx="3" cy="0" r="6" fill="white"></circle><circle cx="6" cy="0" r="5" fill="#dc2626"></circle><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="white"></polygon></g></defs><use xlink:href="#tunisiaFlag" x="92" y="12"></use><use xlink:href="#tunisiaFlag" x="160" y="54"></use><use xlink:href="#tunisiaFlag" x="160" y="132"></use><use xlink:href="#tunisiaFlag" x="92" y="174"></use><use xlink:href="#tunisiaFlag" x="24" y="132"></use><use xlink:href="#tunisiaFlag" x="24" y="54"></use></svg>
         </div>
         <div class="screen-wrapper">
             <div class="screen-body"><img src="https://i.postimg.cc/HWS05DXt/zayd8.jpg" alt="شعار"></div>
@@ -1696,70 +1738,10 @@ window.addEventListener('click', function(e) {
     if (modal && e.target === modal) closeSubscriptionModal();
 });
 </script>
-<style id="permanent-fixes-css">
-    body #pageHome { padding-top: 20px !important; }
-    body #pageHome .main-sections-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      gap: 15px !important;
-      margin: 15px auto !important;
-      max-width: 1100px !important;
-      padding: 0 15px !important;
-      box-sizing: border-box !important;
-    }
-    @media (max-width: 900px) { body #pageHome .main-sections-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-    @media (max-width: 600px) { body #pageHome .main-sections-grid { grid-template-columns: 1fr !important; } }
 
-    body #pageHome .main-section-card {
-      padding: 15px !important;
-      border-radius: 15px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      box-sizing: border-box !important;
-      height: auto !important;
-      min-height: 220px !important;
-    }
-    body #pageHome .main-section-icon { font-size: 30px !important; text-align: center !important; margin-bottom: 5px !important; }
-    body #pageHome .main-section-title { font-size: 15px !important; text-align: center !important; margin-bottom: 5px !important; font-weight: 900 !important; color: #fbbf24 !important; }
-    body #pageHome .main-section-subtitle { font-size: 11px !important; text-align: center !important; margin-bottom: 12px !important; color: #cbd5e1 !important; }
-    body #pageHome .sub-sections-list { margin-top: auto !important; padding: 0 !important; display: flex !important; flex-direction: column !important; gap: 6px !important; }
-    body #pageHome .sub-sections-list li { padding: 6px 10px !important; font-size: 12px !important; border-radius: 8px !important; margin-bottom: 0 !important; display: flex !important; align-items: center !important; }
-  </style>
-    <script id="permanent-fixes-js">
-    setTimeout(function(){
-      var grid = document.querySelector('#pageHome .main-sections-grid');
-      if (grid) {
-        grid.innerHTML = `
-          <div class="main-section-card" style="background:linear-gradient(135deg,#14532d,#166534);border:3px solid #22c55e;">
-            <div class="main-section-icon">🎓</div><div class="main-section-title">قسم التعليم والتكوين</div><div class="main-section-subtitle">التعليم • التكوين</div>
-            <ul class="sub-sections-list"><li onclick="showChildrenTech()"><span class="sub-icon">📖</span> التربية التكنولوجية</li><li onclick="showArabicSection()"><span class="sub-icon">🌙</span> تعليم اللغة العربية</li></ul>
-          </div>
-          <div class="main-section-card" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);border:3px solid #3b82f6;">
-            <div class="main-section-icon">🔬</div><div class="main-section-title">قسم البحث العلمي</div><div class="main-section-subtitle">البحث • المراجع</div>
-            <ul class="sub-sections-list"><li onclick="showLecturesSection()"><span class="sub-icon">🎤</span> المحاضرات</li><li onclick="showBooksSection()"><span class="sub-icon">📚</span> الكتب</li></ul>
-          </div>
-          <div class="main-section-card" style="background:linear-gradient(135deg,#4c1d95,#6d28d9);border:3px solid #fbbf24;">
-            <div class="main-section-icon">🧠</div><div class="main-section-title">قسم الذكاء الاصطناعي</div><div class="main-section-subtitle">الأدوات • التطبيقات</div>
-            <ul class="sub-sections-list"><li onclick="showAISection()"><span class="sub-icon">🤖</span> 9 مسارات</li><li onclick="comingSoon('ورشات الأطفال')" style="background:rgba(251,191,36,.2)"><span class="sub-icon">🧸</span> ورشات للأطفال</li><li onclick="comingSoon('ورشات المدرسين')" style="background:rgba(251,191,36,.2)"><span class="sub-icon">👨‍🏫</span> ورشات للمدرسين</li></ul>
-          </div>
-          <div class="main-section-card" style="background:linear-gradient(135deg,#0f766e,#0d9488);border:3px solid #14b8a6;">
-            <div class="main-section-icon">📚</div><div class="main-section-title">المكتبة الرقمية</div><div class="main-section-subtitle">الكتب • المقالات</div>
-            <ul class="sub-sections-list"><li onclick="comingSoon('الكتب')"><span class="sub-icon">📖</span> الكتب</li><li onclick="comingSoon('المقالات')"><span class="sub-icon">📝</span> المقالات</li></ul>
-          </div>
-          <div class="main-section-card" style="background:linear-gradient(135deg,#c2410c,#ea580c);border:3px solid #f97316;">
-            <div class="main-section-icon">🎥</div><div class="main-section-title">المحاضرات</div><div class="main-section-subtitle">أونلاين • أوفلاين</div>
-            <ul class="sub-sections-list"><li onclick="comingSoon('البث المباشر')"><span class="sub-icon">🔴</span> البث المباشر</li><li onclick="comingSoon('المسجلة')"><span class="sub-icon">💾</span> المسجلة</li></ul>
-          </div>
-          <div class="main-section-card" style="background:linear-gradient(135deg,#831843,#be185d);border:3px solid #ec4899;">
-            <div class="main-section-icon">💡</div><div class="main-section-title">مشاريع الباحثين</div><div class="main-section-subtitle">مدرسين • طلبة • خبراء</div>
-            <ul class="sub-sections-list"><li onclick="comingSoon('مدرسين')"><span class="sub-icon">👨‍🏫</span> مدرسين</li><li onclick="comingSoon('خبراء')"><span class="sub-icon">🧠</span> خبراء</li></ul>
-          </div>
-        `;
-      }
-    }, 500);
-    </script>
     
-</body>
+    
+
 <script>
 /* ═══════════════════════════════════════════════════════
    🛠️ الإصلاحات النهائية: الإشعارات + عرض القوائم
@@ -6306,5 +6288,63 @@ console.log('✅ الزر الأخضر دائم');
 })();
 </script>
     
-    </html>
-  
+    
+  <script id="master-clean-js">
+      window.addEventListener('load', function() {
+        // فرض إظهار صفحة التسجيل (مسح جلسة المشرف)
+        if (typeof localStorage !== 'undefined') {
+          localStorage.removeItem('zaiedAdminPermanent');
+        }
+        if (typeof showPage === 'function') {
+          showPage('pageWelcome');
+        } else {
+          document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); p.style.display = 'none'; });
+          var welcome = document.getElementById('pageWelcome'); if(welcome){ welcome.classList.remove('hide'); welcome.style.display = 'block'; }
+          var banner = document.getElementById('userStatusBanner'); if(banner) banner.className = 'visitor';
+          var text = document.getElementById('bannerText'); if(text) text.textContent = 'مرحباً — أنت زائر';
+        }
+
+        // بناء الأقسام الستة
+        setTimeout(function() {
+          var grid = document.querySelector('#pageHome .main-sections-grid');
+          if (grid) {
+            grid.innerHTML = `
+              <div class="main-section-card" style="background:linear-gradient(135deg,#14532d,#166534);border:3px solid #22c55e;">
+                <div class="main-section-icon">🎓</div><div class="main-section-title">قسم التعليم والتكوين</div><div class="main-section-subtitle">التعليم • التكوين</div>
+                <ul class="sub-sections-list"><li onclick="showChildrenTech()"><span class="sub-icon">📖</span> التربية التكنولوجية</li><li onclick="showArabicSection()"><span class="sub-icon">🌙</span> تعليم اللغة العربية</li></ul>
+              </div>
+              <div class="main-section-card" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);border:3px solid #3b82f6;">
+                <div class="main-section-icon">🔬</div><div class="main-section-title">قسم البحث العلمي</div><div class="main-section-subtitle">البحث • المراجع</div>
+                <ul class="sub-sections-list"><li onclick="showLecturesSection()"><span class="sub-icon">🎤</span> المحاضرات</li><li onclick="showBooksSection()"><span class="sub-icon">📚</span> الكتب</li></ul>
+              </div>
+              <div class="main-section-card" style="background:linear-gradient(135deg,#4c1d95,#6d28d9);border:3px solid #fbbf24;">
+                <div class="main-section-icon">🧠</div><div class="main-section-title">قسم الذكاء الاصطناعي</div><div class="main-section-subtitle">الأدوات • التطبيقات</div>
+                <ul class="sub-sections-list"><li onclick="showAISection()"><span class="sub-icon">🤖</span> 9 مسارات</li><li onclick="comingSoon('ورشات الأطفال')" style="background:rgba(251,191,36,.2)"><span class="sub-icon">🧸</span> ورشات للأطفال</li><li onclick="comingSoon('ورشات المدرسين')" style="background:rgba(251,191,36,.2)"><span class="sub-icon">👨‍🏫</span> ورشات للمدرسين</li></ul>
+              </div>
+              <div class="main-section-card" style="background:linear-gradient(135deg,#0f766e,#0d9488);border:3px solid #14b8a6;">
+                <div class="main-section-icon">📚</div><div class="main-section-title">المكتبة الرقمية</div><div class="main-section-subtitle">الكتب • المقالات</div>
+                <ul class="sub-sections-list"><li onclick="comingSoon('الكتب')"><span class="sub-icon">📖</span> الكتب</li><li onclick="comingSoon('المقالات')"><span class="sub-icon">📝</span> المقالات</li></ul>
+              </div>
+              <div class="main-section-card" style="background:linear-gradient(135deg,#c2410c,#ea580c);border:3px solid #f97316;">
+                <div class="main-section-icon">🎥</div><div class="main-section-title">المحاضرات</div><div class="main-section-subtitle">أونلاين • أوفلاين</div>
+                <ul class="sub-sections-list"><li onclick="comingSoon('البث المباشر')"><span class="sub-icon">🔴</span> البث المباشر</li><li onclick="comingSoon('المسجلة')"><span class="sub-icon">💾</span> المسجلة</li></ul>
+              </div>
+              <div class="main-section-card" style="background:linear-gradient(135deg,#831843,#be185d);border:3px solid #ec4899;">
+                <div class="main-section-icon">💡</div><div class="main-section-title">مشاريع الباحثين</div><div class="main-section-subtitle">مدرسين • طلبة • خبراء</div>
+                <ul class="sub-sections-list"><li onclick="comingSoon('مدرسين')"><span class="sub-icon">👨‍🏫</span> مدرسين</li><li onclick="comingSoon('خبراء')"><span class="sub-icon">🧠</span> خبراء</li></ul>
+              </div>
+            `;
+          }
+
+          // نقل أزرار الصوت للأعلى
+          document.querySelectorAll('.book-slide').forEach(function(slide){
+            if(slide.querySelector('.sticky-audio-bar')) return;
+            var btns = slide.querySelectorAll('.btn-speak');
+            if(!btns.length) return;
+            var bar = document.createElement('div'); bar.className='sticky-audio-bar';
+            btns.forEach(function(b){ b.parentElement.style.display='none'; bar.appendChild(b); });
+            slide.insertBefore(bar, slide.firstElementChild);
+          });
+        }, 500);
+      });
+    </script></body></html>
