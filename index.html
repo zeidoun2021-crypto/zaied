@@ -1696,6 +1696,69 @@ window.addEventListener('click', function(e) {
     if (modal && e.target === modal) closeSubscriptionModal();
 });
 </script>
+<style id="permanent-fixes-css">
+    body #pageHome { padding-top: 20px !important; }
+    body #pageHome .main-sections-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 15px !important;
+      margin: 15px auto !important;
+      max-width: 1100px !important;
+      padding: 0 15px !important;
+      box-sizing: border-box !important;
+    }
+    @media (max-width: 900px) { body #pageHome .main-sections-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+    @media (max-width: 600px) { body #pageHome .main-sections-grid { grid-template-columns: 1fr !important; } }
+
+    body #pageHome .main-section-card {
+      padding: 15px !important;
+      border-radius: 15px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      box-sizing: border-box !important;
+      height: auto !important;
+      min-height: 220px !important;
+    }
+    body #pageHome .main-section-icon { font-size: 30px !important; text-align: center !important; margin-bottom: 5px !important; }
+    body #pageHome .main-section-title { font-size: 15px !important; text-align: center !important; margin-bottom: 5px !important; font-weight: 900 !important; color: #fbbf24 !important; }
+    body #pageHome .main-section-subtitle { font-size: 11px !important; text-align: center !important; margin-bottom: 12px !important; color: #cbd5e1 !important; }
+    body #pageHome .sub-sections-list { margin-top: auto !important; padding: 0 !important; display: flex !important; flex-direction: column !important; gap: 6px !important; }
+    body #pageHome .sub-sections-list li { padding: 6px 10px !important; font-size: 12px !important; border-radius: 8px !important; margin-bottom: 0 !important; display: flex !important; align-items: center !important; }
+  </style>
+    <script id="permanent-fixes-js">
+    setTimeout(function(){
+      var grid = document.querySelector('#pageHome .main-sections-grid');
+      if (grid) {
+        grid.innerHTML = `
+          <div class="main-section-card" style="background:linear-gradient(135deg,#14532d,#166534);border:3px solid #22c55e;">
+            <div class="main-section-icon">🎓</div><div class="main-section-title">قسم التعليم والتكوين</div><div class="main-section-subtitle">التعليم • التكوين</div>
+            <ul class="sub-sections-list"><li onclick="showChildrenTech()"><span class="sub-icon">📖</span> التربية التكنولوجية</li><li onclick="showArabicSection()"><span class="sub-icon">🌙</span> تعليم اللغة العربية</li></ul>
+          </div>
+          <div class="main-section-card" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);border:3px solid #3b82f6;">
+            <div class="main-section-icon">🔬</div><div class="main-section-title">قسم البحث العلمي</div><div class="main-section-subtitle">البحث • المراجع</div>
+            <ul class="sub-sections-list"><li onclick="showLecturesSection()"><span class="sub-icon">🎤</span> المحاضرات</li><li onclick="showBooksSection()"><span class="sub-icon">📚</span> الكتب</li></ul>
+          </div>
+          <div class="main-section-card" style="background:linear-gradient(135deg,#4c1d95,#6d28d9);border:3px solid #fbbf24;">
+            <div class="main-section-icon">🧠</div><div class="main-section-title">قسم الذكاء الاصطناعي</div><div class="main-section-subtitle">الأدوات • التطبيقات</div>
+            <ul class="sub-sections-list"><li onclick="showAISection()"><span class="sub-icon">🤖</span> 9 مسارات</li><li onclick="comingSoon('ورشات الأطفال')" style="background:rgba(251,191,36,.2)"><span class="sub-icon">🧸</span> ورشات للأطفال</li><li onclick="comingSoon('ورشات المدرسين')" style="background:rgba(251,191,36,.2)"><span class="sub-icon">👨‍🏫</span> ورشات للمدرسين</li></ul>
+          </div>
+          <div class="main-section-card" style="background:linear-gradient(135deg,#0f766e,#0d9488);border:3px solid #14b8a6;">
+            <div class="main-section-icon">📚</div><div class="main-section-title">المكتبة الرقمية</div><div class="main-section-subtitle">الكتب • المقالات</div>
+            <ul class="sub-sections-list"><li onclick="comingSoon('الكتب')"><span class="sub-icon">📖</span> الكتب</li><li onclick="comingSoon('المقالات')"><span class="sub-icon">📝</span> المقالات</li></ul>
+          </div>
+          <div class="main-section-card" style="background:linear-gradient(135deg,#c2410c,#ea580c);border:3px solid #f97316;">
+            <div class="main-section-icon">🎥</div><div class="main-section-title">المحاضرات</div><div class="main-section-subtitle">أونلاين • أوفلاين</div>
+            <ul class="sub-sections-list"><li onclick="comingSoon('البث المباشر')"><span class="sub-icon">🔴</span> البث المباشر</li><li onclick="comingSoon('المسجلة')"><span class="sub-icon">💾</span> المسجلة</li></ul>
+          </div>
+          <div class="main-section-card" style="background:linear-gradient(135deg,#831843,#be185d);border:3px solid #ec4899;">
+            <div class="main-section-icon">💡</div><div class="main-section-title">مشاريع الباحثين</div><div class="main-section-subtitle">مدرسين • طلبة • خبراء</div>
+            <ul class="sub-sections-list"><li onclick="comingSoon('مدرسين')"><span class="sub-icon">👨‍🏫</span> مدرسين</li><li onclick="comingSoon('خبراء')"><span class="sub-icon">🧠</span> خبراء</li></ul>
+          </div>
+        `;
+      }
+    }, 500);
+    </script>
+    
 </body>
 <script>
 /* ═══════════════════════════════════════════════════════
