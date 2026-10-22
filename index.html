@@ -5458,32 +5458,12 @@ function enforceHideStats() {
         // ابحث عن أي زر إحصائيات (الأصلي أو المكرر) واقتله
         var s1 = document.getElementById('statsBtn');
         var s2 = document.getElementById('myStatsBtn');
-        
-        if (s1) s1.style.setProperty('display', 'none', 'important');
-        if (s2) s2.style.setProperty('display', 'none', 'important');
-    }
-}
+  
 
-// تشغيل الدالة كل 50 مللي ثانية (أسرع من أي كود قديم يحاول إظهار الزر)
-setInterval(enforceHideStats, 50);
 })();
-</script>
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- 🛑 إخفاء زر الإحصائيات قسرياً في صفحة التسجيل (CSS فقط) -->
-<!-- ═══════════════════════════════════════════════════════ -->
+</script>  
 <style>
-    /* إذا كانت صفحة الترحيب ظاهرة، أخفِ زر الإحصائيات تماماً */
-    body:has(#pageWelcome:not(.hide)) #statsBtn,
-    body:has(#pageWelcome:not(.hide)) #myStatsBtn {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-        z-index: -9999 !important;
-    }
-</style>
-<style>
-    /* إخفاء قسري لزر الإحصائيات إذا كانت صفحة الترحيب (التسجيل) ظاهرة */
+    /* إخفاء زر الإحصائيات في صفحة التسجيل فقط */
     body:has(#pageWelcome:not(.hide)) #statsBtn,
     body:has(#pageWelcome:not(.hide)) #myStatsBtn {
         display: none !important;
@@ -5491,8 +5471,8 @@ setInterval(enforceHideStats, 50);
         opacity: 0 !important;
     }
 </style>
-</html>
 
-<!-- ═══════════════════════════════════════════ -->
-<!-- ════════ نهاية الملف — المنصة كاملة ═══════ -->
-<!-- ═══════════════════════════════════════════ -->
+</body>
+</html>
+</body>
+</html>
