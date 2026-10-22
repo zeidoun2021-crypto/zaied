@@ -5661,5 +5661,55 @@ document.addEventListener("DOMContentLoaded", function() {
     }, 100);
 });
 </script>
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 🟡 استعادة الشريط الأصفر التحذيري للزوار -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+function isRegisteredNow() {
+    try {
+        var u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        return !!(u && u.email);
+    } catch(e) { return false; }
+}
+function isAdminNow() {
+    return window.isAdminMode === true || localStorage.getItem('zaiedAdminPermanent') === '1';
+}
+
+function showVisitorBanner() {
+    // إخفاء الشريط إذا كان المستخدم مسجلاً أو مشرفاً
+    if (isRegisteredNow() || isAdminNow()) {
+        var old = document.getElementById('visitorBanner');
+        if (old) { old.remove(); document.body.classList.remove('has-visitor-banner'); }
+        return;
+    }
+    if (document.getElementById('visitorBanner')) return;
+
+    // إضافة الأنماط الخاصة بالحركة
+    var style = document.createElement('style');
+    style.textContent = 
+        '@keyframes vShine{0%{background-position:-200% center}100%{background-position:200% center}}' +
+        '@keyframes vScroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}' +
+        '#visitorBanner{background:linear-gradient(90deg,#f59e0b,#fbbf24,#fcd34d,#fbbf24,#f59e0b);background-size:200% auto;animation:vShine 3s linear infinite}' +
+        '#visitorBanner .vb-marquee{display:inline-block;white-space:nowrap;animation:vScroll 22s linear infinite}' +
+        'body.has-visitor-banner{padding-top:70px!important}';
+    document.head.appendChild(style);
+
+    // إنشاء الشريط
+    var b = document.createElement('div');
+    b.id = 'visitorBanner';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999999;padding:14px 20px;display:flex;align-items:center;gap:15px;border-bottom:4px solid #dc2626;box-shadow:0 4px 20px rgba(0,0,0,0.3);direction:rtl;font-family:Cairo,sans-serif;';
+    b.innerHTML = '<div style="flex:1;overflow:hidden;height:30px;position:relative;"><div class="vb-marquee" style="font-size:17px;font-weight:900;color:#7f1d1d;line-height:30px;">🔒 لا يمكنك الدخول إلى المنصة إلا بعد التسجيل &nbsp;•&nbsp; التسجيل مجاني تماماً &nbsp;•&nbsp; سجّل الآن واستمتع بكل المحتوى &nbsp;•&nbsp; 🔒 لا يمكنك الدخول إلا بعد التسجيل</div></div><button onclick="window.scrollToRegister()" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:3px solid #fff;border-radius:25px;padding:8px 20px;font-family:Cairo,sans-serif;font-weight:900;cursor:pointer;font-size:15px;white-space:nowrap;box-shadow:0 4px 15px rgba(34,197,94,0.6);">🔑 سجّل الآن مجاناً</button>';
+    
+    document.body.appendChild(b);
+    document.body.classList.add('has-visitor-banner');
+}
+
+setInterval(showVisitorBanner, 1000);
+setTimeout(showVisitorBanner, 100);
+})();
+</script>
 </body>
 </html>
