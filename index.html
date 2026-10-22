@@ -5364,6 +5364,66 @@ setTimeout(restoreLogoAndMarquee, 200);
 console.log('✅ تم استعادة اللوقو والشريط المتحرك بنجاح');
 })();
 </script>
+<script>
+(function(){
+'use strict';
+
+// دالة لإجبار زر الإحصائيات على الظهور في صفحة التسجيل
+function forceShowStatsOnWelcome() {
+    var welcomePage = document.getElementById('pageWelcome');
+    var statsBtn = document.getElementById('statsBtn');
+    
+    // إذا كنا في صفحة التسجيل وزر الإحصائيات موجود
+    if (welcomePage && !welcomePage.classList.contains('hide') && statsBtn) {
+        statsBtn.style.setProperty('display', 'block', 'important');
+        statsBtn.style.setProperty('z-index', '2147483647', 'important');
+        statsBtn.style.setProperty('position', 'fixed', 'important');
+        statsBtn.style.setProperty('bottom', '20px', 'important');
+        statsBtn.style.setProperty('right', '20px', 'important');
+    }
+}
+
+// تشغيل الدالة باستمرار لضمان بقاء الزر ظاهراً
+setInterval(forceShowStatsOnWelcome, 500);
+setTimeout(forceShowStatsOnWelcome, 200);
+
+console.log('✅ تم إصلاح ظهور زر الإحصائيات في صفحة التسجيل');
+})();
+</script>
+<script>
+(function(){
+'use strict';
+
+// دالة لإخفاء زر الإحصائيات في صفحة التسجيل وإظهاره فقط في صفحة الأقسام
+function manageStatsVisibility() {
+    var welcomePage = document.getElementById('pageWelcome');
+    var statsBtn = document.getElementById('statsBtn');
+    
+    if (!welcomePage || !statsBtn) return;
+
+    // إذا كنا في صفحة التسجيل (الترحيب) -> أخفِ الزر
+    if (!welcomePage.classList.contains('hide')) {
+        statsBtn.style.setProperty('display', 'none', 'important');
+    } 
+    // إذا كنا في أي صفحة أخرى (مثل الأقسام) والمستخدم مشرف -> أظهر الزر
+    else if (window.isAdminMode || localStorage.getItem('zaiedAdminPermanent') === '1') {
+        statsBtn.style.setProperty('display', 'block', 'important');
+        statsBtn.style.setProperty('z-index', '2147483647', 'important');
+        statsBtn.style.setProperty('position', 'fixed', 'important');
+        statsBtn.style.setProperty('bottom', '20px', 'important');
+        statsBtn.style.setProperty('right', '20px', 'important');
+    } else {
+        // إخفاء في باقي الحالات
+        statsBtn.style.setProperty('display', 'none', 'important');
+    }
+}
+
+// تشغيل الدالة باستمرار لضمان عدم عودة الزر للظهور في صفحة التسجيل
+setInterval(manageStatsVisibility, 300);
+setTimeout(manageStatsVisibility, 100);
+
+})();
+</script>
 </html>
 
 <!-- ═══════════════════════════════════════════ -->
