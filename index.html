@@ -5291,6 +5291,79 @@ setTimeout(fixUIElements, 500);
 console.log('✅ تم تثبيت الباتش الشامل النهائي بنجاح!');
 })();
 </script>
+<script>
+(function(){
+'use strict';
+
+function restoreLogoAndMarquee() {
+    var pageWelcome = document.getElementById('pageWelcome');
+    if (!pageWelcome) return;
+
+    // 1. إعادة بناء اللوقو إذا كان مفقوداً
+    if (!document.querySelector('.logo-wrapper')) {
+        var logoWrapper = document.createElement('div');
+        logoWrapper.className = 'logo-wrapper';
+        // كود الـ SVG للأعلام التونسية الدوارة + شعار زايد
+        logoWrapper.innerHTML = `
+            <div class="outer-ring"></div>
+            <div class="rotating-flags">
+                <svg viewBox="0 0 185 185">
+                    <defs>
+                        <g id="tunisiaFlag">
+                            <circle cx="0" cy="0" r="11" fill="#dc2626"/>
+                            <circle cx="0" cy="0" r="8.5" fill="none" stroke="white" stroke-width="1"/>
+                            <circle cx="3" cy="0" r="6" fill="white"/>
+                            <circle cx="6" cy="0" r="5" fill="#dc2626"/>
+                            <polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="white"/>
+                        </g>
+                    </defs>
+                    <use xlink:href="#tunisiaFlag" x="92" y="12"/>
+                    <use xlink:href="#tunisiaFlag" x="160" y="54"/>
+                    <use xlink:href="#tunisiaFlag" x="160" y="132"/>
+                    <use xlink:href="#tunisiaFlag" x="92" y="174"/>
+                    <use xlink:href="#tunisiaFlag" x="24" y="132"/>
+                    <use xlink:href="#tunisiaFlag" x="24" y="54"/>
+                </svg>
+            </div>
+            <div class="screen-wrapper">
+                <div class="screen-body" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#dc2626,#991b1b);">
+                    <div style="text-align:center;">
+                        <div style="font-size:50px;line-height:1;">👨‍🏫</div>
+                        <div style="color:#fbbf24;font-weight:900;font-size:20px;font-family:Cairo;margin-top:5px;">زايد</div>
+                        <div style="color:#fff;font-size:10px;font-family:Cairo;margin-top:2px;">🇹🇳 تونس</div>
+                    </div>
+                </div>
+                <div class="screen-stand"></div>
+                <div class="screen-base"></div>
+            </div>
+        `;
+        // إدراج اللوقو في أعلى صفحة الترحيب
+        pageWelcome.insertBefore(logoWrapper, pageWelcome.firstChild);
+    }
+
+    // 2. إعادة بناء الشريط المتحرك إذا كان مفقوداً
+    if (!document.querySelector('.marquee-bar')) {
+        var marqueeBar = document.createElement('div');
+        marqueeBar.className = 'marquee-bar';
+        marqueeBar.innerHTML = '<marquee>🌟 منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس 🌟 محمد زايد - خبير دولي - تونس 🇹🇳 🌟</marquee>';
+        
+        // إدراج الشريط أسفل اللوقو مباشرة
+        var logo = document.querySelector('.logo-wrapper');
+        if (logo) {
+            logo.parentNode.insertBefore(marqueeBar, logo.nextSibling);
+        } else {
+            pageWelcome.insertBefore(marqueeBar, pageWelcome.firstChild);
+        }
+    }
+}
+
+// تشغيل الدالة باستمرار للتأكد من بقاء العناصر
+setInterval(restoreLogoAndMarquee, 1000);
+setTimeout(restoreLogoAndMarquee, 200);
+
+console.log('✅ تم استعادة اللوقو والشريط المتحرك بنجاح');
+})();
+</script>
 </html>
 
 <!-- ═══════════════════════════════════════════ -->
