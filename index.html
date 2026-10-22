@@ -5797,5 +5797,52 @@ setInterval(function() {
 
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 🚪 إضافة زر الخروج النهائي في صفحة التسجيل -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+function addWelcomeExitBtn() {
+    var welcomePage = document.getElementById('pageWelcome');
+    
+    // إذا كنا في صفحة التسجيل وليس هناك زر خروج مخصص
+    if (welcomePage && !welcomePage.classList.contains('hide') && !document.getElementById('customExitBtn')) {
+        var btn = document.createElement('button');
+        btn.id = 'customExitBtn';
+        btn.innerHTML = '⏻ خروج من المنصة';
+        
+        // تنسيق الزر ليكون بارزاً في أعلى اليسار (تحت الشريط الأصفر)
+        btn.style.cssText = 'position: fixed; top: 80px; left: 20px; z-index: 999999; background: linear-gradient(135deg, #dc2626, #991b1b); color: white; border: 3px solid #fbbf24; border-radius: 40px; padding: 12px 25px; font-family: Cairo, sans-serif; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);';
+        
+        btn.onclick = function() {
+            // استدعاء الدالة الأصلية إذا كانت موجودة، أو تنفيذ الخروج يدوياً
+            if (typeof window.exitPlatform === 'function') {
+                window.exitPlatform();
+            } else {
+                if (confirm('⏻ هل تريد مغادرة المنصة؟')) {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.replace('https://www.google.com');
+                }
+            }
+        };
+        
+        document.body.appendChild(btn);
+    } 
+    // إخفاء الزر إذا كنا لسنا في صفحة التسجيل
+    else if (welcomePage && welcomePage.classList.contains('hide')) {
+        var existingBtn = document.getElementById('customExitBtn');
+        if (existingBtn) existingBtn.remove();
+    }
+}
+
+// تشغيل مستمر لضمان ظهور الزر في صفحة التسجيل فقط
+setInterval(addWelcomeExitBtn, 500);
+setTimeout(addWelcomeExitBtn, 100);
+
+})();
+</script>
 </body>
 </html>
