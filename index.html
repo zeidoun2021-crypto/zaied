@@ -5482,6 +5482,15 @@ setInterval(enforceHideStats, 50);
         z-index: -9999 !important;
     }
 </style>
+<style>
+    /* إخفاء قسري لزر الإحصائيات إذا كانت صفحة الترحيب (التسجيل) ظاهرة */
+    body:has(#pageWelcome:not(.hide)) #statsBtn,
+    body:has(#pageWelcome:not(.hide)) #myStatsBtn {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+</style>
 </html>
 
 <!-- ═══════════════════════════════════════════ -->
