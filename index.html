@@ -5424,6 +5424,24 @@ setTimeout(manageStatsVisibility, 100);
 
 })();
 </script>
+(function() {
+    function hideStatsOnWelcome() {
+        var statsBtn = document.getElementById('statsBtn');
+        var welcomePage = document.getElementById('pageWelcome');
+        if (!statsBtn || !welcomePage) return;
+
+        // If welcome page is visible, hide stats button
+        if (!welcomePage.classList.contains('hide')) {
+            statsBtn.style.setProperty('display', 'none', 'important');
+        } else {
+            // If not on welcome page, show it ONLY if admin (or keep original behavior)
+            if (window.isAdminMode || localStorage.getItem('zaiedAdminPermanent') === '1') {
+                statsBtn.style.setProperty('display', 'block', 'important');
+            }
+        }
+    }
+    setInterval(hideStatsOnWelcome, 100); // Fast interval
+})();
 </html>
 
 <!-- ═══════════════════════════════════════════ -->
