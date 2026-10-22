@@ -5471,8 +5471,183 @@ function enforceHideStats() {
         opacity: 0 !important;
     }
 </style>
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 👑 الباتش الشامل النهائي (يجعل المنصة مثالية 100%) -->
+<!-- ═══════════════════════════════════════════════════════════ -->
 
-</body>
-</html>
+<style id="ultimate-fix-css">
+    /* 1. إخفاء الشريط الأخضر المزعج وزر الإحصائيات المكرر */
+    #trialCounter { display: none !important; }
+    #myStatsBtn { display: none !important; }
+
+    /* 2. إخفاء زر الإحصائيات في صفحة التسجيل فقط */
+    body:has(#pageWelcome:not(.hide)) #statsBtn {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+
+    /* 3. تثبيت الشريط العلوي (مرحباً — أنت المشرف) بعيداً عن البطاقات */
+    #userStatusBanner {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        z-index: 99999 !important;
+        margin: 0 !important;
+        border-radius: 0 0 20px 20px !important;
+        padding: 10px 15px !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+    }
+
+    /* 4. إعطاء الصفحة مسافة علوية لتبتعد البطاقات عن الشريط */
+    #pageHome { padding-top: 80px !important; }
+
+    /* 5. ترتيب البطاقات الثلاث (3 في صف واحد وبشكل متناسق) */
+    #pageHome .main-sections-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+        width: 98% !important;
+        max-width: 1200px !important;
+        margin: 20px auto 100px auto !important;
+        align-items: start !important;
+    }
+
+    .main-section-card {
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 15px !important;
+        border-radius: 15px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .main-section-icon { font-size: 40px !important; margin-bottom: 10px !important; text-align: center !important; }
+    .main-section-title { font-size: 18px !important; text-align: center !important; margin-bottom: 15px !important; font-weight: 900 !important; }
+    .sub-sections-list li { padding: 10px 12px !important; font-size: 14px !important; margin-bottom: 6px !important; border-radius: 10px !important; }
+
+    /* 6. ترتيب الأزرار السفلية (ملفي، الاشتراك، خروج) في المنتصف */
+    #pageHome > div[style*="display:flex"] {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        z-index: 9999 !important;
+        background: rgba(15,23,42,0.9) !important;
+        padding: 12px 25px !important;
+        border-radius: 50px !important;
+        backdrop-filter: blur(5px) !important;
+        width: max-content !important;
+        border: 2px solid #475569 !important;
+    }
+    
+    /* 7. زر الإحصائيات يميناً، والحقوق يساراً */
+    #statsBtn {
+        position: fixed !important; bottom: 20px !important; right: 20px !important; left: auto !important;
+        z-index: 10000 !important; display: block !important;
+    }
+    .copyright-bar {
+        position: fixed !important; bottom: 20px !important; left: 20px !important; right: auto !important;
+        max-width: 180px !important; font-size: 9px !important; padding: 8px !important; z-index: 10000 !important;
+    }
+</style>
+
+<script>
+(function(){
+'use strict';
+
+/* ═══ 1. إيقاف الصوت عند التنقل ═══ */
+window.stopAllAudio = function(){
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (window.currentAudio) { try { window.currentAudio.pause(); window.currentAudio.currentTime = 0; } catch(e) {} window.currentAudio = null; }
+};
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button, .nav-btn, .sub-sections-list li');
+    if (!btn) return;
+    var text = btn.innerText || '';
+    if (text.includes('التالي') || text.includes('السابق') || text.includes('خروج') || text.includes('العودة') || text.includes('🔊') || text.includes('التمارين')) {
+        window.stopAllAudio();
+    }
+}, true);
+
+/* ═══ 2. إصلاح نافذة المشرف ═══ */
+window.showAdminLogin = function(){
+    var old = document.getElementById('adminLoginModal'); if (old) old.remove();
+    var modal = document.createElement('div');
+    modal.id = 'adminLoginModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.97);z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;font-family:Cairo;';
+    modal.innerHTML = '<div style="background:#1e293b;border-radius:25px;padding:30px;max-width:400px;width:100%;border:3px solid #fbbf24;"><div style="text-align:center;margin-bottom:20px;"><div style="font-size:60px;">👑</div><h2 style="color:#fbbf24;font-size:24px;font-weight:900;">لوحة المشرف</h2><p style="color:#94a3b8;font-size:12px;">(012345)</p></div><input type="password" id="adminPwdModal" placeholder="🔒 كلمة المرور" style="width:100%;padding:15px;border:2px solid #475569;border-radius:20px;background:#0f172a;color:#fff;font-size:18px;text-align:center;box-sizing:border-box;margin-bottom:15px;"><button id="adminBtnOk" style="width:100%;padding:15px;background:linear-gradient(135deg,#dc2626,#991b1b);color:white;border:3px solid #fbbf24;border-radius:40px;font-weight:900;font-size:17px;cursor:pointer;margin-bottom:10px;">🔓 دخول</button><button id="adminBtnCancel" style="width:100%;padding:12px;background:#334155;color:white;border:none;border-radius:40px;font-weight:900;cursor:pointer;">إلغاء</button></div>';
+    document.body.appendChild(modal);
+    document.getElementById('adminBtnOk').onclick = function(){
+        if (document.getElementById('adminPwdModal').value.trim() === '012345') {
+            window.isAdminMode = true; window.userStatus = 'admin'; localStorage.setItem('zaiedAdminPermanent', '1');
+            modal.remove();
+            document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
+            document.getElementById('pageHome').classList.remove('hide');
+            var s = document.getElementById('statsBtn'); if(s) s.style.display = 'block';
+            var w = document.getElementById('welcomeName'); if(w) w.textContent = 'المشرف العام';
+            if(window.updateUserBanner) window.updateUserBanner();
+        } else { alert('❌ كلمة المرور غير صحيحة'); }
+    };
+    document.getElementById('adminBtnCancel').onclick = function(){ modal.remove(); };
+    setTimeout(function(){ document.getElementById('adminPwdModal').focus(); }, 100);
+};
+
+/* ═══ 3. نافذة الإحصائيات الجديدة ═══ */
+window.openCustomStats = async function() {
+    if (document.getElementById('customStatsModal')) return;
+    var modal = document.createElement('div');
+    modal.id = 'customStatsModal';
+    modal.style.cssText = 'position: fixed; inset: 0; background: rgba(15,23,42,0.97); z-index: 2147483647; display: flex; flex-direction: column; padding: 20px; direction: rtl; font-family: Cairo, sans-serif; overflow-y: auto;';
+    modal.innerHTML = '<div style="display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; width: 100%; border-bottom: 2px solid #fbbf24; padding-bottom: 15px; margin-bottom: 20px;"><h1 style="color: #fbbf24; font-size: 24px; margin: 0;">📊 إحصائيات المنصة</h1><button onclick="document.getElementById(\'customStatsModal\').remove()" style="background: #dc2626; color: white; border: none; border-radius: 20px; padding: 10px 20px; font-weight: bold; cursor: pointer; font-family: Cairo;">✖ إغلاق</button></div><div id="customStatsContent" style="max-width: 900px; margin: 0 auto; width: 100%; color: white; text-align: center;"><div style="font-size: 30px; margin: 50px 0;">⏳ جاري تحميل البيانات...</div></div>';
+    document.body.appendChild(modal);
+
+    try {
+        var users = await window.fbGetAllUsers() || [];
+        var visitors = await window.fbGetAllVisitors() || [];
+        var today = new Date().toDateString();
+        var todayVisits = visitors.filter(v => v.visitedAt && v.visitedAt.seconds && new Date(v.visitedAt.seconds * 1000).toDateString() === today).length;
+        var statsHtml = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">' +
+            '<div style="background: #1e293b; border: 2px solid #3b82f6; border-radius: 15px; padding: 20px;"><div style="font-size: 40px; margin-bottom: 10px;">👥</div><div style="font-size: 35px; font-weight: 900; color: #3b82f6;">'+users.length+'</div><div style="color: #94a3b8; margin-top: 5px;">المسجلون</div></div>' +
+            '<div style="background: #1e293b; border: 2px solid #22c55e; border-radius: 15px; padding: 20px;"><div style="font-size: 40px; margin-bottom: 10px;">💎</div><div style="font-size: 35px; font-weight: 900; color: #22c55e;">'+users.filter(u => u.subscribed).length+'</div><div style="color: #94a3b8; margin-top: 5px;">المشتركون</div></div>' +
+            '<div style="background: #1e293b; border: 2px solid #8b5cf6; border-radius: 15px; padding: 20px;"><div style="font-size: 40px; margin-bottom: 10px;">🎭</div><div style="font-size: 35px; font-weight: 900; color: #8b5cf6;">'+visitors.length+'</div><div style="color: #94a3b8; margin-top: 5px;">عدد الزيارات</div></div>' +
+            '<div style="background: #1e293b; border: 2px solid #f59e0b; border-radius: 15px; padding: 20px;"><div style="font-size: 40px; margin-bottom: 10px;">✨</div><div style="font-size: 35px; font-weight: 900; color: #f59e0b;">'+todayVisits+'</div><div style="color: #94a3b8; margin-top: 5px;">زيارات اليوم</div></div></div>';
+        if (users.length > 0) {
+            statsHtml += '<h2 style="color: #fbbf24; text-align: right; margin-bottom: 15px;">👥 قائمة المسجلين</h2><div style="display: flex; flex-direction: column; gap: 10px;">';
+            users.forEach((u, i) => { statsHtml += '<div style="background: #f8fafc; color: #1e293b; border-radius: 12px; padding: 15px; border-right: 5px solid #3b82f6; text-align: right;"><div style="font-weight: 900; color: #dc2626; font-size: 16px;">'+(i+1)+'. '+(u.name||'بدون اسم')+'</div><div style="font-size: 13px; color: #475569; margin-top: 5px;">📧 '+(u.email||'-')+' | 📱 '+(u.whatsapp||'-')+'</div></div>'; });
+            statsHtml += '</div>';
+        }
+        document.getElementById('customStatsContent').innerHTML = statsHtml;
+    } catch (e) { document.getElementById('customStatsContent').innerHTML = '<h2 style="color:#fca5a5;">❌ خطأ في جلب البيانات.</h2>'; }
+};
+
+/* ═══ 4. ربط زر الإحصائيات وإصلاح اللوقو ═══ */
+function fixElements() {
+    var statsBtn = document.getElementById('statsBtn');
+    if (statsBtn && !statsBtn.__fixed) {
+        statsBtn.__fixed = true;
+        statsBtn.onclick = function(e) { e.preventDefault(); window.openCustomStats(); };
+    }
+    var box = document.querySelector('.screen-body');
+    if (box && !box.getAttribute('data-logo-fixed')) {
+        box.setAttribute('data-logo-fixed', '1');
+        var img = new Image();
+        img.onload = function(){ box.innerHTML = '<img src="logo.png" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">'; };
+        img.onerror = function(){ box.innerHTML = '<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#dc2626,#991b1b);border-radius:12px;"><div style="font-size:50px;">👨‍🏫</div><div style="color:#fbbf24;font-weight:900;font-size:20px;">زايد</div></div>'; };
+        img.src = 'logo.png';
+    }
+}
+setInterval(fixElements, 1000);
+setTimeout(fixElements, 500);
+
+console.log('✅ تم تطبيق الباتش الشامل النهائي بنجاح!');
+})();
+</script>
+
 </body>
 </html>
