@@ -5711,5 +5711,91 @@ setInterval(showVisitorBanner, 1000);
 setTimeout(showVisitorBanner, 100);
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 🔙 إضافة زر العودة وإصلاح الدروس وترتيب الشاشة -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+/* 1. إضافة زر عائم (العودة للأقسام) في كل الصفحات */
+function addGlobalBackButton() {
+    if (document.getElementById('globalBackBtn')) return;
+    
+    var btn = document.createElement('button');
+    btn.id = 'globalBackBtn';
+    btn.innerHTML = '🔙 العودة إلى الأقسام';
+    btn.style.cssText = 'position: fixed; top: 80px; left: 20px; z-index: 99999; background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; border: 3px solid #fbbf24; border-radius: 40px; padding: 12px 25px; font-family: Cairo; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.5); display: none;';
+    
+    btn.onclick = function() {
+        document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
+        var home = document.getElementById('pageHome');
+        if (home) home.classList.remove('hide');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+    
+    document.body.appendChild(btn);
+}
+
+/* 2. التحكم في ظهور الزر العائم (يظهر فقط في الصفحات الفرعية) */
+function toggleBackButton() {
+    var btn = document.getElementById('globalBackBtn');
+    if (!btn) return;
+    
+    var welcome = document.getElementById('pageWelcome');
+    var home = document.getElementById('pageHome');
+    
+    // إذا كنا في صفحة الترحيب أو الصفحة الرئيسية، نخفي الزر
+    if ((welcome && !welcome.classList.contains('hide')) || (home && !home.classList.contains('hide'))) {
+        btn.style.display = 'none';
+    } else {
+        btn.style.display = 'block';
+    }
+}
+
+/* 3. إصلاح أزرار الدروس في صفحة الإعدادية وترتيبها */
+function fixMiddleStage() {
+    var middlePage = document.getElementById('pageMiddleStage');
+    if (!middlePage || middlePage.classList.contains('hide')) return;
+
+    // ترتيب البطاقات
+    var grid = middlePage.querySelector('div[style*="grid"]');
+    if (grid) {
+        grid.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important; gap: 15px !important; padding: 15px !important;';
+    }
+
+    // إصلاح أزرار الدروس (ربطها بالدوال الصحيحة)
+    var cards = middlePage.querySelectorAll('div[onclick]');
+    cards.forEach(function(card) {
+        var text = card.innerText;
+        if (text.includes('7.1')) {
+            card.onclick = function() { if(window.__showLesson) window.__showLesson('1.1'); else alert('جاري تحميل الدرس...'); };
+        } else if (text.includes('7.2')) {
+            card.onclick = function() { if(window.__showML) window.__showML('7.2'); };
+        } else if (text.includes('7.3')) {
+            card.onclick = function() { if(window.__showML) window.__showML('7.3'); };
+        } else if (text.includes('8.1')) {
+            card.onclick = function() { if(window.__showML) window.__showML('8.1'); };
+        } else if (text.includes('8.2')) {
+            card.onclick = function() { if(window.__showML) window.__showML('8.2'); };
+        } else if (text.includes('9.1')) {
+            card.onclick = function() { if(window.__showML) window.__showML('9.1'); };
+        } else if (text.includes('9.2')) {
+            card.onclick = function() { if(window.__showML) window.__showML('9.2'); };
+        }
+    });
+}
+
+// تشغيل دالة إضافة الزر
+setTimeout(addGlobalBackButton, 500);
+
+// مراقبة مستمرة لتحديث حالة الزر وترتيب الدروس
+setInterval(function() {
+    toggleBackButton();
+    fixMiddleStage();
+}, 500);
+
+})();
+</script>
 </body>
 </html>
