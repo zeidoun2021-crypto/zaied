@@ -5442,6 +5442,32 @@ setTimeout(manageStatsVisibility, 100);
     }
     setInterval(hideStatsOnWelcome, 100); // Fast interval
 })();
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 🛑 الحل الجذري الوحيد: إزالة زر الإحصائيات من صفحة التسجيل -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+// دالة صارمة تمسح الزر من الشاشة إذا كنا في صفحة الترحيب
+function enforceHideStats() {
+    var welcomePage = document.getElementById('pageWelcome');
+    
+    // إذا كانت صفحة الترحيب ظاهرة (لسنا في الأقسام)
+    if (welcomePage && !welcomePage.classList.contains('hide')) {
+        // ابحث عن أي زر إحصائيات (الأصلي أو المكرر) واقتله
+        var s1 = document.getElementById('statsBtn');
+        var s2 = document.getElementById('myStatsBtn');
+        
+        if (s1) s1.style.setProperty('display', 'none', 'important');
+        if (s2) s2.style.setProperty('display', 'none', 'important');
+    }
+}
+
+// تشغيل الدالة كل 50 مللي ثانية (أسرع من أي كود قديم يحاول إظهار الزر)
+setInterval(enforceHideStats, 50);
+})();
+</script>
 </html>
 
 <!-- ═══════════════════════════════════════════ -->
