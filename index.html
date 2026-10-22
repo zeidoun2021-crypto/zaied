@@ -5468,6 +5468,20 @@ function enforceHideStats() {
 setInterval(enforceHideStats, 50);
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 🛑 إخفاء زر الإحصائيات قسرياً في صفحة التسجيل (CSS فقط) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<style>
+    /* إذا كانت صفحة الترحيب ظاهرة، أخفِ زر الإحصائيات تماماً */
+    body:has(#pageWelcome:not(.hide)) #statsBtn,
+    body:has(#pageWelcome:not(.hide)) #myStatsBtn {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        z-index: -9999 !important;
+    }
+</style>
 </html>
 
 <!-- ═══════════════════════════════════════════ -->
