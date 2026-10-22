@@ -5844,5 +5844,73 @@ setTimeout(addWelcomeExitBtn, 100);
 
 })();
 </script>
+<style id="final-perfect-layout">
+    /* 1. إخفاء البطاقة الحمراء (مرحباً المشرف) */
+    #pageHome .welcome-card {
+        display: none !important;
+    }
+    
+    /* 2. إخفاء الشريط الأخضر المزعج إن وجد */
+    #trialCounter {
+        display: none !important;
+    }
+
+    /* 3. ترتيب البطاقات الثلاثة (تأخذ المساحة كاملة) */
+    #pageHome .main-sections-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+        max-width: 1400px !important;
+        width: 98% !important;
+        margin: 20px auto 100px auto !important; /* مسافة سفلية حتى لا تغطيها الأزرار */
+        align-items: start !important;
+    }
+
+    /* 4. تصميم البطاقات */
+    .main-section-card {
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 20px !important;
+        border-radius: 15px !important;
+    }
+
+    /* 5. ترتيب الأزرار السفلية في المنتصف */
+    #pageHome > div[style*="display:flex"] {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        z-index: 9999 !important;
+        background: rgba(15,23,42,0.9) !important;
+        padding: 10px 20px !important;
+        border-radius: 50px !important;
+        backdrop-filter: blur(5px) !important;
+        width: max-content !important;
+        border: 2px solid #475569 !important;
+    }
+    
+    /* 6. تثبيت زر الإحصائيات يميناً والحقوق يساراً */
+    #statsBtn {
+        position: fixed !important; 
+        bottom: 20px !important; 
+        right: 20px !important; 
+        left: auto !important;
+        z-index: 10000 !important;
+    }
+    .copyright-bar {
+        position: fixed !important; 
+        bottom: 20px !important; 
+        left: 20px !important; 
+        right: auto !important;
+        max-width: 180px !important; 
+        font-size: 9px !important; 
+        padding: 8px !important; 
+        z-index: 10000 !important;
+    }
+</style>
 </body>
 </html>
