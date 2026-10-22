@@ -5648,6 +5648,18 @@ setTimeout(fixElements, 500);
 console.log('✅ تم تطبيق الباتش الشامل النهائي بنجاح!');
 })();
 </script>
-
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        var node;
+        while (node = walker.nextNode()) {
+            if (node.textContent.includes('hideStatsOnWelcome')) {
+                node.textContent = ''; // إخفاء النص
+            }
+        }
+    }, 100);
+});
+</script>
 </body>
 </html>
