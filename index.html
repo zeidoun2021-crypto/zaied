@@ -72,23 +72,11 @@
     .sub-sections-list li:hover{background:rgba(251,191,36,.25);transform:translateX(-5px)}
     .back-btn{background:#334155;color:#fff;padding:12px 20px;border-radius:40px;border:none;cursor:pointer;font-weight:bold;font-family:'Cairo',sans-serif;margin:15px 0;font-size:14px;margin-left:8px}
     .btn-admin{padding:12px 30px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;border-radius:30px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:0.3s}
-    .stages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin: 20px auto; max-width: 1100px; }
-    .stage-card { background: linear-gradient(135deg, #dc2626, #991b1b); border: 3px solid #fbbf24; border-radius: 25px; padding: 25px; text-align: center; cursor: pointer; color: white; transition: transform 0.3s; position:relative; }
-    .stage-card:hover { transform: translateY(-5px); }
-    .stage-card .stage-icon { font-size: 55px; margin-bottom: 12px; }
-    .stage-card .stage-title { font-size: 18px; font-weight: 900; color: #fbbf24; margin-bottom: 8px; }
-    .stage-card .stage-desc { font-size: 13px; color: #cbd5e1; }
-    .stage-card.book-card { background: linear-gradient(135deg, #16a34a, #14532d); }
-    .stage-card.middle { background: linear-gradient(135deg, #f59e0b, #b45309); }
-    .stage-card.high { background: linear-gradient(135deg, #7c3aed, #4c1d95); }
-
+    
     .lock-badge { position:absolute; top:8px; left:8px; background:#dc2626; color:#fbbf24; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:900; border:2px solid #fbbf24; z-index:5; }
     .unlocked-badge { position:absolute; top:8px; left:8px; background:#16a34a; color:#fbbf24; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:900; border:2px solid #fbbf24; z-index:5; }
 
-    .protected {
-        -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-        user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none;
-    }
+    .protected { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none; }
     .protected img { pointer-events: none; user-select: none; -webkit-user-drag: none; }
 
     @media print {
@@ -122,48 +110,8 @@
 </div>
 
 <div class="container">
-    <div id="pageWelcome">
-        <div class="logo-wrapper">
-            <div class="outer-ring"></div>
-            <div class="rotating-flags">
-                <svg viewBox="0 0 185 185"><defs><g id="tunisiaFlag"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="white" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="white"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="white"/></g></defs><use xlink:href="#tunisiaFlag" x="92" y="12"/><use xlink:href="#tunisiaFlag" x="160" y="54"/><use xlink:href="#tunisiaFlag" x="160" y="132"/><use xlink:href="#tunisiaFlag" x="92" y="174"/><use xlink:href="#tunisiaFlag" x="24" y="132"/><use xlink:href="#tunisiaFlag" x="24" y="54"/></svg>
-            </div>
-            <div class="screen-wrapper">
-                <div class="screen-body">
-                    <img src="my-photo.jpg" alt="محمد زايد" class="logo-img">
-                    <div class="logo-text">
-                        <span style="font-size:16px;font-weight:900;color:#fbbf24;">منصة</span>
-                        <span style="font-size:24px;font-weight:900;color:#fff;">زايد</span>
-                    </div>
-                </div>
-                <div class="screen-stand"></div>
-                <div class="screen-base"></div>
-            </div>
-        </div>
-        <div class="marquee-bar"><marquee>🌟 منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس 🌟 محمد زايد - خبير دولي - تونس 🇹🇳 🌟</marquee></div>
-        <div class="welcome-card">
-            <h2>مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وبحثا علميا</h2>
-            <div style="margin-top:20px;"><button class="btn-register-main" onclick="window.scrollToRegister()">🔑 سجّلوا مجاناً</button></div>
-        </div>
-        <div id="visitorGateway">
-            <div style="text-align:center;font-size:45px;">👋</div>
-            <h2>🔑 التسجيل المجاني</h2>
-            <div class="gw-err" id="gwError"></div>
-            <input class="gw-input" id="gwName" placeholder="👤 الاسم الكامل (ثلاثي) *">
-            <input class="gw-input" id="gwProfession" placeholder="💼 المهنة *">
-            <input class="gw-input" id="gwSpecialty" placeholder="🎯 الاختصاص *">
-            <input class="gw-input" id="gwEmail" type="email" placeholder="📧 البريد الإلكتروني *">
-            <input class="gw-input" id="gwPhone" type="tel" placeholder="📱 رقم الواتساب *">
-            <input class="gw-input" id="gwCountry" placeholder="🌍 بلد الإقامة *" value="تونس">
-            <input class="gw-input" id="gwCity" placeholder="🏙️ المدينة *">
-            <div class="radio-group" id="gwCategories"></div>
-            <button class="gw-submit" onclick="window.submitVisitorGateway()">🔑 ابدأ الآن مجاناً</button>
-            <div style="text-align:center; margin-top:15px;"><button onclick="window.showAdminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;">👑 دخول المشرف</button></div>
-        </div>
-    </div>
-
-    <div id="pageHome" class="hide">
-        <div class="welcome-card" style="margin-bottom:20px;"><h2>🌟 مرحباً <span id="welcomeName"></span> 🌟</h2></div>
+    <div id="pageHome">
+        <div class="welcome-card" style="margin-bottom:20px;"><h2>🌟 مرحباً <span id="welcomeName">بك</span> 🌟</h2></div>
         <div class="main-sections-grid">
             <div class="main-section-card education">
                 <div class="main-section-icon">🎓</div><div class="main-section-title">قسم التعليم والتكوين</div>
@@ -212,6 +160,26 @@
     <div id="pageLessonViewer" class="hide"></div>
 </div>
 
+<!-- نافذة التسجيل المنبثقة (تظهر فوق الأقسام) -->
+<div id="registerModal" class="sub-modal" style="display:flex;">
+    <div class="sub-modal-inner" style="max-width:600px; background:#fff; color:#0f172a;">
+        <div style="text-align:center;font-size:45px;">👋</div>
+        <h2 style="color:#dc2626;text-align:center;margin:8px 0;font-weight:900;">🔑 التسجيل المجاني للدخول</h2>
+        <p style="text-align:center;color:#475569;font-size:13px;margin-bottom:15px;">يجب التسجيل لمشاهدة محتويات المنصة</p>
+        <div class="gw-err" id="gwError"></div>
+        <input class="gw-input" id="gwName" placeholder="👤 الاسم الكامل (ثلاثي) *">
+        <input class="gw-input" id="gwProfession" placeholder="💼 المهنة *">
+        <input class="gw-input" id="gwSpecialty" placeholder="🎯 الاختصاص *">
+        <input class="gw-input" id="gwEmail" type="email" placeholder="📧 البريد الإلكتروني *">
+        <input class="gw-input" id="gwPhone" type="tel" placeholder="📱 رقم الواتساب *">
+        <input class="gw-input" id="gwCountry" placeholder="🌍 بلد الإقامة *" value="تونس">
+        <input class="gw-input" id="gwCity" placeholder="🏙️ المدينة *">
+        <div class="radio-group" id="gwCategories"></div>
+        <button class="gw-submit" onclick="window.submitVisitorGateway()">🔑 ابدأ الآن مجاناً</button>
+        <div style="text-align:center; margin-top:15px;"><button onclick="window.showAdminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;">👑 دخول المشرف</button></div>
+    </div>
+</div>
+
 <script>
 (function(){
     'use strict';
@@ -254,7 +222,7 @@
     };
     
     window.goToHome = function() {
-        window.showPage((window.currentUser || window.isAdminMode) ? 'pageWelcome' : 'pageWelcome');
+        window.showPage('pageHome');
     };
     
     window.submitVisitorGateway = function() {
@@ -273,8 +241,11 @@
         }
         window.currentUser = { name: n, profession: p, specialty: sp, email: e, phone: w, country: c, city: city, category: cat };
         localStorage.setItem('zaied_currentUser', JSON.stringify(window.currentUser));
+        
+        // إخفاء نافذة التسجيل وإظهار الأقسام
+        document.getElementById('registerModal').style.display = 'none';
+        document.getElementById('welcomeName').textContent = n;
         window.updateUI();
-        window.goToHome();
     };
     
     window.logoutUser = function() {
@@ -283,6 +254,7 @@
         window.currentUser = null;
         window.isAdminMode = false;
         window.updateUI();
+        document.getElementById('registerModal').style.display = 'flex';
         window.goToHome();
     };
     
@@ -356,16 +328,15 @@
                 window.isAdminMode = true;
                 localStorage.setItem('zaied_admin', '1');
                 modal.remove();
+                document.getElementById('registerModal').style.display = 'none';
                 window.updateUI();
-                window.goToHome();
-                alert('مرحباً بك أيها المشرف');
             } else {
                 document.getElementById('adminErr').style.display = 'block';
             }
         };
     };
     
-    window.scrollToRegister = function() { window.scrollTo(0, 300); };
+    window.scrollToRegister = function() { document.getElementById('registerModal').style.display = 'flex'; };
     
     window.currentAudio = null;
     window.speakArabic = function(text) { window.speak(text, 'ar'); };
@@ -394,9 +365,7 @@
     
     window.showUniversityService = function(type) {
         var titles = { internship: '📄 طلب تربص', job: '💼 طلب شغل', consulting: '💡 استشارات', projects: '🎯 اقتراح مشاريع تخرج' };
-        
         var fields = '';
-        
         if (type === 'projects') {
             fields = `
                 <input class="gw-input" id="usName" placeholder="👤 اسم صاحب المشروع *">
@@ -406,7 +375,7 @@
                 <input class="gw-input" id="usTopic" placeholder="📝 موضوع المشروع *">
                 <input class="gw-input" id="usPhone" placeholder="📱 رقم الهاتف / واتساب *">
                 <input class="gw-input" id="usEmail" type="email" placeholder="📧 البريد الإلكتروني *">
-                <textarea class="gw-input" id="usCv" placeholder="🔗 رابط إرفاق المشروع أو التعريف به (Google Drive، PDF، إلخ) *" style="height:100px; resize:vertical;"></textarea>
+                <textarea class="gw-input" id="usCv" placeholder="🔗 رابط إرفاق المشروع أو التعريف به *" style="height:100px; resize:vertical;"></textarea>
                 <button class="gw-submit" onclick="window.submitUniversityService('${type}')">💾 حفظ الطلب في المنصة</button>
             `;
         } else {
@@ -427,7 +396,6 @@
                 <button class="gw-submit" onclick="window.submitUniversityService('${type}')">💾 حفظ الطلب في المنصة</button>
             `;
         }
-        
         var old = document.getElementById('usModal'); if (old) old.remove();
         var m = document.createElement('div'); m.id = 'usModal'; m.className = 'sub-modal';
         m.innerHTML = '<div class="sub-modal-inner" style="max-width:600px;"><div style="text-align:center;font-size:40px;">' + titles[type].split(' ')[0] + '</div><h2 style="color:#fbbf24;text-align:center;margin:10px 0;font-size:20px;">' + titles[type] + '</h2><p style="text-align:center;color:#cbd5e1;font-size:13px;margin-bottom:15px;">يرجى ملء جميع البيانات بدقة</p>' + fields + '<button onclick="document.getElementById(\'usModal\').remove()" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:40px;cursor:pointer;margin-top:8px;font-size:13px;">إغلاق</button></div>';
@@ -441,16 +409,11 @@
         var cv = document.getElementById('usCv').value.trim();
         var f = document.getElementById('usField').value.trim();
         var sp = document.getElementById('usSpecialty').value.trim();
-        
         var reqData = {};
-        
         if (type === 'projects') {
             var prof = document.getElementById('usProfession').value.trim();
             var topic = document.getElementById('usTopic').value.trim();
-            if (!n || !prof || !sp || !f || !topic || !ph || !e || !cv) {
-                alert('الرجاء ملء جميع الحقول المطلوبة');
-                return;
-            }
+            if (!n || !prof || !sp || !f || !topic || !ph || !e || !cv) { alert('الرجاء ملء جميع الحقول المطلوبة'); return; }
             reqData = { name: n, profession: prof, specialty: sp, field: f, topic: topic, phone: ph, email: e, cv: cv };
         } else {
             var y = document.getElementById('usYear').value.trim();
@@ -460,20 +423,14 @@
                 consultType = document.getElementById('usConsultType').value;
                 if (!consultType) { alert('الرجاء اختيار نوع الاستشارة'); return; }
             }
-            if (!n || !y || !sp || !inst || !f || !ph || !e || !cv) {
-                alert('الرجاء ملء جميع الحقول المطلوبة');
-                return;
-            }
+            if (!n || !y || !sp || !inst || !f || !ph || !e || !cv) { alert('الرجاء ملء جميع الحقول المطلوبة'); return; }
             reqData = { name: n, year: y, specialty: sp, institution: inst, field: f, phone: ph, email: e, cv: cv, consultType: consultType };
         }
-        
         var req = { id: Date.now(), type: type, date: new Date().toLocaleString('ar-TN') };
         for (var key in reqData) { req[key] = reqData[key]; }
-        
         var reqs = JSON.parse(localStorage.getItem('zaied_requests') || '[]');
         reqs.push(req);
         localStorage.setItem('zaied_requests', JSON.stringify(reqs));
-        
         alert('✅ تم حفظ طلبك بنجاح في قاعدة بيانات المنصة. سيتواصل معك المشرف قريباً.');
         var modal = document.getElementById('usModal'); if (modal) modal.remove();
     };
@@ -609,15 +566,14 @@
     window.addEventListener('load', function() {
         try {
             var u = localStorage.getItem('zaied_currentUser'), a = localStorage.getItem('zaied_admin');
-            if (a === '1') { window.isAdminMode = true; }
-            else if (u) { try { window.currentUser = JSON.parse(u); } catch(e) {} }
+            if (a === '1') { window.isAdminMode = true; document.getElementById('registerModal').style.display = 'none'; }
+            else if (u) { try { window.currentUser = JSON.parse(u); document.getElementById('registerModal').style.display = 'none'; } catch(e) {} }
         } catch(e) {}
         window.checkSubscription();
         window.updateUI();
     });
 })();
 </script>
-
 <script>
 (function(){
     'use strict';
@@ -787,17 +743,7 @@
     };
     window.__startPrimaryExercises = function() { alert('📝 التمارين في مرحلة المراجعة — قريباً'); };
 
-    window.addEventListener('load', function() {
-        var isLogged = localStorage.getItem('zaied_currentUser');
-        var isAdmin = localStorage.getItem('zaied_admin');
-        
-        if (!isLogged && isAdmin !== '1') {
-            window.showPage('pageWelcome');
-        } else {
-            window.showPage('pageHome');
-        }
-        setTimeout(function(){ window.__updateLockBadges(); }, 500);
-    });
+    setTimeout(function(){ window.__updateLockBadges(); }, 500);
 })();
 </script>
 </body>
