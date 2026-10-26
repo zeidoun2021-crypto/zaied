@@ -25,9 +25,34 @@
     .banner-content{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap}
     .banner-btn{padding:7px 18px;border-radius:25px;border:none;cursor:pointer;font-weight:bold;font-size:13px}
 
+    .logo-wrapper{position:relative;width:200px;height:200px;margin:20px auto 10px;display:flex;justify-content:center;align-items:center}
+    .outer-ring{position:absolute;width:200px;height:200px;border-radius:50%;border:4px solid #dc2626;top:0;left:0;background:rgba(255,255,255,.98);box-shadow:0 0 20px #dc2626;animation:pulse 3s ease-in-out infinite}
+    @keyframes pulse{0%,100%{box-shadow:0 0 20px #dc2626}50%{box-shadow:0 0 32px #ef4444}}
+    .rotating-flags{position:absolute;width:185px;height:185px;top:8px;left:8px;animation:rot 22s linear infinite;z-index:2}
+    @keyframes rot{100%{transform:rotate(360deg)}}
+    .rotating-flags svg{width:100%;height:100%;overflow:visible}
+    
+    .screen-wrapper{position:absolute;width:130px;height:130px;top:35px;left:35px;z-index:3}
+    .screen-body{width:100%;height:105px;background:linear-gradient(135deg,#1e293b,#0f172a);border:3px solid #dc2626;border-radius:15px;padding:4px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+    .screen-body .logo-img { width:100%; height:100%; object-fit:contain; border-radius:10px; background:#fff; position:absolute; top:0; left:0; animation: fadeImg 6s ease-in-out infinite alternate; }
+    .screen-body .logo-text { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg,#dc2626,#991b1b); border-radius:10px; color:#fff; animation: fadeTxt 6s ease-in-out infinite alternate; }
+    @keyframes fadeImg { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
+    @keyframes fadeTxt { 0%, 45% { opacity: 0; } 55%, 100% { opacity: 1; } }
+
+    .screen-stand{width:30px;height:10px;background:linear-gradient(135deg,#dc2626,#991b1b);margin:0 auto;border-radius:0 0 5px 5px}
+    .screen-base{width:70px;height:6px;background:linear-gradient(135deg,#dc2626,#991b1b);margin:0 auto;border-radius:5px}
+
+    .marquee-bar{width:100%;max-width:800px;background:linear-gradient(135deg,#dc2626,#991b1b);padding:10px;border-radius:50px;border:2px solid #fbbf24;overflow:hidden;margin:10px auto}
+    .marquee-bar marquee{color:#fff;font-weight:900;font-size:14px}
     .welcome-card{background:linear-gradient(135deg,#dc2626,#991b1b);padding:25px;border-radius:25px;text-align:center;border:4px solid #fbbf24;max-width:800px;width:100%;margin:0 auto}
     .welcome-card h2{font-size:24px;margin-bottom:10px;font-weight:900}
     
+    .btn-register-main { display:inline-block; padding:18px 50px; background:linear-gradient(135deg,#22c55e,#16a34a); color:white; font-size:22px; font-weight:900; border:4px solid #fbbf24; border-radius:50px; cursor:pointer; box-shadow:0 8px 20px rgba(34,197,94,0.4); transition:0.3s; }
+    .btn-register-main:hover { transform:scale(1.05); box-shadow:0 12px 25px rgba(34,197,94,0.6); }
+
+    #visitorGateway{max-width:800px;width:100%;margin:20px auto;background:#fff;border:4px solid #dc2626;border-radius:25px;padding:30px;box-shadow:0 15px 50px rgba(220,38,38,.3)}
+    #visitorGateway h2{color:#dc2626;text-align:center;font-size:24px;margin:8px 0;font-weight:900}
+    .gw-err{display:none;color:#991b1b;background:#fee2e2;padding:10px;border-radius:12px;font-size:13px;margin-bottom:12px;text-align:center;border:2px solid #dc2626;font-weight:700}
     .gw-input{display:block !important;width:100% !important;padding:14px 18px !important;margin-bottom:10px !important;border:2px solid #cbd5e1 !important;border-radius:25px !important;background:#f8fafc !important;color:#0f172a !important;font-size:14px !important;font-weight:600 !important;box-sizing:border-box !important}
     .gw-input:focus{outline:none !important;border-color:#dc2626 !important;background:#fff !important}
     .gw-submit{display:block !important;width:100% !important;padding:16px !important;background:linear-gradient(135deg,#dc2626,#991b1b) !important;color:#fff !important;border:3px solid #fbbf24 !important;border-radius:40px !important;font-weight:900 !important;font-size:17px !important;cursor:pointer !important;margin-top:15px !important}
@@ -60,8 +85,6 @@
     .sub-price-box { background:#0f172a; border-radius:15px; padding:14px; margin:10px 0; }
 
     #protectionToast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#dc2626; color:#fff; padding:12px 25px; border-radius:40px; font-weight:900; z-index:9999999; box-shadow:0 8px 20px rgba(0,0,0,0.5); border:2px solid #fbbf24; font-size:14px; display:none; }
-
-    #registerModal { display: flex !important; }
 
     .tech-slide { background:#f8fafc;border-radius:25px;padding:25px;margin:15px 0;color:#1e293b;position:relative; }
     .tech-slide-num { display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:6px 18px;border-radius:20px;font-size:14px;font-weight:bold;margin-bottom:20px; }
@@ -104,14 +127,56 @@
         <span id="bannerIcon">🎭</span>
         <span id="bannerText">مرحباً — أنت زائر</span>
         <button class="banner-btn" id="bannerRegisterBtn" onclick="window.scrollToRegister()" style="background:#fbbf24;color:#1e293b;">🔑 سجّل مجاناً</button>
-        <button class="banner-btn" id="bannerSubsBtn" onclick="window.showSubscribePrompt()" style="display:none;background:#22c55e;color:white;">💳 اشترك</button>
+        <button class="banner-btn" id="bannerSubsBtn" onclick="window.showSubscribePrompt()" style="display:none;background:#22c55e;color:white;">💳 اشترك الآن</button>
         <button class="banner-btn" id="bannerLogoutBtn" onclick="window.logoutUser()" style="display:none;background:#dc2626;color:white;">🚪 خروج</button>
-        <button class="banner-btn" onclick="window.exitPlatform()" style="background:#991b1b;color:white;border:1px solid #fbbf24;">⏻ خروج</button>
+        <button class="banner-btn" onclick="window.exitPlatform()" style="background:#991b1b;color:white;border:1px solid #fbbf24;">⏻ خروج من المنصة</button>
     </div>
 </div>
 
 <div class="container">
-    <div id="pageHome" style="display:none;">
+    <!-- صفحة الاستقبال والتسجيل (تظهر دائماً أولاً) -->
+    <div id="pageWelcome">
+        <div class="logo-wrapper">
+            <div class="outer-ring"></div>
+            <div class="rotating-flags">
+                <svg viewBox="0 0 185 185"><defs><g id="tunisiaFlag"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="white" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="white"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="white"/></g></defs><use xlink:href="#tunisiaFlag" x="92" y="12"/><use xlink:href="#tunisiaFlag" x="160" y="54"/><use xlink:href="#tunisiaFlag" x="160" y="132"/><use xlink:href="#tunisiaFlag" x="92" y="174"/><use xlink:href="#tunisiaFlag" x="24" y="132"/><use xlink:href="#tunisiaFlag" x="24" y="54"/></svg>
+            </div>
+            <div class="screen-wrapper">
+                <div class="screen-body">
+                    <img src="my-photo.jpg" alt="محمد زايد" class="logo-img">
+                    <div class="logo-text">
+                        <span style="font-size:16px;font-weight:900;color:#fbbf24;">منصة</span>
+                        <span style="font-size:24px;font-weight:900;color:#fff;">زايد</span>
+                    </div>
+                </div>
+                <div class="screen-stand"></div>
+                <div class="screen-base"></div>
+            </div>
+        </div>
+        <div class="marquee-bar"><marquee>🌟 منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس 🌟 محمد زايد - خبير دولي - تونس 🇹🇳 🌟</marquee></div>
+        <div class="welcome-card">
+            <h2>مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وبحثا علميا</h2>
+            <div style="margin-top:20px;"><button class="btn-register-main" onclick="window.scrollToRegister()">🔑 سجّلوا مجاناً</button></div>
+        </div>
+        <div id="visitorGateway">
+            <div style="text-align:center;font-size:45px;">👋</div>
+            <h2>🔑 التسجيل المجاني</h2>
+            <div class="gw-err" id="gwError"></div>
+            <input class="gw-input" id="gwName" placeholder="👤 الاسم الكامل (ثلاثي) *">
+            <input class="gw-input" id="gwProfession" placeholder="💼 المهنة *">
+            <input class="gw-input" id="gwSpecialty" placeholder="🎯 الاختصاص *">
+            <input class="gw-input" id="gwEmail" type="email" placeholder="📧 البريد الإلكتروني *">
+            <input class="gw-input" id="gwPhone" type="tel" placeholder="📱 رقم الواتساب *">
+            <input class="gw-input" id="gwCountry" placeholder="🌍 بلد الإقامة *" value="تونس">
+            <input class="gw-input" id="gwCity" placeholder="🏙️ المدينة *">
+            <div class="radio-group" id="gwCategories"></div>
+            <button class="gw-submit" onclick="window.submitVisitorGateway()">🔑 ابدأ الآن مجاناً</button>
+            <div style="text-align:center; margin-top:15px;"><button onclick="window.showAdminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;">👑 دخول المشرف</button></div>
+        </div>
+    </div>
+
+    <!-- الأقسام (مخفية في البداية) -->
+    <div id="pageHome" class="hide">
         <div class="welcome-card" style="margin-bottom:20px;"><h2>🌟 مرحباً <span id="welcomeName">بك</span> 🌟</h2></div>
         <div class="main-sections-grid">
             <div class="main-section-card education">
@@ -161,24 +226,6 @@
     <div id="pageLessonViewer" class="hide"></div>
 </div>
 
-<div id="registerModal" class="sub-modal">
-    <div class="sub-modal-inner" style="max-width:600px; background:#fff; color:#0f172a;">
-        <div style="text-align:center;font-size:45px;">👋</div>
-        <h2 style="color:#dc2626;text-align:center;margin:8px 0;font-weight:900;">🔑 التسجيل المجاني للدخول</h2>
-        <div class="gw-err" id="gwError" style="display:none;color:#991b1b;background:#fee2e2;padding:10px;border-radius:12px;font-size:13px;margin-bottom:12px;text-align:center;border:2px solid #dc2626;font-weight:700"></div>
-        <input class="gw-input" id="gwName" placeholder="👤 الاسم الكامل (ثلاثي) *">
-        <input class="gw-input" id="gwProfession" placeholder="💼 المهنة *">
-        <input class="gw-input" id="gwSpecialty" placeholder="🎯 الاختصاص *">
-        <input class="gw-input" id="gwEmail" type="email" placeholder="📧 البريد الإلكتروني *">
-        <input class="gw-input" id="gwPhone" type="tel" placeholder="📱 رقم الواتساب *">
-        <input class="gw-input" id="gwCountry" placeholder="🌍 بلد الإقامة *" value="تونس">
-        <input class="gw-input" id="gwCity" placeholder="🏙️ المدينة *">
-        <div class="radio-group" id="gwCategories"></div>
-        <button class="gw-submit" onclick="window.submitVisitorGateway()">🔑 ابدأ الآن مجاناً</button>
-        <div style="text-align:center; margin-top:15px;"><button onclick="window.showAdminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;">👑 دخول المشرف</button></div>
-    </div>
-</div>
-
 <script>
 (function(){
     window.currentUser = null;
@@ -217,7 +264,7 @@
     };
     
     window.goToHome = function() {
-        window.showPage('pageHome');
+        window.showPage((window.currentUser || window.isAdminMode) ? 'pageHome' : 'pageWelcome');
     };
     
     window.submitVisitorGateway = function() {
@@ -236,8 +283,7 @@
         }
         window.currentUser = { name: n, profession: p, specialty: sp, email: e, phone: w, country: c, city: city, category: cat };
         localStorage.setItem('zaied_currentUser', JSON.stringify(window.currentUser));
-        document.getElementById('registerModal').style.display = 'none';
-        document.getElementById('pageHome').style.display = 'block';
+        window.showPage('pageHome');
         document.getElementById('welcomeName').textContent = n;
         window.updateUI();
     };
@@ -248,9 +294,7 @@
         window.currentUser = null;
         window.isAdminMode = false;
         window.updateUI();
-        document.getElementById('registerModal').style.display = 'flex';
-        document.getElementById('pageHome').style.display = 'none';
-        window.goToHome();
+        window.showPage('pageWelcome');
     };
     
     window.exitPlatform = function() {
@@ -321,8 +365,7 @@
                 window.isAdminMode = true;
                 localStorage.setItem('zaied_admin', '1');
                 modal.remove();
-                document.getElementById('registerModal').style.display = 'none';
-                document.getElementById('pageHome').style.display = 'block';
+                window.showPage('pageHome');
                 window.updateUI();
             } else {
                 document.getElementById('adminErr').style.display = 'block';
@@ -330,7 +373,10 @@
         };
     };
     
-    window.scrollToRegister = function() { document.getElementById('registerModal').style.display = 'flex'; };
+    window.scrollToRegister = function() { 
+        var el = document.getElementById('visitorGateway');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
     
     window.speak = function(text, lang) {
         if (!text) return;
@@ -502,18 +548,6 @@
         var el = document.getElementById('adminCodesList'); if (el) el.innerHTML = html;
     };
     
-    window.openAdminStats = function() {
-        if (!window.isAdminMode) { alert('للمشرف فقط'); return; }
-        var totalVisitors = localStorage.getItem('zaied_totalVisitors') || '1,245';
-        var totalUsers = localStorage.getItem('zaied_totalUsers') || '156';
-        var totalSubscribers = localStorage.getItem('zaied_totalSubs') || '42';
-        var old = document.getElementById('adminStatsModal'); if (old) old.remove();
-        var m = document.createElement('div'); m.id = 'adminStatsModal';
-        m.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
-        m.innerHTML = `<div style="background:#1e293b;border-radius:25px;padding:25px;max-width:600px;width:100%;border:3px solid #f59e0b;color:#fff;box-sizing:border-box;"><div style="text-align:center;font-size:45px;">📊</div><h2 style="color:#fbbf24;text-align:center;margin:10px 0;font-size:19px;">لوحة الإحصائيات</h2><div style="display:grid; grid-template-columns:repeat(3,1fr); gap:15px; margin-top:20px;"><div style="background:#0f172a; padding:15px; border-radius:15px; text-align:center;"><div style="font-size:12px; color:#94a3b8;">الزوار</div><div style="font-size:24px; color:#3b82f6; font-weight:900;">${totalVisitors}</div></div><div style="background:#0f172a; padding:15px; border-radius:15px; text-align:center;"><div style="font-size:12px; color:#94a3b8;">المسجلين</div><div style="font-size:24px; color:#22c55e; font-weight:900;">${totalUsers}</div></div><div style="background:#0f172a; padding:15px; border-radius:15px; text-align:center;"><div style="font-size:12px; color:#94a3b8;">المشتركين</div><div style="font-size:24px; color:#fbbf24; font-weight:900;">${totalSubscribers}</div></div></div><button onclick="document.getElementById('adminStatsModal').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:40px;cursor:pointer;margin-top:20px;">إغلاق</button></div>`;
-        document.body.appendChild(m);
-    };
-    
     window.showToast = function(msg) {
         var t = document.getElementById('protectionToast');
         if (!t) { t = document.createElement('div'); t.id = 'protectionToast'; document.body.appendChild(t); }
@@ -534,21 +568,27 @@
     window.addEventListener('load', function() {
         try {
             var u = localStorage.getItem('zaied_currentUser'), a = localStorage.getItem('zaied_admin');
-            if (a === '1') { window.isAdminMode = true; document.getElementById('registerModal').style.display = 'none'; document.getElementById('pageHome').style.display = 'block'; }
-            else if (u) { window.currentUser = JSON.parse(u); document.getElementById('registerModal').style.display = 'none'; document.getElementById('pageHome').style.display = 'block'; document.getElementById('welcomeName').textContent = window.currentUser.name; }
-            else { document.getElementById('registerModal').style.display = 'flex'; document.getElementById('pageHome').style.display = 'none'; }
-        } catch(e) { document.getElementById('registerModal').style.display = 'flex'; }
+            if (a === '1') {
+                window.isAdminMode = true;
+                window.showPage('pageHome');
+            } else if (u) {
+                window.currentUser = JSON.parse(u);
+                document.getElementById('welcomeName').textContent = window.currentUser.name;
+                window.showPage('pageHome');
+            } else {
+                window.showPage('pageWelcome');
+            }
+        } catch(e) { window.showPage('pageWelcome'); }
         window.checkSubscription();
         window.updateUI();
     });
 })();
 </script>
+
 <script>
 (function(){
-    'use strict';
     var pageChildrenTech = document.getElementById('pageChildrenTech');
     if (!pageChildrenTech) return;
-    
     pageChildrenTech.innerHTML = `
         <button class="back-btn" onclick="window.goToHome()">🔙 العودة</button>
         <div class="welcome-card" style="margin:15px 0;"><h2>📖 التربية التكنولوجية</h2><p>اختر المحور</p></div>
