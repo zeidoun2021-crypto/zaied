@@ -2,590 +2,569 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<script>try{localStorage.clear();sessionStorage.clear();}catch(e){}</script>
+<script>try{var _j=localStorage.getItem('zaid_jobs');localStorage.clear();sessionStorage.clear();if(_j)localStorage.setItem('zaid_jobs',_j);}catch(e){}</script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Cairo,sans-serif}
 html,body{height:100%;overflow:hidden}
 body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;display:flex;flex-direction:column}
 .hide{display:none!important}
-
-/* الشريط العلوي */
-#topBanner{background:linear-gradient(135deg,#64748b,#475569);padding:8px 12px;text-align:center;font-weight:bold;font-size:13px;border-bottom:3px solid #fbbf24;flex-shrink:0;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
-#topBanner.registered{background:linear-gradient(135deg,#3b82f6,#1e40af)}
-#topBanner.admin{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
-.banner-btn{padding:4px 12px;border-radius:15px;border:none;cursor:pointer;font-weight:900;font-size:11px;font-family:Cairo}
-
-/* الشريط الأصفر */
-#yellowBanner{position:fixed;top:0;left:0;right:0;z-index:999999;background:linear-gradient(90deg,#f59e0b,#fbbf24,#fcd34d,#fbbf24,#f59e0b);color:#7f1d1d;height:40px;display:none;align-items:center;overflow:hidden;border-bottom:3px solid #dc2626}
-.banner-text-wrap{flex:1;overflow:hidden;position:relative;height:100%}
-.banner-text{position:absolute;white-space:nowrap;font-size:13px;line-height:40px;animation:scrollBannerText 20s linear infinite;font-weight:900}
-@keyframes scrollBannerText{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
-.btn-register-yellow{background:#22c55e;color:#fff;border:2px solid #fff;border-radius:20px;padding:3px 12px;font-weight:900;font-size:11px;cursor:pointer;margin:0 10px}
-
-.container{flex:1;overflow-y:auto;padding:15px;display:flex;justify-content:center;align-items:flex-start}
-
-/* صفحة الترحيب */
+#top{background:linear-gradient(135deg,#64748b,#475569);padding:8px;text-align:center;font-size:12px;border-bottom:3px solid #fbbf24;flex-shrink:0;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap}
+#top.reg{background:linear-gradient(135deg,#3b82f6,#1e40af)}
+#top.adm{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
+#top button{padding:4px 12px;border-radius:15px;border:none;cursor:pointer;font-weight:900;font-size:11px;font-family:Cairo}
+#yellow{position:fixed;top:0;left:0;right:0;z-index:999;background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b);height:40px;display:none;align-items:center;overflow:hidden;border-bottom:3px solid #dc2626}
+.yw{flex:1;overflow:hidden;position:relative;height:100%}
+.yt{position:absolute;white-space:nowrap;font-size:12px;line-height:40px;animation:ys 20s linear infinite;font-weight:900;color:#7f1d1d}
+@keyframes ys{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+#yellow button{background:#22c55e;color:#fff;border:2px solid #fff;border-radius:20px;padding:3px 12px;font-weight:900;font-size:11px;cursor:pointer;margin:0 10px}
+#main{flex:1;overflow-y:auto;padding:15px;display:flex;justify-content:center;align-items:flex-start}
 #pageWelcome{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:1000px;align-content:center;min-height:100%}
 @media(max-width:800px){#pageWelcome{grid-template-columns:1fr}}
-.welcome-left{display:flex;flex-direction:column;justify-content:center;align-items:center}
-
-/* اللوقو الأصلي (TV مع أعلام تونس) */
-.logo-wrapper{position:relative;width:180px;height:180px;margin:0 auto 10px;display:flex;justify-content:center;align-items:center}
-.outer-ring{position:absolute;width:180px;height:180px;border-radius:50%;border:4px solid #dc2626;top:0;left:0;background:rgba(255,255,255,.98);box-shadow:0 0 20px #dc2626;animation:pulse 3s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 20px #dc2626}50%{box-shadow:0 0 32px #ef4444}}
-.rotating-flags{position:absolute;width:165px;height:165px;top:8px;left:8px;animation:rot 22s linear infinite;z-index:2}
-@keyframes rot{100%{transform:rotate(360deg)}}
-.rotating-flags svg{width:100%;height:100%;overflow:visible}
-.screen-wrapper{position:absolute;width:115px;height:115px;top:33px;left:33px;z-index:3}
-.screen-body{width:100%;height:92px;background:linear-gradient(135deg,#1e293b,#0f172a);border:3px solid #dc2626;border-radius:15px;padding:3px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
-.screen-body .logo-img{width:100%;height:100%;object-fit:contain;border-radius:10px;background:#fff;position:absolute;top:0;left:0;animation:fadeImg 6s ease-in-out infinite alternate}
-.screen-body .logo-text{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#dc2626,#991b1b);border-radius:10px;color:#fff;animation:fadeTxt 6s ease-in-out infinite alternate}
-@keyframes fadeImg{0%,45%{opacity:1}55%,100%{opacity:0}}
-@keyframes fadeTxt{0%,45%{opacity:0}55%,100%{opacity:1}}
-.screen-stand{width:26px;height:9px;background:linear-gradient(135deg,#dc2626,#991b1b);margin:0 auto;border-radius:0 0 5px 5px}
-.screen-base{width:60px;height:5px;background:linear-gradient(135deg,#dc2626,#991b1b);margin:0 auto;border-radius:5px}
-
-/* الشريط الأحمر المتحرك */
-.marquee-bar{width:100%;max-width:450px;background:linear-gradient(135deg,#dc2626,#991b1b);padding:8px;border-radius:50px;border:2px solid #fbbf24;overflow:hidden;margin:10px auto}
-.marquee-bar marquee{color:#fff;font-weight:900;font-size:12px}
-.welcome-text{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px 20px;border-radius:20px;text-align:center;border:4px solid #fbbf24;font-size:14px;line-height:1.7;font-weight:900;max-width:450px}
-
-/* نموذج التسجيل */
-#visitorGateway{background:#fff;border:3px solid #dc2626;border-radius:20px;padding:15px;max-width:460px;width:100%;color:#0f172a;margin:0 auto}
-#visitorGateway h2{color:#dc2626;text-align:center;font-size:17px;margin-bottom:8px;font-weight:900}
-.gw-err{display:none;color:#991b1b;background:#fee2e2;padding:6px;border-radius:8px;font-size:11px;text-align:center;border:2px solid #dc2626;font-weight:700;margin-bottom:6px}
-.gw-input{display:block!important;width:100%!important;padding:8px 15px!important;margin-bottom:6px!important;border:2px solid #cbd5e1!important;border-radius:20px!important;background:#f8fafc!important;color:#0f172a!important;font-size:12px!important;font-weight:600!important;box-sizing:border-box!important;height:34px!important}
-.gw-input:focus{outline:none!important;border-color:#dc2626!important;background:#fff!important}
-.gw-submit{display:block!important;width:100%!important;padding:10px!important;background:linear-gradient(135deg,#dc2626,#991b1b)!important;color:#fff!important;border:2px solid #fbbf24!important;border-radius:30px!important;font-weight:900!important;font-size:14px!important;cursor:pointer!important;margin-top:8px!important}
-.radio-group{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:5px!important;margin:6px 0!important}
-.radio-group label{display:inline-block!important;background:#fee2e2!important;color:#991b1b!important;padding:5px 12px!important;border-radius:20px!important;font-weight:900!important;cursor:pointer!important;border:2px solid transparent!important;font-size:11px!important}
-
-/* صفحة الأقسام */
+.col{display:flex;flex-direction:column;justify-content:center;align-items:center}
+.logo{position:relative;width:180px;height:180px;margin:0 auto 10px}
+.ring{position:absolute;width:180px;height:180px;border-radius:50%;border:4px solid #dc2626;background:rgba(255,255,255,.98);box-shadow:0 0 20px #dc2626;animation:pl 3s infinite}
+@keyframes pl{50%{box-shadow:0 0 32px #ef4444}}
+.flags{position:absolute;width:165px;height:165px;top:8px;left:8px;animation:rt 22s linear infinite;z-index:2}
+@keyframes rt{100%{transform:rotate(360deg)}}
+.tv{position:absolute;width:115px;height:115px;top:33px;left:33px;z-index:3}
+.tvb{width:100%;height:92px;background:#1e293b;border:3px solid #dc2626;border-radius:15px;overflow:hidden;position:relative}
+.tvb img{width:100%;height:100%;object-fit:contain;background:#fff;position:absolute;animation:fi 6s infinite alternate}
+.tvt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#dc2626,#991b1b);animation:ft 6s infinite alternate}
+@keyframes fi{0%,45%{opacity:1}55%,100%{opacity:0}}
+@keyframes ft{0%,45%{opacity:0}55%,100%{opacity:1}}
+.tvs{width:26px;height:9px;background:#dc2626;margin:0 auto;border-radius:0 0 5px 5px}
+.tvb2{width:60px;height:5px;background:#dc2626;margin:0 auto;border-radius:5px}
+.marq{width:100%;max-width:450px;background:linear-gradient(135deg,#dc2626,#991b1b);padding:8px;border-radius:50px;border:2px solid #fbbf24;overflow:hidden;margin:10px auto}
+.marq marquee{color:#fff;font-weight:900;font-size:12px}
+.wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:20px;text-align:center;border:4px solid #fbbf24;font-size:14px;line-height:1.7;font-weight:900;max-width:450px}
+#gw{background:#fff;border:3px solid #dc2626;border-radius:20px;padding:15px;max-width:460px;width:100%;color:#0f172a;margin:0 auto}
+#gw h2{color:#dc2626;text-align:center;font-size:17px;margin-bottom:8px;font-weight:900}
+.err{display:none;color:#991b1b;background:#fee2e2;padding:6px;border-radius:8px;font-size:11px;text-align:center;border:2px solid #dc2626;font-weight:700;margin-bottom:6px}
+.inp{display:block;width:100%;padding:8px 15px;margin-bottom:6px;border:2px solid #cbd5e1;border-radius:20px;background:#f8fafc;color:#0f172a;font-size:12px;font-weight:600;box-sizing:border-box;height:34px}
+.inp:focus{outline:none;border-color:#dc2626;background:#fff}
+select.inp,textarea.inp{height:auto;min-height:34px;padding:8px 15px}
+textarea.inp{min-height:70px;resize:vertical}
+.sbt{display:block;width:100%;padding:10px;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:2px solid #fbbf24;border-radius:30px;font-weight:900;font-size:14px;cursor:pointer;margin-top:8px;font-family:Cairo}
+.cats{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin:6px 0}
+.cat{background:#fee2e2;color:#991b1b;padding:5px 12px;border-radius:20px;font-weight:900;cursor:pointer;font-size:11px;border:2px solid transparent}
+.cat.on{background:#dc2626;color:#fff;border-color:#fbbf24}
 #pageHome{width:100%;max-width:1300px;display:flex;flex-direction:column;gap:8px}
-.home-title{background:linear-gradient(135deg,#dc2626,#991b1b);padding:8px 15px;border-radius:12px;text-align:center;border:3px solid #fbbf24;font-size:15px;font-weight:900}
-.sections{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-@media(max-width:1100px){.sections{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.sections{grid-template-columns:1fr}}
-.card{border-radius:12px;padding:10px;display:flex;flex-direction:column;min-height:0}
-.card.education{background:linear-gradient(135deg,#14532d,#166534);border:2px solid #22c55e}
-.card.research{background:linear-gradient(135deg,#1e3a8a,#1e40af);border:2px solid #3b82f6}
-.card.ai{background:linear-gradient(135deg,#4c1d95,#6d28d9);border:2px solid #fbbf24}
-.card.services{background:linear-gradient(135deg,#831843,#9d174d);border:2px solid #fbbf24}
-.card-icon{font-size:30px;text-align:center;margin-bottom:4px}
-.card-title{font-size:12px;font-weight:900;color:#fbbf24;text-align:center;margin-bottom:6px}
+.htitle{background:linear-gradient(135deg,#dc2626,#991b1b);padding:8px 15px;border-radius:12px;text-align:center;border:3px solid #fbbf24;font-size:15px;font-weight:900}
+.secs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.card{border-radius:12px;padding:10px;display:flex;flex-direction:column}
+.c-edu{background:linear-gradient(135deg,#14532d,#166534);border:2px solid #22c55e}
+.c-res{background:linear-gradient(135deg,#1e3a8a,#1e40af);border:2px solid #3b82f6}
+.c-ai{background:linear-gradient(135deg,#4c1d95,#6d28d9);border:2px solid #fbbf24}
+.c-srv{background:linear-gradient(135deg,#831843,#9d174d);border:2px solid #fbbf24}
+.c-job{background:linear-gradient(135deg,#0e7490,#155e75);border:2px solid #06b6d4}
+.ci{font-size:30px;text-align:center;margin-bottom:4px}
+.ct{font-size:12px;font-weight:900;color:#fbbf24;text-align:center;margin-bottom:6px}
 .card ul{list-style:none;flex:1}
-.card li{background:rgba(255,255,255,.1);padding:6px 8px;border-radius:8px;margin-bottom:3px;font-size:11px;font-weight:700;cursor:pointer;color:#fff}
+.card li{background:rgba(255,255,255,.1);padding:6px 8px;border-radius:8px;margin-bottom:3px;font-size:11px;font-weight:700;cursor:pointer}
 .card li:hover{background:rgba(251,191,36,.25)}
-.home-btns{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+.hbtns{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:4px}
 .btn{padding:8px 18px;border:none;border-radius:20px;font-family:Cairo;font-size:12px;font-weight:900;cursor:pointer;color:#fff}
-.btn-green{background:#22c55e}
-.btn-gray{background:#334155}
-
-/* صفحة الدرس */
-.lesson-page{max-width:900px;width:100%;margin:0 auto}
-.btn-back{background:#334155;color:#fff;padding:8px 20px;border-radius:20px;border:none;cursor:pointer;font-weight:900;margin-bottom:10px;font-size:12px;font-family:Cairo}
-.lesson-card{background:linear-gradient(135deg,#16a34a,#14532d);border:3px solid #fbbf24;border-radius:15px;padding:15px;text-align:center;cursor:pointer;color:white}
-.lesson-card:hover{transform:translateY(-2px)}
-.lesson-icon{font-size:45px;margin-bottom:6px}
-.lesson-title{font-size:15px;font-weight:900;color:#fbbf24;margin-bottom:4px}
-.lesson-desc{font-size:11px;color:#cbd5e1}
-
-/* الشرائح */
-.tech-slide{background:#f8fafc;border-radius:15px;padding:15px;margin:8px 0;color:#1e293b}
-.tech-slide-num{display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:bold;margin-bottom:10px}
-.tech-slide-title{font-size:18px;font-weight:900;color:#dc2626;text-align:center;margin-bottom:10px}
-.tech-image{background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-radius:12px;padding:8px;margin:10px 0;text-align:center;border:2px dashed #3b82f6}
-.tech-image img{max-width:100%;max-height:200px;border-radius:8px}
-.tech-text{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:10px;border-radius:12px;margin:8px 0;border-right:4px solid #f59e0b;font-size:13px;line-height:1.7;color:#78350f;font-weight:600}
-.tech-text strong{color:#dc2626;font-weight:900}
-.tech-translation{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-radius:12px;padding:8px;margin:8px 0;text-align:center;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.tech-translation>div{background:white;padding:6px;border-radius:8px}
-.tech-translation .lbl{font-size:9px;color:#94a3b8;margin-bottom:2px;font-weight:bold}
-.tech-translation .ar{color:#dc2626;font-size:13px;font-weight:900}
-.tech-translation .fr{color:#1e88e5;font-size:11px;font-weight:700}
-.tech-translation .en{color:#16a34a;font-size:11px;font-weight:700}
-.tech-speak-btns{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
-.tech-speak-btn{padding:5px 12px;border:none;border-radius:18px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;color:white}
-.tech-speak-ar{background:linear-gradient(135deg,#dc2626,#991b1b)}
-.tech-speak-fr{background:linear-gradient(135deg,#1e88e5,#0d47a1)}
-.tech-speak-en{background:linear-gradient(135deg,#16a34a,#15803d)}
-.tech-nav{display:flex;gap:6px;margin:10px auto;justify-content:center;flex-wrap:wrap}
-.tech-nav-btn{padding:8px 18px;border:none;border-radius:20px;font-family:Cairo;font-weight:900;font-size:12px;cursor:pointer;color:white}
-.tech-prev{background:linear-gradient(135deg,#3b82f6,#1e40af)}
-.tech-next{background:linear-gradient(135deg,#22c55e,#16a34a)}
-.tech-exit{background:linear-gradient(135deg,#f59e0b,#b45309)}
-.tech-progress{background:#334155;height:5px;border-radius:5px;overflow:hidden;margin:6px auto;max-width:900px}
-.tech-progress-fill{background:linear-gradient(90deg,#fbbf24,#22c55e);height:100%;width:0%}
-.tech-dialogue-child{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border-right:3px solid #3b82f6;padding:6px 10px;border-radius:10px;margin:5px 0;font-size:12px;font-weight:600}
-.tech-dialogue-computer{background:linear-gradient(135deg,#fce7f3,#fbcfe8);color:#9f1239;border-right:3px solid #e91e63;padding:6px 10px;border-radius:10px;margin:5px 0;font-size:12px;font-weight:600}
-.exam-option{display:block;width:100%;padding:10px;margin:6px 0;border:2px solid #475569;border-radius:10px;background:#f1f5f9;color:#1e293b;font-size:13px;font-weight:900;cursor:pointer;font-family:Cairo}
-.exam-option:hover{background:#e2e8f0}
-.tech-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:12px 0}
+.bg{background:#22c55e}.bgr{background:#334155}
+#lesson{max-width:900px;width:100%;margin:0 auto}
+.back{background:#334155;color:#fff;padding:8px 20px;border-radius:20px;border:none;cursor:pointer;font-weight:900;margin-bottom:10px;font-size:12px;font-family:Cairo}
+.lcard{background:linear-gradient(135deg,#16a34a,#14532d);border:3px solid #fbbf24;border-radius:15px;padding:15px;text-align:center;cursor:pointer;margin-bottom:8px}
+.lcard.r{background:linear-gradient(135deg,#dc2626,#991b1b)}
+.lcard.p{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
+.lcard.j{background:linear-gradient(135deg,#0e7490,#155e75);border-color:#06b6d4}
+.li{font-size:45px;margin-bottom:6px}
+.lt{font-size:15px;font-weight:900;color:#fbbf24;margin-bottom:4px}
+.ld{font-size:11px;color:#cbd5e1}
+.sel{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:12px 0}
+.slide{background:#f8fafc;border-radius:15px;padding:15px;margin:8px 0;color:#1e293b}
+.sn{display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:bold;margin-bottom:10px}
+.st{font-size:18px;font-weight:900;color:#dc2626;text-align:center;margin-bottom:10px}
+.simg{background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-radius:12px;padding:8px;margin:10px 0;text-align:center;border:2px dashed #3b82f6}
+.simg img{max-width:100%;max-height:200px;border-radius:8px}
+.stxt{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:10px;border-radius:12px;margin:8px 0;border-right:4px solid #f59e0b;font-size:13px;line-height:1.9;color:#78350f;font-weight:600}
+.stxt strong{color:#dc2626;font-weight:900}
+.strans{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-radius:12px;padding:8px;margin:8px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}
+.strans>div{background:#fff;padding:6px;border-radius:8px}
+.strans .lbl{font-size:9px;color:#94a3b8;margin-bottom:2px;font-weight:bold}
+.strans .ar{color:#dc2626;font-size:13px;font-weight:900}
+.strans .fr{color:#1e88e5;font-size:11px;font-weight:700}
+.strans .en{color:#16a34a;font-size:11px;font-weight:700}
+.dc{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border-right:3px solid #3b82f6;padding:6px 10px;border-radius:10px;margin:5px 0;font-size:12px;font-weight:600}
+.dm{background:linear-gradient(135deg,#fce7f3,#fbcfe8);color:#9f1239;border-right:3px solid #e91e63;padding:6px 10px;border-radius:10px;margin:5px 0;font-size:12px;font-weight:600}
+.sb{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.spb{padding:5px 12px;border:none;border-radius:18px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;color:#fff}
+.sp-ar{background:linear-gradient(135deg,#dc2626,#991b1b)}
+.sp-fr{background:linear-gradient(135deg,#1e88e5,#0d47a1)}
+.sp-en{background:linear-gradient(135deg,#16a34a,#15803d)}
+.nav{display:flex;gap:6px;margin:10px auto;justify-content:center;flex-wrap:wrap}
+.nbtn{padding:8px 18px;border:none;border-radius:20px;font-family:Cairo;font-weight:900;font-size:12px;cursor:pointer;color:#fff}
+.np{background:linear-gradient(135deg,#3b82f6,#1e40af)}
+.nn{background:linear-gradient(135deg,#22c55e,#16a34a)}
+.ne{background:linear-gradient(135deg,#f59e0b,#b45309)}
+.prog{background:#334155;height:5px;border-radius:5px;overflow:hidden;margin:6px auto;max-width:900px}
+.progf{background:linear-gradient(90deg,#fbbf24,#22c55e);height:100%;width:0;transition:.3s}
+.opt{display:block;width:100%;padding:10px;margin:6px 0;border:2px solid #475569;border-radius:10px;background:#f1f5f9;color:#1e293b;font-size:13px;font-weight:900;cursor:pointer;font-family:Cairo}
+.opt:hover{background:#e2e8f0}
+.cert{background:linear-gradient(135deg,#fffef5,#fef3c7);border:6px double #dc2626;border-radius:15px;padding:25px;text-align:center;color:#0f172a;margin:15px 0}
+.cert h1{color:#dc2626;font-size:24px;margin-bottom:8px}
+.cert h2{color:#991b1b;font-size:22px;margin:12px 0;border-bottom:2px solid #fbbf24;display:inline-block;padding-bottom:4px}
+.cert p{font-size:14px;margin:6px 0;line-height:1.7}
+.cert .sign{margin-top:15px;font-size:12px;color:#475569}
+.svcard{background:linear-gradient(135deg,#831843,#9d174d);border:3px solid #fbbf24;border-radius:15px;padding:15px;color:#fff;margin:8px 0;text-align:center}
+.svcard h3{color:#fbbf24;font-size:16px;margin-bottom:6px}
+.svcard p{font-size:13px;margin-bottom:8px}
+.svcard button{padding:8px 20px;background:#22c55e;color:#fff;border:none;border-radius:20px;font-weight:900;cursor:pointer;font-family:Cairo}
+.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:900;color:#fff}
+.lvl-a{background:#64748b}.lvl-b{background:#3b82f6}.lvl-c{background:#22c55e}.lvl-d{background:#f59e0b}.lvl-e{background:#dc2626}
+.job-info{background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border-right:4px solid #0e7490;padding:12px;border-radius:12px;margin:8px 0;color:#134e4a;font-size:13px;line-height:2}
+.job-info strong{color:#0e7490;font-weight:900}
+.job-overview{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-right:4px solid #3b82f6;padding:12px;border-radius:12px;margin:8px 0;color:#1e3a8a;font-size:13px;line-height:1.8}
+.job-overview strong{color:#1e40af;font-weight:900}
+.apply-btn{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:10px 22px;border:2px solid #fbbf24;border-radius:20px;font-weight:900;cursor:pointer;font-family:Cairo;font-size:13px}
+.del-btn{background:#dc2626;color:#fff;padding:6px 14px;border:none;border-radius:15px;font-weight:900;cursor:pointer;font-family:Cairo;font-size:11px;margin-right:6px}
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.mem .mc{background:#334155;padding:15px;border-radius:8px;text-align:center;font-size:24px;cursor:pointer;color:transparent;user-select:none}
+.mem .mc.on{background:#22c55e;color:#fff}
+.mem .mc.done{background:#fbbf24;color:#fff;cursor:default}
+.mem .mc:hover:not(.done){background:#475569}
 </style>
 </head>
 <body>
 
-<div id="yellowBanner">
-    <div class="banner-text-wrap"><div class="banner-text">🔒 لا يمكنك الدخول إلى المنصة إلا بعد التسجيل &nbsp;•&nbsp; التسجيل مجاني تماماً &nbsp;•&nbsp; سجّل الآن واستمتع بكل المحتوى &nbsp;•&nbsp; منصة زايد</div></div>
-    <button class="btn-register-yellow" onclick="showPage('pageWelcome')">🔑 سجّل الآن مجاناً</button>
+<div id="yellow">
+<div class="yw"><div class="yt">🔒 التسجيل مجاني • سجّل الآن واستمتع بكل المحتوى • منصة زايد</div></div>
+<button onclick="ZAID.showPage('pageWelcome')">🔑 سجّل</button>
 </div>
 
-<div id="topBanner">
-    <span id="bannerIcon">🎭</span>
-    <span id="bannerText">مرحباً — أنت زائر</span>
-    <button class="banner-btn" id="btnRegister" onclick="showPage('pageWelcome')" style="background:#fbbf24;color:#1e293b;">🔑 سجّل</button>
-    <button class="banner-btn" id="btnSubscribe" onclick="showSubscribe()" style="display:none;background:#22c55e;color:white;">💳 اشترك</button>
-    <button class="banner-btn" id="btnLogout" onclick="logout()" style="display:none;background:#dc2626;color:white;">🚪 خروج</button>
+<div id="top">
+<span id="ti">🎭</span>
+<span id="tt">مرحباً — أنت زائر</span>
+<button id="br" onclick="ZAID.showPage('pageWelcome')" style="background:#fbbf24;color:#1e293b;">🔑 سجّل</button>
+<button id="bs" onclick="ZAID.showSub()" style="display:none;background:#22c55e;color:#fff;">💳 اشترك</button>
+<button id="bo" onclick="ZAID.logout()" style="display:none;background:#dc2626;color:#fff;">🚪 خروج</button>
 </div>
 
-<div class="container">
+<div id="main">
 
-    <!-- ═══ صفحة الترحيب + التسجيل ═══ -->
-    <div id="pageWelcome">
-        <div class="welcome-left">
-            <div class="logo-wrapper">
-                <div class="outer-ring"></div>
-                <div class="rotating-flags">
-                    <svg viewBox="0 0 185 185"><defs><g id="tunisiaFlag"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="white" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="white"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="white"/></g></defs><use xlink:href="#tunisiaFlag" x="92" y="12"/><use xlink:href="#tunisiaFlag" x="160" y="54"/><use xlink:href="#tunisiaFlag" x="160" y="132"/><use xlink:href="#tunisiaFlag" x="92" y="174"/><use xlink:href="#tunisiaFlag" x="24" y="132"/><use xlink:href="#tunisiaFlag" x="24" y="54"/></svg>
-                </div>
-                <div class="screen-wrapper">
-                    <div class="screen-body">
-                        <img src="my-photo.jpg" alt="محمد زايد" class="logo-img">
-                        <div class="logo-text">
-                            <span style="font-size:14px;font-weight:900;color:#fbbf24;">منصة</span>
-                            <span style="font-size:22px;font-weight:900;color:#fff;">زايد</span>
-                        </div>
-                    </div>
-                    <div class="screen-stand"></div>
-                    <div class="screen-base"></div>
-                </div>
-            </div>
-            <div class="marquee-bar"><marquee>🌟 منصة زايد للتعليم والبحث العلمي والتكنولوجي المتطور والذكاء الاصطناعي بتونس 🌟 محمد زايد - خبير دولي - تونس 🇹🇳 🌟</marquee></div>
-            <div class="welcome-text">مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وبحثا علميا</div>
-        </div>
-        <div class="welcome-left">
-            <div id="visitorGateway">
-                <div style="text-align:center;font-size:32px;">👋</div>
-                <h2>🔑 التسجيل المجاني</h2>
-                <div class="gw-err" id="gwError"></div>
-                <input class="gw-input" id="gwName" placeholder="👤 الاسم الكامل (ثلاثي) *">
-                <input class="gw-input" id="gwProfession" placeholder="💼 المهنة *">
-                <input class="gw-input" id="gwSpecialty" placeholder="🎯 الاختصاص *">
-                <input class="gw-input" id="gwEmail" type="email" placeholder="📧 البريد الإلكتروني *">
-                <input class="gw-input" id="gwPhone" type="tel" placeholder="📱 رقم الواتساب *">
-                <input class="gw-input" id="gwCountry" placeholder="🌍 بلد الإقامة *" value="تونس">
-                <input class="gw-input" id="gwCity" placeholder="🏙️ المدينة *">
-                <div class="radio-group" id="gwCategories"></div>
-                <button class="gw-submit" onclick="submitRegister()">🔑 ابدأ الآن مجاناً</button>
-                <div style="text-align:center;margin-top:6px;">
-                    <button onclick="adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:11px;font-family:Cairo;">👑 دخول المشرف</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="pageWelcome">
+<div class="col">
+<div class="logo">
+<div class="ring"></div>
+<div class="flags"><svg viewBox="0 0 185 185"><defs><g id="tn"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="#fff" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="#fff"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="#fff"/></g></defs><use href="#tn" x="92" y="12"/><use href="#tn" x="160" y="54"/><use href="#tn" x="160" y="132"/><use href="#tn" x="92" y="174"/><use href="#tn" x="24" y="132"/><use href="#tn" x="24" y="54"/></svg></div>
+<div class="tv"><div class="tvb"><img src="my-photo.jpg" onerror="this.style.display='none'"><div class="tvt"><span style="font-size:14px;font-weight:900;color:#fbbf24;">منصة</span><span style="font-size:22px;font-weight:900;color:#fff;">زايد</span></div></div><div class="tvs"></div><div class="tvb2"></div></div>
+</div>
+<div class="marq"><marquee>🌟 منصة زايد للتعليم والبحث العلمي والذكاء الاصطناعي — تونس 🇹🇳 — محمد زايد — خبير دولي 🌟</marquee></div>
+<div class="wctxt">مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وبحثا علميا</div>
+</div>
+<div class="col">
+<div id="gw">
+<div style="text-align:center;font-size:32px;">👋</div>
+<h2>🔑 التسجيل المجاني</h2>
+<div class="err" id="err"></div>
+<input class="inp" id="fn" placeholder="👤 الاسم الكامل (ثلاثي) *">
+<input class="inp" id="fp" placeholder="💼 المهنة *">
+<input class="inp" id="fs" placeholder="🎯 الاختصاص *">
+<input class="inp" id="fe" type="email" placeholder="📧 البريد *">
+<input class="inp" id="fh" type="tel" placeholder="📱 واتساب *">
+<input class="inp" id="fc" placeholder="🌍 بلد الإقامة *" value="تونس">
+<input class="inp" id="fci" placeholder="🏙️ المدينة *">
+<div class="cats" id="cats"></div>
+<button class="sbt" onclick="ZAID.register()">🔑 ابدأ الآن مجاناً</button>
+<div style="text-align:center;margin-top:6px;"><button onclick="ZAID.adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:11px;font-family:Cairo;">👑 دخول المشرف</button></div>
+</div>
+</div>
+</div>
 
-    <!-- ═══ صفحة الأقسام ═══ -->
-    <div id="pageHome" class="hide">
-        <div class="home-title">🌟 مرحباً <span id="welcomeName"></span> 🌟</div>
-        <div class="sections">
-            <div class="card education">
-                <div class="card-icon">🎓</div>
-                <div class="card-title">التعليم والتكوين</div>
-                <ul>
-                    <li onclick="openTechSection()">📖 التربية التكنولوجية</li>
-                    <li onclick="openLesson('اللغة العربية')">🌙 اللغة العربية</li>
-                    <li onclick="openLesson('الألعاب')">🎮 الألعاب</li>
-                </ul>
-            </div>
-            <div class="card research">
-                <div class="card-icon">🔬</div>
-                <div class="card-title">البحث العلمي</div>
-                <ul>
-                    <li onclick="openLesson('المحاضرات')">🎤 المحاضرات</li>
-                    <li onclick="openLesson('الكتب')">📚 الكتب</li>
-                </ul>
-            </div>
-            <div class="card ai">
-                <div class="card-icon">🧠</div>
-                <div class="card-title">الذكاء الاصطناعي</div>
-                <ul>
-                    <li onclick="openLesson('مسارات AI')">🤖 مسارات AI</li>
-                </ul>
-            </div>
-            <div class="card services">
-                <div class="card-icon">🏫</div>
-                <div class="card-title">الخدمات الجامعية</div>
-                <ul>
-                    <li onclick="openLesson('طلب تربص')">📄 طلب تربص</li>
-                    <li onclick="openLesson('طلب شغل')">💼 طلب شغل</li>
-                    <li onclick="openLesson('استشارات')">💡 استشارات</li>
-                    <li onclick="openLesson('مشاريع تخرج')">🎯 مشاريع تخرج</li>
-                </ul>
-            </div>
-        </div>
-        <div class="home-btns">
-            <button class="btn btn-green" onclick="showSubscribe()">💳 اشترك</button>
-            <button class="btn btn-gray" onclick="logout()">🚪 خروج</button>
-        </div>
-    </div>
+<div id="pageHome" class="hide">
+<div class="htitle">🌟 مرحباً <span id="un"></span> 🌟</div>
+<div class="secs">
+<div class="card c-edu"><div class="ci">🎓</div><div class="ct">التعليم والتكوين</div><ul>
+<li onclick="ZAID.openCat('tech')">📖 التربية التكنولوجية</li>
+<li onclick="ZAID.openCat('arabic')">🌙 اللغة العربية</li>
+<li onclick="ZAID.openCat('games')">🎮 الألعاب</li>
+</ul></div>
+<div class="card c-res"><div class="ci">🔬</div><div class="ct">البحث العلمي</div><ul>
+<li onclick="ZAID.openCat('lectures')">🎤 المحاضرات</li>
+<li onclick="ZAID.openCat('books')">📚 الكتب</li>
+</ul></div>
+<div class="card c-ai"><div class="ci">🧠</div><div class="ct">الذكاء الاصطناعي</div><ul>
+<li onclick="ZAID.openCat('ai')">🤖 مسارات AI</li>
+</ul></div>
+<div class="card c-job"><div class="ci">💼</div><div class="ct">عروض تشغيل</div><ul>
+<li onclick="ZAID.openJobs()">📋 كل العروض</li>
+<li id="adminAddJob" onclick="ZAID.jobForm()" style="display:none;background:rgba(251,191,36,.3)">➕ إضافة عرض</li>
+</ul></div>
+<div class="card c-srv"><div class="ci">🏫</div><div class="ct">الخدمات الجامعية</div><ul>
+<li onclick="ZAID.openSrv('internship')">📄 طلب تربص</li>
+<li onclick="ZAID.openSrv('job')">💼 طلب شغل</li>
+<li onclick="ZAID.openSrv('consult')">💡 استشارات</li>
+<li onclick="ZAID.openSrv('grad')">🎯 مشاريع تخرج</li>
+</ul></div>
+</div>
+<div class="hbtns">
+<button class="btn bg" onclick="ZAID.showSub()">💳 اشترك</button>
+<button class="btn bgr" onclick="ZAID.logout()">🚪 خروج</button>
+</div>
+</div>
 
-    <!-- ═══ صفحة الدرس ═══ -->
-    <div id="pageLesson" class="hide">
-        <div class="lesson-page">
-            <button class="btn-back" onclick="goHome()">🔙 العودة</button>
-            <div id="lessonContent"></div>
-        </div>
-    </div>
+<div id="pageLesson" class="hide">
+<div id="lesson">
+<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+<div id="lc"></div>
+</div>
+</div>
 
 </div>
 
-<div id="toast"></div>
 <script>
 (function(){
-    'use strict';
-    var currentUser = null;
-    var isAdminMode = false;
-    var currentAudio = null;
-    var ADMIN_PASSWORD = '012345';
-    var PAYMENT_WHATSAPP = '21655335477';
+'use strict';
+var Z=window.ZAID={};
+Z.user=null;Z.admin=false;Z.audio=null;Z.selectedCat=null;
+Z.lessons={};Z.exams={};Z.services={};Z.jobs=[];
+Z.cur={key:'',idx:0};Z.exam={key:'',idx:0,score:0,qs:[]};
+Z.ADMIN='012345';Z.WA='21655335477';
+Z.LVL=['تقني','تقني سامي','مهندس','ماجستير','دكتوراه'];
+Z.LVL_CLS={'تقني':'lvl-a','تقني سامي':'lvl-b','مهندس':'lvl-c','ماجستير':'lvl-d','دكتوراه':'lvl-e'};
+Z.addLesson=function(k,m,s){Z.lessons[k]={meta:m,slides:s};};
+Z.addExam=function(k,q){Z.exams[k]=q;};
+Z.addSrv=function(k,d){Z.services[k]=d;};
+Z.saveJobs=function(){try{localStorage.setItem('zaid_jobs',JSON.stringify(Z.jobs));}catch(e){}};
+Z.loadJobs=function(){try{var j=localStorage.getItem('zaid_jobs');if(j)Z.jobs=JSON.parse(j);}catch(e){}};
 
-    // ===== اختيار الفئة =====
-    var categories = ['طفل','ولي','طالب','أستاذ','باحث','خبير'];
-    var selectedCat = null;
-    var catGroup = document.getElementById('gwCategories');
-    if (catGroup) {
-        categories.forEach(function(c){
-            var b = document.createElement('div');
-            b.className = 'cat-btn';
-            b.textContent = c;
-            b.onclick = function(){
-                document.querySelectorAll('.cat-btn').forEach(function(x){ x.classList.remove('active'); });
-                b.classList.add('active');
-                selectedCat = c;
-            };
-            catGroup.appendChild(b);
-        });
-    }
+var cats=['طفل','ولي','طالب','أستاذ','باحث','خبير'];
+var cg=document.getElementById('cats');
+cats.forEach(function(c){
+  var b=document.createElement('div');b.className='cat';b.textContent=c;
+  b.onclick=function(){document.querySelectorAll('.cat').forEach(function(x){x.classList.remove('on');});b.classList.add('on');Z.selectedCat=c;};
+  cg.appendChild(b);
+});
 
-    // ===== عرض الصفحات =====
-    window.showPage = function(id){
-        document.querySelectorAll('.container > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); });
-        var el = document.getElementById(id);
-        if (el) el.classList.remove('hide');
-        window.scrollTo(0,0);
-    };
-    window.goHome = function(){
-        window.showPage(currentUser || isAdminMode ? 'pageHome' : 'pageWelcome');
-    };
+Z.showPage=function(id){
+  document.querySelectorAll('#main > div[id^="page"]').forEach(function(p){p.classList.add('hide');});
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo(0,0);
+};
+Z.goHome=function(){Z.stopSpeak();Z.showPage(Z.user||Z.admin?'pageHome':'pageWelcome');};
 
-    // ===== تحديث الواجهة =====
-    function updateUI(){
-        var banner = document.getElementById('topBanner');
-        var icon = document.getElementById('bannerIcon');
-        var text = document.getElementById('bannerText');
-        var btnReg = document.getElementById('btnRegister');
-        var btnOut = document.getElementById('btnLogout');
-        var btnSubs = document.getElementById('btnSubscribe');
-        var yellow = document.getElementById('yellowBanner');
+Z.updateUI=function(){
+  var b=document.getElementById('top'),ic=document.getElementById('ti'),tx=document.getElementById('tt');
+  var br=document.getElementById('br'),bo=document.getElementById('bo'),bs=document.getElementById('bs');
+  var y=document.getElementById('yellow'),aj=document.getElementById('adminAddJob');
+  if(Z.admin){b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف';
+    br.style.display='none';bo.style.display='inline-block';bs.style.display='none';y.style.display='none';
+    if(aj)aj.style.display='block';}
+  else if(Z.user){b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name;
+    br.style.display='none';bo.style.display='inline-block';bs.style.display='inline-block';y.style.display='none';
+    if(aj)aj.style.display='none';}
+  else{b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر';
+    br.style.display='inline-block';bo.style.display='none';bs.style.display='none';y.style.display='flex';
+    if(aj)aj.style.display='none';}
+};
 
-        if (isAdminMode) {
-            banner.className = 'admin';
-            icon.textContent = '👑';
-            text.textContent = 'مرحباً — المشرف العام';
-            if (btnReg) btnReg.style.display = 'none';
-            if (btnOut) btnOut.style.display = 'inline-block';
-            if (btnSubs) btnSubs.style.display = 'none';
-            if (yellow) yellow.style.display = 'none';
-        } else if (currentUser) {
-            banner.className = 'registered';
-            icon.textContent = '✅';
-            text.textContent = 'مرحباً ' + currentUser.name;
-            if (btnReg) btnReg.style.display = 'none';
-            if (btnOut) btnOut.style.display = 'inline-block';
-            if (btnSubs) btnSubs.style.display = 'inline-block';
-            if (yellow) yellow.style.display = 'none';
-        } else {
-            banner.className = '';
-            icon.textContent = '🎭';
-            text.textContent = 'مرحباً — أنت زائر';
-            if (btnReg) btnReg.style.display = 'inline-block';
-            if (btnOut) btnOut.style.display = 'none';
-            if (btnSubs) btnSubs.style.display = 'none';
-            if (yellow) yellow.style.display = 'flex';
-        }
-    }
+Z.register=function(){
+  var n=document.getElementById('fn').value.trim();
+  var p=document.getElementById('fp').value.trim();
+  var s=document.getElementById('fs').value.trim();
+  var e=document.getElementById('fe').value.trim();
+  var h=document.getElementById('fh').value.trim();
+  var c=document.getElementById('fc').value.trim();
+  var ci=document.getElementById('fci').value.trim();
+  var er=document.getElementById('err');
+  if(n.split(' ').length<3||!p||!s||!e||!h||!c||!ci||!Z.selectedCat){
+    er.style.display='block';er.textContent='املأ جميع الحقول، والاسم ثلاثي';return;}
+  er.style.display='none';
+  Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat};
+  document.getElementById('un').textContent=n;
+  Z.updateUI();Z.showPage('pageHome');
+};
 
-    // ===== التسجيل =====
-    window.submitRegister = function(){
-        var n = document.getElementById('gwName').value.trim();
-        var p = document.getElementById('gwProfession').value.trim();
-        var sp = document.getElementById('gwSpecialty').value.trim();
-        var e = document.getElementById('gwEmail').value.trim();
-        var ph = document.getElementById('gwPhone').value.trim();
-        var country = document.getElementById('gwCountry').value.trim();
-        var city = document.getElementById('gwCity').value.trim();
-        var err = document.getElementById('gwError');
+Z.adminLogin=function(){
+  var p=prompt('كلمة المرور:');
+  if(p===Z.ADMIN){Z.admin=true;Z.updateUI();Z.showPage('pageHome');}
+  else if(p!==null){alert('كلمة المرور خاطئة');}
+};
+Z.logout=function(){Z.user=null;Z.admin=false;Z.stopSpeak();Z.updateUI();Z.showPage('pageWelcome');};
 
-        if (n.split(' ').length < 3 || !p || !sp || !e || !ph || !country || !city || !selectedCat){
-            err.style.display = 'block';
-            err.textContent = 'املأ جميع الحقول، والاسم ثلاثي';
-            return;
-        }
-        err.style.display = 'none';
-        currentUser = { name: n, profession: p, specialty: sp, email: e, phone: ph, country: country, city: city, category: selectedCat };
-        document.getElementById('welcomeName').textContent = n;
-        updateUI();
-        window.showPage('pageHome');
-    };
+Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
+Z.speak=function(t,l){
+  if(!t)return;Z.stopSpeak();
+  var tl=l==='ar'?'ar':l==='fr'?'fr':'en';
+  var u='https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURIComponent(t)+'&tl='+tl+'&client=gtx';
+  Z.audio=new Audio(u);
+  Z.audio.play().catch(function(){
+    if('speechSynthesis' in window){
+      var s=new SpeechSynthesisUtterance(t);s.lang=l==='ar'?'ar-SA':l==='fr'?'fr-FR':'en-US';s.rate=0.9;
+      window.speechSynthesis.speak(s);}
+  });
+};
 
-    // ===== دخول المشرف =====
-    window.adminLogin = function(){
-        var pwd = prompt('كلمة المرور:');
-        if (pwd === ADMIN_PASSWORD) {
-            isAdminMode = true;
-            updateUI();
-            window.showPage('pageHome');
-        } else if (pwd !== null) {
-            alert('كلمة المرور خاطئة');
-        }
-    };
+Z.showSub=function(){
+  var o=document.getElementById('sm');if(o)o.remove();
+  var m=document.createElement('div');m.id='sm';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:20px;max-width:400px;width:100%;border:3px solid #fbbf24;color:#fff;box-sizing:border-box">'
+    +'<div style="text-align:center;font-size:40px">🔒</div>'
+    +'<h2 style="color:#fbbf24;text-align:center;margin:8px 0;font-size:16px">الاشتراك</h2>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:10px;margin:8px 0"><div style="color:#22c55e;font-weight:900;font-size:12px">🇹🇳 محلي</div><div style="font-size:14px;font-weight:700">25 دينار</div><div style="font-size:10px;color:#94a3b8">e-Dinar / D17</div></div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:10px;margin:8px 0"><div style="color:#3b82f6;font-weight:900;font-size:12px">🌍 دولي</div><div style="font-size:14px;font-weight:700">20 USD / EUR</div><div style="font-size:10px;color:#94a3b8">Western Union</div></div>'
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:10px;background:#22c55e;color:#fff;border:none;border-radius:20px;font-weight:900;font-size:13px;cursor:pointer;margin-top:8px;font-family:Cairo">📱 أرسل إشعار الدفع</button>'
+    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:8px;background:#334155;color:#fff;border:none;border-radius:20px;cursor:pointer;margin-top:6px;font-size:12px;font-family:Cairo">إغلاق</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+Z.wa=function(){
+  var u=Z.user||{};
+  var msg='مرحباً، أرغب في الاشتراك.\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'');
+  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
+};
 
-    // ===== الخروج =====
-    window.logout = function(){
-        currentUser = null;
-        isAdminMode = false;
-        if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-        updateUI();
-        window.showPage('pageWelcome');
-    };
+Z.openCat=function(cat){
+  if(!Z.user&&!Z.admin){Z.showPage('pageWelcome');return;}
+  var ks=Object.keys(Z.lessons).filter(function(k){return Z.lessons[k].meta.cat===cat;});
+  var c=document.getElementById('lc');
+  if(!ks.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">🚧</div><div class="st">'+cat+'</div><div class="stxt">قيد الإعداد</div></div>';}
+  else{var h='<div class="sel">';
+    ks.forEach(function(k){var m=Z.lessons[k].meta;
+      h+='<div class="lcard '+(m.color||'')+'" onclick="ZAID.startLesson(\''+k+'\')"><div class="li">'+(m.icon||'📖')+'</div><div class="lt">'+m.name+'</div><div class="ld">'+(m.desc||'')+'</div></div>';});
+    h+='</div>';c.innerHTML=h;}
+  Z.showPage('pageLesson');
+};
 
-    // ===== النطق =====
-    window.speak = function(text, lang){
-        if (!text) return;
-        if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-        if (window.speechSynthesis) window.speechSynthesis.cancel();
-        var tl = lang === 'ar' ? 'ar' : lang === 'fr' ? 'fr' : 'en';
-        var url = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' + encodeURIComponent(text) + '&tl=' + tl + '&client=gtx';
-        currentAudio = new Audio(url);
-        currentAudio.play().catch(function(){
-            if ('speechSynthesis' in window) {
-                var u = new SpeechSynthesisUtterance(text);
-                u.lang = lang === 'ar' ? 'ar-SA' : lang === 'fr' ? 'fr-FR' : 'en-US';
-                u.rate = 0.9;
-                window.speechSynthesis.speak(u);
-            }
-        });
-    };
+Z.openSrv=function(key){
+  if(!Z.user&&!Z.admin){Z.showPage('pageWelcome');return;}
+  var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
+  var c=document.getElementById('lc');
+  c.innerHTML='<div class="svcard"><div style="font-size:50px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
+  Z.showPage('pageLesson');
+};
 
-    // ===== نافذة الاشتراك =====
-    window.showSubscribe = function(){
-        var old = document.getElementById('subModal'); if (old) old.remove();
-        var m = document.createElement('div');
-        m.id = 'subModal';
-        m.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;';
-        m.innerHTML = '<div style="background:#1e293b;border-radius:15px;padding:20px;max-width:400px;width:100%;border:3px solid #fbbf24;color:#fff;box-sizing:border-box;">'
-            + '<div style="text-align:center;font-size:40px;">🔒</div>'
-            + '<h2 style="color:#fbbf24;text-align:center;margin:8px 0;font-size:16px;">الاشتراك في المنصة</h2>'
-            + '<div style="background:#0f172a;border-radius:12px;padding:10px;margin:8px 0;">'
-            + '<div style="color:#22c55e;font-weight:900;font-size:12px;">🇹🇳 الدفع المحلي</div>'
-            + '<div style="font-size:14px;font-weight:700;">25 دينار تونسي</div>'
-            + '<div style="font-size:10px;color:#94a3b8;">e-Dinar / D17</div></div>'
-            + '<div style="background:#0f172a;border-radius:12px;padding:10px;margin:8px 0;">'
-            + '<div style="color:#3b82f6;font-weight:900;font-size:12px;">🌍 الدفع الدولي</div>'
-            + '<div style="font-size:14px;font-weight:700;">20 دولار / 20 يورو</div>'
-            + '<div style="font-size:10px;color:#94a3b8;">Western Union</div></div>'
-            + '<button onclick="openWhatsApp()" style="width:100%;padding:10px;background:#22c55e;color:#fff;border:none;border-radius:20px;font-weight:900;font-size:13px;cursor:pointer;margin-top:8px;font-family:Cairo;">📱 أرسل إشعار الدفع</button>'
-            + '<button onclick="document.getElementById(\'subModal\').remove()" style="width:100%;padding:8px;background:#334155;color:#fff;border:none;border-radius:20px;cursor:pointer;margin-top:6px;font-size:12px;font-family:Cairo;">إغلاق</button>'
-            + '</div>';
-        document.body.appendChild(m);
-    };
-
-    window.openWhatsApp = function(){
-        var u = currentUser || {};
-        var msg = 'مرحباً، أرغب في الاشتراك في منصة زايد.\nالاسم: ' + (u.name || '') + '\nالبريد: ' + (u.email || '');
-        window.open('https://wa.me/' + PAYMENT_WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
-    };
-
-    // ===== صفحة درس عامة =====
-    window.openLesson = function(title){
-        if (!currentUser && !isAdminMode) { window.showPage('pageWelcome'); return; }
-        var content = document.getElementById('lessonContent');
-        content.innerHTML = '<div class="tech-slide" style="text-align:center;padding:30px;">'
-            + '<div style="font-size:50px;">🚧</div>'
-            + '<div class="tech-slide-title">' + title + '</div>'
-            + '<div class="tech-text">هذا القسم قيد الإعداد</div>'
-            + '</div>';
-        window.showPage('pageLesson');
-    };
-
-    // ===== فتح قسم التربية =====
-    window.openTechSection = function(){
-        if (!currentUser && !isAdminMode) { window.showPage('pageWelcome'); return; }
-        if (window.__showTechSelector) {
-            window.__showTechSelector();
-        } else {
-            window.openLesson('التربية التكنولوجية');
-        }
-    };
-
-    // ===== عند التحميل =====
-    window.addEventListener('load', function(){
-        updateUI();
-        window.showPage('pageWelcome');
+Z.openJobs=function(){
+  if(!Z.user&&!Z.admin){Z.showPage('pageWelcome');return;}
+  var c=document.getElementById('lc');
+  if(!Z.jobs.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">💼</div><div class="st">لا توجد عروض بعد</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';}
+  else{
+    var h='<div class="sel">';
+    Z.jobs.forEach(function(j,idx){
+      var cls=Z.LVL_CLS[j.level]||'lvl-c';
+      h+='<div class="lcard j" onclick="ZAID.viewJob('+idx+')"><div class="li">'+(j.icon||'💼')+'</div><div class="lt">'+(j.title||'عرض')+'</div><div class="ld">'+(j.company||'')+'</div><div style="margin-top:6px"><span class="badge '+cls+'">'+j.level+'</span></div></div>';
     });
+    h+='</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div>';
+    c.innerHTML=h;
+  }
+  Z.showPage('pageLesson');
+};
 
+Z.viewJob=function(idx){
+  var j=Z.jobs[idx];if(!j)return;
+  var cls=Z.LVL_CLS[j.level]||'lvl-c';
+  var c=document.getElementById('lc');
+  var h='<div class="slide"><div class="sn">💼 '+(j.title||'عرض')+'</div>';
+  h+='<div class="job-info"><div><strong>👤 اسم المشغل:</strong> '+(j.employer||'—')+'</div><div><strong>🏢 اسم المؤسسة:</strong> '+(j.company||'—')+'</div><div><strong>🎯 الاختصاص والمجال:</strong> '+(j.specialty||'—')+'</div><div><strong>📊 المستوى المطلوب:</strong> <span class="badge '+cls+'">'+j.level+'</span></div></div>';
+  h+='<div class="job-overview"><strong>📄 لمحة على العرض:</strong><br>'+(j.overview||'—')+'</div>';
+  h+='<div class="nav"><button class="apply-btn" onclick="ZAID.applyJob('+idx+')">📱 تقدم لهذا العرض</button><button class="nbtn ne" onclick="ZAID.openJobs()">🔙 كل العروض</button></div>';
+  if(Z.admin)h+='<div style="text-align:center;margin-top:8px"><button class="del-btn" onclick="ZAID.delJob('+idx+')">🗑️ حذف</button></div>';
+  h+='</div>';
+  c.innerHTML=h;Z.showPage('pageLesson');
+};
+
+Z.applyJob=function(idx){
+  var j=Z.jobs[idx];if(!j)return;
+  var u=Z.user||{};
+  var msg='مرحباً، أرغب في التقدم لوظيفة: '+(j.title||'')+'\nالمؤسسة: '+(j.company||'')+'\nالاختصاص: '+(j.specialty||'')+'\nالمستوى: '+(j.level||'')+'\n---\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'')+'\nالهاتف: '+(u.phone||'');
+  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
+};
+
+Z.delJob=function(idx){
+  if(!Z.admin){alert('للمشرف فقط');return;}
+  if(!confirm('حذف هذا العرض؟'))return;
+  Z.jobs.splice(idx,1);Z.saveJobs();Z.openJobs();
+};
+
+Z.jobForm=function(){
+  if(!Z.admin){alert('للمشرف فقط');return;}
+  var old=document.getElementById('jf');if(old)old.remove();
+  var m=document.createElement('div');m.id='jf';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999;display:flex;align-items:center;justify-content:center;padding:15px;overflow-y:auto';
+  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:20px;max-width:450px;width:100%;border:3px solid #fbbf24;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
+    +'<h2 style="color:#fbbf24;text-align:center;margin-bottom:10px;font-size:16px">➕ إضافة عرض</h2>'
+    +'<input class="inp" id="jfTitle" placeholder="عنوان الوظيفة">'
+    +'<input class="inp" id="jfEmployer" placeholder="اسم المشغل *">'
+    +'<input class="inp" id="jfCompany" placeholder="اسم المؤسسة *">'
+    +'<input class="inp" id="jfSpecialty" placeholder="الاختصاص والمجال *">'
+    +'<textarea class="inp" id="jfOverview" placeholder="لمحة على العرض *"></textarea>'
+    +'<select class="inp" id="jfLevel">'+opts+'</select>'
+    +'<button class="sbt" onclick="ZAID.saveJob()">💾 حفظ</button>'
+    +'<button onclick="document.getElementById(\'jf\').remove()" style="width:100%;padding:8px;background:#334155;color:#fff;border:none;border-radius:20px;cursor:pointer;margin-top:6px;font-size:12px;font-family:Cairo">إلغاء</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+
+Z.saveJob=function(){
+  var t=document.getElementById('jfTitle').value.trim()||'💼 عرض';
+  var e=document.getElementById('jfEmployer').value.trim();
+  var c=document.getElementById('jfCompany').value.trim();
+  var s=document.getElementById('jfSpecialty').value.trim();
+  var o=document.getElementById('jfOverview').value.trim();
+  var l=document.getElementById('jfLevel').value;
+  if(!e||!c||!s||!o){alert('املأ الحقول الإلزامية (*)');return;}
+  Z.jobs.push({title:t,employer:e,company:c,specialty:s,overview:o,level:l,icon:'💼'});
+  Z.saveJobs();document.getElementById('jf').remove();alert('✅ تم الحفظ');Z.openJobs();
+};
+
+function renderSlide(o){
+  var h='<div class="slide">';
+  if(o.n)h+='<div class="sn">'+o.n+'</div>';
+  if(o.t)h+='<div class="st">'+o.t+'</div>';
+  if(o.i)h+='<div class="simg"><img src="'+o.i+'" onerror="this.style.display=\'none\'"></div>';
+  if(o.c)h+='<div class="dc">'+o.c+'</div>';
+  if(o.m)h+='<div class="dm">'+o.m+'</div>';
+  if(o.x)h+='<div class="stxt">'+o.x+'</div>';
+  if(o.r)h+='<div class="strans"><div><div class="lbl">🇹🇳</div><div class="ar">'+(o.r[0]||'')+'</div></div><div><div class="lbl">🇫🇷</div><div class="fr">'+(o.r[1]||'')+'</div></div><div><div class="lbl">🇬🇧</div><div class="en">'+(o.r[2]||'')+'</div></div></div>';
+  if(o.s&&o.s[0]){
+    var lb=['عربي','FR','EN'],lg=['ar','fr','en'],cls=['sp-ar','sp-fr','sp-en'];
+    h+='<div class="sb">';
+    for(var i=0;i<3;i++)if(o.s[i])h+='<button class="spb '+cls[i]+'" onclick="ZAID.speak(\''+o.s[i].replace(/'/g,"\\'")+'\',\''+lg[i]+'\')">🔊 '+lb[i]+'</button>';
+    h+='</div>';
+  }
+  if(o.v)h+='<div class="simg"><iframe width="100%" height="180" src="'+o.v+'" allowfullscreen></iframe></div>';
+  if(o.e)h+='<div style="text-align:center;padding:15px"><div style="font-size:50px;margin-bottom:10px">📝</div><div class="stxt" style="font-size:15px"><strong>📝 الاختبار</strong></div><button onclick="ZAID.startExam(\''+o.e+'\')" style="margin-top:15px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:15px;padding:12px 30px;border:none;border-radius:25px;font-weight:900;cursor:pointer;font-family:Cairo">🚀 ابدأ</button></div>';
+  return h+'</div>';
+}
+
+Z.startLesson=function(k){var L=Z.lessons[k];if(!L)return;Z.cur={key:k,idx:0};renderCur();};
+
+function renderCur(){
+  Z.stopSpeak();
+  var L=Z.lessons[Z.cur.key];if(!L)return;
+  var c=document.getElementById('lc');
+  var nav='<div class="nav">';
+  if(Z.cur.idx>0)nav+='<button class="nbtn np" onclick="ZAID.prev()">▶ السابق</button>';
+  nav+='<button class="nbtn ne" onclick="ZAID.openCat(\''+(L.meta.cat||'tech')+'\')">🏠 خروج</button>';
+  if(Z.cur.idx<L.slides.length-1)nav+='<button class="nbtn nn" onclick="ZAID.next()">التالي ◀</button>';
+  nav+='</div>';
+  var pr='<div class="prog"><div class="progf" style="width:'+((Z.cur.idx+1)/L.slides.length*100)+'%"></div></div>';
+  c.innerHTML=renderSlide(L.slides[Z.cur.idx])+nav+pr;
+  window.scrollTo(0,0);
+}
+Z.prev=function(){if(Z.cur.idx>0){Z.cur.idx--;renderCur();}};
+Z.next=function(){var L=Z.lessons[Z.cur.key];if(Z.cur.idx<L.slides.length-1){Z.cur.idx++;renderCur();}};
+
+Z.startExam=function(k){var q=Z.exams[k];if(!q){alert('لا اختبار');return;}Z.exam={key:k,idx:0,score:0,qs:q};renderExam();};
+
+function renderExam(){
+  var c=document.getElementById('lc'),t=Z.exam.qs.length;
+  if(Z.exam.idx>=t){
+    var p=Math.round(Z.exam.score/t*100),ok=p>=50;
+    var msg=ok?'🎉 مبروك! نجحت':'😔 لم تنجح';
+    var col=ok?'#22c55e':'#dc2626',cert='';
+    if(ok){
+      var nm=(Z.user&&Z.user.name)?Z.user.name:'المتعلم';
+      var dt=new Date().toLocaleDateString('ar-TN');
+      cert='<div class="cert"><h1>🏆 شهادة إتمام</h1><p>تشهد منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي بأن</p><h2>'+nm+'</h2><p>قد أتم بنجاح هذا الاختبار بنسبة <strong>'+p+'%</strong></p><p>التاريخ: '+dt+'</p><div class="sign">محمد زايد — خبير دولي — تونس 🇹🇳</div></div>';
+    }
+    c.innerHTML='<div class="slide" style="text-align:center"><div class="sn">🏆 النتيجة</div><div style="font-size:22px;font-weight:900;color:'+col+';margin:15px 0">'+msg+'</div><div class="stxt" style="font-size:16px">درجتك: '+Z.exam.score+' من '+t+'<br>النسبة: '+p+'%</div>'+cert+'<div style="margin-top:15px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="nbtn nn" onclick="ZAID.startExam(\''+Z.exam.key+'\')">🔄 إعادة</button><button class="nbtn ne" onclick="ZAID.goHome()">🔙 الرئيسية</button></div></div>';
+    return;
+  }
+  var q=Z.exam.qs[Z.exam.idx],op='';
+  for(var i=0;i<q.o.length;i++)op+='<button class="opt" onclick="ZAID.ans(\''+q.o[i].replace(/'/g,"\\'")+'\')">'+q.o[i]+'</button>';
+  c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div><div class="stxt" style="font-size:15px;font-weight:900">'+q.q+'</div>'+op+'</div>';
+}
+Z.ans=function(ch){var q=Z.exam.qs[Z.exam.idx];if(ch===q.a){Z.exam.score++;alert('✅ صحيح!');}else{alert('❌ خطأ. الصحيح: '+q.a);}Z.exam.idx++;renderExam();};
+
+Z.startMemory=function(){
+  if(!Z.user&&!Z.admin){Z.showPage('pageWelcome');return;}
+  var pairs=['🍎','🍎','🍌','🍌','🍇','🍇','🍓','🍓'];
+  pairs.sort(function(){return Math.random()-.5;});
+  var st={open:[],done:0,matches:0,moves:0};
+  var c=document.getElementById('lc');
+  function draw(){
+    var h='<div class="slide"><div class="sn">🎮 لعبة الذاكرة</div><div class="st">اعثر على الأزواج!</div><div class="stxt">محاولات: '+st.moves+' — أزواج: '+st.matches+'/4</div><div class="mem">';
+    for(var i=0;i<pairs.length;i++){
+      var isOpen=st.open.indexOf(i)>=0,isDone=(st.done&(1<<i))>0,shown=isOpen||isDone;
+      h+='<div class="mc '+(shown?'on':'')+(isDone?' done':'')+'" onclick="ZAID._mc('+i+')">'+(shown?pairs[i]:'?')+'</div>';
+    }
+    h+='</div><div class="nav"><button class="nbtn ne" onclick="ZAID.openCat(\'games\')">🏠 خروج</button></div></div>';
+    c.innerHTML=h;
+  }
+  Z._mc=function(i){
+    if(st.open.indexOf(i)>=0||(st.done&(1<<i))>0)return;
+    if(st.open.length>=2)return;
+    st.open.push(i);
+    if(st.open.length===2){
+      st.moves++;var a=st.open[0],b=st.open[1];
+      if(pairs[a]===pairs[b]){
+        st.done|=(1<<a)|(1<<b);st.matches++;st.open=[];
+        setTimeout(function(){if(st.matches===4){alert('🎉 أكملت في '+st.moves+' محاولة!');Z.openCat('games');}else draw();},400);
+      }else{setTimeout(function(){st.open=[];draw();},700);}
+    }
+    draw();
+  };
+  draw();Z.showPage('pageLesson');
+};
+
+Z.loadJobs();
+window.addEventListener('load',function(){Z.updateUI();Z.showPage('pageWelcome');});
 })();
 </script>
 
 <script>
+/* ══════════════════════════════════════════════════════════════════
+   الجزء 1/6 — بيانات تجريبية (ستُستبدل في الجزء 2/6)
+   ══════════════════════════════════════════════════════════════════ */
 (function(){
-    'use strict';
+var Z=window.ZAID;
 
-    // ===== شرائح كتاب الأطفال والحاسوب =====
-    var BOOK = [
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 1</div><div class="tech-image"><img src="https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg" onerror="this.style.display=\'none\'"></div><div style="text-align:center;font-size:20px;font-weight:900;color:#dc2626;margin:10px 0;">📚 الأطفال والحاسوب</div><div class="tech-text" style="text-align:center;">بقلم: <strong>محمد زايد</strong><br>خبير دولي — تونس 🇹🇳</div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الأطفال والحاسوب بقلم محمد زايد\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Les enfants et l ordinateur\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Children and the computer\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 2</div><div class="tech-image"><img src="https://i.postimg.cc/CKcnB72y/haswb1.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-child">🧒 الأطفال: ما اسمك أيها الصديق؟</div><div class="tech-dialogue-computer">💻 الحاسوب: لي اسمان — الكمبيوتر أو الحاسوب.</div><div class="tech-dialogue-child">🧒 الأطفال: صف لنا نفسك.</div><div class="tech-dialogue-computer">💻 أتكون من <strong>جزء مادي</strong> (Hardware) و<strong>جزء معنوي</strong> (Software).</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">جزء مادي / معنوي</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Matériel / Logiciel</div></div><div><div class="lbl">🇬🇧</div><div class="en">Hardware / Software</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'جزء مادي وجزء معنوي\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Materiel et logiciel\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Hardware and software\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 3</div><div class="tech-image"><img src="https://i.postimg.cc/Hk9XKgqm/whdt-mrkzyt.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-child">🧒 الأطفال: يقال أنك ذكي وسريع!</div><div class="tech-dialogue-computer">💻 الحاسوب: نعم — بفضل <strong>المعالج</strong>. مثل القلب والدماغ.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">معالج</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Processeur</div></div><div><div class="lbl">🇬🇧</div><div class="en">Processor</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'المعالج\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Processeur\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Processor\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 4</div><div class="tech-dialogue-computer">💻 أتكون من 4 أجزاء: <strong>الوحدة المركزية</strong>، <strong>الذاكرات</strong>، <strong>الروابط</strong>، <strong>اللواحق</strong>.</div><div class="tech-dialogue-child">🧒 الأطفال: ما هي الوحدة المركزية؟</div><div class="tech-dialogue-computer">💻 قلبي النابض وعقلي المفكر.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">وحدة مركزية</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Unité Centrale</div></div><div><div class="lbl">🇬🇧</div><div class="en">System Unit</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الوحدة المركزية\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Unite centrale\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'System unit\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 5</div><div class="tech-image"><img src="https://i.postimg.cc/5NZs1bKy/hyt-wmytt.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-computer">💻 هناك <strong>ذاكرة حية</strong> (RAM) و<strong>ذاكرة ميتة</strong> (ROM).</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">RAM / ROM</div></div><div><div class="lbl">🇫🇷</div><div class="fr">RAM / ROM</div></div><div><div class="lbl">🇬🇧</div><div class="en">RAM / ROM</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'ذاكرة حية وذاكرة ميتة\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'RAM et ROM\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'RAM and ROM\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 6</div><div class="tech-dialogue-computer">💻 <strong>الروابط</strong> هي النواقل والقنوات التي تنقل المعطيات.</div><div class="tech-dialogue-computer">💻 <strong>اللواحق</strong> هي الأجهزة الخارجية — الفأرة، لوحة المفاتيح، الطابعة.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">روابط / لواحق</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Bus / Périphériques</div></div><div><div class="lbl">🇬🇧</div><div class="en">Bus / Peripherals</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الروابط واللواحق\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Bus et peripheriques\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Bus and peripherals\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 7</div><div class="tech-image"><img src="https://i.postimg.cc/7ZkXt82w/fart.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-child">🧒 الأطفال: للتحدث معك نستعمل الفأرة؟</div><div class="tech-dialogue-computer">💻 نعم — أداة تيسّر التخاطب.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">فأرة</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Souris</div></div><div><div class="lbl">🇬🇧</div><div class="en">Mouse</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الفأرة\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Souris\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Mouse\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 8</div><div class="tech-dialogue-child">🧒 الأطفال: ملحقات أخرى للتخاطب؟</div><div class="tech-dialogue-computer">💻 نعم — لوحة المفاتيح، القلم الضوئي، لوحة الرسم، الشاشة اللمسية.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">ملحقات الإدخال</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Périphériques d\'entrée</div></div><div><div class="lbl">🇬🇧</div><div class="en">Input devices</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'لوحة المفاتيح والقلم الضوئي والشاشة اللمسية\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Clavier et crayon optique et ecran tactile\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Keyboard and light pen and touch screen\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 9</div><div class="tech-image"><img src="https://i.postimg.cc/wT3wRQdz/monitor.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-computer">💻 <strong>الشاشة</strong> وسيلة تخاطب. أحجامها: 15، 17-21، 32+ بوصة.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">شاشة</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Écran</div></div><div><div class="lbl">🇬🇧</div><div class="en">Screen</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الشاشة\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Ecran\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Screen\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 10</div><div class="tech-image"><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-child">🧒 الأطفال: قنوات الإخراج؟</div><div class="tech-dialogue-computer">💻 <strong>الطابعة</strong> — تنشر المعطيات على الورق. أنواعها: إبرية، نفاثة، ليزرية.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">طابعة</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Imprimante</div></div><div><div class="lbl">🇬🇧</div><div class="en">Printer</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الطابعة الإبرية والنفاثة والليزرية\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Imprimante matricielle jet et laser\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Dot matrix inkjet laser printer\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 11</div><div class="tech-image"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Canon_Canoscan_Lide_25.jpg/800px-Canon_Canoscan_Lide_25.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-child">🧒 الأطفال: طريقة أخرى لإخراج الصور؟</div><div class="tech-dialogue-computer">💻 <strong>الماسح</strong> لإدخال الصور والوثائق، و<strong>الراسم</strong> للخرائط والمخططات.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">ماسح / راسم</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Scanner / Traceur</div></div><div><div class="lbl">🇬🇧</div><div class="en">Scanner / Plotter</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الماسح والراسم\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Scanner et traceur\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Scanner and plotter\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 12</div><div class="tech-image"><img src="https://i.postimg.cc/R0wsVCxv/modem.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-child">🧒 الأطفال: التخاطب مع حواسيب بعيدة؟</div><div class="tech-dialogue-computer">💻 نعم — عبر <strong>المودم</strong> الذي يقوم بالتضمين وفك التضمين.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">مودم</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Modem</div></div><div><div class="lbl">🇬🇧</div><div class="en">Modem</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'المودم\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Modem\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Modem\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 13</div><div class="tech-image"><img src="https://i.ibb.co/FbLdWngL/image.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-dialogue-child">🧒 الأطفال: كيف نلعب معك؟</div><div class="tech-dialogue-computer">💻 تُخزّنون البرمجية على <strong>القرص الصلب</strong>.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">قرص صلب</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Disque dur</div></div><div><div class="lbl">🇬🇧</div><div class="en">Hard disk</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'القرص الصلب\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Disque dur\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Hard disk\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 14</div><div class="tech-dialogue-computer">💻 <strong>نظام التشغيل</strong> برنامج إجباري (Windows, Unix).</div><div class="tech-dialogue-computer">💻 <strong>البرمجيات التطبيقية</strong> اختيارية: مكتبية، ألعاب، تصميم.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">نظام تشغيل</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Système d\'exploitation</div></div><div><div class="lbl">🇬🇧</div><div class="en">Operating system</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'نظام التشغيل والبرمجيات التطبيقية\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Systeme d exploitation et applications\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Operating system and applications\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 15 — الفيديوهات</div><div class="tech-text" style="text-align:center;">🎬 مراجعة الدرس عبر الفيديوهات</div><div class="tech-image"><iframe width="100%" height="180" src="https://www.youtube.com/embed/3QCgr6IpuvA" allowfullscreen></iframe></div><div class="tech-image"><iframe width="100%" height="180" src="https://www.youtube.com/embed/HB4I2CgkcCo" allowfullscreen></iframe></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 16 — الاختبار</div><div style="text-align:center;padding:15px;"><div style="font-size:50px;margin-bottom:10px;">📝</div><div class="tech-text" style="font-size:15px;"><strong>📝 الاختبار النهائي</strong></div><button onclick="window.__startExam()" style="margin-top:15px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;font-size:15px;padding:12px 30px;border:none;border-radius:25px;font-weight:900;cursor:pointer;font-family:Cairo;">🚀 ابدأ الاختبار</button></div></div>'
-    ];
+Z.addLesson('demo_book',{cat:'tech',icon:'📖',name:'📚 عرض تجريبي — الأطفال والحاسوب',desc:'3 شرائح — المحرّك يعمل'},[
+{n:'📖 1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong> — تونس 🇹🇳',s:['الأطفال والحاسوب بقلم محمد زايد','Les enfants et l ordinateur','Children and the computer']},
+{n:'📖 2',t:'💻 الحاسوب',i:'https://i.postimg.cc/CKcnB72y/haswb1.jpg',c:'🧒 ما اسمك؟',m:'💻 لي اسمان — الكمبيوتر أو الحاسوب. أتكون من <strong>جزء مادي</strong> و<strong>جزء معنوي</strong>.',r:['جزء مادي / معنوي','Matériel / Logiciel','Hardware / Software'],s:['جزء مادي وجزء معنوي','Materiel et logiciel','Hardware and software']},
+{n:'📖 3 — الاختبار',e:'demo_exam'}
+]);
 
-    // ===== شرائح المرحلة الابتدائية =====
-    var PRIM = [
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 1</div><div class="tech-image"><img src="https://i.postimg.cc/t4Rpp7t6/alatfal-walhaswb.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-slide-title">📚 الدرس الأول — التربية التكنولوجية</div><div class="tech-text" style="text-align:center;">بقلم: <strong>محمد زايد</strong></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 2</div><div class="tech-slide-title">💻 الحاسوب (Computer)</div><div class="tech-image"><img src="https://i.postimg.cc/mZX3L8qx/haswb.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-text">جهاز إلكتروني رقمي يستقبل البيانات ويعالجها ويخزنها ويخرج النتائج.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">الحاسوب</div></div><div><div class="lbl">🇫🇷</div><div class="fr">L\'ordinateur</div></div><div><div class="lbl">🇬🇧</div><div class="en">The computer</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الحاسوب\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'L ordinateur\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'The computer\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 3</div><div class="tech-slide-title">⚙️ المعالج (CPU)</div><div class="tech-image"><img src="https://i.postimg.cc/Hk9XKgqm/whdt-mrkzyt.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-text">الوحدة المركزية للمعالجة — دماغ الحاسوب. سرعته بالغيغاهرتز.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">المعالج</div></div><div><div class="lbl">🇫🇷</div><div class="fr">Processeur</div></div><div><div class="lbl">🇬🇧</div><div class="en">Processor</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'المعالج\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'Processeur\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'Processor\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 4</div><div class="tech-slide-title">💾 الذاكرة الحية (RAM)</div><div class="tech-image"><img src="https://i.postimg.cc/5NZs1bKy/hyt-wmytt.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-text">ذاكرة متطايرة تفقد محتواها عند انقطاع الكهرباء.</div><div class="tech-translation"><div><div class="lbl">🇹🇳</div><div class="ar">RAM</div></div><div><div class="lbl">🇫🇷</div><div class="fr">RAM</div></div><div><div class="lbl">🇬🇧</div><div class="en">RAM</div></div></div><div class="tech-speak-btns"><button class="tech-speak-btn tech-speak-ar" onclick="window.speak(\'الذاكرة الحية\',\'ar\')">🔊 عربي</button><button class="tech-speak-btn tech-speak-fr" onclick="window.speak(\'RAM\',\'fr\')">🔊 FR</button><button class="tech-speak-btn tech-speak-en" onclick="window.speak(\'RAM\',\'en\')">🔊 EN</button></div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 5</div><div class="tech-slide-title">💾 RAM vs ROM</div><div class="tech-text"><strong>RAM:</strong> متطايرة، تفقد محتواها.<br><strong>ROM:</strong> دائمة، تحتفظ بالبيانات.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 6</div><div class="tech-slide-title">🔗 النواقل (Bus)</div><div class="tech-text">خطوط كهربائية تنقل البيانات والعناوين وإشارات التحكم.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 7</div><div class="tech-slide-title">🎥 الكاميرا الرقمية</div><div class="tech-image"><img src="https://i.postimg.cc/Mpp3ddLd/camera-numerique.png" onerror="this.style.display=\'none\'"></div><div class="tech-text">جهاز إدخال بصري يلتقط الصور والفيديو.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 8</div><div class="tech-slide-title">🖱️ الفأرة</div><div class="tech-image"><img src="https://i.postimg.cc/sDQv7rjc/souris.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-text">جهاز إدخال للتفاعل مع الواجهة.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 9</div><div class="tech-slide-title">⌨️ لوحة المفاتيح</div><div class="tech-image"><img src="https://i.postimg.cc/YC2nSbfG/lwht-mfatyh.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-text">جهاز إدخال نصي.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 10</div><div class="tech-slide-title">🖨️ الطابعة</div><div class="tech-image"><img src="https://i.postimg.cc/bNm0m8kf/tabʿat.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-text">جهاز إخراج للبيانات على الورق. أنواع: إبرية، نفاثة، ليزرية.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 11</div><div class="tech-slide-title">📠 الماسح والراسم</div><div class="tech-image"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Canon_Canoscan_Lide_25.jpg/800px-Canon_Canoscan_Lide_25.jpg" onerror="this.style.display=\'none\'"></div><div class="tech-text">الماسح للوثائق، والراسم للخرائط.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 12</div><div class="tech-slide-title">🎤 المصدح</div><div class="tech-text">جهاز إدخال صوتي يحوّل الموجات إلى إشارات.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 13</div><div class="tech-slide-title">📺 الشاشة</div><div class="tech-text">جهاز إخراج بصري. أنواعها: LCD، LED، OLED.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 14</div><div class="tech-slide-title">🖨️ أنواع الطابعات</div><div class="tech-text"><strong>إبرية:</strong> رخيصة، بطيئة.<br><strong>نفاثة:</strong> جيدة للصور.<br><strong>ليزرية:</strong> سريعة، دقيقة.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 15</div><div class="tech-slide-title">📡 الموديم</div><div class="tech-text">جهاز التضمين وفك التضمين للاتصال عبر الشبكات.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 16</div><div class="tech-slide-title">💿 القرص الصلب</div><div class="tech-text">وحدة تخزين مغناطيسية دائمة.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 17</div><div class="tech-slide-title">🌐 الشبكات والإنترنت</div><div class="tech-text">أجهزة متصلة لتبادل البيانات. أنواع: LAN، WAN، Internet.</div></div>',
-        '<div class="tech-slide"><div class="tech-slide-num">📖 صفحة 18 — الاختبار</div><div style="text-align:center;padding:15px;"><div style="font-size:50px;margin-bottom:10px;">📝</div><div class="tech-text" style="font-size:15px;"><strong>📝 الاختبار النهائي</strong></div><button onclick="window.__startExam()" style="margin-top:15px;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;font-size:15px;padding:12px 30px;border:none;border-radius:25px;font-weight:900;cursor:pointer;font-family:Cairo;">🚀 ابدأ الاختبار</button></div></div>'
-    ];
+Z.addExam('demo_exam',[
+{q:'الجزء المادي؟',o:['Hardware','Software','Internet','Windows'],a:'Hardware'},
+{q:'وظيفة المعالج؟',o:['تخزين','عرض','تنفيذ الأوامر','طباعة'],a:'تنفيذ الأوامر'},
+{q:'ذاكرة تفقد محتواها؟',o:['ROM','RAM','Hard Disk','CD'],a:'RAM'},
+{q:'جهاز إدخال؟',o:['شاشة','طابعة','فأرة','مضخم'],a:'فأرة'},
+{q:'نظام التشغيل؟',o:['Word','Windows','Excel','Chrome'],a:'Windows'},
+{q:'الجزء المعنوي؟',o:['Hardware','Software','CPU','RAM'],a:'Software'},
+{q:'تخزين بصري؟',o:['قرص صلب','CD/DVD','RAM','لوحة'],a:'CD/DVD'},
+{q:'اختصار الذاكرة الحية؟',o:['ROM','RAM','CPU','USB'],a:'RAM'}
+]);
 
-    // ===== أسئلة الاختبار =====
-    var Q = [
-        {q:"الجزء المادي في الحاسوب؟",o:["Hardware","Software","Internet","Windows"],a:"Hardware"},
-        {q:"وظيفة المعالج (CPU)؟",o:["تخزين","عرض الصور","تنفيذ الأوامر","الطباعة"],a:"تنفيذ الأوامر"},
-        {q:"الذاكرة التي تفقد محتواها عند انقطاع الكهرباء؟",o:["ROM","RAM","Hard Disk","CD"],a:"RAM"},
-        {q:"أي من التالي جهاز إدخال؟",o:["الشاشة","الطابعة","الفأرة","المضخم"],a:"الفأرة"},
-        {q:"نظام التشغيل الأساسي؟",o:["Word","Windows","Excel","Chrome"],a:"Windows"},
-        {q:"الجزء المعنوي يسمى؟",o:["Hardware","Software","CPU","RAM"],a:"Software"},
-        {q:"وسيط تخزين بصري؟",o:["القرص الصلب","CD/DVD","RAM","اللوحة الأم"],a:"CD/DVD"},
-        {q:"اختصار الذاكرة الحية؟",o:["ROM","RAM","CPU","USB"],a:"RAM"}
-    ];
+Z.addLesson('demo_game',{cat:'games',icon:'🎮',name:'لعبة الذاكرة',desc:'اعثر على الأزواج',color:'p'},[
+{n:'لعبة',t:'🎮 لعبة الذاكرة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:15px"><button onclick="ZAID.startMemory()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:15px;padding:12px 30px;border:none;border-radius:25px;font-weight:900;cursor:pointer;font-family:Cairo">🎯 ابدأ</button></div>'}
+]);
 
-    var state = { slides: [], idx: 0 };
-    var exam = { idx: 0, score: 0 };
+Z.addSrv('internship',{icon:'📄',title:'طلب تربص',desc:'أرسل سيرتك الذاتية عبر واتساب.'});
+Z.addSrv('job',{icon:'💼',title:'طلب شغل',desc:'فرص عمل في تونس والخليج.'});
+Z.addSrv('consult',{icon:'💡',title:'استشارات',desc:'استشارات أكاديمية ومهنية.'});
+Z.addSrv('grad',{icon:'🎯',title:'مشاريع تخرج',desc:'إشراف على مشاريع التخرج.'});
 
-    // ===== عرض اختيار الدرس =====
-    window.__showTechSelector = function(){
-        var c = document.getElementById('lessonContent');
-        if (!c) return;
-        c.innerHTML = '<div class="tech-selector">'
-            + '<div class="lesson-card" onclick="window.__startTech(\'orig\')"><div class="lesson-icon">📖</div><div class="lesson-title">📚 الأطفال والحاسوب</div><div class="lesson-desc">16 شريحة + اختبار</div></div>'
-            + '<div class="lesson-card" onclick="window.__startTech(\'prim\')" style="background:linear-gradient(135deg,#dc2626,#991b1b)"><div class="lesson-icon">🧒</div><div class="lesson-title">المرحلة الابتدائية</div><div class="lesson-desc">18 شريحة + اختبار</div></div>'
-            + '</div>';
-        window.showPage('pageLesson');
-    };
-
-    // ===== بدء درس =====
-    window.__startTech = function(type){
-        state.slides = (type === 'orig') ? BOOK : PRIM;
-        state.idx = 0;
-        renderSlide();
-    };
-
-    // ===== عرض الشريحة =====
-    function renderSlide(){
-        var c = document.getElementById('lessonContent');
-        if (!c) return;
-        var nav = '<div class="tech-nav">';
-        if (state.idx > 0) nav += '<button class="tech-nav-btn tech-prev" onclick="window.__prev()">▶ السابق</button>';
-        nav += '<button class="tech-nav-btn tech-exit" onclick="window.__exitTech()">🏠 خروج</button>';
-        if (state.idx < state.slides.length - 1) {
-            nav += '<button class="tech-nav-btn tech-next" onclick="window.__next()">التالي ◀</button>';
-        }
-        nav += '</div>';
-        var prog = '<div class="tech-progress"><div class="tech-progress-fill" style="width:' + ((state.idx + 1) / state.slides.length * 100) + '%"></div></div>';
-        c.innerHTML = state.slides[state.idx] + nav + prog;
-        window.scrollTo(0, 0);
-    }
-
-    window.__prev = function(){ if (state.idx > 0) { state.idx--; renderSlide(); } };
-    window.__next = function(){ if (state.idx < state.slides.length - 1) { state.idx++; renderSlide(); } };
-    window.__exitTech = function(){
-        if (window.currentAudio) { window.currentAudio.pause(); window.currentAudio = null; }
-        window.__showTechSelector();
-    };
-
-    // ===== الاختبار =====
-    window.__startExam = function(){
-        exam.idx = 0;
-        exam.score = 0;
-        renderExam();
-    };
-
-    function renderExam(){
-        var c = document.getElementById('lessonContent');
-        if (!c) return;
-        if (exam.idx >= Q.length) {
-            var p = Math.round((exam.score / Q.length) * 100);
-            var msg = p >= 50 ? '🎉 مبروك! نجحت' : '😔 للأسف، لم تنجح';
-            var col = p >= 50 ? '#22c55e' : '#dc2626';
-            c.innerHTML = '<div class="tech-slide" style="text-align:center;">'
-                + '<div class="tech-slide-num">🏆 النتيجة</div>'
-                + '<div style="font-size:22px;font-weight:900;color:' + col + ';margin:15px 0;">' + msg + '</div>'
-                + '<div class="tech-text" style="font-size:16px;">درجتك: ' + exam.score + ' من ' + Q.length + '<br>النسبة: ' + p + '%</div>'
-                + '<div style="margin-top:15px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">'
-                + '<button class="tech-nav-btn tech-next" onclick="window.__startExam()">🔄 إعادة</button>'
-                + '<button class="tech-nav-btn tech-exit" onclick="window.__exitTech()">🔙 للدروس</button>'
-                + '</div></div>';
-            return;
-        }
-        var q = Q[exam.idx];
-        var opts = '';
-        for (var i = 0; i < q.o.length; i++) {
-            opts += '<button class="exam-option" onclick="window.__ans(\'' + q.o[i].replace(/'/g, "\\'") + '\')">' + q.o[i] + '</button>';
-        }
-        c.innerHTML = '<div class="tech-slide">'
-            + '<div class="tech-slide-num">📝 السؤال ' + (exam.idx + 1) + ' من ' + Q.length + '</div>'
-            + '<div class="tech-text" style="font-size:15px;font-weight:900;">' + q.q + '</div>'
-            + opts + '</div>';
-    }
-
-    window.__ans = function(ch){
-        var q = Q[exam.idx];
-        if (ch === q.a) { exam.score++; alert('✅ صحيح!'); }
-        else { alert('❌ خطأ. الصحيح: ' + q.a); }
-        exam.idx++;
-        renderExam();
-    };
-
+if(!Z.jobs.length){
+  Z.jobs=[
+    {title:'💻 مهندس برمجيات',icon:'💻',employer:'محمد زايد',company:'Tech Solutions',specialty:'تطوير الويب — JavaScript / React',overview:'خبرة 3 سنوات لتطوير تطبيقات ويب حديثة. العمل من المكتب بتونس العاصمة.',level:'مهندس'},
+    {title:'📚 أستاذ رياضيات',icon:'📚',employer:'إدارة المدرسة',company:'المدرسة الدولية بسوسة',specialty:'تعليم الرياضيات — الثانوي',overview:'إجازة في الرياضيات، خبرة سنة. عقد CDD سنة قابل للتجديد.',level:'ماجستير'},
+    {title:'🎨 مصمم جرافيك',icon:'🎨',employer:'Creative',company:'Creative Agency',specialty:'تصميم — Photoshop / Illustrator',overview:'مصمم جرافيك للعمل على مشاريع متنوعة. يمكن عن بعد.',level:'تقني سامي'},
+    {title:'📊 محلل بيانات',icon:'📊',employer:'DataCorp',company:'DataCorp Tunisia',specialty:'Python / SQL / Power BI',overview:'محلل بيانات عن بعد، خبرة سنتين. عقد CDI.',level:'مهندس'},
+    {title:'🌐 مترجم',icon:'🌐',employer:'GlobalLingua',company:'GlobalLingua',specialty:'ترجمة — عربي/فرنسي/إنجليزي',overview:'مترجم freelance عن بعد على مشاريع متنوعة.',level:'ماجستير'},
+    {title:'🔧 تقني صيانة',icon:'🔧',employer:'مركز التكوين',company:'مركز التكوين المهني',specialty:'صيانة الحاسوب والشبكات',overview:'شهادة تقني في الإعلامية. عقد CDD.',level:'تقني'},
+    {title:'🎓 أستاذ جامعي',icon:'🎓',employer:'جامعة المنار',company:'كلية العلوم',specialty:'علوم الحاسوب — AI',overview:'دكتوراه في علوم الحاسوب، أبحاث منشورة.',level:'دكتوراه'}
+  ];
+  Z.saveJobs();
+}
 })();
 </script>
+<!-- ══════════════════════════════════════════════════════════════════
+     نهاية الجزء 1/6
+     ══ ألصق الجزء 2/6 هنا ══
+     ══ ألصق الجزء 3/6 هنا ══
+     ══ ألصق الجزء 4/6 هنا ══
+     ══ ألصق الجزء 5/6 هنا ══
+     ══ ألصق الجزء 6/6 هنا ══
+     ══════════════════════════════════════════════════════════════════ -->
 </body>
 </html>
