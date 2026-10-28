@@ -5,7 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<script>try{var _j=localStorage.getItem('zaid_jobs');localStorage.clear();sessionStorage.clear();if(_j)localStorage.setItem('zaid_jobs',_j);}catch(e){}</script>
+<script>
+try {
+  var _j = localStorage.getItem('zaid_jobs');
+  var _v = localStorage.getItem('zaid_visits') || '0';
+  var _u = localStorage.getItem('zaid_users') || '0';
+  localStorage.clear();
+  sessionStorage.clear();
+  if(_j) localStorage.setItem('zaid_jobs', _j);
+  localStorage.setItem('zaid_visits', parseInt(_v) + 1);
+  localStorage.setItem('zaid_users', _u);
+} catch(e) {}
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Cairo,sans-serif}
 html,body{height:100%;overflow:hidden}
@@ -29,19 +40,19 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 #main{flex:1;overflow-y:auto;padding:15px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;}
 #pageWelcome{display:flex;flex-direction:column;align-items:center;width:100%;max-width:600px;gap:15px;margin:0 auto;}
 
-/* 4. اللوقو والتلفاز مع تأثير الوميض البطيء */
+/* 4. اللوقو والتلفاز (صورة مكبرة) */
 .logo{position:relative;width:220px;height:220px;margin:0 auto}
 .ring{position:absolute;width:220px;height:220px;border-radius:50%;border:5px solid #dc2626;background:rgba(255,255,255,.98);box-shadow:0 0 30px #dc2626;animation:pl 3s infinite}
 @keyframes pl{50%{box-shadow:0 0 45px #ef4444}}
 .flags{position:absolute;width:205px;height:205px;top:7px;left:7px;animation:rt 22s linear infinite;z-index:2}
 @keyframes rt{100%{transform:rotate(360deg)}}
-.tv{position:absolute;width:150px;height:150px;top:35px;left:35px;z-index:3}
-.tvb{width:100%;height:115px;background:#1e293b;border:3px solid #dc2626;border-radius:12px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;}
+.tv{position:absolute;width:160px;height:160px;top:30px;left:30px;z-index:3}
+.tvb{width:100%;height:135px;background:#1e293b;border:3px solid #dc2626;border-radius:12px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;}
 
-/* النص (يظهر ويختفي) */
-.tvt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#dc2626,#991b1b);z-index:1;animation:blinkTxt 6s infinite alternate;}
-/* الصورة (تختفي وتظهر) - مع ضبطها لتكون في المنتصف 100% */
-.tvb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:2;animation:blinkImg 6s infinite alternate;}
+/* الصورة (مكبرة في الأعلى) */
+.tvb img{position:absolute;top:8px;width:110px;height:110px;object-fit:cover;border-radius:50%;border:3px solid #fff;background:#1e293b;z-index:2;animation:blinkImg 6s infinite alternate;}
+/* النص (في الأسفل) */
+.tvt{position:absolute;bottom:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;animation:blinkTxt 6s infinite alternate;}
 
 /* حركة الوميض البطيء (6 ثواني) */
 @keyframes blinkImg { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
@@ -166,6 +177,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <span id="tt">مرحباً — أنت زائر</span>
 <button id="br" onclick="ZAID.showPage('pageWelcome')" style="background:#fbbf24;color:#1e293b;">🔑 سجّل</button>
 <button id="bs" onclick="ZAID.showSub()" style="display:none;background:#22c55e;color:#fff;">💳 اشترك</button>
+<button id="bstat" onclick="ZAID.showStats()" style="display:none;background:#f59e0b;color:#fff;">📊 إحصائيات</button>
 <button id="bo" onclick="ZAID.logout()" style="display:none;background:#dc2626;color:#fff;">🚪 خروج</button>
 </div>
 
@@ -183,11 +195,11 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <div class="flags"><svg viewBox="0 0 185 185"><defs><g id="tn"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="#fff" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="#fff"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="#fff"/></g></defs><use href="#tn" x="92" y="12"/><use href="#tn" x="160" y="54"/><use href="#tn" x="160" y="132"/><use href="#tn" x="92" y="174"/><use href="#tn" x="24" y="132"/><use href="#tn" x="24" y="54"/></svg></div>
     <div class="tv">
       <div class="tvb">
+        <img src="my-photo.jpg" onerror="this.style.display='none'">
         <div class="tvt">
             <span style="font-size:16px;font-weight:900;color:#fbbf24;margin-bottom:2px;">منصة</span>
-            <span style="font-size:24px;font-weight:900;color:#fff;">زايد</span>
+            <span style="font-size:20px;font-weight:900;color:#fff;">زايد</span>
         </div>
-        <img src="my-photo.jpg" onerror="this.style.display='none'">
       </div>
       <div class="tvs"></div><div class="tvb2"></div>
     </div>
@@ -289,17 +301,27 @@ Z.goHome=function(){Z.stopSpeak();Z.showPage(Z.user||Z.admin?'pageHome':'pageWel
 
 Z.updateUI=function(){
   var b=document.getElementById('top'),ic=document.getElementById('ti'),tx=document.getElementById('tt');
-  var br=document.getElementById('br'),bo=document.getElementById('bo'),bs=document.getElementById('bs');
+  var br=document.getElementById('br'),bo=document.getElementById('bo'),bs=document.getElementById('bs'),bstat=document.getElementById('bstat');
   var y=document.getElementById('yellow'),aj=document.getElementById('adminAddJob');
-  if(Z.admin){b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف';
+  
+  if(Z.admin){
+    b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف';
     br.style.display='none';bo.style.display='inline-block';bs.style.display='none';y.style.display='none';
-    if(aj)aj.style.display='block';}
-  else if(Z.user){b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name;
+    if(bstat)bstat.style.display='inline-block';
+    if(aj)aj.style.display='block';
+  }
+  else if(Z.user){
+    b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name;
     br.style.display='none';bo.style.display='inline-block';bs.style.display='inline-block';y.style.display='none';
-    if(aj)aj.style.display='none';}
-  else{b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر';
+    if(bstat)bstat.style.display='none';
+    if(aj)aj.style.display='none';
+  }
+  else{
+    b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر';
     br.style.display='inline-block';bo.style.display='none';bs.style.display='none';y.style.display='flex';
-    if(aj)aj.style.display='none';}
+    if(bstat)bstat.style.display='none';
+    if(aj)aj.style.display='none';
+  }
 };
 
 Z.register=function(){
@@ -315,8 +337,38 @@ Z.register=function(){
     er.style.display='block';er.textContent='املأ جميع الحقول، والاسم ثلاثي';return;}
   er.style.display='none';
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat};
+  
+  try {
+    var u = parseInt(localStorage.getItem('zaid_users') || '0');
+    localStorage.setItem('zaid_users', u + 1);
+  } catch(e){}
+  
   document.getElementById('un').textContent=n;
   Z.updateUI();Z.showPage('pageHome');
+};
+
+Z.showStats=function(){
+  var v=localStorage.getItem('zaid_visits')||'1';
+  var u=localStorage.getItem('zaid_users')||'0';
+  var lc=Object.keys(Z.lessons).length;
+  var ex=Object.keys(Z.exams).length;
+  var jb=Z.jobs.length;
+  
+  var o=document.getElementById('statsModal'); if(o)o.remove();
+  var m=document.createElement('div'); m.id='statsModal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.9);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML='<div style="background:#1e293b;padding:30px;border-radius:20px;max-width:450px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;">'
+    +'<h2 style="color:#f59e0b;margin-bottom:20px;font-size:24px;">📊 إحصائيات المنصة</h2>'
+    +'<div style="display:flex;flex-direction:column;gap:10px;font-size:16px;font-weight:700;">'
+      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>👥 إجمالي الزوار:</span> <span style="color:#3b82f6">'+v+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 عدد المسجلين:</span> <span style="color:#22c55e">'+u+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>📚 الدروس المتاحة:</span> <span style="color:#fbbf24">'+lc+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الاختبارات:</span> <span style="color:#dc2626">'+ex+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>💼 عروض التشغيل:</span> <span style="color:#06b6d4">'+jb+'</span></div>'
+    +'</div>'
+    +'<button onclick="document.getElementById(\'statsModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:20px;font-size:14px;font-family:Cairo;font-weight:900;">إغلاق</button>'
+    +'</div>';
+  document.body.appendChild(m);
 };
 
 Z.adminLogin=function(){
@@ -326,7 +378,7 @@ Z.adminLogin=function(){
   m.innerHTML='<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;">'
     +'<div style="font-size:50px;margin-bottom:15px;">👑</div>'
     +'<h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2>'
-    +'<input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" style="text-align:center;font-size:20px;letter-spacing:5px;">'
+    +'<input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" value="" autocomplete="new-password" style="text-align:center;font-size:20px;letter-spacing:5px;">'
     +'<button onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button>'
     +'<button onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button>'
     +'</div>';
@@ -399,7 +451,7 @@ Z.openSrv=function(key){
 Z.openJobs=function(){
   if(!Z.user&&!Z.admin){Z.showPage('pageWelcome');return;}
   var c=document.getElementById('lc');
-  if(!Z.jobs.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">💼</div><div class="st">لا توجد عروض بعد</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';}
+  if(!Z.jobs.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">💼</div><div class="st">لا توجد عروض تشغيل حالياً</div><div class="stxt">يرجى العودة لاحقاً.</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';}
   else{
     var h='<div class="sel">';
     Z.jobs.forEach(function(j,idx){
@@ -676,17 +728,10 @@ Z.addLesson('demo_game',{cat:'games',icon:'🎮',name:'لعبة الذاكرة',
 ]);
 
 Z.addSrv('internship',{icon:'📄',title:'طلب تربص',desc:'أرسل سيرتك الذاتية عبر واتساب.'});
-Z.addSrv('job',{icon:'💼',title:'طلب شغل',desc:'فرص عمل في تونس والخليج.'});
+Z.addSrv('job',{icon:'💼',title:'طلب شغل',desc:'أرسل سيرتك الذاتية وطلبك للبحث عن عمل.'});
 Z.addSrv('consult',{icon:'💡',title:'استشارات',desc:'استشارات أكاديمية ومهنية.'});
 Z.addSrv('grad',{icon:'🎯',title:'مشاريع تخرج',desc:'إشراف على مشاريع التخرج.'});
 
-if(!Z.jobs.length){
-  Z.jobs=[
-    {title:'💻 مهندس برمجيات',logo:'https://cdn-icons-png.flaticon.com/512/2933/2933245.png',company:'Tech Solutions',tax:'123456A',activity:'تطوير الويب — JavaScript / React',address:'تونس العاصمة',phone:'21655335477',email:'hr@tech.com',level:'مهندس'},
-    {title:'📚 أستاذ رياضيات',logo:'https://cdn-icons-png.flaticon.com/512/3135/3135810.png',company:'المدرسة الدولية',tax:'987654B',activity:'تعليم الرياضيات',address:'سوسة',phone:'21655335477',email:'school@edu.tn',level:'ماجستير'}
-  ];
-  Z.saveJobs();
-}
 })();
 </script>
 </body>
