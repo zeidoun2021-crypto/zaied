@@ -7,14 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <script>
 try {
-  var _j = localStorage.getItem('zaid_jobs');
-  var _v = localStorage.getItem('zaid_visits') || '0';
-  var _u = localStorage.getItem('zaid_users') || '0';
-  localStorage.clear();
-  sessionStorage.clear();
-  if(_j) localStorage.setItem('zaid_jobs', _j);
-  localStorage.setItem('zaid_visits', parseInt(_v) + 1);
-  localStorage.setItem('zaid_users', _u);
+  var _isAdmin = sessionStorage.getItem('zaid_admin_session');
+  if (!_isAdmin) {
+    var _v = localStorage.getItem('zaid_visits') || '0';
+    localStorage.setItem('zaid_visits', parseInt(_v) + 1);
+  }
+  if(!localStorage.getItem('zaid_jobs')) localStorage.setItem('zaid_jobs', '[]');
+  if(!localStorage.getItem('zaid_registered_users')) localStorage.setItem('zaid_registered_users', '[]');
 } catch(e) {}
 </script>
 <style>
@@ -29,7 +28,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 #top.adm{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
 #top button{padding:5px 15px;border-radius:15px;border:none;cursor:pointer;font-weight:900;font-size:13px;font-family:Cairo}
 
-/* 2. الشريط الأصفر الإلزامي */
+/* 2. الشريط الأصفر */
 #yellow{position:relative;width:100%;background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b);height:40px;display:flex;align-items:center;overflow:hidden;border-bottom:3px solid #dc2626;flex-shrink:0;z-index:99;}
 .yw{flex:1;overflow:hidden;position:relative;height:100%}
 .yt{position:absolute;white-space:nowrap;font-size:13px;line-height:40px;animation:ys 20s linear infinite;font-weight:900;color:#7f1d1d}
@@ -48,26 +47,19 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 @keyframes rt{100%{transform:rotate(360deg)}}
 .tv{position:absolute;width:170px;height:170px;top:35px;left:35px;z-index:3}
 .tvb{width:100%;height:145px;background:#fff;border:4px solid #dc2626;border-radius:12px;overflow:hidden;position:relative;}
-
-/* الصورة في المنتصف تماماً مع الرابط الجديد */
 .tvb img{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:115px;height:115px;object-fit:cover;background:#fff;border-radius:50%;border:3px solid #dc2626;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;animation:blinkImg 6s infinite alternate;}
-
-/* النص في المنتصف تماماً */
 .tvt{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;animation:blinkTxt 6s infinite alternate;text-align:center;}
 .tvt span:first-child { font-size: 18px; font-weight: 900; color: #dc2626; margin-bottom: 2px; }
 .tvt span:last-child { font-size: 22px; font-weight: 900; color: #dc2626; }
-
-/* حركة الوميض البطيء (6 ثواني) */
 @keyframes blinkImg { 0%, 70% { opacity: 1; } 85%, 100% { opacity: 0; } }
 @keyframes blinkTxt { 0%, 70% { opacity: 0; } 85%, 100% { opacity: 1; } }
-
 .tvs{width:34px;height:12px;background:#dc2626;margin:0 auto;border-radius:0 0 4px 4px}
 .tvb2{width:80px;height:6px;background:#dc2626;margin:0 auto;border-radius:4px}
 
-/* 5. كلمات الترحيب */
+/* 5. الترحيب */
 .wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:15px;text-align:center;border:3px solid #fbbf24;font-size:16px;line-height:1.6;font-weight:900;width:100%;box-shadow:0 4px 10px rgba(0,0,0,0.3);}
 
-/* 6. حقول التسجيل */
+/* 6. التسجيل */
 #gw{background:#fff;border:3px solid #dc2626;border-radius:15px;padding:20px;width:100%;color:#0f172a;box-shadow:0 8px 25px rgba(0,0,0,0.5)}
 #gw h2{color:#dc2626;text-align:center;font-size:20px;margin-bottom:15px;font-weight:900}
 .err{display:none;color:#991b1b;background:#fee2e2;padding:8px;border-radius:8px;font-size:13px;text-align:center;border:2px solid #dc2626;font-weight:700;margin-bottom:10px}
@@ -79,7 +71,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .cat{background:#fee2e2;color:#991b1b;padding:6px 14px;border-radius:15px;font-weight:900;cursor:pointer;font-size:13px;border:2px solid transparent;transition:0.2s}
 .cat.on{background:#dc2626;color:#fff;border-color:#fbbf24;transform:scale(1.05)}
 
-/* 7. صفحة الأقسام (القروبات) */
+/* 7. الأقسام */
 #pageHome{width:100%;max-width:1200px;display:flex;flex-direction:column;gap:15px;margin:0 auto;}
 .htitle{background:linear-gradient(135deg,#dc2626,#991b1b);padding:12px;border-radius:12px;text-align:center;border:3px solid #fbbf24;font-size:20px;font-weight:900}
 .secs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;}
@@ -98,7 +90,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .btn{padding:10px 20px;border:none;border-radius:20px;font-family:Cairo;font-size:14px;font-weight:900;cursor:pointer;color:#fff}
 .bg{background:#22c55e}.bgr{background:#334155}
 
-/* صفحة الدرس */
+/* صفحة الدرس والشرائح */
 #lesson{max-width:1000px;width:100%;margin:0 auto}
 .back{background:#334155;color:#fff;padding:8px 20px;border-radius:20px;border:none;cursor:pointer;font-weight:900;margin-bottom:15px;font-size:13px;font-family:Cairo}
 .lcard{background:linear-gradient(135deg,#16a34a,#14532d);border:3px solid #fbbf24;border-radius:15px;padding:20px;text-align:center;cursor:pointer;margin-bottom:15px;transition:0.2s}
@@ -111,7 +103,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .ld{font-size:13px;color:#cbd5e1}
 .sel{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin:20px 0}
 
-/* الشرائح */
 .slide{background:#f8fafc;border-radius:15px;padding:20px;margin:10px 0;color:#1e293b;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
 .sn{display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:4px 12px;border-radius:10px;font-size:13px;font-weight:bold;margin-bottom:10px}
 .st{font-size:22px;font-weight:900;color:#dc2626;text-align:center;margin-bottom:15px}
@@ -134,7 +125,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .sp-fr{background:linear-gradient(135deg,#1e88e5,#0d47a1)}
 .sp-en{background:linear-gradient(135deg,#16a34a,#15803d)}
 
-/* التنقل */
 .nav{display:flex;gap:10px;margin:20px auto;justify-content:center;flex-wrap:wrap}
 .nbtn{padding:10px 20px;border:none;border-radius:25px;font-family:Cairo;font-weight:900;font-size:14px;cursor:pointer;color:#fff;transition:0.2s}
 .nbtn:hover{transform:scale(1.05)}
@@ -153,7 +143,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .cert p{font-size:16px;margin:10px 0;line-height:1.8}
 .cert .sign{margin-top:25px;font-size:14px;color:#475569;font-weight:bold}
 
-/* الوظائف والخدمات */
+/* الخدمات */
 .svcard{background:linear-gradient(135deg,#831843,#9d174d);border:3px solid #fbbf24;border-radius:15px;padding:25px;color:#fff;margin:15px 0;text-align:center}
 .svcard h3{color:#fbbf24;font-size:22px;margin-bottom:15px}
 .svcard p{font-size:15px;margin-bottom:20px;line-height:1.8}
@@ -165,7 +155,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .apply-btn{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:10px 25px;border:3px solid #fbbf24;border-radius:25px;font-weight:900;cursor:pointer;font-family:Cairo;font-size:15px;transition:0.2s}
 .del-btn{background:#dc2626;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;cursor:pointer;font-family:Cairo;font-size:13px;margin-right:10px}
 
-/* لعبة الذاكرة */
 .mem{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
 .mem .mc{background:#334155;padding:20px;border-radius:12px;text-align:center;font-size:30px;cursor:pointer;color:transparent;user-select:none;transition:0.2s}
 .mem .mc.on{background:#22c55e;color:#fff;transform:scale(1.05)}
@@ -342,11 +331,12 @@ Z.register=function(){
   if(n.split(' ').length<3||!p||!s||!e||!h||!c||!ci||!Z.selectedCat){
     er.style.display='block';er.textContent='املأ جميع الحقول، والاسم ثلاثي';return;}
   er.style.display='none';
-  Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat};
+  Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date: new Date().toLocaleString('ar-TN')};
   
   try {
-    var u = parseInt(localStorage.getItem('zaid_users') || '0');
-    localStorage.setItem('zaid_users', u + 1);
+    var users = JSON.parse(localStorage.getItem('zaid_registered_users') || '[]');
+    users.push(Z.user);
+    localStorage.setItem('zaid_registered_users', JSON.stringify(users));
   } catch(e){}
   
   document.getElementById('un').textContent=n;
@@ -355,26 +345,51 @@ Z.register=function(){
 
 Z.showStats=function(){
   var v=localStorage.getItem('zaid_visits')||'1';
-  var u=localStorage.getItem('zaid_users')||'0';
+  var users=[];
+  try { users=JSON.parse(localStorage.getItem('zaid_registered_users')||'[]'); }catch(e){}
   var lc=Object.keys(Z.lessons).length;
   var ex=Object.keys(Z.exams).length;
   var jb=Z.jobs.length;
   
+  var usersHtml = '';
+  if(users.length === 0) {
+    usersHtml = '<div style="color:#94a3b8;text-align:center;padding:10px;font-size:14px;">لا يوجد مسجلون بعد</div>';
+  } else {
+    users.forEach(function(u){
+      usersHtml += '<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:13px;line-height:1.6;">'
+        + '<div style="color:#fbbf24;font-weight:900;">👤 ' + u.name + '</div>'
+        + '<div style="color:#cbd5e1;">📧 ' + u.email + ' | 📱 ' + u.phone + '</div>'
+        + '<div style="color:#94a3b8;font-size:11px;">📅 ' + (u.date || '—') + '</div>'
+        + '</div>';
+    });
+  }
+  
   var o=document.getElementById('statsModal'); if(o)o.remove();
   var m=document.createElement('div'); m.id='statsModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.9);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:30px;border-radius:20px;max-width:450px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;">'
-    +'<h2 style="color:#f59e0b;margin-bottom:20px;font-size:24px;">📊 إحصائيات المنصة</h2>'
-    +'<div style="display:flex;flex-direction:column;gap:10px;font-size:16px;font-weight:700;">'
-      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>👥 إجمالي الزوار:</span> <span style="color:#3b82f6">'+v+'</span></div>'
-      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 عدد المسجلين:</span> <span style="color:#22c55e">'+u+'</span></div>'
-      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>📚 الدروس المتاحة:</span> <span style="color:#fbbf24">'+lc+'</span></div>'
-      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الاختبارات:</span> <span style="color:#dc2626">'+ex+'</span></div>'
-      +'<div style="background:rgba(255,255,255,.05);padding:12px;border-radius:10px;display:flex;justify-content:space-between;"><span>💼 عروض التشغيل:</span> <span style="color:#06b6d4">'+jb+'</span></div>'
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML='<div style="background:#1e293b;padding:25px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:90vh;display:flex;flex-direction:column;">'
+    +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2>'
+    +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
+      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>👥 إجمالي الزيارات:</span> <span style="color:#3b82f6">'+v+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 عدد المسجلين:</span> <span style="color:#22c55e">'+users.length+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📚 الدروس:</span> <span style="color:#fbbf24">'+lc+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الاختبارات:</span> <span style="color:#dc2626">'+ex+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>💼 عروض التشغيل:</span> <span style="color:#06b6d4">'+jb+'</span></div>'
     +'</div>'
-    +'<button onclick="document.getElementById(\'statsModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:20px;font-size:14px;font-family:Cairo;font-weight:900;">إغلاق</button>'
+    +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
+    +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:15px;max-height:200px;">'+usersHtml+'</div>'
+    +'<button onclick="ZAID.resetStats()" style="width:100%;padding:10px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;margin-bottom:8px;">🗑️ تصفير العدادات</button>'
+    +'<button onclick="document.getElementById(\'statsModal\').remove()" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;">إغلاق</button>'
     +'</div>';
   document.body.appendChild(m);
+};
+
+Z.resetStats=function(){
+  if(!Z.admin) return;
+  localStorage.setItem('zaid_visits', '0');
+  localStorage.setItem('zaid_registered_users', '[]');
+  alert('✅ تم تصفير جميع العدادات والبيانات بنجاح');
+  Z.showStats(); // تحديث النافذة
 };
 
 Z.adminLogin=function(){
@@ -393,6 +408,7 @@ Z.adminLogin=function(){
 Z.checkAdmin=function(){
   var pwd=document.getElementById('adminPwd').value;
   if(pwd===Z.ADMIN){
+    sessionStorage.setItem('zaid_admin_session', 'true');
     Z.admin=true; document.getElementById('admModal').remove(); Z.updateUI(); Z.showPage('pageHome');
   } else {
     alert('كلمة المرور خاطئة');
@@ -400,7 +416,9 @@ Z.checkAdmin=function(){
 };
 
 Z.logout=function(){
-  Z.user=null;Z.admin=false;Z.stopSpeak();Z.updateUI();Z.showPage('pageWelcome');
+  Z.user=null;Z.admin=false;Z.stopSpeak();
+  sessionStorage.removeItem('zaid_admin_session');
+  Z.updateUI();Z.showPage('pageWelcome');
   var inputs = ['fn','fp','fs','fe','fh','fc','fci'];
   inputs.forEach(function(id){
       var el = document.getElementById(id);
@@ -660,11 +678,12 @@ window.addEventListener('load',function(){Z.updateUI();Z.showPage('pageWelcome')
 (function(){
 var Z=window.ZAID;
 
+/* ====== دروس التربية التكنولوجية ====== */
 Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحاسوب',desc:'16 شريحة + اختبار'},[
 {n:'📖 1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong> — تونس 🇹🇳',s:['الأطفال والحاسوب','Les enfants','Children']},
 {n:'📖 2',i:'https://i.postimg.cc/CKcnB72y/haswb1.jpg',c:'🧒 ما اسمك؟',m:'💻 لي اسمان — الكمبيوتر أو الحاسوب. أتكون من <strong>جزء مادي</strong> و<strong>جزء معنوي</strong>.',r:['جزء مادي / معنوي','Matériel / Logiciel','Hardware / Software'],s:['جزء مادي وجزء معنوي','Materiel et logiciel','Hardware and software']},
 {n:'📖 3',i:'https://i.postimg.cc/Hk9XKgqm/whdt-mrkzyt.jpg',c:'🧒 يقال أنك ذكي!',m:'💻 بفضل <strong>المعالج</strong>.',r:['معالج','Processeur','Processor'],s:['المعالج','Processeur','Processor']},
-{n:'📖 4',c:'🧒 مكوناتك؟',m:'💻 <strong>الوحدة المركزية</strong>، <strong>الذاكرات</strong>، <strong>الروابط</strong>، <strong>اللواحق</strong>.',r:['4 أجزاء','4 parties','4 parts'],s:['الوحدة المركزية والذاكرات والروابط واللواحق','Unite centrale','Central unit']},
+{n:'📖 4', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Personal_computer%2C_exploded_4.svg/640px-Personal_computer%2C_exploded_4.svg.png', c:'🧒 مكوناتك؟', m:'💻 <strong>الوحدة المركزية</strong>، <strong>الذاكرات</strong>، <strong>الروابط</strong>، <strong>اللواحق</strong>.',r:['4 أجزاء','4 parties','4 parts'],s:['الوحدة المركزية والذاكرات والروابط واللواحق','Unite centrale','Central unit']},
 {n:'📖 5',i:'https://i.postimg.cc/5NZs1bKy/hyt-wmytt.jpg',c:'🧒 الوحدة المركزية؟',m:'💻 قلبي النابض وعقلي المفكر.',r:['وحدة مركزية','Unité Centrale','System Unit'],s:['الوحدة المركزية','Unite centrale','System unit']},
 {n:'📖 6',m:'💻 <strong>ذاكرة حية</strong> (RAM) و<strong>ذاكرة ميتة</strong> (ROM).',c:'🧒 ما الفرق؟',r:['RAM / ROM','RAM / ROM','RAM / ROM'],s:['ذاكرة حية وذاكرة ميتة','RAM et ROM','RAM and ROM']},
 {n:'📖 7',m:'💻 <strong>RAM:</strong> متطايرة.<br><strong>ROM:</strong> دائمة.',r:['RAM متطايرة','RAM volatile','RAM volatile'],s:['الرام متطايرة','RAM volatile','RAM is volatile']},
@@ -680,6 +699,7 @@ Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحا�
 {n:'📖 الاختبار',e:'book_exam'}
 ]);
 
+/* ====== دروس المرحلة الابتدائية ====== */
 Z.addLesson('prim',{cat:'tech',icon:'🧒',name:'المرحلة الابتدائية',desc:'18 شريحة + اختبار',color:'r'},[
 {n:'📖 1',t:'📚 الدرس الأول',i:'https://i.postimg.cc/t4Rpp7t6/alatfal-walhaswb.jpg',x:'بقلم: <strong>محمد زايد</strong>',s:['التربية التكنولوجية','Education technologique','Technology education']},
 {n:'📖 2',t:'💻 الحاسوب',i:'https://i.postimg.cc/mZX3L8qx/haswb.jpg',x:'جهاز <strong>إلكتروني رقمي</strong> يستقبل البيانات ويعالجها ويخزنها ويخرج النتائج.',r:['الحاسوب','L ordinateur','The computer'],s:['الحاسوب','L ordinateur','The computer']},
@@ -701,6 +721,84 @@ Z.addLesson('prim',{cat:'tech',icon:'🧒',name:'المرحلة الابتدائ
 {n:'📖 الاختبار',e:'prim_exam'}
 ]);
 
+/* ====== محتوى اللغة العربية ====== */
+Z.addLesson('ar1',{cat:'arabic',icon:'🌙',name:'المستوى 1: الحروف والحركات',desc:'7 شرائح + اختبار'},[
+{n:'الدرس 1',t:'الأبجدية العربية',x:'تتكون الأبجدية العربية من <strong>28 حرفاً</strong>، وتُكتب من اليمين إلى اليسار.<br><br>أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي.',s:['الأبجدية العربية ثمانية وعشرون حرفا','L alphabet arabe','The Arabic alphabet']},
+{n:'الدرس 2',t:'الحركات (التشكيل)',x:'الحركات تحدد نطق الحرف: <br><br><strong>الفتحة (ـَ):</strong> بَ<br><strong>الضمة (ـُ):</strong> بُ<br><strong>الكسرة (ـِ):</strong> بِ<br><strong>السكون (ـْ):</strong> بْ'},
+{n:'الدرس 3',t:'التنوين',x:'التنوين هو نون زائدة تُلفظ ولا تُكتب:<br><br><strong>فتحتين (ـً):</strong> كِتَابًا<br><strong>ضمتين (ـٌ):</strong> كِتَابٌ<br><strong>كسرتين (ـٍ):</strong> كِتَابٍ'},
+{n:'الدرس 4',t:'المدود (حروف العلة)',x:'حروف المد هي الألف والواو والياء.<br><br><strong>الألف:</strong> بَا<br><strong>الواو:</strong> بُو<br><strong>الياء:</strong> بِي'},
+{n:'الدرس 5',t:'الشدة',x:'الشدة (ـّ) تعني أن الحرف مُضاعف (حرفان مُدغمان).<br><br>مثال: <strong>مَدَّ</strong> أصلها مَدَدَ.'},
+{n:'الدرس 6',t:'التاء المربوطة والمفتوحة',x:'<strong>التاء المفتوحة (ت):</strong> تُنطق تاءً دائماً، مثل: بِنْت.<br><strong>التاء المربوطة (ة):</strong> تُنطق هاءً عند الوقف، مثل: وَرْدَة.'},
+{n:'الدرس 7',e:'arabic_exam'}
+]);
+
+Z.addLesson('ar2',{cat:'arabic',icon:'📝',name:'المستوى 2: الجمل والضمائر',desc:'3 شرائح',color:'r'},[
+{n:'الدرس 1',t:'الجملة الاسمية',x:'تبدأ بـ<strong>اسم</strong> وتتكون من <strong>مبتدأ</strong> و<strong>خبر</strong>.<br><br>مثال: <strong>الطالبُ</strong> (مبتدأ) <strong>مجتهدٌ</strong> (خبر).'},
+{n:'الدرس 2',t:'الجملة الفعلية',x:'تبدأ بـ<strong>فعل</strong> وتتكون من <strong>فعل</strong> و<strong>فاعل</strong> و<strong>مفعول به</strong>.<br><br>مثال: <strong>كتبَ</strong> (فعل) <strong>الطالبُ</strong> (فاعل) <strong>الدرسَ</strong> (مفعول).'},
+{n:'الدرس 3',t:'الضمائر',x:'<strong>ضمائر المتكلم:</strong> أنا، نحن.<br><strong>ضمائر المخاطب:</strong> أنتَ، أنتِ، أنتم.<br><strong>ضمائر الغائب:</strong> هو، هي، هم.'}
+]);
+
+Z.addLesson('ar3',{cat:'arabic',icon:'📖',name:'المستوى 3: الفهم والتعبير',desc:'2 شرائح',color:'p'},[
+{n:'الدرس 1',t:'القراءة والفهم',x:'اقرأ النص التالي ثم أجب:<br><br><em>«العلمُ نورٌ والجهلُ ظلامٌ، فاطلبوا العلمَ ولو في الصين»</em>.<br><br>ما الفرق بين العلم والجهل حسب النص؟'},
+{n:'الدرس 2',t:'التعبير الكتابي',x:'اكتب فقرة قصيرة (5 أسطر) عن <strong>أهمية العلم</strong> في نهضة المجتمعات، مستخدماً الجمل الاسمية والفعلية.'}
+]);
+
+/* ====== المحاضرات ====== */
+Z.addLesson('lect_ai_edu',{cat:'lectures',icon:'🎤',name:'AI في التعليم',desc:'4 شرائح'},[
+{n:'1/4',t:'الذكاء الاصطناعي في التعليم',x:'يُحدث AI ثورة في التعليم عبر <strong>التعلم الشخصي</strong> و<strong>التقييم الآلي</strong> و<strong>المساعدين الأذكياء</strong>.',s:['الذكاء الاصطناعي في التعليم','IA dans l education','AI in education']},
+{n:'2/4',t:'أدوات AI',x:'<strong>ChatGPT</strong> للمساعدة، <strong>Duolingo</strong> للغات، <strong>Khan Academy</strong> للتقييم التكيفي.'},
+{n:'3/4',t:'الفوائد والتحديات',x:'<strong>فوائد:</strong> تخصيص، سرعة، تحفيز.<br><strong>تحديات:</strong> الخصوصية، التكلفة، نقص الكفاءات.'},
+{n:'4/4',t:'المستقبل',x:'التعليم المدمج بين <strong>المعلم البشري</strong> و<strong>الذكاء الاصطناعي</strong> هو الطريق الأمثل.',v:'https://www.youtube.com/embed/ad79nYk2keg'}
+]);
+
+Z.addLesson('lect_net',{cat:'lectures',icon:'🌐',name:'شبكات الاتصال',desc:'4 شرائح',color:'r'},[
+{n:'1/4',t:'الشبكات',x:'ربط <strong>جهازين أو أكثر</strong> لتبادل البيانات.'},
+{n:'2/4',t:'الأنواع',x:'<strong>LAN:</strong> محلية.<br><strong>MAN:</strong> مدينة.<br><strong>WAN:</strong> واسعة (الإنترنت).'},
+{n:'3/4',t:'البروتوكولات',x:'<strong>TCP/IP</strong> أساس الإنترنت. <strong>HTTP</strong> للويب. <strong>FTP</strong> للملفات.'},
+{n:'4/4',t:'الأمان',x:'<strong>التشفير</strong> و<strong>الجدار الناري</strong> أساس الحماية.'}
+]);
+
+Z.addLesson('lect_ai_res',{cat:'lectures',icon:'🔬',name:'AI في البحث العلمي',desc:'4 شرائح',color:'p'},[
+{n:'1/4',t:'AI والبحث',x:'يسرّع <strong>تحليل البيانات</strong> و<strong>اكتشاف الأنماط</strong>.'},
+{n:'2/4',t:'تطبيقات',x:'<strong>AlphaFold</strong> للبروتينات، <strong>GPT</strong> للكتابة، <strong>Computer Vision</strong> للتحليل.'},
+{n:'3/4',t:'الأخلاقيات',x:'الانتحال، السرقة العلمية، التحيز في البيانات.'},
+{n:'4/4',t:'الخلاصة',x:'AI <strong>أداة</strong> لا <strong>بديل</strong> عن الباحث.'}
+]);
+
+/* ====== الكتب ====== */
+Z.addLesson('bk_children',{cat:'books',icon:'📚',name:'الأطفال والحاسوب',desc:'بقلم محمد زايد'},[
+{n:'1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong>'},
+{n:'2',t:'مقدمة',x:'كتاب موجه للأطفال لتعلم أساسيات الحاسوب بطريقة مبسطة.'},
+{n:'3',t:'الكتاب الكامل',x:'الكتاب الكامل (16 شريحة) في قسم <strong>التربية التكنولوجية</strong>.'}
+]);
+
+/* ====== مسارات AI ====== */
+Z.addLesson('ai_intro',{cat:'ai',icon:'🤖',name:'مقدمة في AI',desc:'5 شرائح',color:'p'},[
+{n:'1/5',t:'ما هو AI؟',x:'محاكاة <strong>الذكاء البشري</strong> في الآلات.'},
+{n:'2/5',t:'تعلم الآلة',x:'خوارزميات تتعلم من البيانات: إشراف، بدون إشراف، تعزيز.'},
+{n:'3/5',t:'التعلم العميق',x:'شبكات عصبية متعددة الطبقات — أساس GPT وAlphaGo.'},
+{n:'4/5',t:'تطبيقات',x:'سيارات ذاتية القيادة، تشخيص طبي، ترجمة، روبوتات.'},
+{n:'5/5',t:'ابدأ',x:'تعلّم Python ثم TensorFlow أو PyTorch.'}
+]);
+
+Z.addLesson('ai_ml',{cat:'ai',icon:'🧠',name:'تعلم الآلة',desc:'3 شرائح',color:'r'},[
+{n:'1/3',t:'البيانات',x:'البيانات <strong>وقود</strong> التعلم.'},
+{n:'2/3',t:'التدريب',x:'نقسم البيانات: <strong>تدريب</strong> و<strong>اختبار</strong>.'},
+{n:'3/3',t:'التقييم',x:'الدقة، الاستدعاء، F1.'}
+]);
+
+/* ====== الألعاب ====== */
+Z.addLesson('demo_game',{cat:'games',icon:'🎮',name:'لعبة الذاكرة',desc:'اعثر على الأزواج',color:'p'},[
+{n:'لعبة',t:'🎮 لعبة الذاكرة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startMemory()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">🎯 ابدأ</button></div>'}
+]);
+
+/* ====== الخدمات ====== */
+Z.addSrv('internship',{icon:'📄',title:'طلب تربص',desc:'أرسل سيرتك الذاتية عبر واتساب.'});
+Z.addSrv('job',{icon:'💼',title:'طلب شغل',desc:'أرسل سيرتك الذاتية وطلبك للبحث عن عمل.'});
+Z.addSrv('consult',{icon:'💡',title:'استشارات',desc:'استشارات أكاديمية ومهنية.'});
+Z.addSrv('grad',{icon:'🎯',title:'مشاريع تخرج',desc:'إشراف على مشاريع التخرج.'});
+
+/* ====== الاختبارات ====== */
 Z.addExam('book_exam',[
 {q:'الجزء المادي؟',o:['Hardware','Software','Internet','Windows'],a:'Hardware'},
 {q:'الجزء المعنوي؟',o:['Hardware','Software','CPU','RAM'],a:'Software'},
@@ -718,6 +816,7 @@ Z.addExam('book_exam',[
 {q:'الوحدة المركزية تحتوي؟',o:['شاشة','معالج وذاكرات','طابعة','فأرة'],a:'معالج وذاكرات'},
 {q:'النواقل وظيفتها؟',o:['تخزين','نقل بيانات','طباعة','عرض'],a:'نقل بيانات'}
 ]);
+
 Z.addExam('prim_exam',[
 {q:'الحاسوب جهاز؟',o:['ميكانيكي','إلكتروني رقمي','كهربائي','يدوي'],a:'إلكتروني رقمي'},
 {q:'دماغ الحاسوب؟',o:['شاشة','معالج','فأرة','طابعة'],a:'معالج'},
@@ -736,14 +835,12 @@ Z.addExam('prim_exam',[
 {q:'النواقل تنقل؟',o:['ماء','بيانات','ورق','صور'],a:'بيانات'}
 ]);
 
-Z.addLesson('demo_game',{cat:'games',icon:'🎮',name:'لعبة الذاكرة',desc:'اعثر على الأزواج',color:'p'},[
-{n:'لعبة',t:'🎮 لعبة الذاكرة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startMemory()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">🎯 ابدأ</button></div>'}
+Z.addExam('arabic_exam',[
+{q:'عدد حروف الأبجدية العربية؟',o:['26','27','28','29'],a:'28'},
+{q:'ما الحركة على حرف الباء في «بُ»؟',o:['فتحة','ضمة','كسرة','سكون'],a:'ضمة'},
+{q:'أي الكلمات التالية اسم؟',o:['كتبَ','قلم','هو','في'],a:'قلم'},
+{q:'الجملة الاسمية تبدأ بـ...',o:['فعل','اسم','حرف','ظرف'],a:'اسم'}
 ]);
-
-Z.addSrv('internship',{icon:'📄',title:'طلب تربص',desc:'أرسل سيرتك الذاتية عبر واتساب.'});
-Z.addSrv('job',{icon:'💼',title:'طلب شغل',desc:'أرسل سيرتك الذاتية وطلبك للبحث عن عمل.'});
-Z.addSrv('consult',{icon:'💡',title:'استشارات',desc:'استشارات أكاديمية ومهنية.'});
-Z.addSrv('grad',{icon:'🎯',title:'مشاريع تخرج',desc:'إشراف على مشاريع التخرج.'});
 
 })();
 </script>
