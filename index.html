@@ -7,13 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <script>
 try {
-  // تصفير البيانات القديمة لبدء نسخة نظيفة
   localStorage.removeItem('zaid_jobs');
   localStorage.removeItem('zaid_jobs_v3');
   localStorage.removeItem('zaid_registered_users_v2');
   localStorage.removeItem('zaid_registered_users_v3');
-  localStorage.removeItem('zaid_visits_v2');
-  localStorage.removeItem('zaid_visits_v4');
   
   if(!localStorage.getItem('zaid_jobs_v4')) localStorage.setItem('zaid_jobs_v4', '[]');
   if(!localStorage.getItem('zaid_seekers_v4')) localStorage.setItem('zaid_seekers_v4', '[]');
@@ -34,7 +31,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .yt{position:absolute;white-space:nowrap;font-size:13px;line-height:40px;animation:ys 20s linear infinite;font-weight:900;color:#7f1d1d}
 @keyframes ys{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
 #yellow button{background:#22c55e;color:#fff;border:2px solid #fff;border-radius:20px;padding:3px 12px;font-weight:900;font-size:12px;cursor:pointer;margin:0 15px}
-#main{flex:1;overflow-y:auto;padding:15px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;}
+#main{flex:1;overflow-y:auto;padding:15px 20px 80px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;}
 #pageWelcome{display:flex;flex-direction:column;align-items:center;width:100%;max-width:600px;gap:15px;margin:0 auto;}
 .logo{position:relative;width:240px;height:240px;margin:0 auto}
 .ring{position:absolute;width:240px;height:240px;border-radius:50%;border:5px solid #dc2626;background:rgba(255,255,255,.98);box-shadow:0 0 30px #dc2626;animation:pl 3s infinite}
@@ -51,8 +48,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 @keyframes blinkTxt { 0%, 70% { opacity: 0; } 85%, 100% { opacity: 1; } }
 .tvs{width:34px;height:12px;background:#dc2626;margin:0 auto;border-radius:0 0 4px 4px}
 .tvb2{width:80px;height:6px;background:#dc2626;margin:0 auto;border-radius:4px}
-
-/* الشريط الأحمر متحرك */
 .wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:15px;text-align:center;border:3px solid #fbbf24;font-size:16px;line-height:1.6;font-weight:900;width:100%;box-shadow:0 4px 10px rgba(0,0,0,0.3);overflow:hidden;position:relative;}
 .wctxt-inner{display:inline-block;white-space:nowrap;padding-left:100%;animation:redMarquee 15s linear infinite;}
 @keyframes redMarquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
@@ -62,6 +57,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .err{display:none;color:#991b1b;background:#fee2e2;padding:8px;border-radius:8px;font-size:13px;text-align:center;border:2px solid #dc2626;font-weight:700;margin-bottom:10px}
 .inp{display:block;width:100%;padding:10px 15px;margin-bottom:10px;border:2px solid #cbd5e1;border-radius:20px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:600;box-sizing:border-box;height:42px}
 .inp:focus{outline:none;border-color:#dc2626;background:#fff;box-shadow:0 0 8px rgba(220,38,38,0.3)}
+.inp-err{border-color:#dc2626 !important; background:#fee2e2 !important;}
 .sbt{display:block;width:100%;padding:12px;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:2px solid #fbbf24;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo;transition:transform 0.2s}
 .sbt:hover{transform:scale(1.02)}
 .cats{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:10px 0}
@@ -146,6 +142,14 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .mem .mc.on{background:#22c55e;color:#fff;transform:scale(1.05)}
 .mem .mc.done{background:#fbbf24;color:#fff;cursor:default}
 .mem .mc:hover:not(.done){background:#475569}
+
+/* شريط التنقل السفلي الثابت */
+#bottomNav{position:fixed;bottom:0;left:0;width:100%;background:#1e293b;border-top:3px solid #fbbf24;display:flex;justify-content:center;gap:10px;padding:10px;z-index:9998;box-shadow:0 -5px 15px rgba(0,0,0,0.5);}
+#bottomNav button{padding:8px 15px;border-radius:20px;border:none;font-family:Cairo;font-size:13px;font-weight:900;cursor:pointer;color:#fff;transition:0.2s;}
+#bottomNav button:hover{transform:scale(1.05);}
+.bn-home{background:#3b82f6;}
+.bn-reg{background:#22c55e;}
+.bn-exit{background:#dc2626;}
 </style>
 </head>
 <body>
@@ -223,10 +227,10 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 </ul></div>
 <div class="card c-job"><div class="ci">💼</div><div class="ct">عروض التشغيل</div><ul>
 <li onclick="ZAID.openJobs()">📋 عروض المؤسسات</li>
-<li onclick="ZAID.showSeekerForm()">👤 أضف سيرتك الذاتية (باحث عن عمل)</li>
 <li id="adminAddJob" onclick="ZAID.jobForm()" style="display:none;background:rgba(251,191,36,.3)">➕ إضافة عرض (للمشرف)</li>
 </ul></div>
 <div class="card c-srv"><div class="ci">🏫</div><div class="ct">الخدمات الجامعية</div><ul>
+<li onclick="ZAID.showSeekerForm()">👤 باحث عن عمل / تربص</li>
 <li onclick="ZAID.openSrv('internship')">📄 طلب تربص</li>
 <li onclick="ZAID.openSrv('job')">💼 طلب شغل</li>
 <li onclick="ZAID.openSrv('consult')">💡 استشارات</li>
@@ -246,6 +250,13 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 </div>
 </div>
 
+</div>
+
+<!-- شريط التنقل السفلي -->
+<div id="bottomNav">
+  <button class="bn-home" onclick="ZAID.goHome()">🏠 الأقسام</button>
+  <button class="bn-reg" onclick="ZAID.logout()">🔑 العودة للتسجيل</button>
+  <button class="bn-exit" onclick="ZAID.exitPlatform()">🚪 خروج نهائي</button>
 </div>
 
 <script>
@@ -288,6 +299,16 @@ cats.forEach(function(c){
   cg.appendChild(b);
 });
 
+// الخروج النهائي من المنصة
+Z.exitPlatform=function(){
+  if(!confirm('هل تريد الخروج تماماً من المنصة؟')) return;
+  document.body.innerHTML = '<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#0f172a;color:#fff;text-align:center;font-family:Cairo,sans-serif;">'
+    + '<h1 style="color:#22c55e;font-size:40px;margin-bottom:20px;">👋 تم الخروج بنجاح</h1>'
+    + '<p style="font-size:20px;margin-bottom:30px;">يمكنك إغلاق هذه النافذة الآن بأمان.</p>'
+    + '<button onclick="location.reload()" style="padding:15px 40px;background:#3b82f6;color:#fff;border:none;border-radius:30px;font-size:18px;font-weight:900;cursor:pointer;font-family:Cairo;">الدخول مجدداً</button>'
+    + '</div>';
+};
+
 // حماية المحتوى وطرد الزوار
 Z.checkVisitor=function(){
   if(Z.user || Z.admin) return true;
@@ -317,19 +338,19 @@ Z.updateUI=function(){
   
   if(Z.admin){
     b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف';
-    br.style.display='none'; // إخفاء زر سجل للمشرف
+    br.style.display='none';
     bo.style.display='inline-block';bs.style.display='none';y.style.display='none';
     if(bstat) bstat.style.display='inline-block';
     if(aj) aj.style.display='block';
   } else if(Z.user){
     b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name;
-    br.style.display='none'; // إخفاء زر سجل للمستخدم
+    br.style.display='none';
     bo.style.display='inline-block';bs.style.display='inline-block';y.style.display='none';
     if(bstat) bstat.style.display='none';
     if(aj) aj.style.display='none';
   } else {
     b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر';
-    br.style.display='inline-block'; // إظهار زر سجل للزائر
+    br.style.display='inline-block';
     bo.style.display='inline-block';
     bs.style.display='none';y.style.display='flex';
     if(bstat) bstat.style.display='none';
@@ -506,6 +527,7 @@ Z.openCat=function(cat){
 
 Z.openSrv=function(key){
   if(!Z.checkVisitor()) return;
+  if(key==='seeker'){ Z.showSeekerForm(); return; }
   var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
   var c=document.getElementById('lc');
   c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
@@ -586,19 +608,32 @@ Z.jobForm=function(){
 };
 
 Z.saveJob=function(){
-  var c=document.getElementById('jfCompany').value.trim();
-  var act=document.getElementById('jfActivity').value.trim();
-  var addr=document.getElementById('jfAddress').value.trim();
-  var tax=document.getElementById('jfTax').value.trim();
-  var phone=document.getElementById('jfPhone').value.trim();
-  var email=document.getElementById('jfEmail').value.trim();
-  var logo=document.getElementById('jfLogo').value.trim();
-  var t=document.getElementById('jfTitle').value.trim();
+  var c=document.getElementById('jfCompany');
+  var act=document.getElementById('jfActivity');
+  var addr=document.getElementById('jfAddress');
+  var tax=document.getElementById('jfTax');
+  var phone=document.getElementById('jfPhone');
+  var email=document.getElementById('jfEmail');
+  var t=document.getElementById('jfTitle');
   var l=document.getElementById('jfLevel').value;
+  var logo=document.getElementById('jfLogo').value.trim();
   
-  if(!c||!act||!addr||!tax||!phone||!email||!t){alert('يرجى ملء جميع الحقول الإلزامية (*)');return;}
+  // إزالة التلوين السابق
+  [c, act, addr, tax, phone, email, t].forEach(function(el){el.classList.remove('inp-err');});
   
-  Z.jobs.unshift({company:c, activity:act, address:addr, tax:tax, phone:phone, email:email, logo:logo||'', title:t, level:l});
+  if(!c.value.trim()||!act.value.trim()||!addr.value.trim()||!tax.value.trim()||!phone.value.trim()||!email.value.trim()||!t.value.trim()){
+    alert('يرجى ملء جميع الحقول الإلزامية (*)');
+    if(!c.value.trim()) c.classList.add('inp-err');
+    if(!act.value.trim()) act.classList.add('inp-err');
+    if(!addr.value.trim()) addr.classList.add('inp-err');
+    if(!tax.value.trim()) tax.classList.add('inp-err');
+    if(!phone.value.trim()) phone.classList.add('inp-err');
+    if(!email.value.trim()) email.classList.add('inp-err');
+    if(!t.value.trim()) t.classList.add('inp-err');
+    return;
+  }
+  
+  Z.jobs.unshift({company:c.value.trim(), activity:act.value.trim(), address:addr.value.trim(), tax:tax.value.trim(), phone:phone.value.trim(), email:email.value.trim(), logo:logo||'', title:t.value.trim(), level:l});
   Z.saveJobs();document.getElementById('jf').remove();alert('✅ تم حفظ العرض بنجاح');Z.openJobs();
 };
 
@@ -610,7 +645,7 @@ Z.showSeekerForm=function(){
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
   var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
   m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:600px;width:100%;border:4px solid #22c55e;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">👤 إضافة سيرة ذاتية (باحث عن عمل)</h2>'
+    +'<h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">👤 إضافة سيرة ذاتية (باحث عن عمل / تربص)</h2>'
     +'<input class="inp" id="sfName" placeholder="الاسم الكامل *">'
     +'<input class="inp" id="sfSpec" placeholder="الاختصاص *">'
     +'<select class="inp" id="sfLevel">'+opts+'</select>'
@@ -624,17 +659,27 @@ Z.showSeekerForm=function(){
 };
 
 Z.saveSeeker=function(){
-  var name=document.getElementById('sfName').value.trim();
-  var spec=document.getElementById('sfSpec').value.trim();
+  var name=document.getElementById('sfName');
+  var spec=document.getElementById('sfSpec');
   var level=document.getElementById('sfLevel').value;
-  var phone=document.getElementById('sfPhone').value.trim();
-  var email=document.getElementById('sfEmail').value.trim();
-  var exp=document.getElementById('sfExp').value.trim();
+  var phone=document.getElementById('sfPhone');
+  var email=document.getElementById('sfEmail');
+  var exp=document.getElementById('sfExp');
   
-  if(!name||!spec||!phone||!email||!exp){alert('يرجى ملء جميع الحقول');return;}
+  [name, spec, phone, email, exp].forEach(function(el){el.classList.remove('inp-err');});
+  
+  if(!name.value.trim()||!spec.value.trim()||!phone.value.trim()||!email.value.trim()||!exp.value.trim()){
+    alert('يرجى ملء جميع الحقول الإلزامية (*)');
+    if(!name.value.trim()) name.classList.add('inp-err');
+    if(!spec.value.trim()) spec.classList.add('inp-err');
+    if(!phone.value.trim()) phone.classList.add('inp-err');
+    if(!email.value.trim()) email.classList.add('inp-err');
+    if(!exp.value.trim()) exp.classList.add('inp-err');
+    return;
+  }
   
   Z.loadSeekers();
-  Z.seekers.unshift({name:name, spec:spec, level:level, phone:phone, email:email, exp:exp});
+  Z.seekers.unshift({name:name.value.trim(), spec:spec.value.trim(), level:level, phone:phone.value.trim(), email:email.value.trim(), exp:exp.value.trim()});
   Z.saveSeekers();
   document.getElementById('sf').remove();
   alert('✅ تم حفظ سيرتك الذاتية بنجاح، ستكون متاحة للمؤسسات.');
@@ -659,7 +704,6 @@ function renderSlide(o){
   if(o.v)h+='<div class="simg"><iframe width="100%" height="250" src="'+o.v+'" allowfullscreen style="border-radius:10px;border:none;"></iframe></div>';
   if(o.e)h+='<div style="text-align:center;padding:30px"><div style="font-size:50px;margin-bottom:15px">📝</div><div class="stxt" style="font-size:16px"><strong>📝 الاختبار</strong></div><button onclick="ZAID.startExam(\''+o.e+'\')" style="margin-top:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:16px;padding:12px 30px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🚀 ابدأ</button></div>';
   
-  // إضافة زر التحميل للمشتركين
   if(Z.user && Z.user.isSub) {
     h+='<div style="text-align:center;margin-top:15px;"><button onclick="ZAID.downloadSlide()" style="background:#3b82f6;color:#fff;border:none;border-radius:20px;padding:8px 20px;cursor:pointer;font-family:Cairo;font-weight:900;">📥 تحميل هذا المحتوى (نسخة واحدة)</button></div>';
   }
@@ -873,6 +917,7 @@ Z.addLesson('demo_game',{cat:'games',icon:'🎮',name:'لعبة الذاكرة',
 ]);
 
 /* ====== الخدمات ====== */
+Z.addSrv('seeker',{icon:'👤',title:'باحث عن عمل / تربص',desc:''});
 Z.addSrv('internship',{icon:'📄',title:'طلب تربص',desc:'أرسل سيرتك الذاتية عبر واتساب.'});
 Z.addSrv('job',{icon:'💼',title:'طلب شغل',desc:'أرسل سيرتك الذاتية وطلبك للبحث عن عمل.'});
 Z.addSrv('consult',{icon:'💡',title:'استشارات',desc:'استشارات أكاديمية ومهنية.'});
