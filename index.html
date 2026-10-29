@@ -7,13 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <script>
 try {
+  // تغيير اسم المفتاح إلى _v2 لتصفير العداد وبدء صفحة جديدة
   var _isAdmin = sessionStorage.getItem('zaid_admin_session');
   if (!_isAdmin) {
-    var _v = localStorage.getItem('zaid_visits') || '0';
-    localStorage.setItem('zaid_visits', parseInt(_v) + 1);
+    var _v = localStorage.getItem('zaid_visits_v2') || '0';
+    localStorage.setItem('zaid_visits_v2', parseInt(_v) + 1);
   }
   if(!localStorage.getItem('zaid_jobs')) localStorage.setItem('zaid_jobs', '[]');
-  if(!localStorage.getItem('zaid_registered_users')) localStorage.setItem('zaid_registered_users', '[]');
+  if(!localStorage.getItem('zaid_registered_users_v2')) localStorage.setItem('zaid_registered_users_v2', '[]');
 } catch(e) {}
 </script>
 <style>
@@ -107,7 +108,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .sn{display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:4px 12px;border-radius:10px;font-size:13px;font-weight:bold;margin-bottom:10px}
 .st{font-size:22px;font-weight:900;color:#dc2626;text-align:center;margin-bottom:15px}
 .simg{background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-radius:12px;padding:10px;margin:15px 0;text-align:center;border:2px dashed #3b82f6}
-.simg img{max-width:100%;max-height:220px;border-radius:10px}
+.simg img{max-width:100%;max-height:220px;border-radius:10px;object-fit:contain;}
 .stxt{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:12px;border-radius:12px;margin:15px 0;border-right:4px solid #f59e0b;font-size:15px;line-height:1.8;color:#78350f;font-weight:600}
 .stxt strong{color:#dc2626;font-weight:900}
 .strans{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-radius:12px;padding:10px;margin:15px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
@@ -143,7 +144,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .cert p{font-size:16px;margin:10px 0;line-height:1.8}
 .cert .sign{margin-top:25px;font-size:14px;color:#475569;font-weight:bold}
 
-/* الخدمات */
+/* الخدمات والوظائف */
 .svcard{background:linear-gradient(135deg,#831843,#9d174d);border:3px solid #fbbf24;border-radius:15px;padding:25px;color:#fff;margin:15px 0;text-align:center}
 .svcard h3{color:#fbbf24;font-size:22px;margin-bottom:15px}
 .svcard p{font-size:15px;margin-bottom:20px;line-height:1.8}
@@ -334,9 +335,9 @@ Z.register=function(){
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date: new Date().toLocaleString('ar-TN')};
   
   try {
-    var users = JSON.parse(localStorage.getItem('zaid_registered_users') || '[]');
+    var users = JSON.parse(localStorage.getItem('zaid_registered_users_v2') || '[]');
     users.push(Z.user);
-    localStorage.setItem('zaid_registered_users', JSON.stringify(users));
+    localStorage.setItem('zaid_registered_users_v2', JSON.stringify(users));
   } catch(e){}
   
   document.getElementById('un').textContent=n;
@@ -344,9 +345,9 @@ Z.register=function(){
 };
 
 Z.showStats=function(){
-  var v=localStorage.getItem('zaid_visits')||'1';
+  var v=localStorage.getItem('zaid_visits_v2')||'1';
   var users=[];
-  try { users=JSON.parse(localStorage.getItem('zaid_registered_users')||'[]'); }catch(e){}
+  try { users=JSON.parse(localStorage.getItem('zaid_registered_users_v2')||'[]'); }catch(e){}
   var lc=Object.keys(Z.lessons).length;
   var ex=Object.keys(Z.exams).length;
   var jb=Z.jobs.length;
@@ -386,8 +387,8 @@ Z.showStats=function(){
 
 Z.resetStats=function(){
   if(!Z.admin) return;
-  localStorage.setItem('zaid_visits', '0');
-  localStorage.setItem('zaid_registered_users', '[]');
+  localStorage.setItem('zaid_visits_v2', '0');
+  localStorage.setItem('zaid_registered_users_v2', '[]');
   alert('✅ تم تصفير جميع العدادات والبيانات بنجاح');
   Z.showStats(); // تحديث النافذة
 };
@@ -685,15 +686,15 @@ Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحا�
 {n:'📖 3',i:'https://i.postimg.cc/Hk9XKgqm/whdt-mrkzyt.jpg',c:'🧒 يقال أنك ذكي!',m:'💻 بفضل <strong>المعالج</strong>.',r:['معالج','Processeur','Processor'],s:['المعالج','Processeur','Processor']},
 {n:'📖 4', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Personal_computer%2C_exploded_4.svg/640px-Personal_computer%2C_exploded_4.svg.png', c:'🧒 مكوناتك؟', m:'💻 <strong>الوحدة المركزية</strong>، <strong>الذاكرات</strong>، <strong>الروابط</strong>، <strong>اللواحق</strong>.',r:['4 أجزاء','4 parties','4 parts'],s:['الوحدة المركزية والذاكرات والروابط واللواحق','Unite centrale','Central unit']},
 {n:'📖 5',i:'https://i.postimg.cc/5NZs1bKy/hyt-wmytt.jpg',c:'🧒 الوحدة المركزية؟',m:'💻 قلبي النابض وعقلي المفكر.',r:['وحدة مركزية','Unité Centrale','System Unit'],s:['الوحدة المركزية','Unite centrale','System unit']},
-{n:'📖 6',m:'💻 <strong>ذاكرة حية</strong> (RAM) و<strong>ذاكرة ميتة</strong> (ROM).',c:'🧒 ما الفرق؟',r:['RAM / ROM','RAM / ROM','RAM / ROM'],s:['ذاكرة حية وذاكرة ميتة','RAM et ROM','RAM and ROM']},
-{n:'📖 7',m:'💻 <strong>RAM:</strong> متطايرة.<br><strong>ROM:</strong> دائمة.',r:['RAM متطايرة','RAM volatile','RAM volatile'],s:['الرام متطايرة','RAM volatile','RAM is volatile']},
-{n:'📖 8',m:'💻 <strong>الروابط:</strong> تنقل المعطيات. <strong>اللواحق:</strong> أجهزة خارجية.',r:['روابط / لواحق','Bus / Périphériques','Bus / Peripherals'],s:['الروابط واللواحق','Bus et peripheriques','Bus and peripherals']},
+{n:'📖 6', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/RAM_Module.jpg/640px-RAM_Module.jpg', m:'💻 <strong>ذاكرة حية</strong> (RAM) و<strong>ذاكرة ميتة</strong> (ROM).',c:'🧒 ما الفرق؟',r:['RAM / ROM','RAM / ROM','RAM / ROM'],s:['ذاكرة حية وذاكرة ميتة','RAM et ROM','RAM and ROM']},
+{n:'📖 7', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/RAM_and_ROM.jpg/640px-RAM_and_ROM.jpg', m:'💻 <strong>RAM:</strong> متطايرة.<br><strong>ROM:</strong> دائمة.',r:['RAM متطايرة','RAM volatile','RAM volatile'],s:['الرام متطايرة','RAM volatile','RAM is volatile']},
+{n:'📖 8', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/PCI_Slots.jpg/640px-PCI_Slots.jpg', m:'💻 <strong>الروابط:</strong> تنقل المعطيات. <strong>اللواحق:</strong> أجهزة خارجية.',r:['روابط / لواحق','Bus / Périphériques','Bus / Peripherals'],s:['الروابط واللواحق','Bus et peripheriques','Bus and peripherals']},
 {n:'📖 9',i:'https://i.postimg.cc/7ZkXt82w/fart.jpg',c:'🧒 نستعمل الفأرة؟',m:'💻 نعم.',r:['فأرة','Souris','Mouse'],s:['الفأرة','Souris','Mouse']},
-{n:'📖 10',m:'💻 ملحقات: <strong>لوحة المفاتيح</strong>، <strong>القلم الضوئي</strong>، <strong>الشاشة اللمسية</strong>.',r:['ملحقات','Périphériques','Input devices'],s:['لوحة المفاتيح','Clavier','Keyboard']},
+{n:'📖 10', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Computer_keyboard_and_mouse.jpg/640px-Computer_keyboard_and_mouse.jpg', m:'💻 ملحقات: <strong>لوحة المفاتيح</strong>، <strong>القلم الضوئي</strong>، <strong>الشاشة اللمسية</strong>.',r:['ملحقات','Périphériques','Input devices'],s:['لوحة المفاتيح','Clavier','Keyboard']},
 {n:'📖 11',i:'https://i.postimg.cc/wT3wRQdz/monitor.jpg',m:'💻 <strong>الشاشة</strong> وسيلة تخاطب بصرية.',r:['شاشة','Écran','Screen'],s:['الشاشة','Ecran','Screen']},
 {n:'📖 12',i:'https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg',c:'🧒 قنوات الإخراج؟',m:'💻 <strong>الطابعة</strong> — إبرية، نفاثة، ليزرية.',r:['طابعة','Imprimante','Printer'],s:['الطابعة','Imprimante','Printer']},
 {n:'📖 13',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Canon_Canoscan_Lide_25.jpg/800px-Canon_Canoscan_Lide_25.jpg',m:'💻 <strong>الماسح</strong> للوثائق، و<strong>الراسم</strong> للخرائط.',r:['ماسح / راسم','Scanner','Scanner'],s:['الماسح والراسم','Scanner et traceur','Scanner and plotter']},
-{n:'📖 14',i:'https://i.postimg.cc/R0wsVCxv/modem.jpg',c:'🧒 التخاطب مع حواسيب بعيدة؟',m:'💻 عبر <strong>المودم</strong>.',r:['مودم','Modem','Modem'],s:['المودم','Modem','Modem']},
+{n:'📖 14', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/640px-Windows_logo_-_2012.svg.png', c:'🧒 التخاطب مع حواسيب بعيدة؟',m:'💻 عبر <strong>المودم</strong>.',r:['مودم','Modem','Modem'],s:['المودم','Modem','Modem']},
 {n:'📖 15',i:'https://i.ibb.co/FbLdWngL/image.jpg',c:'🧒 كيف نلعب معك؟',m:'💻 تُخزّنون البرمجية على <strong>القرص الصلب</strong>.',r:['قرص صلب','Disque dur','Hard disk'],s:['القرص الصلب','Disque dur','Hard disk']},
 {n:'📖 16 — الفيديوهات',x:'🎬 مراجعة الدرس',v:'https://www.youtube.com/embed/3QCgr6IpuvA'},
 {n:'📖 الاختبار',e:'book_exam'}
@@ -705,19 +706,19 @@ Z.addLesson('prim',{cat:'tech',icon:'🧒',name:'المرحلة الابتدائ
 {n:'📖 2',t:'💻 الحاسوب',i:'https://i.postimg.cc/mZX3L8qx/haswb.jpg',x:'جهاز <strong>إلكتروني رقمي</strong> يستقبل البيانات ويعالجها ويخزنها ويخرج النتائج.',r:['الحاسوب','L ordinateur','The computer'],s:['الحاسوب','L ordinateur','The computer']},
 {n:'📖 3',t:'⚙️ المعالج',i:'https://i.postimg.cc/Hk9XKgqm/whdt-mrkzyt.jpg',x:'<strong>دماغ الحاسوب</strong>.',r:['معالج','Processeur','Processor'],s:['المعالج','Processeur','Processor']},
 {n:'📖 4',t:'💾 الذاكرة الحية',i:'https://i.postimg.cc/5NZs1bKy/hyt-wmytt.jpg',x:'ذاكرة <strong>متطايرة</strong>.',r:['RAM','RAM','RAM'],s:['الذاكرة الحية','RAM','RAM']},
-{n:'📖 5',t:'💾 RAM vs ROM',x:'<strong>RAM:</strong> متطايرة.<br><strong>ROM:</strong> دائمة.'},
-{n:'📖 6',t:'🔗 النواقل',x:'خطوط تنقل البيانات.'},
+{n:'📖 5', t:'💾 RAM vs ROM', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/RAM_Module.jpg/640px-RAM_Module.jpg', x:'<strong>RAM:</strong> متطايرة.<br><strong>ROM:</strong> دائمة.'},
+{n:'📖 6', t:'🔗 النواقل', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/PCI_Slots.jpg/640px-PCI_Slots.jpg', x:'خطوط تنقل البيانات.'},
 {n:'📖 7',t:'🎥 الكاميرا',i:'https://i.postimg.cc/Mpp3ddLd/camera-numerique.png',x:'جهاز إدخال بصري.'},
 {n:'📖 8',t:'🖱️ الفأرة',i:'https://i.postimg.cc/sDQv7rjc/souris.jpg',x:'جهاز إدخال.'},
 {n:'📖 9',t:'⌨️ لوحة المفاتيح',i:'https://i.postimg.cc/YC2nSbfG/lwht-mfatyh.jpg',x:'جهاز إدخال نصي.'},
 {n:'📖 10',t:'🖨️ الطابعة',i:'https://i.postimg.cc/bNm0m8kf/tabʿat.jpg',x:'جهاز إخراج.'},
 {n:'📖 11',t:'📠 الماسح والراسم',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Canon_Canoscan_Lide_25.jpg/800px-Canon_Canoscan_Lide_25.jpg',x:'للوثائق والخرائط.'},
-{n:'📖 12',t:'🎤 المصدح',x:'جهاز إدخال صوتي.'},
-{n:'📖 13',t:'📺 الشاشة',x:'جهاز إخراج بصري.'},
-{n:'📖 14',t:'🖨️ أنواع الطابعات',x:'إبرية، نفاثة، ليزرية.'},
-{n:'📖 15',t:'📡 الموديم',x:'التضمين وفك التضمين.'},
-{n:'📖 16',t:'💿 القرص الصلب',x:'وحدة تخزين دائمة.'},
-{n:'📖 17',t:'🌐 الشبكات',x:'LAN، WAN.'},
+{n:'📖 12', t:'🎤 المصدح', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Microphone.jpg/640px-Microphone.jpg', x:'جهاز إدخال صوتي.'},
+{n:'📖 13', t:'📺 الشاشة', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Computer_monitor.jpg/640px-Computer_monitor.jpg', x:'جهاز إخراج بصري.'},
+{n:'📖 14', t:'🖨️ أنواع الطابعات', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Printer.jpg/640px-Printer.jpg', x:'إبرية، نفاثة، ليزرية.'},
+{n:'📖 15', t:'📡 الموديم', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Modem.jpg/640px-Modem.jpg', x:'التضمين وفك التضمين.'},
+{n:'📖 16', t:'💿 القرص الصلب', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Hard_drive.jpg/640px-Hard_drive.jpg', x:'وحدة تخزين دائمة.'},
+{n:'📖 17', t:'🌐 الشبكات', i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Network.jpg/640px-Network.jpg', x:'LAN، WAN.'},
 {n:'📖 الاختبار',e:'prim_exam'}
 ]);
 
