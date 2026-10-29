@@ -253,7 +253,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <li id="adminAddJob" onclick="ZAID.jobForm()" style="display:none;background:rgba(251,191,36,.3)">➕ إضافة عرض (للمشرف)</li>
 </ul></div>
 <div class="card c-srv"><div class="ci">🏫</div><div class="ct">الخدمات الجامعية</div><ul>
-<li onclick="ZAID.showSeekerForm()">👤 باحث عن عمل / تربص</li>
+<li onclick="ZAID.showSeekerForm('seeker')">👤 باحث عن عمل / تربص</li>
 <li onclick="ZAID.openSrv('internship')">📄 طلب تربص</li>
 <li onclick="ZAID.openSrv('job')">💼 طلب شغل</li>
 <li onclick="ZAID.openSrv('consult')">💡 استشارات</li>
@@ -351,12 +351,15 @@ Z.showPage=function(id){
 
   var btnHome = document.getElementById('btnNavHome');
   var btnReg = document.getElementById('btnNavReg');
-  if (id === 'pageWelcome') {
-    if(btnHome) btnHome.style.display = 'none';
-    if(btnReg) btnReg.style.display = 'none';
-  } else {
-    if(btnHome) btnHome.style.display = 'inline-block';
-    if(btnReg) btnReg.style.display = 'inline-block';
+  
+  if(btnHome) btnHome.style.display = 'inline-block';
+  
+  if(btnReg) {
+      if (id === 'pageWelcome') {
+          btnReg.style.display = 'none'; 
+      } else {
+          btnReg.style.display = 'inline-block';
+      }
   }
 };
 Z.goHome=function(){Z.stopSpeak();Z.showPage(Z.user||Z.admin?'pageHome':'pageWelcome');};
@@ -557,7 +560,10 @@ Z.openCat=function(cat){
 
 Z.openSrv=function(key){
   if(!Z.checkVisitor()) return;
-  if(key==='seeker'){ Z.showSeekerForm(); return; }
+  if(key==='seeker' || key==='internship' || key==='job'){ 
+      Z.showSeekerForm(key); 
+      return; 
+  }
   var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
   var c=document.getElementById('lc');
   c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
@@ -665,51 +671,93 @@ Z.saveJob=function(){
   Z.saveJobs();document.getElementById('jf').remove();alert('✅ تم حفظ العرض بنجاح');Z.openJobs();
 };
 
-Z.showSeekerForm=function(){
+Z.showSeekerForm=function(type){
   if(!Z.checkVisitor()) return;
   var old=document.getElementById('sf');if(old)old.remove();
   var m=document.createElement('div');m.id='sf';
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
   var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:600px;width:100%;border:4px solid #22c55e;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">👤 إضافة سيرة ذاتية (باحث عن عمل / تربص)</h2>'
-    +'<input class="inp" id="sfName" placeholder="الاسم الكامل *">'
+  
+  var title = type === 'internship' ? '📄 طلب تربص' : (type === 'job' ? '💼 طلب شغل' : '👤 إضافة سيرة ذاتية');
+  
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:650px;width:100%;border:4px solid #22c55e;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
+    +'<h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">'+title+'</h2>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +'<input class="inp" id="sfName" placeholder="الاسم *">'
+    +'<input class="inp" id="sfSurname" placeholder="اللقب *">'
+    +'</div>'
+    +'<input class="inp" id="sfSection" placeholder="القسم *">'
+    +'<input class="inp" id="sfSchool" placeholder="المدرسة *">'
     +'<input class="inp" id="sfSpec" placeholder="الاختصاص *">'
     +'<select class="inp" id="sfLevel">'+opts+'</select>'
     +'<input class="inp" id="sfPhone" placeholder="رقم الواتساب *">'
-    +'<input class="inp" id="sfEmail" placeholder="البريد الإلكتروني *">'
-    +'<input class="inp" id="sfExp" placeholder="الخبرة السابقة (مختصر) *">'
-    +'<button class="sbt" onclick="ZAID.saveSeeker()" style="background:#22c55e;border-color:#fff">💾 حفظ السيرة</button>'
+    +'<input class="inp" id="sfEmail" placeholder="البريد الإلكتروني (المايل) *">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +'<input class="inp" id="sfCity" placeholder="المدينة *">'
+    +'<input class="inp" id="sfCountry" placeholder="البلد *" value="تونس">'
+    +'</div>'
+    +'<input class="inp" id="sfField" placeholder="الموضوع او المجال المطلوب *">'
+    +'<div style="margin-bottom:10px;color:#fbbf24;font-weight:bold;font-size:14px;">📎 ارفاق السيرة الذاتية (PDF أو صورة) *:</div>'
+    +'<input type="file" id="sfCV" class="inp" accept=".pdf,image/*" style="padding:8px;height:auto;background:#0f172a;color:#fff;border:1px solid #334155;">'
+    +'<button class="sbt" onclick="ZAID.saveSeeker(\''+type+'\')" style="background:#22c55e;border-color:#fff;margin-top:15px;">💾 حفظ وإرسال الطلب</button>'
     +'<button onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
     +'</div>';
   document.body.appendChild(m);
 };
 
-Z.saveSeeker=function(){
+Z.saveSeeker=function(type){
   var name=document.getElementById('sfName');
+  var surname=document.getElementById('sfSurname');
+  var section=document.getElementById('sfSection');
+  var school=document.getElementById('sfSchool');
   var spec=document.getElementById('sfSpec');
   var level=document.getElementById('sfLevel').value;
   var phone=document.getElementById('sfPhone');
   var email=document.getElementById('sfEmail');
-  var exp=document.getElementById('sfExp');
+  var city=document.getElementById('sfCity');
+  var country=document.getElementById('sfCountry');
+  var field=document.getElementById('sfField');
+  var cvFile=document.getElementById('sfCV').files[0];
   
-  [name, spec, phone, email, exp].forEach(function(el){el.classList.remove('inp-err');});
+  var fields = [name, surname, section, school, spec, phone, email, city, country, field];
+  fields.forEach(function(el){el.classList.remove('inp-err');});
   
-  if(!name.value.trim()||!spec.value.trim()||!phone.value.trim()||!email.value.trim()||!exp.value.trim()){
+  if(!name.value.trim()||!surname.value.trim()||!section.value.trim()||!school.value.trim()||!spec.value.trim()||!phone.value.trim()||!email.value.trim()||!city.value.trim()||!country.value.trim()||!field.value.trim()){
     alert('يرجى ملء جميع الحقول الإلزامية (*)');
-    if(!name.value.trim()) name.classList.add('inp-err');
-    if(!spec.value.trim()) spec.classList.add('inp-err');
-    if(!phone.value.trim()) phone.classList.add('inp-err');
-    if(!email.value.trim()) email.classList.add('inp-err');
-    if(!exp.value.trim()) exp.classList.add('inp-err');
+    fields.forEach(function(el){ if(!el.value.trim()) el.classList.add('inp-err'); });
+    return;
+  }
+
+  if(!cvFile) {
+    alert('يرجى ارفاق السيرة الذاتية');
     return;
   }
   
-  Z.loadSeekers();
-  Z.seekers.unshift({name:name.value.trim(), spec:spec.value.trim(), level:level, phone:phone.value.trim(), email:email.value.trim(), exp:exp.value.trim()});
-  Z.saveSeekers();
-  document.getElementById('sf').remove();
-  alert('✅ تم حفظ سيرتك الذاتية بنجاح، ستكون متاحة للمؤسسات.');
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var cvBase64 = e.target.result;
+    Z.loadSeekers();
+    Z.seekers.unshift({
+      type: type || 'job',
+      name: name.value.trim() + ' ' + surname.value.trim(),
+      section: section.value.trim(),
+      school: school.value.trim(),
+      spec: spec.value.trim(),
+      level: level,
+      phone: phone.value.trim(),
+      email: email.value.trim(),
+      city: city.value.trim(),
+      country: country.value.trim(),
+      field: field.value.trim(),
+      cv: cvBase64,
+      cvName: cvFile.name,
+      date: new Date().toLocaleDateString('ar-TN')
+    });
+    Z.saveSeekers();
+    document.getElementById('sf').remove();
+    alert('✅ تم حفظ طلبك وإرفاق سيرتك الذاتية بنجاح، ستكون متاحة للمؤسسات.');
+  };
+  reader.readAsDataURL(cvFile);
 };
 
 /* ================== الألعاب ================== */
@@ -1027,7 +1075,6 @@ Z.showCrossMessage=function(text, type) {
 
 /* ================== المنجد الرباعي ================== */
 const sections = {1:[], 2:[], 3:[], 4:[]};
-// البيانات مستخرجة بالكامل من الملف الثاني
 const techData = [
     {ar:"الحاسوب", en:"Computer", fr:"Ordinateur", ko:"컴퓨터", def:"جهاز إلكتروني يستقبل البيانات ويعالجها"},
     {ar:"الإنترنت", en:"Internet", fr:"Internet", ko:"인터넷", def:"شبكة عالمية تربط ملايين الحواسيب"},
@@ -1117,7 +1164,6 @@ const aiData = [
     {ar:"تمييز الكلام", en:"Speech Recognition", fr:"Reconnaissance vocale", ko:"음성 인식", def:"تمييز الكلام البشري"}
 ];
 
-// التكرار ليصبح العدد 1000 لكل قسم
 for(let i=0; i<1000; i++){ let d = techData[i % techData.length]; sections[1].push({...d}); }
 for(let i=0; i<1000; i++){ let d = progData[i % progData.length]; sections[2].push({...d}); }
 for(let i=0; i<1000; i++){ let d = netData[i % netData.length]; sections[3].push({...d}); }
@@ -1351,9 +1397,23 @@ Z.addLesson('lect_ai_edu',{cat:'lectures',icon:'🎤',name:'AI في التعلي
 
 /* ====== الكتب ====== */
 Z.addLesson('bk_children',{cat:'books',icon:'📚',name:'الأطفال والحاسوب',desc:'بقلم محمد زايد'},[
-{n:'1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong>'},
-{n:'2',t:'مقدمة',x:'كتاب موجه للأطفال لتعلم أساسيات الحاسوب بطريقة مبسطة.'},
+{n:'1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الحديثة وحوسبة اللغة العربية'},
+{n:'2',t:'مقدمة',x:'كتاب موجه للأطفال لتعلم أساسيات الحاسوب بطريقة مبسطة وممتعة.'},
 {n:'3',t:'الكتاب الكامل',x:'الكتاب الكامل (شرائح تفاعلية) في قسم <strong>التربية التكنولوجية</strong>.'}
+]);
+
+Z.addLesson('bk_ai_crime',{cat:'books',icon:'🛡️',name:'الذكاء الاصطناعي والجرائم الإلكترونية',desc:'بقلم: محمد زايد'},[
+{n:'1',t:'🛡️ الذكاء الاصطناعي والجرائم الإلكترونية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cyber_security.jpg/640px-Cyber_security.jpg',x:'تأليف: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الرقمية وحوسبة اللغة العربية<br>أستاذ جامعي'},
+{n:'2',t:'🤖 الذكاء الاصطناعي: المفهوم والتقنيات',x:'يشمل الذكاء الاصطناعي تقنيات متعددة مثل:<br><strong>تعلم الآلة</strong>، <strong>التعلم العميق</strong>، <strong>الأنظمة الخبيرة</strong>، و<strong>معالجة اللغة الطبيعية</strong>.<br>وتُستخدم هذه التقنيات لحل مشكلات معقدة ومحاكاة الذكاء البشري.'},
+{n:'3',t:'🚨 الجرائم الإلكترونية السيبرانية',x:'من أخطر الجرائم في العصر الرقمي:<br><strong>التصيد الاحتيالي</strong> (Phishing)<br><strong>هجمات حجب الخدمة</strong> (DDoS)<br><strong>البرمجيات الخبيثة</strong> (Malware)<br><strong>انتحال الهوية</strong> وسرقة البيانات.'},
+{n:'4',t:'🛡️ الذكاء الاصطناعي في الأمن السيبراني',x:'يُستخدم الذكاء الاصطناعي للكشف المبكر عن الاختراقات،<br>تحليل سلوك المستخدمين،<br>واكتشاف البرمجيات الخبيثة الجديدة التي تتجاوز أنظمة الحماية التقليدية.<br>مما يعزز <strong>السلامة والأمن السيبراني</strong>.'}
+]);
+
+Z.addLesson('bk_smart_campus',{cat:'books',icon:'🏫',name:'المدينة الجامعية الذكية',desc:'منبع للتقدم والتطور'},[
+{n:'1',t:'🏫 المدينة الجامعية الذكية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Universidad_de_Alcal%C3%A1%2C_Plaza_de_San_Diego.jpg/640px-Universidad_de_Alcal%C3%A1%2C_Plaza_de_San_Diego.jpg',x:'تأليف: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الرقمية وحوسبة اللغة العربية'},
+{n:'2',t:'🌟 المفهوم والأهداف',x:'المركب الجامعي الذكي هو فضاء يجمع بين البنية التحتية المتقدمة والتكنولوجيا الرقمية.<br>يهدف إلى <strong>تحسين جودة التعليم</strong>، <strong>تسهيل حياة الطلاب</strong>، <strong>وترشيد استهلاك الطاقة</strong>، ليصبح منبعاً للتنمية المستدامة.'},
+{n:'3',t:'⚙️ المكونات الرقمية',x:'يعتمد على:<br><strong>إنترنت الأشياء (IoT)</strong> للحساسات.<br><strong>السحابة المعلوماتية (Cloud)</strong> لتخزين البيانات.<br><strong>البيانات الضخمة (Big Data)</strong> للتحليل.<br><strong>الذكاء الاصطناعي</strong> لاتخاذ القرار.'},
+{n:'4',t:'🚀 الخدمات الذكية',x:'تشمل:<br>- أنظمة الدخول الذكية.<br>- إدارة ذكية للفصول الدراسية.<br>- منصات تعلم إلكتروني متكاملة.<br>- مراقبة أمنية ذكية.<br>- إدارة ذكية للمياه والطاقة.'}
 ]);
 
 /* ====== الخدمات ====== */
