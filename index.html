@@ -65,7 +65,16 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .cat.on{background:#dc2626;color:#fff;border-color:#fbbf24;transform:scale(1.05)}
 #pageHome{width:100%;max-width:1200px;display:flex;flex-direction:column;gap:15px;margin:0 auto;}
 .htitle{background:linear-gradient(135deg,#dc2626,#991b1b);padding:12px;border-radius:12px;text-align:center;border:3px solid #fbbf24;font-size:20px;font-weight:900}
-.secs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;}
+
+/* تنسيق البطاقات لتصبح 3 في السطر */
+.secs{display:grid;grid-template-columns:repeat(3, 1fr);gap:15px;}
+@media (max-width: 900px) {
+    .secs { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .secs { grid-template-columns: 1fr; }
+}
+
 .card{border-radius:15px;padding:20px;display:flex;flex-direction:column;height:100%;}
 .c-edu{background:linear-gradient(135deg,#14532d,#166534);border:3px solid #22c55e}
 .c-res{background:linear-gradient(135deg,#1e3a8a,#1e40af);border:3px solid #3b82f6}
@@ -352,7 +361,13 @@ Z.showPage=function(id){
   var btnHome = document.getElementById('btnNavHome');
   var btnReg = document.getElementById('btnNavReg');
   
-  if(btnHome) btnHome.style.display = 'inline-block';
+  if(btnHome) {
+      if (id === 'pageWelcome') {
+          btnHome.style.display = 'none';
+      } else {
+          btnHome.style.display = 'inline-block';
+      }
+  }
   
   if(btnReg) {
       if (id === 'pageWelcome') {
