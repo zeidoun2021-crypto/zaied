@@ -28,7 +28,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 #top.adm{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
 #top button{padding:5px 15px;border-radius:15px;border:none;cursor:pointer;font-weight:900;font-size:13px;font-family:Cairo}
 
-/* 2. الشريط الأصفر (كما هو بدون تغيير) */
+/* 2. الشريط الأصفر */
 #yellow{position:relative;width:100%;background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b);height:40px;display:flex;align-items:center;overflow:hidden;border-bottom:3px solid #dc2626;flex-shrink:0;z-index:99;}
 .yw{flex:1;overflow:hidden;position:relative;height:100%}
 .yt{position:absolute;white-space:nowrap;font-size:13px;line-height:40px;animation:ys 20s linear infinite;font-weight:900;color:#7f1d1d}
@@ -56,7 +56,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .tvs{width:34px;height:12px;background:#dc2626;margin:0 auto;border-radius:0 0 4px 4px}
 .tvb2{width:80px;height:6px;background:#dc2626;margin:0 auto;border-radius:4px}
 
-/* 5. الشريط الأحمر (الترحيب) - تمت إضافة حركة هنا */
+/* 5. الشريط الأحمر (الترحيب) */
 .wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:15px;text-align:center;border:3px solid #fbbf24;font-size:16px;line-height:1.6;font-weight:900;width:100%;box-shadow:0 4px 10px rgba(0,0,0,0.3);overflow:hidden;position:relative;}
 .wctxt-inner{display:inline-block;white-space:nowrap;padding-left:100%;animation:redMarquee 15s linear infinite;}
 @keyframes redMarquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
@@ -316,9 +316,11 @@ Z.updateUI=function(){
   var b=document.getElementById('top'),ic=document.getElementById('ti'),tx=document.getElementById('tt');
   var br=document.getElementById('br'),bo=document.getElementById('bo'),bs=document.getElementById('bs'),bstat=document.getElementById('bstats');
   var y=document.getElementById('yellow'),aj=document.getElementById('adminAddJob');
+  
   if(Z.admin){
     b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف';
-    br.style.display='inline-block';bo.style.display='inline-block';bs.style.display='none';y.style.display='none';
+    br.style.display='none'; // إخفاء زر سجل للمشرف
+    bo.style.display='inline-block';bs.style.display='none';y.style.display='none';
     if(bstat){
       bstat.style.display='inline-block';
       var un=parseInt(localStorage.getItem('zaid_unread_regs')||'0');
@@ -327,12 +329,14 @@ Z.updateUI=function(){
     if(aj)aj.style.display='block';
   } else if(Z.user){
     b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name;
-    br.style.display='none';bo.style.display='inline-block';bs.style.display='inline-block';y.style.display='none';
+    br.style.display='none'; // إخفاء زر سجل للمستخدم
+    bo.style.display='inline-block';bs.style.display='inline-block';y.style.display='none';
     if(bstat)bstat.style.display='none';
     if(aj)aj.style.display='none';
   } else {
     b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر';
-    br.style.display='inline-block';bo.style.display='inline-block';
+    br.style.display='inline-block'; // إظهار زر سجل للزائر
+    bo.style.display='inline-block';
     bs.style.display='none';y.style.display='flex';
     if(bstat)bstat.style.display='none';
     if(aj)aj.style.display='none';
