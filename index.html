@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <script>
 try {
-  // تغيير اسم المفتاح إلى _v2 لتصفير العداد وبدء صفحة جديدة
   var _isAdmin = sessionStorage.getItem('zaid_admin_session');
   if (!_isAdmin) {
     var _v = localStorage.getItem('zaid_visits_v2') || '0';
@@ -261,7 +260,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 </div>
 
 </div>
-
 <script>
 (function(){
 'use strict';
@@ -269,7 +267,7 @@ var Z=window.ZAID={};
 Z.user=null;Z.admin=false;Z.audio=null;Z.selectedCat=null;
 Z.lessons={};Z.exams={};Z.services={};Z.jobs=[];
 Z.cur={key:'',idx:0};Z.exam={key:'',idx:0,score:0,qs:[]};
-Z.ADMIN='012345';Z.WA='21655335477';
+Z.ADMIN='012345';Z.WA='21655335477';Z.ADMIN_EMAIL='zeidoun2021@gmail.com';
 Z.LVL=['تقني','تقني سامي','مهندس','ماجستير','دكتوراه'];
 Z.LVL_CLS={'تقني':'lvl-a','تقني سامي':'lvl-b','مهندس':'lvl-c','ماجستير':'lvl-d','دكتوراه':'lvl-e'};
 Z.addLesson=function(k,m,s){Z.lessons[k]={meta:m,slides:s};};
@@ -301,7 +299,11 @@ Z.updateUI=function(){
   if(Z.admin){
     b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف';
     br.style.display='none';bo.style.display='inline-block';bs.style.display='none';y.style.display='none';
-    if(bstat)bstat.style.display='inline-block';
+    if(bstat){
+      bstat.style.display='inline-block';
+      var _unread=parseInt(localStorage.getItem('zaid_unread_regs')||'0');
+      bstat.textContent = _unread>0 ? '📊 الإحصائيات ('+_unread+')' : '📊 الإحصائيات';
+    }
     if(aj)aj.style.display='block';
   }
   else if(Z.user){
@@ -333,18 +335,76 @@ Z.register=function(){
     er.style.display='block';er.textContent='املأ جميع الحقول، والاسم ثلاثي';return;}
   er.style.display='none';
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date: new Date().toLocaleString('ar-TN')};
-  
   try {
     var users = JSON.parse(localStorage.getItem('zaid_registered_users_v2') || '[]');
     users.push(Z.user);
     localStorage.setItem('zaid_registered_users_v2', JSON.stringify(users));
+    var unread = parseInt(localStorage.getItem('zaid_unread_regs') || '0') + 1;
+    localStorage.setItem('zaid_unread_regs', unread);
   } catch(e){}
-  
+  Z.notifyAdminEmail(Z.user);
+  Z.showRegSuccess(Z.user);
   document.getElementById('un').textContent=n;
-  Z.updateUI();Z.showPage('pageHome');
+  Z.updateUI();
+};
+
+Z.notifyAdminEmail=function(u){
+  var body='تسجيل جديد في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي\n';
+  body+='=====================================\n\n';
+  body+='الاسم الكامل: '+u.name+'\n';
+  body+='المهنة: '+u.prof+'\n';
+  body+='الاختصاص: '+u.spec+'\n';
+  body+='البريد الإلكتروني: '+u.email+'\n';
+  body+='رقم الواتساب: '+u.phone+'\n';
+  body+='بلد الإقامة: '+u.country+'\n';
+  body+='المدينة: '+u.city+'\n';
+  body+='الفئة: '+u.cat+'\n';
+  body+='تاريخ التسجيل: '+u.date+'\n';
+  body+='\n=====================================\n';
+  body+='رسالة آلية من منصة زايد — الرجاء عدم الرد.';
+  var subject='تسجيل جديد — '+u.name;
+  var mailto='mailto:'+Z.ADMIN_EMAIL+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  Z._lastMailto=mailto;
+  try{
+    var a=document.createElement('a');
+    a.href=mailto;a.target='_blank';a.rel='noopener';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){try{a.remove();}catch(x){}},800);
+  }catch(err){}
+};
+
+Z.showRegSuccess=function(u){
+  var o=document.getElementById('regSuccess');if(o)o.remove();
+  var m=document.createElement('div');m.id='regSuccess';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML='<div style="background:#1e293b;padding:30px;border-radius:20px;max-width:480px;width:100%;border:4px solid #22c55e;color:#fff;text-align:center">'
+    +'<div style="font-size:60px;margin-bottom:10px">🎉</div>'
+    +'<h2 style="color:#22c55e;margin-bottom:15px;font-size:22px">تم التسجيل بنجاح!</h2>'
+    +'<div style="background:#0f172a;padding:15px;border-radius:10px;margin-bottom:15px;text-align:right;font-size:13px;line-height:1.9">'
+      +'<div><strong style="color:#fbbf24">👤 الاسم:</strong> '+u.name+'</div>'
+      +'<div><strong style="color:#fbbf24">📧 البريد:</strong> '+u.email+'</div>'
+      +'<div><strong style="color:#fbbf24">📱 الواتساب:</strong> '+u.phone+'</div>'
+    +'</div>'
+    +'<div style="background:rgba(34,197,94,.15);padding:12px;border-radius:10px;margin-bottom:15px;font-size:13px;line-height:1.7;border-right:3px solid #22c55e;text-align:right">'
+      +'📧 <strong>تم فتح تطبيق البريد لإشعار المشرف</strong><br>'
+      +'<span style="color:#94a3b8;font-size:12px">إذا لم يفتح تلقائياً، اضغط زر الإرسال أدناه.</span>'
+    +'</div>'
+    +'<button onclick="ZAID.resendEmail()" style="width:100%;padding:12px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:15px;cursor:pointer;font-family:Cairo;margin-bottom:8px">📧 إعادة إرسال الإشعار للمشرف</button>'
+    +'<button onclick="ZAID.finishReg()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:14px;cursor:pointer;font-family:Cairo">🚀 متابعة إلى المنصة</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+
+Z.resendEmail=function(){ if(Z._lastMailto){ try{ window.location.href=Z._lastMailto; }catch(e){} } };
+
+Z.finishReg=function(){
+  var o=document.getElementById('regSuccess');if(o)o.remove();
+  Z.showPage('pageHome');
 };
 
 Z.showStats=function(){
+  localStorage.setItem('zaid_unread_regs','0');
+  Z.updateUI();
   var v=localStorage.getItem('zaid_visits_v2')||'1';
   var users=[];
   try { users=JSON.parse(localStorage.getItem('zaid_registered_users_v2')||'[]'); }catch(e){}
@@ -380,17 +440,19 @@ Z.showStats=function(){
     +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
     +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:15px;max-height:200px;">'+usersHtml+'</div>'
     +'<button onclick="ZAID.resetStats()" style="width:100%;padding:10px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;margin-bottom:8px;">🗑️ تصفير العدادات</button>'
-    +'<button onclick="document.getElementById(\'statsModal\').remove()" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;">إغلاق</button>'
+    +'<button onclick="document.getElementById(\'statsModal\').remove();ZAID.updateUI();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;">إغلاق</button>'
     +'</div>';
   document.body.appendChild(m);
 };
 
 Z.resetStats=function(){
   if(!Z.admin) return;
-  localStorage.setItem('zaid_visits_v2', '0');
-  localStorage.setItem('zaid_registered_users_v2', '[]');
-  alert('✅ تم تصفير جميع العدادات والبيانات بنجاح');
-  Z.showStats(); // تحديث النافذة
+  localStorage.setItem('zaid_visits_v2','0');
+  localStorage.setItem('zaid_registered_users_v2','[]');
+  localStorage.setItem('zaid_unread_regs','0');
+  alert('✅ تم تصفير جميع عدادات الإحصائيات والمسجلين بنجاح');
+  Z.updateUI();
+  Z.showStats();
 };
 
 Z.adminLogin=function(){
@@ -674,7 +736,6 @@ Z.loadJobs();
 window.addEventListener('load',function(){Z.updateUI();Z.showPage('pageWelcome');});
 })();
 </script>
-
 <script>
 (function(){
 var Z=window.ZAID;
