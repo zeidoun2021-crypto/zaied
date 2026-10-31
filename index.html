@@ -279,7 +279,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
-/* ⚠️⚠️⚠️ إعدادات Firebase (ضع مفاتيحك هنا لاحقاً) ⚠️⚠️⚠️ */
+/* ⚠️ ضع مفاتيح Firebase الخاصة بك هنا لاحقاً ⚠️ */
 var firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -290,7 +290,7 @@ var firebaseConfig = {
 };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 var db = firebase.firestore();
-/* ⚠️⚠️⚠️ نهاية إعدادات Firebase ⚠️⚠️⚠️ */
+/* ⚠️ نهاية إعدادات Firebase ⚠️ */
 
 Z.ADMIN='012345'; 
 Z.WA='21655335477';
@@ -447,22 +447,35 @@ Z.showStats=function(){
   db.collection("users").get().then(function(querySnapshot) {
       var users = [];
       querySnapshot.forEach(function(doc) {
-          users.push(doc.data());
+          var u = doc.data();
+          u._docId = doc.id;
+          users.push(u);
       });
       
       var todayStr=new Date().toLocaleDateString('ar-TN');
       var todayUsers=users.filter(function(u){return u.date===todayStr;});
+      var subscribers=users.filter(function(u){return u.isSub===true;});
       
       var usersHtml='';
       if(users.length===0) usersHtml='<div style="color:#94a3b8;text-align:center;padding:12px;">لا يوجد مسجلون بعد.</div>';
       else {
         users.forEach(function(u,i){
+          var subBtn = u.isSub 
+            ? '<button onclick="ZAID.toggleSub(\''+u._docId+'\',true)" style="background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">❌ إلغاء الاشتراك</button>'
+            : '<button onclick="ZAID.toggleSub(\''+u._docId+'\',false)" style="background:#22c55e;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">✅ تفعيل الاشتراك</button>';
+          
+          var subBadge = u.isSub 
+            ? '<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">مشترك</span>' 
+            : '<span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">غير مشترك</span>';
+
           usersHtml+='<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:12px;line-height:1.7;">'
-            +'<div style="color:#fbbf24;font-weight:900;font-size:13px;">👤 '+(i+1)+'. '+(u.name||'—')+'</div>'
+            +'<div style="color:#fbbf24;font-weight:900;font-size:13px;">'+subBadge+' 👤 '+(i+1)+'. '+(u.name||'—')+'</div>'
             +'<div style="color:#cbd5e1;">📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')+'</div>'
             +'<div style="color:#94a3b8;">💼 '+(u.prof||'—')+' — 🎯 '+(u.spec||'—')+'</div>'
             +'<div style="color:#94a3b8;">🌍 '+(u.country||'—')+' — '+(u.city||'—')+'</div>'
-            +'<div style="color:#94a3b8;font-size:11px;">🏷️ '+(u.cat||'—')+' — 📅 '+(u.date||'—')+'</div></div>';
+            +'<div style="color:#94a3b8;font-size:11px;">🏷️ '+(u.cat||'—')+' — 📅 '+(u.date||'—')+'</div>'
+            +subBtn
+            +'</div>';
         });
       }
       
@@ -471,10 +484,10 @@ Z.showStats=function(){
       m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
       m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
         +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة (Firebase)</h2>'
-        +'<div style="font-size:12px;color:#22c55e;margin-bottom:10px;">✅ متصل بقاعدة بيانات Firebase</div>'
         +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
           +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 مسجلون اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
           +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 إجمالي المسجلين:</span><span style="color:#fbbf24">'+users.length+'</span></div>'
+          +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
         +'</div>'
         +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
         +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div>'
@@ -482,8 +495,24 @@ Z.showStats=function(){
       document.body.appendChild(m2);
   }).catch(function(error) {
       console.error("Error getting documents: ", error);
-      alert("خطأ في جلب البيانات من Firebase. تأكد من إعدادات قاعدة البيانات.");
+      alert("خطأ في جلب البيانات من Firebase.");
       document.getElementById('statsModal').remove();
+  });
+};
+
+Z.toggleSub=function(docId, currentStatus){
+  if(!Z.admin){ alert('هذه الميزة للمشرف فقط'); return; }
+  var newStatus = !currentStatus;
+  var msg = newStatus ? 'تفعيل اشتراك هذا المستخدم؟' : 'إلغاء اشتراك هذا المستخدم؟';
+  if(!confirm(msg)) return;
+  
+  db.collection("users").doc(docId).update({
+    isSub: newStatus
+  }).then(function() {
+    alert('✅ تم تحديث حالة الاشتراك بنجاح');
+    Z.showStats();
+  }).catch(function(error) {
+    alert('حدث خطأ: ' + error);
   });
 };
 
@@ -508,10 +537,10 @@ Z.showSub=function(){
   m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:450px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
     +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
     +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي</div><div style="font-size:18px;font-weight:700;margin:5px 0">50 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">e-Dinar / D17</div></div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:18px;font-weight:700;margin:5px 0">30 دولار / 30 يورو</div><div style="font-size:12px;color:#94a3b8">Western Union</div></div>'
-    +'<div style="font-size:13px;color:#fbbf24;text-align:center;margin-bottom:10px;">للمشترك الحق في تحميل أي محتوى يريده (نسخة واحدة).</div>'
-    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع</button>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي</div><div style="font-size:18px;font-weight:700;margin:5px 0">20 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">e-Dinar / D17</div></div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:18px;font-weight:700;margin:5px 0">20 دولار / 20 يورو</div><div style="font-size:12px;color:#94a3b8">Western Union</div></div>'
+    +'<div style="background:rgba(251,191,36,.1);border-right:4px solid #fbbf24;padding:10px;border-radius:8px;font-size:13px;color:#fbbf24;text-align:right;margin-bottom:10px;line-height:1.7;"><strong>💡 مزايا الاشتراك:</strong><br>• رفع وتحميل كل محتوى المنصة <strong>مرة واحدة سنوياً</strong><br>• شهادة معتمدة بعد كل اختبار ناجح</div>'
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
     +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
   document.body.appendChild(m);
 };
@@ -1052,7 +1081,7 @@ const techData = [
     {ar:"الكاميرا", en:"Camera", fr:"Caméra", ko:"카메라", def:"جهاز التقاط الصور"},
     {ar:"المودم", en:"Modem", fr:"Modem", ko:"모뎀", def:"جهاز ربط بالإنترنت"},
     {ar:"الموجه", en:"Router", fr:"Routeur", ko:"라우터", def:"جهاز توجيه البيانات"},
-    {ar:"المحول", en:"Adapter", fr:"Adaptateur", ko:"어댑터", def:"محول الإشارات"},
+    {ar:"المحول", en:"Adapter", fr:"Adaptateur", ko:"어댑تر", def:"محول الإشارات"},
     {ar:"المبدل", en:"Switch", fr:"Commutateur", ko:"스위치", def:"جهاز ربط الشبكات"},
     {ar:"الجسر", en:"Bridge", fr:"Pont", ko:"브리지", def:"جهاز ربط شبكتين"},
     {ar:"النقطة الساخنة", en:"Hotspot", fr:"Point d'accès", ko:"핫스팟", def:"نقطة اتصال لاسلكية"},
@@ -1245,18 +1274,70 @@ function renderSlide(o){
   if(o.e)h+='<div style="text-align:center;padding:30px"><div style="font-size:50px;margin-bottom:15px">📝</div><div class="stxt" style="font-size:16px"><strong>📝 الاختبار</strong></div><button onclick="ZAID.startExam(\''+o.e+'\')" style="margin-top:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:16px;padding:12px 30px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🚀 ابدأ</button></div>';
   
   if(Z.user && Z.user.isSub) {
-    h+='<div style="text-align:center;margin-top:15px;"><button onclick="ZAID.downloadSlide()" style="background:#3b82f6;color:#fff;border:none;border-radius:20px;padding:8px 20px;cursor:pointer;font-family:Cairo;font-weight:900;">📥 تحميل هذا المحتوى (نسخة واحدة)</button></div>';
+    h+='<div style="text-align:center;margin-top:15px;"><button onclick="ZAID.downloadSlide()" style="background:#3b82f6;color:#fff;border:none;border-radius:20px;padding:8px 20px;cursor:pointer;font-family:Cairo;font-weight:900;">📥 تحميل كل المحتوى (مرة واحدة سنوياً)</button></div>';
   }
   return h+'</div>';
 }
+
 Z.downloadSlide=function(){
-  var txt = document.getElementById('lc').innerText;
-  var blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
+  if(!Z.user || !Z.user.isSub) {
+    alert('⚠️ هذه الميزة للمشتركين فقط. يرجى الاشتراك أولاً.');
+    return;
+  }
+
+  var email = Z.user.email;
+  var key = 'zaid_year_download_' + email;
+  var lastDownload = localStorage.getItem(key);
+
+  if(lastDownload) {
+    var lastDate = new Date(lastDownload);
+    var nextAllowed = new Date(lastDate.getFullYear() + 1, lastDate.getMonth(), lastDate.getDate());
+    if(new Date() < nextAllowed) {
+      alert('⚠️ لقد قمت بتحميل المحتوى هذا العام.\n\nيمكنك التحميل مرة أخرى بعد:\n' + nextAllowed.toLocaleDateString('ar-TN'));
+      return;
+    }
+  }
+
+  if(!confirm('📥 هل تريد تحميل كل محتوى المنصة؟\n\n(يمكنك التحميل مرة واحدة فقط في السنة)')) return;
+
+  var allContent = 'منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي\n';
+  allContent += 'تاريخ التحميل: ' + new Date().toLocaleDateString('ar-TN') + ' ' + new Date().toLocaleTimeString('ar-TN') + '\n';
+  allContent += 'المستخدم: ' + (Z.user.name || '') + ' (' + email + ')\n';
+  allContent += '================================================\n\n';
+
+  var lessonCount = 0;
+  for(var lessonKey in Z.lessons) {
+    lessonCount++;
+    var lesson = Z.lessons[lessonKey];
+    allContent += '\n' + Array(51).join('=') + '\n';
+    allContent += '📖 الدرس ' + lessonCount + ': ' + (lesson.meta.name || lessonKey) + '\n';
+    allContent += Array(51).join('=') + '\n\n';
+
+    lesson.slides.forEach(function(slide, i) {
+      if(slide.t) allContent += '📌 ' + slide.t.replace(/<[^>]*>/g, '') + '\n';
+      if(slide.x) {
+        var cleanText = slide.x.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n').replace(/<[^>]*>/g, '').trim();
+        allContent += cleanText + '\n';
+      }
+      if(slide.s && slide.s[0]) allContent += '(النطق: ' + slide.s[0] + ')\n';
+      allContent += '\n';
+    });
+  }
+
+  allContent += '\n\n' + Array(51).join('=') + '\n';
+  allContent += '✅ إجمالي الدروس المحملة: ' + lessonCount + '\n';
+  allContent += 'منصة زايد — ' + new Date().getFullYear() + '\n';
+
+  var blob = new Blob([allContent], {type: 'text/plain;charset=utf-8'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'zaid_content.txt';
+  a.download = 'zaid_full_content_' + new Date().getFullYear() + '.txt';
   a.click();
+
+  localStorage.setItem(key, new Date().toISOString());
+  alert('✅ تم تحميل كل المحتوى بنجاح (' + lessonCount + ' درس).\n\nلن تتمكن من التحميل مرة أخرى حتى:\n' + new Date(new Date().getFullYear() + 1, new Date().getMonth(), new Date().getDate()).toLocaleDateString('ar-TN'));
 };
+
 Z.startLesson=function(k){var L=Z.lessons[k];if(!L)return;Z.cur={key:k,idx:0};renderCur();};
 
 function renderCur(){
@@ -1365,8 +1446,7 @@ Z.addLesson('bk_smart_campus',{cat:'books',icon:'🏫',name:'المدينة ال
 {n:'2',t:'🌟 المفهوم والأهداف',x:'المركب الجامعي الذكي هو فضاء يجمع بين البنية التحتية المتقدمة والتكنولوجيا الرقمية.<br>يهدف إلى <strong>تحسين جودة التعليم</strong>، <strong>تسهيل حياة الطلاب</strong>، <strong>وترشيد استهلاك الطاقة</strong>، ليصبح منبعاً للتنمية المستدامة.'},
 {n:'3',t:'⚙️ المكونات الرقمية',x:'يعتمد على:<br><strong>إنترنت الأشياء (IoT)</strong> للحساسات.<br><strong>السحابة المعلوماتية (Cloud)</strong> لتخزين البيانات.<br><strong>البيانات الضخمة (Big Data)</strong> للتحليل.<br><strong>الذكاء الاصطناعي</strong> لاتخاذ القرار.'},
 {n:'4',t:'🚀 الخدمات الذكية',x:'تشمل:<br>- أنظمة الدخول الذكية.<br>- إدارة ذكية للفصول الدراسية.<br>- منصات تعلم إلكتروني متكاملة.<br>- مراقبة أمنية ذكية.<br>- إدارة ذكية للمياه والطاقة.'}
-]);
-/* ================== إضافات AI (الورشات والكتاب الشامل) ================== */
+]);/* ================== إضافات AI (الورشات والكتاب الشامل) ================== */
 Z.addLesson('ai_full_workshop1', {cat: 'ai', icon: '📄', name: 'دليل المعلم الشامل', desc: 'ورشة 1 - نص حرفي', color: 'p'}, [
 {n: 'الورشة 1', t: 'الذكاء الاصطناعي في خدمة التعليم', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الذكاء الاصطناعي في خدمة التعليم دليل المعلم الشامل لاستخدام أدوات الذكاء الاصطناعي (1)
 تقديم وتنشيط: محمد زايد - خبير دولي في التكنولوجيات الحاسوبية - أستاذ جامعي - رئيس جمعية اللغة العربية الرقمية - تونس
