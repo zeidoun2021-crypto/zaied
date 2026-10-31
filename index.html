@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
@@ -185,10 +184,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <div class="tv">
       <div class="tvb">
         <img src="https://i.postimg.cc/MHGWk2FL/5120251.jpg" onerror="this.style.display='none';">
-        <div class="tvt">
-            <span>منصة</span>
-            <span>زايد</span>
-        </div>
+        <div class="tvt"><span>منصة</span><span>زايد</span></div>
       </div>
       <div class="tvs"></div><div class="tvb2"></div>
     </div>
@@ -279,7 +275,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
-/* ⚠️ ضع مفاتيح Firebase الخاصة بك هنا لاحقاً ⚠️ */
+/* ⚠️ إعدادات Firebase - ضع مفاتيحك هنا ⚠️ */
 var firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -290,7 +286,9 @@ var firebaseConfig = {
 };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 var db = firebase.firestore();
-/* ⚠️ نهاية إعدادات Firebase ⚠️ */
+
+/* 📧 إعداد Web3Forms - ضع مفتاحك هنا */
+Z.WEB3FORMS_KEY = 'ضع_مفتاح_الوصول_هنا';
 
 Z.ADMIN='012345'; 
 Z.WA='21655335477';
@@ -398,12 +396,26 @@ Z.register=function(){
   
   // حفظ في Firebase
   db.collection("users").add(Z.user)
-  .then(function() {
-    console.log("✅ تم حفظ المستخدم في Firebase");
-  })
-  .catch(function(error) {
-    console.error("❌ خطأ في Firebase: ", error);
-  });
+  .then(function() { console.log("✅ محفوظ في Firebase"); })
+  .catch(function(error) { console.error("❌ خطأ Firebase:", error); });
+  
+  // إرسال نسخة إلى البريد عبر Web3Forms
+  if(Z.WEB3FORMS_KEY && Z.WEB3FORMS_KEY !== 'ضع_مفتاح_الوصول_هنا') {
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        access_key: Z.WEB3FORMS_KEY,
+        subject: '🎉 مسجل جديد في منصة زايد',
+        from_name: 'منصة زايد',
+        name: n, email: e, phone: h,
+        prof: p, spec: s, country: c, city: ci,
+        category: Z.selectedCat, date: Z.user.date
+      })
+    }).then(function(res){ return res.json(); })
+    .then(function(data){ console.log('📧 Web3Forms:', data); })
+    .catch(function(err){ console.error('❌ Web3Forms:', err); });
+  }
   
   Z.visitorAttempts=0; 
   document.getElementById('un').textContent=n;
@@ -506,14 +518,9 @@ Z.toggleSub=function(docId, currentStatus){
   var msg = newStatus ? 'تفعيل اشتراك هذا المستخدم؟' : 'إلغاء اشتراك هذا المستخدم؟';
   if(!confirm(msg)) return;
   
-  db.collection("users").doc(docId).update({
-    isSub: newStatus
-  }).then(function() {
-    alert('✅ تم تحديث حالة الاشتراك بنجاح');
-    Z.showStats();
-  }).catch(function(error) {
-    alert('حدث خطأ: ' + error);
-  });
+  db.collection("users").doc(docId).update({ isSub: newStatus })
+  .then(function() { alert('✅ تم تحديث حالة الاشتراك بنجاح'); Z.showStats(); })
+  .catch(function(error) { alert('حدث خطأ: ' + error); });
 };
 
 Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
@@ -534,19 +541,21 @@ Z.showSub=function(){
   var o=document.getElementById('sm');if(o)o.remove();
   var m=document.createElement('div');m.id='sm';
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:450px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:460px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
     +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
     +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي</div><div style="font-size:18px;font-weight:700;margin:5px 0">20 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">e-Dinar / D17</div></div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:18px;font-weight:700;margin:5px 0">20 دولار / 20 يورو</div><div style="font-size:12px;color:#94a3b8">Western Union</div></div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس)</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">30 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div></div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">20 دولار / 20 يورو</div><div style="font-size:12px;color:#94a3b8">عبر Western Union</div></div>'
+    +'<div style="background:rgba(34,197,94,.15);border-right:4px solid #22c55e;padding:10px;border-radius:8px;font-size:13px;color:#22c55e;text-align:right;margin:10px 0;line-height:1.7;"><strong>⚡ الدفع يستغرق دقيقة واحدة فقط</strong></div>'
     +'<div style="background:rgba(251,191,36,.1);border-right:4px solid #fbbf24;padding:10px;border-radius:8px;font-size:13px;color:#fbbf24;text-align:right;margin-bottom:10px;line-height:1.7;"><strong>💡 مزايا الاشتراك:</strong><br>• رفع وتحميل كل محتوى المنصة <strong>مرة واحدة سنوياً</strong><br>• شهادة معتمدة بعد كل اختبار ناجح</div>'
     +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
     +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
   document.body.appendChild(m);
 };
+
 Z.wa=function(){
   var u=Z.user||{};
-  var msg='مرحباً، أرغب في الاشتراك.\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'');
+  var msg='مرحباً، أرغب في الاشتراك في منصة زايد.\n\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'')+'\n\nطريقة الدفع: (e-Dinar / Western Union)';
   window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
 };
 
@@ -628,7 +637,7 @@ Z.jobForm=function(){
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
   var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
   m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:600px;width:100%;border:4px solid #06b6d4;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#06b6d4;text-align:center;margin-bottom:15px;font-size:20px">🏢 إضافة عرض تشغيل (بيانات المؤسسة)</h2>'
+    +'<h2 style="color:#06b6d4;text-align:center;margin-bottom:15px;font-size:20px">🏢 إضافة عرض تشغيل</h2>'
     +'<input class="inp" id="jfCompany" placeholder="اسم المؤسسة / الشركة *">'
     +'<input class="inp" id="jfActivity" placeholder="ميدان النشاط *">'
     +'<input class="inp" id="jfAddress" placeholder="العنوان / مكان الإقامة *">'
@@ -689,7 +698,7 @@ Z.showSeekerForm=function(type){
     +'<input class="inp" id="sfSpec" placeholder="الاختصاص *">'
     +'<select class="inp" id="sfLevel">'+opts+'</select>'
     +'<input class="inp" id="sfPhone" placeholder="رقم الواتساب *">'
-    +'<input class="inp" id="sfEmail" placeholder="البريد الإلكتروني (المايل) *">'
+    +'<input class="inp" id="sfEmail" placeholder="البريد الإلكتروني *">'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
     +'<input class="inp" id="sfCity" placeholder="المدينة *">'
     +'<input class="inp" id="sfCountry" placeholder="البلد *" value="تونس">'
@@ -733,7 +742,7 @@ Z.saveSeeker=function(type){
     });
     Z.saveSeekers();
     document.getElementById('sf').remove();
-    alert('✅ تم حفظ طلبك وإرفاق سيرتك الذاتية بنجاح، ستكون متاحة للمؤسسات.');
+    alert('✅ تم حفظ طلبك وإرفاق سيرتك الذاتية بنجاح.');
   };
   reader.readAsDataURL(cvFile);
 };
@@ -946,7 +955,6 @@ Z.showGameMessage=function(text, type) {
     setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
 };
 
-/* ===== Crossword (تم إصلاح التعليق عند الإجابة الخاطئة) ===== */
 const crosswordQuestions = [
     { q: "ما هي الشبكة العالمية التي تربط ملايين الأجهزة؟", correct: "الإنترنت", options: ["الإنترنت", "المتصفح", "الخادم", "الشبكة"] },
     { q: "ما هو البرنامج المستخدم لعرض صفحات الويب؟", correct: "المتصفح", options: ["المتصفح", "نظام التشغيل", "البريد", "المعالج"] },
@@ -1081,7 +1089,7 @@ const techData = [
     {ar:"الكاميرا", en:"Camera", fr:"Caméra", ko:"카메라", def:"جهاز التقاط الصور"},
     {ar:"المودم", en:"Modem", fr:"Modem", ko:"모뎀", def:"جهاز ربط بالإنترنت"},
     {ar:"الموجه", en:"Router", fr:"Routeur", ko:"라우터", def:"جهاز توجيه البيانات"},
-    {ar:"المحول", en:"Adapter", fr:"Adaptateur", ko:"어댑تر", def:"محول الإشارات"},
+    {ar:"المحول", en:"Adapter", fr:"Adaptateur", ko:"어댑터", def:"محول الإشارات"},
     {ar:"المبدل", en:"Switch", fr:"Commutateur", ko:"스위치", def:"جهاز ربط الشبكات"},
     {ar:"الجسر", en:"Bridge", fr:"Pont", ko:"브리지", def:"جهاز ربط شبكتين"},
     {ar:"النقطة الساخنة", en:"Hotspot", fr:"Point d'accès", ko:"핫스팟", def:"نقطة اتصال لاسلكية"},
@@ -1254,7 +1262,7 @@ Z.displayDictTerm=function(pos) {
     document.getElementById('dictTermDisplay').innerHTML = html;
     document.getElementById('dictCounter').innerHTML = `📌 ${pos+1} من ${dictFilteredList.length} مصطلح | القسم ${dictCurrentSection}`;
 };
-/* ================== عرض الشرائح والاختبارات ================== */
+/* ================== محرك العرض ================== */
 function renderSlide(o){
   var h='<div class="slide">';
   if(o.n)h+='<div class="sn">'+o.n+'</div>';
@@ -1271,8 +1279,7 @@ function renderSlide(o){
     h+='</div>';
   }
   if(o.v)h+='<div class="simg"><iframe width="100%" height="250" src="'+o.v+'" allowfullscreen style="border-radius:10px;border:none;"></iframe></div>';
-  if(o.e)h+='<div style="text-align:center;padding:30px"><div style="font-size:50px;margin-bottom:15px">📝</div><div class="stxt" style="font-size:16px"><strong>📝 الاختبار</strong></div><button onclick="ZAID.startExam(\''+o.e+'\')" style="margin-top:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:16px;padding:12px 30px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🚀 ابدأ</button></div>';
-  
+  if(o.e)h+='<div style="text-align:center;padding:30px"><div style="font-size:50px;margin-bottom:15px">📝</div><div class="stxt" style="font-size:16px"><strong>📝 الاختبار</strong></div><button onclick="ZAID.startExam(\''+o.e+'\')" style="margin-top:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:16px;padding:12px 30px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🚀 ابدأ الاختبار</button></div>';
   if(Z.user && Z.user.isSub) {
     h+='<div style="text-align:center;margin-top:15px;"><button onclick="ZAID.downloadSlide()" style="background:#3b82f6;color:#fff;border:none;border-radius:20px;padding:8px 20px;cursor:pointer;font-family:Cairo;font-weight:900;">📥 تحميل كل المحتوى (مرة واحدة سنوياً)</button></div>';
   }
@@ -1280,66 +1287,43 @@ function renderSlide(o){
 }
 
 Z.downloadSlide=function(){
-  if(!Z.user || !Z.user.isSub) {
-    alert('⚠️ هذه الميزة للمشتركين فقط. يرجى الاشتراك أولاً.');
-    return;
-  }
-
+  if(!Z.user || !Z.user.isSub) { alert('⚠️ هذه الميزة للمشتركين فقط. يرجى الاشتراك أولاً.'); return; }
   var email = Z.user.email;
   var key = 'zaid_year_download_' + email;
   var lastDownload = localStorage.getItem(key);
-
   if(lastDownload) {
     var lastDate = new Date(lastDownload);
     var nextAllowed = new Date(lastDate.getFullYear() + 1, lastDate.getMonth(), lastDate.getDate());
-    if(new Date() < nextAllowed) {
-      alert('⚠️ لقد قمت بتحميل المحتوى هذا العام.\n\nيمكنك التحميل مرة أخرى بعد:\n' + nextAllowed.toLocaleDateString('ar-TN'));
-      return;
-    }
+    if(new Date() < nextAllowed) { alert('⚠️ لقد قمت بتحميل المحتوى هذا العام.\n\nيمكنك التحميل مرة أخرى بعد:\n' + nextAllowed.toLocaleDateString('ar-TN')); return; }
   }
-
-  if(!confirm('📥 هل تريد تحميل كل محتوى المنصة؟\n\n(يمكنك التحميل مرة واحدة فقط في السنة)')) return;
-
+  if(!confirm('📥 هل تريد تحميل كل محتوى المنصة؟\n\n(مرة واحدة فقط في السنة)')) return;
   var allContent = 'منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي\n';
-  allContent += 'تاريخ التحميل: ' + new Date().toLocaleDateString('ar-TN') + ' ' + new Date().toLocaleTimeString('ar-TN') + '\n';
+  allContent += 'تاريخ التحميل: ' + new Date().toLocaleDateString('ar-TN') + '\n';
   allContent += 'المستخدم: ' + (Z.user.name || '') + ' (' + email + ')\n';
-  allContent += '================================================\n\n';
-
+  allContent += Array(51).join('=') + '\n\n';
   var lessonCount = 0;
   for(var lessonKey in Z.lessons) {
     lessonCount++;
     var lesson = Z.lessons[lessonKey];
-    allContent += '\n' + Array(51).join('=') + '\n';
-    allContent += '📖 الدرس ' + lessonCount + ': ' + (lesson.meta.name || lessonKey) + '\n';
-    allContent += Array(51).join('=') + '\n\n';
-
+    allContent += '\n📖 الدرس ' + lessonCount + ': ' + (lesson.meta.name || lessonKey) + '\n';
+    allContent += Array(51).join('-') + '\n\n';
     lesson.slides.forEach(function(slide, i) {
       if(slide.t) allContent += '📌 ' + slide.t.replace(/<[^>]*>/g, '') + '\n';
-      if(slide.x) {
-        var cleanText = slide.x.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n').replace(/<[^>]*>/g, '').trim();
-        allContent += cleanText + '\n';
-      }
+      if(slide.x) { var cleanText = slide.x.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n').replace(/<[^>]*>/g, '').trim(); allContent += cleanText + '\n'; }
       if(slide.s && slide.s[0]) allContent += '(النطق: ' + slide.s[0] + ')\n';
       allContent += '\n';
     });
   }
-
-  allContent += '\n\n' + Array(51).join('=') + '\n';
-  allContent += '✅ إجمالي الدروس المحملة: ' + lessonCount + '\n';
-  allContent += 'منصة زايد — ' + new Date().getFullYear() + '\n';
-
   var blob = new Blob([allContent], {type: 'text/plain;charset=utf-8'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'zaid_full_content_' + new Date().getFullYear() + '.txt';
   a.click();
-
   localStorage.setItem(key, new Date().toISOString());
   alert('✅ تم تحميل كل المحتوى بنجاح (' + lessonCount + ' درس).\n\nلن تتمكن من التحميل مرة أخرى حتى:\n' + new Date(new Date().getFullYear() + 1, new Date().getMonth(), new Date().getDate()).toLocaleDateString('ar-TN'));
 };
 
 Z.startLesson=function(k){var L=Z.lessons[k];if(!L)return;Z.cur={key:k,idx:0};renderCur();};
-
 function renderCur(){
   Z.stopSpeak();
   var L=Z.lessons[Z.cur.key];if(!L)return;
@@ -1356,31 +1340,46 @@ function renderCur(){
 Z.prev=function(){if(Z.cur.idx>0){Z.cur.idx--;renderCur();}};
 Z.next=function(){var L=Z.lessons[Z.cur.key];if(Z.cur.idx<L.slides.length-1){Z.cur.idx++;renderCur();}};
 
-Z.startExam=function(k){var q=Z.exams[k];if(!q){alert('لا اختبار');return;}Z.exam={key:k,idx:0,score:0,qs:q};renderExam();};
+/* ================== محرك الاختبارات (مع النقاط والملاحظات) ================== */
+Z.startExam=function(k){var q=Z.exams[k];if(!q){alert('لا اختبار');return;}Z.exam={key:k,idx:0,score:0,total:q.length,qs:q,answers:[]};renderExam();};
+
 function renderExam(){
   var c=document.getElementById('lc'),t=Z.exam.qs.length;
   if(Z.exam.idx>=t){
-    var p=Math.round(Z.exam.score/t*100),ok=p>=50;
+    var p=Math.round((Z.exam.score/(t*10))*100),ok=p>=50;
     var msg=ok?'🎉 مبروك! نجحت':'😔 لم تنجح';
     var col=ok?'#22c55e':'#dc2626',cert='';
     if(ok){
       var nm=(Z.user&&Z.user.name)?Z.user.name:'المتعلم';
       var dt=new Date().toLocaleDateString('ar-TN');
-      cert='<div class="cert"><h1>🏆 شهادة إتمام</h1><p>تشهد منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي بأن</p><h2>'+nm+'</h2><p>قد أتم بنجاح هذا الاختبار بنسبة <strong>'+p+'%</strong></p><p>التاريخ: '+dt+'</p><div class="sign">محمد زايد — خبير دولي — تونس 🇹🇳</div></div>';
+      cert='<div class="cert"><h1>🏆 شهادة إتمام</h1><p>تشهد منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي بأن</p><h2>'+nm+'</h2><p>قد أتم بنجاح هذا الاختبار بنسبة <strong>'+p+'%</strong> وحصل على <strong>'+Z.exam.score+'</strong> نقطة من أصل '+(t*10)+'</p><p>التاريخ: '+dt+'</p><div class="sign">محمد زايد — خبير دولي — تونس 🇹🇳</div></div>';
     }
-    c.innerHTML='<div class="slide" style="text-align:center"><div class="sn">🏆 النتيجة</div><div style="font-size:26px;font-weight:900;color:'+col+';margin:20px 0">'+msg+'</div><div class="stxt" style="font-size:16px">درجتك: '+Z.exam.score+' من '+t+'<br>النسبة: '+p+'%</div>'+cert+'<div style="margin-top:20px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap"><button class="nbtn nn" onclick="ZAID.startExam(\''+Z.exam.key+'\')">🔄 إعادة</button><button class="nbtn ne" onclick="ZAID.goHome()">🔙 الرئيسية</button></div></div>';
+    c.innerHTML='<div class="slide" style="text-align:center"><div class="sn">🏆 النتيجة النهائية</div><div style="font-size:26px;font-weight:900;color:'+col+';margin:20px 0">'+msg+'</div><div class="stxt" style="font-size:16px">النتيجة: '+Z.exam.score+' نقطة من '+(t*10)+'<br>النسبة: '+p+'%</div>'+cert+'<div style="margin-top:20px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap"><button class="nbtn nn" onclick="ZAID.startExam(\''+Z.exam.key+'\')">🔄 إعادة</button><button class="nbtn ne" onclick="ZAID.goHome()">🔙 الرئيسية</button></div></div>';
     return;
   }
   var q=Z.exam.qs[Z.exam.idx],op='';
   for(var i=0;i<q.o.length;i++)op+='<button class="opt" onclick="ZAID.ans(\''+q.o[i].replace(/'/g,"\\'")+'\')">'+q.o[i]+'</button>';
-  c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div><div class="stxt" style="font-size:16px;font-weight:900">'+q.q+'</div>'+op+'</div>';
+  c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div><div style="background:#fef3c7;padding:10px;border-radius:8px;margin-bottom:10px;text-align:center;font-weight:900;color:#78350f;">⭐ النقاط الحالية: '+Z.exam.score+'</div><div class="stxt" style="font-size:16px;font-weight:900">'+q.q+'</div>'+op+'</div>';
 }
-Z.ans=function(ch){var q=Z.exam.qs[Z.exam.idx];if(ch===q.a){Z.exam.score++;alert('✅ صحيح!');}else{alert('❌ خطأ. الصحيح: '+q.a);}Z.exam.idx++;renderExam();};
+
+Z.ans=function(ch){
+  var q=Z.exam.qs[Z.exam.idx];
+  if(ch===q.a){
+    Z.exam.score += 10;
+    alert('✅ إجابة صحيحة! +10 نقاط\n\n' + (q.explain || 'أحسنت!'));
+  } else {
+    alert('❌ إجابة خاطئة.\n\nالإجابة الصحيحة: ' + q.a + '\n\n' + (q.explain || 'راجع الدرس وحاول مرة أخرى.'));
+  }
+  Z.exam.idx++;
+  renderExam();
+};
 
 Z.loadJobs();
 Z.loadSeekers();
 
-/* ================== المحتوى (الدروس الأصلية) ================== */
+/* ================== المحتوى (الدروس) ================== */
+
+/* ----- كتاب الأطفال والحاسوب (الأصلي) ----- */
 Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحاسوب',desc:'شرائح تعليمية + اختبار'},[
 {n:'📖 1',t:'📚 مقدمة',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'مرحباً بكم في كتاب "الأطفال والحاسوب". بقلم: <strong>محمد زايد</strong>',s:['الأطفال والحاسوب','Les enfants','Children']},
 {n:'📖 2',t:'💻 ما هو الحاسوب؟',i:'https://i.postimg.cc/CKcnB72y/haswb1.jpg',x:'الحاسوب هو جهاز <strong>إلكتروني رقمي</strong> يمكنه تخزين ومعالجة البيانات واستقبالها وإخراج النتائج.',r:['حاسوب','Ordinateur','Computer'],s:['الحاسوب','Ordinateur','Computer']},
@@ -1393,6 +1392,17 @@ Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحا�
 {n:'📖 9 — الاختبار',e:'book_exam'}
 ]);
 
+/* ----- الدرس 1 الجديد: ما هو الحاسوب؟ (التعريف، التطور، الأنواع) ----- */
+Z.addLesson('tech_lesson1',{cat:'tech',icon:'💻',name:'الدرس 1: ما هو الحاسوب؟',desc:'التعريف، التطور، الأنواع + اختبار'},[
+{n:'الشريحة 1',t:'💻 ما هو الحاسوب؟',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Desktop_computer_clipart_-_Yellow_theme.svg/640px-Desktop_computer_clipart_-_Yellow_theme.svg.png',x:'<strong>الحاسوب</strong> هو جهاز إلكتروني رقمي له القدرة على استقبال البيانات ومعالجتها وتخزينها واسترجاعها، ثم إخراج النتائج في شكل معلومات مفيدة.<br><br>يعمل الحاسوب وفق مجموعة من التعليمات والأوامر التي تُعرف بـ<strong>البرامج</strong>، وهو مصمم لتنفيذ العمليات الحسابية والمنطقية بسرعة فائقة ودقة عالية.',s:['الحاسوب هو جهاز إلكتروني رقمي لمعالجة البيانات','L\'ordinateur est un appareil électronique numérique','A computer is a digital electronic device'],r:['حاسوب','Ordinateur','Computer']},
+{n:'الشريحة 2',t:'📜 لمحة تاريخية: تطور الحاسوب',x:'مرّ الحاسوب بعدة <strong>أجيال</strong> منذ اختراعه:<br><br><strong>الجيل الأول (1946–1959):</strong> أجهزة ضخمة تعمل بالصمامات المفرغة، تزن أكثر من 30 طناً وتستهلك طاقة هائلة.<br><strong>الجيل الثاني (1959–1965):</strong> استخدام الترانزستورات، فأصبحت أصغر وأسرع.<br><strong>الجيل الثالث (1965–1980):</strong> الدوائر المتكاملة.<br><strong>الجيل الرابع (1980–1990):</strong> المعالجات الدقيقة.<br><strong>الجيل الخامس (1990–الآن):</strong> الذكاء الاصطناعي والحوسبة السحابية.',s:['تطور الحاسوب عبر خمسة أجيال','L\'évolution de l\'ordinateur à travers cinq générations','The evolution of computers through five generations']},
+{n:'الشريحة 3',t:'🖥️ الأنواع الرئيسية للحواسيب',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Personal_computer%2C_exploded_4.svg/640px-Personal_computer%2C_exploded_4.svg.png',x:'تُصنَّف الحواسيب حسب <strong>الحجم والأداء</strong> إلى:<br><br><strong>1. الحواسيب العملاقة (Supercomputers):</strong> الأقوى والأغلى، تُستخدم في الأبحاث الفضائية والتنبؤات الجوية.<br><strong>2. الحواسيب الكبيرة (Mainframes):</strong> تخدم آلاف المستخدمين في الشركات والمصارف.<br><strong>3. الحواسيب الشخصية (PCs):</strong> مثل الحاسوب المكتبي (Desktop) والمحمول (Laptop).<br><strong>4. الأجهزة المحمولة:</strong> الهواتف الذكية والأجهزة اللوحية (Tablets).',s:['أنواع الحواسيب حسب الحجم والأداء','Types d\'ordinateurs selon la taille','Types of computers by size']},
+{n:'الشريحة 4',t:'⚙️ مكونات الحاسوب الأساسية',x:'يتكون الحاسوب من جزأين رئيسيين:<br><br><strong>1. المكونات المادية (Hardware):</strong> وهي الأجزاء الملموسة مثل المعالج (CPU)، الذاكرة (RAM)، القرص الصلب (HDD/SSD)، الشاشة، لوحة المفاتيح، والفأرة.<br><strong>2. المكونات البرمجية (Software):</strong> وهي البرامج والتطبيقات ونظام التشغيل التي تُشغّل العتاد وتوجهه.<br><br>لا يعمل الحاسوب بدون تكامل الجزأين معاً.',s:['مكونات الحاسوب: العتاد والبرمجيات','Composants : matériel et logiciel','Components: hardware and software'],v:'https://www.youtube.com/embed/1I5ZM4h7a5E'},
+{n:'الشريحة 5',t:'🎯 مزايا استخدام الحاسوب',x:'من أهم مزايا الحاسوب:<br><br><strong>1. الدقة المتناهية:</strong> نتائج صحيحة دون أخطاء بشرية.<br><strong>2. السرعة الفائقة:</strong> إنجاز ملايين العمليات في الثانية.<br><strong>3. التخزين الهائل:</strong> حفظ كميات ضخمة من البيانات واسترجاعها فوراً.<br><strong>4. الاقتصادية:</strong> توفير الوقت والجهد والتكلفة.<br><strong>5. الاتصالات الشبكية:</strong> ربط الأجهزة وتبادل المعلومات عبر الإنترنت.',s:['مزايا الحاسوب: الدقة والسرعة والتخزين','Avantages : précision, rapidité et stockage','Advantages: accuracy, speed, and storage']},
+{n:'📝 اختبار الدرس 1',e:'tech_lesson1_exam'}
+]);
+
+/* ----- اللغة العربية: المستوى 1 ----- */
 Z.addLesson('ar1',{cat:'arabic',icon:'🌙',name:'المستوى 1: الحروف والحركات',desc:'7 شرائح + اختبار'},[
 {n:'الدرس 1',t:'الأبجدية العربية',x:'تتكون الأبجدية العربية من <strong>28 حرفاً</strong>، وتُكتب من اليمين إلى اليسار.<br><br>أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي.',s:['الأبجدية العربية ثمانية وعشرون حرفا','L alphabet arabe','The Arabic alphabet']},
 {n:'الدرس 2',t:'الحركات (التشكيل)',x:'الحركات تحدد نطق الحرف: <br><br><strong>الفتحة (ـَ):</strong> بَ<br><strong>الضمة (ـُ):</strong> بُ<br><strong>الكسرة (ـِ):</strong> بِ<br><strong>السكون (ـْ):</strong> بْ'},
@@ -1403,16 +1413,12 @@ Z.addLesson('ar1',{cat:'arabic',icon:'🌙',name:'المستوى 1: الحروف
 {n:'الدرس 7',e:'arabic_exam'}
 ]);
 
-Z.addLesson('mem_game',{cat:'games',icon:'🧠',name:'لعبة الذاكرة',desc:'اعثر على الأزواج',color:'p'},[
-{n:'لعبة',t:'🎮 لعبة الذاكرة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startMemory()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}
-]);
-Z.addLesson('word_game',{cat:'games',icon:'🔍',name:'ابحث عن الكلمة',desc:'لعبة حروف تفاعلية',color:'r'},[
-{n:'لعبة',t:'🔍 ابحث عن الكلمة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startWordSearch()" style="background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}
-]);
-Z.addLesson('cross_game',{cat:'games',icon:'🔐',name:'الكلمات المتقاطعة',desc:'أسئلة تكنولوجية',color:'j'},[
-{n:'لعبة',t:'🔐 الكلمات المتقاطعة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startCrossword()" style="background:linear-gradient(135deg,#0e7490,#155e75);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}
-]);
+/* ----- دروس الألعاب (نقاط دخول اللعب) ----- */
+Z.addLesson('mem_game',{cat:'games',icon:'🧠',name:'لعبة الذاكرة',desc:'اعثر على الأزواج',color:'p'},[{n:'لعبة',t:'🎮 لعبة الذاكرة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startMemory()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo">🎯 ابدأ</button></div>'}]);
+Z.addLesson('word_game',{cat:'games',icon:'🔍',name:'ابحث عن الكلمة',desc:'لعبة حروف تفاعلية',color:'r'},[{n:'لعبة',t:'🔍 ابحث عن الكلمة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startWordSearch()" style="background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo">🎯 ابدأ</button></div>'}]);
+Z.addLesson('cross_game',{cat:'games',icon:'🔐',name:'الكلمات المتقاطعة',desc:'أسئلة تكنولوجية',color:'j'},[{n:'لعبة',t:'🔐 الكلمات المتقاطعة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startCrossword()" style="background:linear-gradient(135deg,#0e7490,#155e75);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo">🎯 ابدأ</button></div>'}]);
 
+/* ----- مقدمة AI + محاضرة AI في التعليم + كتب ----- */
 Z.addLesson('ai_intro',{cat:'ai',icon:'🤖',name:'مقدمة في AI',desc:'5 شرائح',color:'p'},[
 {n:'1/5',t:'ما هو AI؟',x:'محاكاة <strong>الذكاء البشري</strong> في الآلات.'},
 {n:'2/5',t:'تعلم الآلة',x:'خوارزميات تتعلم من البيانات: إشراف، بدون إشراف، تعزيز.'},
@@ -1420,180 +1426,165 @@ Z.addLesson('ai_intro',{cat:'ai',icon:'🤖',name:'مقدمة في AI',desc:'5 �
 {n:'4/5',t:'تطبيقات',x:'سيارات ذاتية القيادة، تشخيص طبي، ترجمة، روبوتات.'},
 {n:'5/5',t:'ابدأ',x:'تعلّم Python ثم TensorFlow أو PyTorch.'}
 ]);
-
 Z.addLesson('lect_ai_edu',{cat:'lectures',icon:'🎤',name:'AI في التعليم',desc:'4 شرائح'},[
 {n:'1/4',t:'الذكاء الاصطناعي في التعليم',x:'يُحدث AI ثورة في التعليم عبر <strong>التعلم الشخصي</strong> و<strong>التقييم الآلي</strong> و<strong>المساعدين الأذكياء</strong>.',s:['الذكاء الاصطناعي في التعليم','IA dans l education','AI in education']},
 {n:'2/4',t:'أدوات AI',x:'<strong>ChatGPT</strong> للمساعدة، <strong>Duolingo</strong> للغات، <strong>Khan Academy</strong> للتقييم التكيفي.'},
 {n:'3/4',t:'الفوائد والتحديات',x:'<strong>فوائد:</strong> تخصيص، سرعة، تحفيز.<br><strong>تحديات:</strong> الخصوصية، التكلفة، نقص الكفاءات.'},
 {n:'4/4',t:'المستقبل',x:'التعليم المدمج بين <strong>المعلم البشري</strong> و<strong>الذكاء الاصطناعي</strong> هو الطريق الأمثل.',v:'https://www.youtube.com/embed/ad79nYk2keg'}
 ]);
-
 Z.addLesson('bk_children',{cat:'books',icon:'📚',name:'الأطفال والحاسوب',desc:'بقلم محمد زايد'},[
-{n:'1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الحديثة وحوسبة اللغة العربية'},
+{n:'1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الحديثة'},
 {n:'2',t:'مقدمة',x:'كتاب موجه للأطفال لتعلم أساسيات الحاسوب بطريقة مبسطة وممتعة.'},
-{n:'3',t:'الكتاب الكامل',x:'الكتاب الكامل (شرائح تفاعلية) في قسم <strong>التربية التكنولوجية</strong>.'}
+{n:'3',t:'الكتاب الكامل',x:'الكتاب الكامل في قسم <strong>التربية التكنولوجية</strong>.'}
 ]);
-
-Z.addLesson('bk_ai_crime',{cat:'books',icon:'🛡️',name:'الذكاء الاصطناعي والجرائم الإلكترونية',desc:'بقلم: محمد زايد'},[
-{n:'1',t:'🛡️ الذكاء الاصطناعي والجرائم الإلكترونية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cyber_security.jpg/640px-Cyber_security.jpg',x:'تأليف: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الرقمية وحوسبة اللغة العربية<br>أستاذ جامعي'},
-{n:'2',t:'🤖 الذكاء الاصطناعي: المفهوم والتقنيات',x:'يشمل الذكاء الاصطناعي تقنيات متعددة مثل:<br><strong>تعلم الآلة</strong>، <strong>التعلم العميق</strong>، <strong>الأنظمة الخبيرة</strong>، و<strong>معالجة اللغة الطبيعية</strong>.<br>وتُستخدم هذه التقنيات لحل مشكلات معقدة ومحاكاة الذكاء البشري.'},
-{n:'3',t:'🚨 الجرائم الإلكترونية السيبرانية',x:'من أخطر الجرائم في العصر الرقمي:<br><strong>التصيد الاحتيالي</strong> (Phishing)<br><strong>هجمات حجب الخدمة</strong> (DDoS)<br><strong>البرمجيات الخبيثة</strong> (Malware)<br><strong>انتحال الهوية</strong> وسرقة البيانات.'},
-{n:'4',t:'🛡️ الذكاء الاصطناعي في الأمن السيبراني',x:'يُستخدم الذكاء الاصطناعي للكشف المبكر عن الاختراقات،<br>تحليل سلوك المستخدمين،<br>واكتشاف البرمجيات الخبيثة الجديدة التي تتجاوز أنظمة الحماية التقليدية.<br>مما يعزز <strong>السلامة والأمن السيبراني</strong>.'}
-]);
-
-Z.addLesson('bk_smart_campus',{cat:'books',icon:'🏫',name:'المدينة الجامعية الذكية',desc:'منبع للتقدم والتطور'},[
-{n:'1',t:'🏫 المدينة الجامعية الذكية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Universidad_de_Alcal%C3%A1%2C_Plaza_de_San_Diego.jpg/640px-Universidad_de_Alcal%C3%A1%2C_Plaza_de_San_Diego.jpg',x:'تأليف: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الرقمية وحوسبة اللغة العربية'},
-{n:'2',t:'🌟 المفهوم والأهداف',x:'المركب الجامعي الذكي هو فضاء يجمع بين البنية التحتية المتقدمة والتكنولوجيا الرقمية.<br>يهدف إلى <strong>تحسين جودة التعليم</strong>، <strong>تسهيل حياة الطلاب</strong>، <strong>وترشيد استهلاك الطاقة</strong>، ليصبح منبعاً للتنمية المستدامة.'},
-{n:'3',t:'⚙️ المكونات الرقمية',x:'يعتمد على:<br><strong>إنترنت الأشياء (IoT)</strong> للحساسات.<br><strong>السحابة المعلوماتية (Cloud)</strong> لتخزين البيانات.<br><strong>البيانات الضخمة (Big Data)</strong> للتحليل.<br><strong>الذكاء الاصطناعي</strong> لاتخاذ القرار.'},
-{n:'4',t:'🚀 الخدمات الذكية',x:'تشمل:<br>- أنظمة الدخول الذكية.<br>- إدارة ذكية للفصول الدراسية.<br>- منصات تعلم إلكتروني متكاملة.<br>- مراقبة أمنية ذكية.<br>- إدارة ذكية للمياه والطاقة.'}
-]);/* ================== إضافات AI (الورشات والكتاب الشامل) ================== */
+/* ================== إضافات AI (الورشات) ================== */
 Z.addLesson('ai_full_workshop1', {cat: 'ai', icon: '📄', name: 'دليل المعلم الشامل', desc: 'ورشة 1 - نص حرفي', color: 'p'}, [
-{n: 'الورشة 1', t: 'الذكاء الاصطناعي في خدمة التعليم', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الذكاء الاصطناعي في خدمة التعليم دليل المعلم الشامل لاستخدام أدوات الذكاء الاصطناعي (1)
-تقديم وتنشيط: محمد زايد - خبير دولي في التكنولوجيات الحاسوبية - أستاذ جامعي - رئيس جمعية اللغة العربية الرقمية - تونس
+{n: 'الورشة 1', t: 'الذكاء الاصطناعي في خدمة التعليم', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الذكاء الاصطناعي في خدمة التعليم - دليل المعلم الشامل
+تقديم: محمد زايد - خبير دولي في التكنولوجيات الحاسوبية - تونس
 
 • المحتويات:
-1. التعريف بالذكاء الاصطناعي 2. تكنولوجيات الذكاء الاصطناعي في التعليم 3. الأدوات المختارة 4. تطبيقات المعلم (7 تطبيقات) 5. أدوات الطالب (3 أدوات) 6. فوائد AI للمعلم 7. مخاطر AI 8. كيفية تجنب المخاطر 9. ملخص سريع 10. شكر وتواصل.
-• تعريف الذكاء الاصطناعي:
-فرع من علوم الحاسوب يهدف إلى محاكاة القدرات الذهنية البشرية (التعلم، اتخاذ القرار، فهم اللغة، التعرف على الصور). يُستخدم كمساعد ذكي للمعلم لتوفير الوقت وتخصيص التعلم.
+1. التعريف 2. تقنيات AI في التعليم 3. الأدوات 4. تطبيقات المعلم 5. أدوات الطالب 6. الفوائد 7. المخاطر 8. تجنب المخاطر 9. الملخص.
+
+• تعريف AI: فرع من علوم الحاسوب يحاكي القدرات الذهنية البشرية (التعلم، اتخاذ القرار، فهم اللغة). يُستخدم كمساعد ذكي للمعلم.
+
 • تقنيات AI في التعليم:
-1. معالجة اللغة الطبيعية (NLP): تصحيح المقالات، روبوتات دردشة، تلخيص الدروس.
+1. معالجة اللغة الطبيعية (NLP): تصحيح المقالات، روبوتات دردشة، تلخيص.
 2. التعلم الآلي: تعلم تكيفي، التنبؤ بأداء الطالب.
 3. التوليد الإبداعي: خطط دروس، تمارين.
-4. تحليل الصوت والصورة.
-5. أنظمة التوصية.
-6. التحليلات التنبؤية.
-• الأدوات المختارة:
-MagicSchool AI (تخطيط)، Canva Education (تصميم)، Quizizz AI (تقييم)، EdPuzzle (فيديو تفاعلي)، Diffit (تكييف النصوص)، Xmind AI (خرائط ذهنية)، ClassDojo + Koalendar (إدارة الصف)، Notion AI (تنظيم الطالب)، Immersive Reader (قراءة مساعدة)، Speechify (تحويل النص لصوت).
-• المخاطر وتجنبها:
-مخاطر: معلومات خاطئة، تحيز، انتهاك خصوصية، اعتماد مفرط.
-تجنبها: المراجعة البشرية، عدم الاعتماد الكامل، حماية البيانات، الإفصاح، التوازن، التحديث المستمر.
-• التطبيق 1: MagicSchool AI (تخطيط الدروس) الموقع: www.magicschool.ai
-الخطوات: إنشاء حساب -> اختيار Lesson Plan -> تعيين البيانات (موضوع، مستوى، مدة، أهداف) -> Generate.
-تمرين: إنشاء خطة درس "دورة الماء" للسنة الخامسة في 20 دقيقة.
-• التطبيق 2: Canva Education (التصميم) الموقع: www.canva.com
-الخطوات: اختيار Magic Design -> كتابة الوصف -> اختيار التصميم -> التعديل بـ Magic Write و Magic Edit -> تصدير PDF.
-تمرين: إنشاء ملصق تعليمي عن دورة الماء في 20 دقيقة.
-• التطبيق 3: Quizizz AI (التقييم) الموقع: quizizz.com
-الخطوات: Create -> Generate with AI -> إدخال الموضوع -> توليد 10-15 سؤال -> تخصيص الأسئلة -> نشر الرابط.
-تمرين: إنشاء اختبار عن دورة الماء في 20 دقيقة.
-• التطبيق 4: EdPuzzle (فيديو تفاعلي) الموقع: edpuzzle.com
-الخطوات: Add Content -> YouTube -> بحث -> Use this video -> إضافة أسئلة AI -> Assign.
-تمرين: تحويل فيديو دورة الماء إلى درس تفاعلي في 25 دقيقة.
-• التطبيق 5: Diffit (تكييف النصوص) الموقع: www.diffit.me
-الخطوات: لصق النص -> اختيار 3 مستويات (CE2, CM2, 3ème) -> Generate -> تصدير PDF/Google Docs.
-تمرين: تكييف نص "دورة الماء" في 20 دقيقة.
-• التطبيق 6: Xmind AI (خرائط ذهنية) الموقع: xmind.net
-الخطوات: AI Mind Map -> إدخال الموضوع -> توليد الخريطة -> AI Explanation -> Pitch Mode.
-تمرين: إنشاء خريطة ذهنية لدورة الماء في 25 دقيقة.
-• التطبيق 7: ClassDojo + Koalendar (إدارة) ClassDojo: إدارة السلوك. Koalendar: حجز المواعيد.
-تمرين: إنشاء فصل وهمي وتحديد مواعيد المقابلات في 20 دقيقة.
-• أدوات الطالب: Notion AI: تنظيم الواجبات. Immersive Reader: قراءة مساعدة. Speechify: تحويل النص لصوت.
-تمارين تطبيقية لكل أداة (15-20 دقيقة).</div>` }
+
+• الأدوات المختارة: MagicSchool AI، Canva Education، Quizizz AI، EdPuzzle، Diffit، Xmind AI، ClassDojo، Notion AI، Immersive Reader، Speechify.
+
+• المخاطر: معلومات خاطئة، تحيز، انتهاك خصوصية، اعتماد مفرط.
+• تجنبها: المراجعة البشرية، حماية البيانات، التوازن.
+
+• التطبيقات العملية:
+1. MagicSchool AI: تخطيط دروس في 20 دقيقة.
+2. Canva Education: تصميم ملصقات تعليمية.
+3. Quizizz AI: توليد 10-15 سؤالاً فورياً.
+4. EdPuzzle: تحويل فيديو YouTube إلى درس تفاعلي.
+5. Diffit: تكييف النصوص لـ3 مستويات.
+6. Xmind AI: خرائط ذهنية تلقائية.
+7. ClassDojo: إدارة سلوك الطلاب.</div>` }
 ]);
 
 Z.addLesson('ai_full_workshop2', {cat: 'ai', icon: '📄', name: 'من الفكرة إلى الدرس', desc: 'ورشة 2 - نص حرفي', color: 'j'}, [
 {n: 'الورشة 2', t: 'من الفكرة إلى الدرس الجاهز', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الورشة التطبيقية: من الفكرة إلى الدرس الجاهز
-المدة: 3 ساعات. الفئة: جميع المستويات التعليمية.
-الأدوات:
-1. Ideogram: توليد الصور (مناسبة للملصقات والعناوين).
+المدة: 3 ساعات.
+
+• الأدوات:
+1. Ideogram: توليد الصور (ملصقات، عناوين).
 2. ElevenLabs: تحويل النص لصوت.
 3. Speechify: إضافة الصوت للعروض.
 4. HeyGen: تحويل PPT لفيديو.
 5. Canva Magic Media: صور للمبتدئين.
 6. CapCut: تجميع الفيديو.
 7. Whisper: تحويل الصوت لنص.
-تطبيقات عملية:
-- Ideogram: ملصق عن البراكين أو المعلقات (10 دقائق).
+
+• تطبيقات عملية:
+- Ideogram: ملصق عن البراكين (10 دقائق).
 - Canva: صورتين عن البراكين (15 دقيقة).
 - CapCut: تجميع 3 صور وصوت في فيديو (15 دقيقة).
-- Whisper: تفريغ نصي لشرح عن البراكين (10 دقائق).
-مخاطر AI: الاستسلام المعرفي، المعلومات المغلوطة، التراجع اللغوي، فقدان الفضول.
-تجنب المخاطر: التكوين، المراجعة البشرية، التحقق من المصادر، احترام الخصوصية، الإفصاح، تنويع التقييم، تعليم الاستخدام المسؤول.
-مشروع التخرج: إنتاج درس تفاعلي (3-5 صور + ملف صوتي + فيديو + عرض + سؤال).
-شروط الشهادة: إرسال العمل عبر الواتساب في أسبوع، معدل 10/20.</div>` }
+- Whisper: تفريغ نصي لشرح (10 دقائق).
+
+• مخاطر AI: الاستسلام المعرفي، المعلومات المغلوطة، التراجع اللغوي، فقدان الفضول.
+• تجنبها: التكوين، المراجعة البشرية، التحقق من المصادر، احترام الخصوصية، الإفصاح، تعليم الاستخدام المسؤول.
+
+• مشروع التخرج: إنتاج درس تفاعلي (3-5 صور + ملف صوتي + فيديو + عرض + سؤال).
+• شروط الشهادة: إرسال العمل عبر الواتساب في أسبوع، معدل 10/20.</div>` }
 ]);
 
+/* ================== كتاب AI الشامل (6 أجزاء) ================== */
 Z.addLesson('ai_book_part1', {cat: 'ai', icon: '📚', name: 'الكتاب الشامل (1)', desc: 'المقدمة والآليات', color: 'r'}, [
 {n: 'المقدمة', t: 'المقدمة العامة', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">كتاب الذكاء الاصطناعي: الآليات والتطبيقات - محمد بن عبدالله زايد.
-المقدمة: في عالم يتسارع فيه التطور التكنولوجي، أصبح الذكاء الاصطناعي محوراً رئيسياً في القرن 21. هذا الكتاب رحلة متكاملة تبدأ من الأساسيات، مروراً بالتطبيقات، وصولاً للتحديات الأمنية.
-المميزات: الشمولية، التعددية اللغوية (معجم ثلاثي)، التطبيق العملي (10 تمارين)، التركيز على اللغة العربية، الجمع بين الإيجابيات والسلبيات، الأخلاقيات.
+
+المقدمة: في عالم يتسارع فيه التطور التكنولوجي، أصبح الذكاء الاصطناعي محوراً رئيسياً في القرن 21. هذا الكتاب رحلة متكاملة من الأساسيات إلى التطبيقات ثم التحديات الأمنية.
+
+المميزات: الشمولية، التعددية اللغوية، التطبيق العملي (10 تمارين)، التركيز على اللغة العربية، الجمع بين الإيجابيات والسلبيات.
+
 الهيكل: 6 أجزاء (الآليات، اللغة العربية، البحث العلمي، الورشة التطبيقية، الجريمة الإلكترونية، الأمن السيبراني).</div>` },
-{n: 'الفصل 1', t: 'التعريف بمفهوم AI', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">تعريف AI: منظومات حاسوبية قادرة على القيام بوظائف معقدة (تفكير، قرار، حل مسائل). هو مصطلح عام يشمل التعلم الآلي، العميق، ومعالجة اللغة.
-الذكاء البشري vs الاصطناعي: البشر يتفوقون في الابتكار، الحدس، الذكاء العاطفي، التأقلم، والأخلاق. الآلات تتفوق في السرعة، معالجة البيانات الضخمة، والعمل 24/7 دون تعب. نقاط التقاطع: كلاهما يتعلم ويتحسن، يحل المسائل المعقدة، ويعالج معلومات البيئة.
-حدود الذكاء البشري: قيود الذاكرة، التحيزات المعرفية، محدودية التركيز، والأخطاء.
-مقارنة: AI يعالج البيانات أسرع، لكنه لا يبتكر ولا يملك حدساً. البشر يبتكرون لكنهم يتعبون ويخطئون.</div>` }
+{n: 'الفصل 1', t: 'التعريف بمفهوم AI', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">تعريف AI: منظومات حاسوبية قادرة على القيام بوظائف معقدة (تفكير، قرار، حل مسائل). يشمل التعلم الآلي، العميق، ومعالجة اللغة.
+
+الذكاء البشري vs الاصطناعي:
+- البشر: ابتكار، حدس، ذكاء عاطفي، أخلاق.
+- الآلات: سرعة، معالجة بيانات ضخمة، عمل 24/7 دون تعب.
+- نقاط التقاطع: كلاهما يتعلم ويتحسن.
+
+مقارنة: AI يعالج البيانات أسرع، لكنه لا يبتكر ولا يملك حدساً.</div>` }
 ]);
 
 Z.addLesson('ai_book_part2', {cat: 'ai', icon: '⚙️', name: 'الكتاب الشامل (2)', desc: 'الأنواع والتعلم الآلي', color: 'j'}, [
 {n: 'الأنواع', t: 'تصنيف AI', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">أنواع AI:
-1. الضيق (Narrow): مهام محددة (تعرف صوتي، أرشاد).
-2. العام (General): قدرات معرفية بشرية (نظري).
+1. الضيق (Narrow): مهام محددة (تعرف صوتي).
+2. العام (General): قدرات بشرية (نظري).
 3. الفائق (Super): يتجاوز البشر (نظري).
-4. التفاعلي: يتفاعل مع المدخلات دون تذكر.
+4. التفاعلي: يتفاعل دون تذكر.
 5. محدود الذاكرة: يتذكر الأحداث (سيارات ذاتية).
 6. نظرية العقل: يفهم مشاعر البشر.
-7. الواعي بنفسه: يفهم حالته الداخلية (نظري).</div>` },
-{n: 'التعلم الآلي', t: 'Machine Learning', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">تعلم الآلة: جعل الخوارزميات تكتشف أنماطاً في البيانات (أرقام، كلمات، صور).
-الخوارزمية: مجموعة تعليمات لحل مشكلة. تتكون من: مدخلات (X)، عمليات حسابية، مخرجات (Y).
+7. الواعي بنفسه: يفهم حالته الداخلية.</div>` },
+{n: 'التعلم الآلي', t: 'Machine Learning', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">تعلم الآلة: جعل الخوارزميات تكتشف أنماطاً في البيانات.
+
 أنواع التعلم:
-1. المراقب: بيانات موسومة (مدخلات ومخرجات معروفة) لتكوين دالة.
-2. غير المراقب: بيانات غير موسومة لاكتشاف هياكل خفية (تجميع، عنقدة).
-3. النصف مراقب: مزيج بين القليل من الموسوم والكثير من غير الموسوم.
-4. المعزز: وكيل يتعلم عبر التجربة والخطأ والمكافآت.</div>` },
-{n: 'التعلم العميق', t: 'Deep Learning', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">التعلم العميق: فرع من التعلم الآلي مستوحى من الدماغ البشري، يستخدم شبكات عصبية متعددة الطبقات. يمكنه التعلم بنفسه دون برمجة صريحة.
-الآلية: تحليل مستمر للبيانات ببنية منطقية متعددة المستويات. الطبقات الأولى تكتشف الأشكال، والطبقات العميقة تكتشف المفاهيم المعقدة.
-أهميته: أساس السيارات المستقلة، الدردشة الآلية، والترجمة. يُعتبر الثورة الصناعية الجديدة في AI.</div>` }
+1. المراقب: بيانات موسومة (مدخلات ومخرجات معروفة).
+2. غير المراقب: بيانات غير موسومة لاكتشاف هياكل خفية.
+3. النصف مراقب: مزيج.
+4. المعزز: وكيل يتعلم عبر التجربة والمكافآت.</div>` },
+{n: 'التعلم العميق', t: 'Deep Learning', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">التعلم العميق: فرع من التعلم الآلي يستخدم شبكات عصبية متعددة الطبقات. يمكنه التعلم بنفسه دون برمجة صريحة.
+
+الآلية: الطبقات الأولى تكتشف الأشكال، والطبقات العميقة تكتشف المفاهيم المعقدة.
+أهميته: أساس السيارات المستقلة، الدردشة الآلية، والترجمة.</div>` }
 ]);
 
-Z.addLesson('ai_book_part3', {cat: 'ai', icon: '🧠', name: 'الكتاب الشامل (3)', desc: 'الشبكات العصبية والرؤية', color: 'p'}, [
-{n: 'الشبكات العصبية', t: 'Neural Networks', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الشبكات العصبية: بنية معلوماتية تحاكي الدماغ البشري (خلايا تتناقل نبضات). تتكون من طبقات (مدخلات، مخفية، مخرجات).
-الخصائص: التعقيد (أوزان وانحيازات)، التكوين (طبقات قليلة = تدريب أسرع لكن محدود)، الأداء (تشتغل بشكل أفضل في المهام الأساسية).</div>` },
-{n: 'اللغة والرؤية', t: 'NLP والرؤية الحاسوبية', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">NLP: تفاعل الحواسيب مع اللغة البشرية (نصية أو صوتية). يشمل: التعرف الصوتي، الوسم النحوي، فك الغموض، التعرف على الوحدات المسماة، تحليل المشاعر.
-الرؤية الحاسوبية: تمكين الآلات من رؤية العالم (تحديد كائنات، ملامح وجه، ترتيب صور). تعتمد على التعلم العميق والبيانات الضخمة. مهامها: فهم مكونات الصورة، تصنيفها، فهم المشهد. تُستخدم في الطب، السيارات، والصناعة.
-التعرف على الكلام: تحويل الصوت لنص. يُستخدم في الهواتف والمساعدات الذكية. يعتمد على خصائص الإشارة الصوتية (الطاقة، نسبة المرور للصفر، النبرة العالية).</div>` }
+Z.addLesson('ai_book_part3', {cat: 'ai', icon: '🧠', name: 'الكتاب الشامل (3)', desc: 'الشبكات والرؤية', color: 'p'}, [
+{n: 'الشبكات العصبية', t: 'Neural Networks', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الشبكات العصبية: بنية تحاكي الدماغ البشري. تتكون من طبقات (مدخلات، مخفية، مخرجات).
+الخصائص: أوزان، انحيازات، طبقات متعددة = دقة أعلى لكن تدريب أبطأ.</div>` },
+{n: 'NLP والرؤية', t: 'اللغة والرؤية الحاسوبية', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">NLP: تفاعل الحواسيب مع اللغة البشرية. يشمل: التعرف الصوتي، فك الغموض، تحليل المشاعر.
+
+الرؤية الحاسوبية: تمكين الآلات من رؤية العالم (تحديد كائنات، ملامح وجه). تعتمد على التعلم العميق والبيانات الضخمة.
+
+التعرف على الكلام: تحويل الصوت لنص. يعتمد على خصائص الإشارة الصوتية.</div>` }
 ]);
 
-Z.addLesson('ai_book_part4', {cat: 'ai', icon: '🧩', name: 'الكتاب الشامل (4)', desc: 'الأنظمة الخبيرة والمنطق', color: 'j'}, [
-{n: 'الأنظمة الخبيرة', t: 'Expert Systems', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الأنظمة الخبيرة: تطبيقات AI تحاكي تفكير الخبراء البشر. ظهرت عام 1965 (Feigenbaum).
-المكونات: قاعدة المعلومات، محرك الاستنساخ (الأمامي، الخلفي، المختلط)، واجهة المستخدم.
-الخصائص: أداء عالٍ، وثوقية، قابلية تكيف، سهولة استخدام، قابلية تفسير.</div>` },
-{n: 'المنطق الضبابي', t: 'Fuzzy Logic', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">المنطق الضبابي: يعتمد على قيم حقيقية بين 0 و1 (وليس فقط 0 أو 1). طوره "الطفي زداح" عام 1965.
-يتعامل مع المفاهيم الذاتية (حار، بارد، متوسط) بدلاً من القيم الدقيقة. يُستخدم في الأنظمة المعقدة غير القابلة للنمذجة (مثل التحكم في السرعة).</div>` },
-{n: 'الجريمة الإلكترونية', t: 'مقدمة', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الجريمة الإلكترونية: أعمال إجرامية عبر الحاسوب أو الشبكة. تشمل: القرصنة، التصيد، انتحال الهوية، طلب الفدية.
-تتميز بأنها عابرة للحدود، صعبة الاكتشاف، وتستغل الثغرات الأمنية. تكلفتها تصل لمليارات الدولارات.</div>` }
+Z.addLesson('ai_book_part4', {cat: 'ai', icon: '🧩', name: 'الكتاب الشامل (4)', desc: 'الأنظمة الخبيرة', color: 'j'}, [
+{n: 'الأنظمة الخبيرة', t: 'Expert Systems', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الأنظمة الخبيرة: تطبيقات AI تحاكي تفكير الخبراء. ظهرت 1965.
+المكونات: قاعدة المعرفة، محرك الاستنتاج (أمامي/خلفي/مختلط)، واجهة المستخدم.
+الخصائص: أداء عالٍ، وثوقية، قابلية تفسير.</div>` },
+{n: 'المنطق الضبابي', t: 'Fuzzy Logic', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">المنطق الضبابي: يعتمد على قيم بين 0 و1 (ليس فقط 0 أو 1). طوره "الطفي زداح" عام 1965.
+يتعامل مع المفاهيم الذاتية (حار، بارد، متوسط). يُستخدم في التحكم بالسرعة، الغسالات، المكيفات.</div>` },
+{n: 'الجرائم الإلكترونية', t: 'مقدمة', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الجريمة الإلكترونية: أعمال إجرامية عبر الحاسوب أو الشبكة. تشمل: القرصنة، التصيد، انتحال الهوية.
+تتميز بأنها عابرة للحدود، صعبة الاكتشاف، وتستغل الثغرات الأمنية.</div>` }
 ]);
 
 Z.addLesson('ai_book_part5', {cat: 'ai', icon: '🚨', name: 'الكتاب الشامل (5)', desc: 'الجرائم الإلكترونية', color: 'r'}, [
-{n: 'هجمات DDoS', t: 'هجمات قطع الخدمة', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">هجوم DDoS: إغراق الخادم بطلبات وهمية لمنع المستخدمين الشرعيين من الوصول.
-المراحل: اختيار الهدف -> بناء شبكة موبوءة (Botnet) -> إطلاق الهجوم.
-الأنواع: هجوم على طبقة التطبيقات، الهجوم البروتوكولي، الهجمات الحجمية.</div>` },
-{n: 'التصيد', t: 'Phishing', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">التصيد: خداع المستخدمين لسرقة معلوماتهم (كلمات المرور، بطاقات الائتمان) عبر انتحال شخصية جهة موثوقة.
-الأنواع: تصيد بالبريد، تصيد بالرمح (Spear)، تصيد هاتفي (Smishing, Vishing)، صيد الحيتان (Whaling)، انتحال المجال (Spoofing)، توأم شرير (Evil Twin)، استنساخ (Clone)، ثقب مائي (Watering hole).</div>` },
-{n: 'البوت نت والبرمجيات', t: 'Botnets & Malware', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">Botnet: شبكة حواسيب مصابة تتحكم فيها جهة مهاجمة (Bot Herder). تستخدم للهجمات والتوزيع.
-البرمجيات الضارة: فيروسات (تثبت على ملفات)، ديدان (تتكاثر وتنتشر عبر الشبكة)، فيروسات متعددة الأشكال (تغير شفرتها)، أحصنة طروادة، برامج الفدية (تشفير الملفات)، برامج تجسس.</div>` }
+{n: 'هجمات DDoS', t: 'هجمات قطع الخدمة', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">هجوم DDoS: إغراق الخادم بطلبات وهمية لمنع المستخدمين الشرعيين.
+المراحل: اختيار الهدف، بناء Botnet، إطلاق الهجوم.
+الأنواع: هجوم على التطبيقات، البروتوكول، الأحجام.</div>` },
+{n: 'التصيد', t: 'Phishing', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">التصيد: خداع المستخدمين لسرقة معلوماتهم (كلمات المرور، البطاقات) عبر انتحال شخصية جهة موثوقة.
+الأنواع: بريدي، برمح، هاتفي، صيد الحيتان، انتحال المجال، توأم شرير، استنساخ، ثقب مائي.</div>` },
+{n: 'Botnet والبرمجيات', t: 'Botnets & Malware', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">Botnet: شبكة حواسيب مصابة تتحكم فيها جهة مهاجمة. تستخدم للهجمات.
+البرمجيات الضارة: فيروسات، ديدان، متعددة الأشكال، أحصنة طروادة، برامج فدية، برامج تجسس.</div>` }
 ]);
 
 Z.addLesson('ai_book_part6', {cat: 'ai', icon: '🛡️', name: 'الكتاب الشامل (6)', desc: 'الأمن السيبراني', color: 'p'}, [
 {n: 'الأمن السيبراني', t: 'المفاهيم الأساسية', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الأمن السيبراني: حماية الأنظمة والشبكات والبيانات من الهجمات.
-المجالات المؤمنة: الموظفين، البنية التحتية، الثغرات، التكنولوجيا.
 العناصر الأساسية:
 1. الهوية (Identification).
-2. التوثيق (Authentication): ما تعرفه، ما تملكه، من أنت.
+2. التوثيق (Authentication).
 3. التكامل (Integrity): صحة البيانات.
 4. السرية (Confidentiality): منع الوصول غير المصرح.
 5. التوفر (Availability): ضمان الوصول عند الحاجة.
-6. عدم التنصل (Non-repudiation): لا يمكن إنكار إرسال/استلام رسالة.</div>` },
-{n: 'الذكاء الاصطناعي والأمن', t: 'AI في الحماية', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">AI في الأمن السيبراني: الكشف الآلي عن التهديدات، تحليل البيانات الضخمة، التعلم من الهجمات السابقة.
+6. عدم التنصل (Non-repudiation).</div>` },
+{n: 'AI والأمن', t: 'AI في الحماية', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">AI في الأمن السيبراني: الكشف الآلي عن التهديدات، تحليل البيانات الضخمة، التعلم من الهجمات.
 الطرق التقليدية: تعتمد على التوقيعات (تفشل مع التهديدات الجديدة).
-طرق AI: تستخدم التعلم العميق والآلي (تكتشف التهديدات المعروفة وغير المعروفة). إيجابيات: فعالية، دقة، كشف سريع. تحديات: التحيز، الاستخدام الضار من القراصنة.</div>` }
+طرق AI: التعلم العميق يكتشف التهديدات المعروفة وغير المعروفة.
+إيجابيات: فعالية، دقة، كشف سريع. تحديات: التحيز، الاستخدام الضار.</div>` }
 ]);
 
-/* ================== المحتوى الجديد: اللغة العربية 2-5 ================== */
+/* ================== اللغة العربية: المستويات 2-5 ================== */
 Z.addLesson('ar2',{cat:'arabic',icon:'📝',name:'المستوى 2: الكلمة والجملة',desc:'5 شرائح + اختبار'},[
 {n:'الدرس 1',t:'أنواع الكلمة في العربية',x:'الكلمة في العربية ثلاثة أنواع:<br><br><strong>1. الاسم:</strong> يدل على شيء أو شخص أو مكان. مثال: كتاب، ولد، مدرسة.<br><strong>2. الفعل:</strong> يدل على حدث مقترن بزمن. مثال: كتب، يكتب، اكتب.<br><strong>3. الحرف:</strong> لا معنى له إلا مع غيره. مثال: في، من، إلى، على، عن.',s:['الكلمة ثلاثة أنواع','Le mot a trois types','The word has three types']},
 {n:'الدرس 2',t:'الجملة الاسمية',x:'الجملة الاسمية تبدأ بـ<strong>اسم</strong>، وتتكون من:<br><br><strong>المبتدأ:</strong> الاسم الذي نبدأ به.<br><strong>الخبر:</strong> ما نخبر به عن المبتدأ.<br><br>مثال: <strong>الطالبُ مجتهدٌ</strong> — الطالب: مبتدأ، مجتهد: خبر.'},
 {n:'الدرس 3',t:'الجملة الفعلية',x:'الجملة الفعلية تبدأ بـ<strong>فعل</strong>، وتتكون من:<br><br><strong>الفعل</strong> + <strong>الفاعل</strong> + <strong>المفعول به</strong> (إن وجد).<br><br>مثال: <strong>كتبَ الطالبُ الدرسَ</strong> — كتب: فعل، الطالب: فاعل، الدرس: مفعول به.'},
-{n:'الدرس 4',t:'علامات الترقيم',x:'علامات الترقيم تفصل بين الجمل وتوضح المعنى:<br><br><strong>النقطة (.)</strong> نهاية الجملة التامة.<br><strong>الفاصلة (،)</strong> بين الجمل القصيرة.<br><strong>الفاصلة المنقوطة (؛)</strong> بين جملتين مرتبطتين.<br><strong>علامة الاستفهام (؟)</strong> نهاية السؤال.<br><strong>علامة التعجب (!)</strong> للتعجب أو التأثر.'},
+{n:'الدرس 4',t:'علامات الترقيم',x:'علامات الترقيم تفصل بين الجمل وتوضح المعنى:<br><br><strong>النقطة (.)</strong> نهاية الجملة التامة.<br><strong>الفاصلة (،)</strong> بين الجمل القصيرة.<br><strong>الفاصلة المنقوطة (؛)</strong> بين جملتين مرتبطتين.<br><strong>علامة الاستفهام (؟)</strong> نهاية السؤال.<br><strong>علامة التعجب (!)</strong> للتعجب.'},
 {n:'الدرس 5',e:'arabic_exam_2'}
 ]);
 
@@ -1608,8 +1599,8 @@ Z.addLesson('ar3',{cat:'arabic',icon:'📖',name:'المستوى 3: الإعرا
 Z.addLesson('ar4',{cat:'arabic',icon:'📚',name:'المستوى 4: القراءة والفهم',desc:'5 شرائح + اختبار'},[
 {n:'الدرس 1',t:'مهارات القراءة',x:'القراءة مهارة أساسية تحتاج إلى:<br><br><strong>السرعة المناسبة</strong> حسب نوع النص.<br><strong>الفهم الدقيق</strong> للمعاني.<br><strong>التركيز</strong> على الأفكار الرئيسية.<br><strong>الاستنتاج</strong> لما وراء السطور.'},
 {n:'الدرس 2',t:'الفكرة الرئيسية',x:'<strong>الفكرة الرئيسية</strong> هي المحور الذي يدور حوله النص.<br><br>تكون عادة في:<br>- <strong>العنوان</strong>.<br>- <strong>الجملة الأولى</strong> من الفقرة.<br>- <strong>الجملة الأخيرة</strong> من الفقرة.'},
-{n:'الدرس 3',t:'الفكرة الفرعية',x:'<strong>الفكرة الفرعية</strong> تفصيل للفكرة الرئيسية.<br><br>مثال: إذا كانت الفكرة الرئيسية "أهمية الماء"، فالفروع:<br>- الماء ضروري للحياة.<br>- الماء يشكل 70% من جسم الإنسان.<br>- الماء يدخل في الزراعة والصناعة.'},
-{n:'الدرس 4',t:'الاستنتاج',x:'<strong>الاستنتاج</strong> هو استخراج معنى غير مذكور صراحة في النص.<br><br>مثال: النص يقول "خرج الطفل مبتلاً من البيت" — نستنتج أن <strong>الجو ممطر</strong>.'},
+{n:'الدرس 3',t:'الفكرة الفرعية',x:'<strong>الفكرة الفرعية</strong> تفصيل للفكرة الرئيسية.<br><br>مثال: الفكرة الرئيسية "أهمية الماء" — فروعها: الماء ضروري للحياة، يشكل 70% من جسم الإنسان، يدخل في الزراعة والصناعة.'},
+{n:'الدرس 4',t:'الاستنتاج',x:'<strong>الاستنتاج</strong> هو استخراج معنى غير مذكور صراحة في النص.<br><br>مثال: "خرج الطفل مبتلاً من البيت" — نستنتج أن <strong>الجو ممطر</strong>.'},
 {n:'الدرس 5',e:'arabic_exam_4'}
 ]);
 
@@ -1617,67 +1608,59 @@ Z.addLesson('ar5',{cat:'arabic',icon:'✍️',name:'المستوى 5: التعب
 {n:'الدرس 1',t:'أنواع التعبير',x:'<strong>التعبير الشفهي:</strong> الحديث والخطابة.<br><strong>التعبير الكتابي:</strong> كتابة النصوص.<br><br>من أنواع التعبير الكتابي:<br>- <strong>الرسالة</strong>.<br>- <strong>المقال</strong>.<br>- <strong>القصة</strong>.<br>- <strong>التقرير</strong>.'},
 {n:'الدرس 2',t:'كتابة الرسالة',x:'الرسالة تتكون من:<br><br><strong>التحية</strong>: السلام عليكم...<br><strong>المقدمة</strong>: سبب الكتابة.<br><strong>الموضوع</strong>: المحتوى الأساسي.<br><strong>الخاتمة</strong>: الدعاء أو التحية.<br><strong>التوقيع</strong>: الاسم والتاريخ.'},
 {n:'الدرس 3',t:'كتابة المقال',x:'المقال يتكون من:<br><br><strong>العنوان:</strong> جذاب ومختصر.<br><strong>المقدمة:</strong> تمهيد للموضوع.<br><strong>العرض:</strong> الأفكار والحجج.<br><strong>الخاتمة:</strong> خلاصة ونتيجة.'},
-{n:'الدرس 4',t:'كتابة القصة',x:'القصة تتكون من:<br><br><strong>الشخصيات</strong>: من هم أبطال القصة؟<br><strong>المكان والزمان</strong>: أين ومتى؟<br><strong>الحبكة</strong>: سلسلة الأحداث.<br><strong>العقدة</strong>: المشكلة.<br><strong>الحل</strong>: نهاية القصة.'},
+{n:'الدرس 4',t:'كتابة القصة',x:'القصة تتكون من:<br><br><strong>الشخصيات</strong>: أبطال القصة.<br><strong>المكان والزمان</strong>: أين ومتى؟<br><strong>الحبكة</strong>: سلسلة الأحداث.<br><strong>العقدة</strong>: المشكلة.<br><strong>الحل</strong>: نهاية القصة.'},
 {n:'الدرس 5',e:'arabic_exam_5'}
 ]);
 
-/* ================== المحتوى الجديد: المراحل التعليمية ================== */
+/* ================== المراحل التعليمية ================== */
 Z.addLesson('pri_math',{cat:'primary',icon:'🔢',name:'الرياضيات - الابتدائي',desc:'4 شرائح',color:'o'},[
 {n:'1/4',t:'الأعداد من 0 إلى 100',x:'<strong>الأعداد الطبيعية</strong> تبدأ من 0 وتزيد:<br>0، 1، 2، 3 ... 99، 100.<br><br>كل عدد يتكون من <strong>آحاد</strong> و<strong>عشرات</strong> و<strong>مئات</strong>.<br>مثال: 47 = 4 عشرات + 7 آحاد.'},
 {n:'2/4',t:'العمليات الأساسية',x:'<strong>الجمع (+):</strong> 5 + 3 = 8.<br><strong>الطرح (−):</strong> 8 − 3 = 5.<br><strong>الضرب (×):</strong> 4 × 3 = 12.<br><strong>القسمة (÷):</strong> 12 ÷ 3 = 4.'},
 {n:'3/4',t:'الأشكال الهندسية',x:'<strong>المربع:</strong> 4 أضلاع متساوية.<br><strong>المستطيل:</strong> 4 أضلاع، كل ضلعين متقابلين متساويان.<br><strong>المثلث:</strong> 3 أضلاع.<br><strong>الدائرة:</strong> شكل بلا أضلاع.'},
 {n:'4/4',t:'القياس',x:'<strong>الطول:</strong> سنتيمتر، متر، كيلومتر.<br><strong>الوزن:</strong> غرام، كيلوغرام.<br><strong>الوقت:</strong> ثانية، دقيقة، ساعة.<br><strong>الحجم:</strong> لتر، مليلتر.'}
 ]);
-
 Z.addLesson('pri_ar',{cat:'primary',icon:'🌙',name:'العربية - الابتدائي',desc:'4 شرائح',color:'o'},[
 {n:'1/4',t:'الحروف والحركات',x:'الحروف العربية 28 حرفاً.<br><br>الحركات:<br><strong>الفتحة (ـَ)</strong><br><strong>الضمة (ـُ)</strong><br><strong>الكسرة (ـِ)</strong><br><strong>السكون (ـْ)</strong>'},
 {n:'2/4',t:'المفرد والمثنى والجمع',x:'<strong>المفرد:</strong> واحد (كتاب).<br><strong>المثنى:</strong> اثنان (كتابان).<br><strong>الجمع:</strong> أكثر من اثنين (كتب).'},
 {n:'3/4',t:'المذكر والمؤنث',x:'<strong>المذكر:</strong> ولد، معلم.<br><strong>المؤنث:</strong> بنت، معلمة (تضاف التاء المربوطة عادة).'},
 {n:'4/4',t:'الجملة البسيطة',x:'الجملة البسيطة = <strong>مبتدأ + خبر</strong>.<br><br>مثال: <strong>السماءُ صافيةٌ</strong>.<br>مثال: <strong>الطفلُ يلعبُ</strong>.'}
 ]);
-
 Z.addLesson('pri_sci',{cat:'primary',icon:'🔬',name:'العلوم - الابتدائي',desc:'4 شرائح',color:'o'},[
 {n:'1/4',t:'الحواس الخمس',x:'<strong>البصر:</strong> العين.<br><strong>السمع:</strong> الأذن.<br><strong>الشم:</strong> الأنف.<br><strong>التذوق:</strong> اللسان.<br><strong>اللمس:</strong> الجلد.'},
 {n:'2/4',t:'النباتات',x:'النبات يتكون من: <strong>الجذر</strong> (يمتص الماء)، <strong>الساق</strong> (ينقل الماء)، <strong>الأوراق</strong> (تصنع الغذاء)، <strong>الزهرة</strong> (تنتج البذور).'},
 {n:'3/4',t:'الحيوانات',x:'<strong>آكلات العشب:</strong> تأكل النباتات (بقرة، خروف).<br><strong>آكلات اللحوم:</strong> تأكل الحيوانات (أسد، ذئب).<br><strong>القارتة:</strong> تأكل الاثنين (دجاج، إنسان).'},
 {n:'4/4',t:'الماء والهواء',x:'<strong>الماء</strong> ضروري للحياة — يشكل 70% من جسم الإنسان.<br><strong>الهواء</strong> ضروري للتنفس — يحتوي على الأوكسجين.'}
 ]);
-
 Z.addLesson('mid_math',{cat:'middle',icon:'📐',name:'الرياضيات - الإعدادي',desc:'4 شرائح',color:'j'},[
-{n:'1/4',t:'الأعداد الصحيحة النسبية',x:'<strong>الأعداد الموجبة:</strong> 1، 2، 3 ...<br><strong>الأعداد السالبة:</strong> −1، −2، −3 ...<br><strong>الصفر</strong> ليس موجباً ولا سالباً.<br><br>قاعدة الجمع: + و− = −، − و− = −، + و+ = +.'},
+{n:'1/4',t:'الأعداد الصحيحة النسبية',x:'<strong>الأعداد الموجبة:</strong> 1، 2، 3 ...<br><strong>الأعداد السالبة:</strong> −1، −2، −3 ...<br><strong>الصفر</strong> ليس موجباً ولا سالباً.'},
 {n:'2/4',t:'المعادلات',x:'<strong>المعادلة</strong> تساوٍ بين طرفين يحتويان مجهولاً (x).<br><br>مثال: 2x + 3 = 11.<br>الحل: 2x = 8 → x = 4.'},
 {n:'3/4',t:'نظرية فيثاغورس',x:'في المثلث القائم:<br><br><strong>(الوتر)² = (الضلع الأول)² + (الضلع الثاني)²</strong><br><br>مثال: أضلاع 3 و4 → الوتر = √(9+16) = 5.'},
 {n:'4/4',t:'النسبة المئوية',x:'<strong>النسبة المئوية</strong> تعني "من كل 100".<br><br>مثال: 25% من 200 = 25 × 200 ÷ 100 = 50.'}
 ]);
-
 Z.addLesson('mid_ar',{cat:'middle',icon:'📖',name:'العربية - الإعدادي',desc:'4 شرائح',color:'j'},[
 {n:'1/4',t:'الإعراب التفصيلي',x:'<strong>مرفوعات:</strong> الفاعل، المبتدأ، الخبر، نائب الفاعل، اسم كان.<br><strong>منصوبات:</strong> المفعول به، الحال، التمييز، خبر كان، اسم إنَّ.<br><strong>مجرورات:</strong> الاسم بعد حرف الجر، المضاف إليه.'},
 {n:'2/4',t:'الأفعال',x:'<strong>الماضي:</strong> كتب.<br><strong>المضارع:</strong> يكتب.<br><strong>الأمر:</strong> اكتب.<br><br>الأفعال الناسخة: كان، أصبح، ظل، بات.<br>الحروف الناسخة: إنَّ، أنَّ، كأنَّ، لكنَّ، ليتَ، لعلَّ.'},
-{n:'3/4',t:'البلاغة',x:'<strong>التشبيه:</strong> "العلمُ كالنور".<br><strong>الاستعارة:</strong> "ابتسم الصباح".<br><strong>الكناية:</strong> "فلانٌ كثير الرماد" (كريم).<br><strong>المجاز:</strong> "رأيت أسداً يخطب" (رجل شجاع).'},
+{n:'3/4',t:'البلاغة',x:'<strong>التشبيه:</strong> "العلمُ كالنور".<br><strong>الاستعارة:</strong> "ابتسم الصباح".<br><strong>الكناية:</strong> "فلانٌ كثير الرماد" (كريم).<br><strong>المجاز:</strong> "رأيت أسداً يخطب".'},
 {n:'4/4',t:'العروض',x:'<strong>البحر الكامل:</strong> متفاعلن متفاعلن متفاعلن.<br><strong>البحر الرمل:</strong> فاعلاتن فاعلاتن فاعلاتن.<br><strong>البحر البسيط:</strong> مستفعلن فاعلن مستفعلن فاعلن.'}
 ]);
-
 Z.addLesson('mid_sci',{cat:'middle',icon:'⚗️',name:'العلوم - الإعدادي',desc:'4 شرائح',color:'j'},[
 {n:'1/4',t:'الخلية',x:'<strong>الخلية</strong> هي وحدة بناء الكائن الحي.<br><br><strong>النواة:</strong> تحتوي المادة الوراثية.<br><strong>السيتوبلازم:</strong> يحتوي العضيات.<br><strong>الغشاء الخلوي:</strong> يحيط بالخلية.'},
-{n:'2/4',t:'الذرة',x:'<strong>الذرة</strong> أصغر جزء من المادة.<br><br><strong>البروتون:</strong> موجب الشحنة، في النواة.<br><strong>النيوترون:</strong> متعادل، في النواة.<br><strong>الإلكترون:</strong> سالب الشحنة، يدور حول النواة.'},
+{n:'2/4',t:'الذرة',x:'<strong>الذرة</strong> أصغر جزء من المادة.<br><br><strong>البروتون:</strong> موجب الشحنة، في النواة.<br><strong>النيوترون:</strong> متعادل، في النواة.<br><strong>الإلكترون:</strong> سالب الشحنة.'},
 {n:'3/4',t:'الطاقة',x:'<strong>الطاقة الحركية:</strong> طاقة الحركة.<br><strong>الطاقة الكامنة:</strong> طاقة الوضع.<br><strong>الطاقة الحرارية:</strong> من الحرارة.<br><strong>الطاقة الكهربائية:</strong> من الكهرباء.<br><strong>الطاقة الشمسية:</strong> من الشمس.'},
 {n:'4/4',t:'التفاعلات الكيميائية',x:'<strong>التفاعل الكيميائي:</strong> تحول مواد إلى مواد جديدة.<br><br>مثال: احتراق الخشب + أوكسجين → رماد + ثاني أوكسيد الكربون + ماء.'}
 ]);
-
 Z.addLesson('high_math',{cat:'high',icon:'📊',name:'الرياضيات - الثانوي',desc:'4 شرائح',color:'p'},[
 {n:'1/4',t:'النهايات',x:'<strong>النهاية</strong> تعني قيمة الدالة عند اقتراب x من عدد معين.<br><br>مثال: lim(x→2) (x+3) = 5.'},
 {n:'2/4',t:'الاشتقاق',x:'<strong>الاشتقاق</strong> يقيس معدل تغير الدالة.<br><br>مشتقة xⁿ هي n·x^(n−1).<br>مشتقة sin(x) هي cos(x).<br>مشتقة eˣ هي eˣ.'},
 {n:'3/4',t:'التكامل',x:'<strong>التكامل</strong> هو عكس الاشتقاق.<br><br>∫xⁿ dx = x^(n+1)/(n+1) + C.<br>∫sin(x) dx = −cos(x) + C.'},
 {n:'4/4',t:'المتتاليات',x:'<strong>المتتالية الحسابية:</strong> كل حد يزيد بمقدار ثابت.<br>uₙ = u₀ + n·r.<br><br><strong>المتتالية الهندسية:</strong> كل حد يضرب في عدد ثابت.<br>uₙ = u₀ · qⁿ.'}
 ]);
-
 Z.addLesson('high_ar',{cat:'high',icon:'📚',name:'العربية - الثانوي',desc:'4 شرائح',color:'p'},[
 {n:'1/4',t:'الأدب الجاهلي',x:'<strong>الشعر الجاهلي:</strong> المعلقات، قصائد طويلة.<br><strong>أشهر الشعراء:</strong> امرؤ القيس، عنترة، طرفة بن العبد.<br><strong>الخصائص:</strong> الفخر، الغزل، الوصف، الحكمة.'},
 {n:'2/4',t:'الأدب الإسلامي',x:'<strong>القرآن الكريم:</strong> أعظم نص عربي.<br><strong>الحديث النبوي:</strong> فصاحة وبلاغة.<br><strong>الشعر الإسلامي:</strong> حسان بن ثابت، كعب بن زهير.'},
 {n:'3/4',t:'الأدب الحديث',x:'<strong>مدارس:</strong> الإحياء، الديوان، المهجر، الواقعية.<br><strong>أعلام:</strong> أحمد شوقي، حافظ إبراهيم، طه حسين، نجيب محفوظ، جبران خليل جبران.'},
 {n:'4/4',t:'النصوص والحجاج',x:'<strong>الحجاج:</strong> إقناع القارئ بفكرة.<br><strong>الوسائل:</strong> البرهان، المثال، الاستشهاد، المقارنة.<br><strong>الأنواع:</strong> حجاج مباشر، غير مباشر.'}
 ]);
-
 Z.addLesson('high_sci',{cat:'high',icon:'🔭',name:'العلوم - الثانوي',desc:'4 شرائح',color:'p'},[
 {n:'1/4',t:'الميكانيكا',x:'<strong>قانون نيوتن الأول:</strong> الجسم الساكن يبقى ساكناً ما لم تؤثر عليه قوة.<br><strong>قانون نيوتن الثاني:</strong> F = m·a.<br><strong>قانون نيوتن الثالث:</strong> لكل فعل رد فعل مساوٍ ومعاكس.'},
 {n:'2/4',t:'الكهرباء',x:'<strong>قانون أوم:</strong> V = I·R.<br><strong>الطاقة الكهربائية:</strong> P = V·I.<br><strong>التوالي:</strong> R = R₁ + R₂.<br><strong>التوازي:</strong> 1/R = 1/R₁ + 1/R₂.'},
@@ -1685,92 +1668,111 @@ Z.addLesson('high_sci',{cat:'high',icon:'🔭',name:'العلوم - الثانو
 {n:'4/4',t:'علم الوراثة',x:'<strong>DNA:</strong> الحمض النووي الريبوزي منقوص الأوكسجين.<br><strong>المورثات:</strong> وحدات الوراثة.<br><strong>الكروموزومات:</strong> 46 عند الإنسان (23 زوجاً).'}
 ]);
 
-/* ================== المحتوى الجديد: محاضرات وكتب ================== */
+/* ================== محاضرات وكتب إضافية ================== */
 Z.addLesson('lect_network',{cat:'lectures',icon:'🌐',name:'شبكات الاتصال',desc:'4 شرائح'},[
-{n:'1/4',t:'ما هي شبكات الاتصال؟',x:'<strong>شبكة الاتصال</strong> هي ربط جهازين أو أكثر لتبادل البيانات والموارد.<br><br>من أهم أنواعها: <strong>LAN</strong> (شبكة محلية)، <strong>WAN</strong> (شبكة واسعة)، <strong>MAN</strong> (شبكة إقليمية).',s:['شبكات الاتصال','Réseaux de communication','Communication networks']},
+{n:'1/4',t:'ما هي شبكات الاتصال؟',x:'<strong>شبكة الاتصال</strong> هي ربط جهازين أو أكثر لتبادل البيانات.<br><br>من أهم أنواعها: <strong>LAN</strong> (محلية)، <strong>WAN</strong> (واسعة)، <strong>MAN</strong> (إقليمية).',s:['شبكات الاتصال','Réseaux de communication','Communication networks']},
 {n:'2/4',t:'مكونات الشبكة',x:'<strong>الخادم:</strong> يقدم الخدمات.<br><strong>العميل:</strong> يطلب الخدمات.<br><strong>الموجه:</strong> يوجه البيانات.<br><strong>المبدل:</strong> يربط الأجهزة.<br><strong>الوسائط:</strong> أسلاك أو لاسلكي.'},
 {n:'3/4',t:'البروتوكولات',x:'<strong>TCP/IP:</strong> أساس الإنترنت.<br><strong>HTTP/HTTPS:</strong> نقل صفحات الويب.<br><strong>FTP:</strong> نقل الملفات.<br><strong>DNS:</strong> تحويل الأسماء إلى عناوين IP.'},
 {n:'4/4',t:'الأمن في الشبكات',x:'<strong>جدار الحماية (Firewall):</strong> يمنع الدخول غير المصرح.<br><strong>التشفير:</strong> حماية البيانات.<br><strong>VPN:</strong> شبكة خاصة افتراضية.<br><strong>كلمات مرور قوية:</strong> أساس الحماية.',v:'https://www.youtube.com/embed/qiQR5rTSshw'}
 ]);
-
 Z.addLesson('lect_ai_research',{cat:'lectures',icon:'🔬',name:'تأثير AI في البحث العلمي',desc:'4 شرائح'},[
 {n:'1/4',t:'AI والبحث العلمي',x:'يُحدث <strong>الذكاء الاصطناعي</strong> ثورة في البحث العلمي عبر:<br><br><strong>تسريع التحليل</strong> للبيانات الضخمة.<br><strong>اكتشاف الأنماط</strong> الخفية.<br><strong>توليد الفرضيات</strong> الجديدة.<br><strong>أتمتة المهام</strong> المتكررة.',s:['تأثير AI في البحث العلمي','Impact de l IA sur la recherche','AI impact on research']},
-{n:'2/4',t:'أدوات البحث بالـ AI',x:'<strong>Scite:</strong> تحليل الاستشهادات.<br><strong>Elicit:</strong> مراجعة الأدبيات.<br><strong>Consensus:</strong> استخراج النتائج.<br><strong>Connected Papers:</strong> خرائط الأبحاث.<br><strong>ChatGPT/Claude:</strong> صياغة الفرضيات.'},
-{n:'3/4',t:'التحديات الأخلاقية',x:'<strong>الانتحال:</strong> نسب أعمال AI للباحث.<br><strong>التحيز:</strong> نتائج منحازة حسب البيانات.<br><strong>الشفافية:</strong> صعوبة تفسير قرارات AI.<br><strong>المسؤولية:</strong> من يتحمل نتائج الأخطاء؟'},
-{n:'4/4',t:'المستقبل',x:'<strong>التعاون:</strong> بين الباحث البشري وAI.<br><strong>التحقق:</strong> مراجعة بشرية دائمة.<br><strong>الإفصاح:</strong> ذكر استخدام AI في المنهجية.<br><strong>التطوير:</strong> أدوات أدق وأكثر شفافية.',v:'https://www.youtube.com/embed/2ePf9rue1Ao'}
+{n:'2/4',t:'أدوات البحث',x:'<strong>Scite:</strong> تحليل الاستشهادات.<br><strong>Elicit:</strong> مراجعة الأدبيات.<br><strong>Consensus:</strong> استخراج النتائج.<br><strong>Connected Papers:</strong> خرائط الأبحاث.<br><strong>ChatGPT/Claude:</strong> صياغة الفرضيات.'},
+{n:'3/4',t:'التحديات الأخلاقية',x:'<strong>الانتحال:</strong> نسب أعمال AI للباحث.<br><strong>التحيز:</strong> نتائج منحازة.<br><strong>الشفافية:</strong> صعوبة التفسير.<br><strong>المسؤولية:</strong> من يتحمل نتائج الأخطاء؟'},
+{n:'4/4',t:'المستقبل',x:'<strong>التعاون:</strong> بين الباحث البشري وAI.<br><strong>التحقق:</strong> مراجعة بشرية دائمة.<br><strong>الإفصاح:</strong> ذكر استخدام AI.<br><strong>التطوير:</strong> أدوات أكثر شفافية.',v:'https://www.youtube.com/embed/2ePf9rue1Ao'}
 ]);
-
+Z.addLesson('bk_ai_crime',{cat:'books',icon:'🛡️',name:'AI والجرائم الإلكترونية',desc:'بقلم: محمد زايد'},[
+{n:'1',t:'🛡️ AI والجرائم الإلكترونية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cyber_security.jpg/640px-Cyber_security.jpg',x:'تأليف: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الرقمية'},
+{n:'2',t:'AI: المفهوم والتقنيات',x:'يشمل AI: <strong>تعلم الآلة</strong>، <strong>التعلم العميق</strong>، <strong>الأنظمة الخبيرة</strong>، <strong>معالجة اللغة الطبيعية</strong>.'},
+{n:'3',t:'الجرائم الإلكترونية',x:'من أخطرها:<br><strong>التصيد الاحتيالي</strong> (Phishing)<br><strong>هجمات DDoS</strong><br><strong>البرمجيات الخبيثة</strong><br><strong>انتحال الهوية</strong>.'},
+{n:'4',t:'AI في الأمن',x:'يُستخدم AI للكشف المبكر عن الاختراقات، تحليل سلوك المستخدمين، اكتشاف البرمجيات الخبيثة الجديدة.'}
+]);
+Z.addLesson('bk_smart_campus',{cat:'books',icon:'🏫',name:'المدينة الجامعية الذكية',desc:'منبع للتقدم'},[
+{n:'1',t:'🏫 المدينة الجامعية الذكية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Universidad_de_Alcal%C3%A1%2C_Plaza_de_San_Diego.jpg/640px-Universidad_de_Alcal%C3%A1%2C_Plaza_de_San_Diego.jpg',x:'تأليف: <strong>محمد زايد</strong><br>خبير دولي'},
+{n:'2',t:'المفهوم والأهداف',x:'المركب الجامعي الذكي يجمع بين البنية التحتية المتقدمة والتكنولوجيا الرقمية.<br>يهدف إلى <strong>تحسين جودة التعليم</strong>، <strong>تسهيل حياة الطلاب</strong>، <strong>وترشيد الطاقة</strong>.'},
+{n:'3',t:'المكونات الرقمية',x:'<strong>إنترنت الأشياء (IoT)</strong>، <strong>السحابة (Cloud)</strong>، <strong>البيانات الضخمة (Big Data)</strong>، <strong>الذكاء الاصطناعي</strong>.'},
+{n:'4',t:'الخدمات الذكية',x:'أنظمة الدخول الذكية، إدارة ذكية للفصول، منصات تعلم إلكتروني، مراقبة أمنية، إدارة المياه والطاقة.'}
+]);
 Z.addLesson('bk_children_v2',{cat:'books',icon:'📚',name:'الأطفال والحاسوب (نسخة موسعة)',desc:'بقلم محمد زايد'},[
-{n:'1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الحديثة وحوسبة اللغة العربية<br>أستاذ جامعي'},
-{n:'2',t:'لماذا هذا الكتاب؟',x:'كتاب موجه للأطفال (6-12 سنة) وأوليائهم، يهدف إلى:<br><br><strong>تعريف الأطفال</strong> بأساسيات الحاسوب.<br><strong>تنمية مهارات</strong> الاستخدام الآمن.<br><strong>التحفيز</strong> على الإبداع الرقمي.<br><strong>الوقاية</strong> من مخاطر الإنترنت.'},
-{n:'3',t:'المحتوى',x:'يتضمن الكتاب:<br><br>1. ما هو الحاسوب؟<br>2. مكونات الحاسوب.<br>3. كيف يعمل الحاسوب؟<br>4. أساسيات الإنترنت.<br>5. الأمان الرقمي للأطفال.<br>6. ألعاب تعليمية.<br>7. تمارين تطبيقية.'},
-{n:'4',t:'رسالة الكتاب',x:'الهدف الأسمى هو تكوين <strong>جيل رقمي واعٍ</strong> يستخدم التكنولوجيا بأمان ومسؤولية وإبداع.<br><br>للكاتب أكثر من 20 سنة خبرة في مجال التكنولوجيات الحديثة.'}
+{n:'1',t:'📚 الأطفال والحاسوب',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'بقلم: <strong>محمد زايد</strong><br>أستاذ جامعي'},
+{n:'2',t:'لماذا هذا الكتاب؟',x:'كتاب موجه للأطفال (6-12 سنة) وأوليائهم، يهدف إلى:<br><strong>تعريف الأطفال</strong> بأساسيات الحاسوب.<br><strong>تنمية مهارات</strong> الاستخدام الآمن.<br><strong>التحفيز</strong> على الإبداع الرقمي.'},
+{n:'3',t:'المحتوى',x:'1. ما هو الحاسوب؟ 2. مكوناته. 3. كيف يعمل؟ 4. أساسيات الإنترنت. 5. الأمان الرقمي. 6. ألعاب تعليمية. 7. تمارين تطبيقية.'},
+{n:'4',t:'الرسالة',x:'الهدف: تكوين <strong>جيل رقمي واعٍ</strong> يستخدم التكنولوجيا بأمان ومسؤولية وإبداع.'}
 ]);
-
-Z.addLesson('bk_ai_future',{cat:'books',icon:'🚀',name:'مستقبل الذكاء الاصطناعي',desc:'بقلم: محمد زايد'},[
-{n:'1',t:'🚀 مستقبل الذكاء الاصطناعي',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Human_brain_comparison_with_computer.svg/640px-Human_brain_comparison_with_computer.svg.png',x:'تأليف: <strong>محمد زايد</strong><br>خبير دولي في التكنولوجيات الرقمية'},
-{n:'2',t:'السيناريوهات المحتملة',x:'<strong>1. AI مساعد:</strong> يساعد البشر دون استبدالهم.<br><strong>2. AI شريك:</strong> يتعاون مع البشر في اتخاذ القرار.<br><strong>3. AI مستقل:</strong> يعمل بشكل ذاتي في مجالات محددة.<br><strong>4. AGI:</strong> ذكاء عام يفوق البشر (نظري).'},
-{n:'3',t:'القطاعات المتأثرة',x:'<strong>الصحة:</strong> تشخيص أدق، أدوية شخصية.<br><strong>التعليم:</strong> تعلم مخصص، مساعدون أذكياء.<br><strong>الاقتصاد:</strong> أتمتة، وظائف جديدة.<br><strong>الفنون:</strong> إبداع مشترك بين البشر وAI.'},
-{n:'4',t:'التحديات الكبرى',x:'<strong>أخلاقياً:</strong> من يتحمل مسؤولية قرارات AI؟<br><strong>اجتماعياً:</strong> البطالة التكنولوجية.<br><strong>أمنياً:</strong> استخدام AI في الحروب.<br><strong>بيئياً:</strong> استهلاك الطاقة الهائل للنماذج الضخمة.'}
+Z.addLesson('bk_ai_future',{cat:'books',icon:'🚀',name:'مستقبل AI',desc:'بقلم: محمد زايد'},[
+{n:'1',t:'🚀 مستقبل AI',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Human_brain_comparison_with_computer.svg/640px-Human_brain_comparison_with_computer.svg.png',x:'تأليف: <strong>محمد زايد</strong><br>خبير دولي'},
+{n:'2',t:'السيناريوهات',x:'<strong>1. AI مساعد:</strong> يساعد دون استبدال.<br><strong>2. AI شريك:</strong> يتعاون في القرار.<br><strong>3. AI مستقل:</strong> يعمل ذاتياً.<br><strong>4. AGI:</strong> ذكاء عام يفوق البشر (نظري).'},
+{n:'3',t:'القطاعات',x:'<strong>الصحة:</strong> تشخيص أدق.<br><strong>التعليم:</strong> تعلم مخصص.<br><strong>الاقتصاد:</strong> أتمتة ووظائف جديدة.<br><strong>الفنون:</strong> إبداع مشترك.'},
+{n:'4',t:'التحديات',x:'<strong>أخلاقياً:</strong> من يتحمل المسؤولية؟<br><strong>اجتماعياً:</strong> البطالة التكنولوجية.<br><strong>أمنياً:</strong> استخدام AI في الحروب.<br><strong>بيئياً:</strong> استهلاك الطاقة.'}
 ]);
 
 /* ================== الاختبارات ================== */
+
 Z.addExam('book_exam',[
-{q:'الجزء المادي؟',o:['Hardware','Software','Internet','Windows'],a:'Hardware'},
-{q:'الجزء المعنوي؟',o:['Hardware','Software','CPU','RAM'],a:'Software'},
-{q:'وظيفة المعالج؟',o:['تخزين','عرض','تنفيذ الأوامر','طباعة'],a:'تنفيذ الأوامر'},
-{q:'ذاكرة تفقد محتواها؟',o:['ROM','RAM','Hard Disk','CD'],a:'RAM'},
-{q:'جهاز إخراج؟',o:['فأرة','لوحة','طابعة','ماسح'],a:'طابعة'},
-{q:'نظام تشغيل؟',o:['Word','Windows','Excel','Chrome'],a:'Windows'}
+{q:'الجزء المادي؟',o:['Hardware','Software','Internet','Windows'],a:'Hardware',explain:'الجزء المادي هو الأجزاء الملموسة من الحاسوب.'},
+{q:'الجزء المعنوي؟',o:['Hardware','Software','CPU','RAM'],a:'Software',explain:'البرمجيات هي الجزء غير الملموس من الحاسوب.'},
+{q:'وظيفة المعالج؟',o:['تخزين','عرض','تنفيذ الأوامر','طباعة'],a:'تنفيذ الأوامر',explain:'المعالج هو دماغ الحاسوب وينفذ جميع الأوامر.'},
+{q:'ذاكرة تفقد محتواها؟',o:['ROM','RAM','Hard Disk','CD'],a:'RAM',explain:'RAM ذاكرة مؤقتة تفقد محتواها عند إيقاف التشغيل.'},
+{q:'جهاز إخراج؟',o:['فأرة','لوحة','طابعة','ماسح'],a:'طابعة',explain:'الطابعة تعرض النتائج على الورق فهي جهاز إخراج.'},
+{q:'نظام تشغيل؟',o:['Word','Windows','Excel','Chrome'],a:'Windows',explain:'Windows نظام تشغيل، بينما Word وExcel تطبيقات.'}
 ]);
 
 Z.addExam('arabic_exam',[
-{q:'عدد حروف الأبجدية العربية؟',o:['26','27','28','29'],a:'28'},
-{q:'ما الحركة على حرف الباء في «بُ»؟',o:['فتحة','ضمة','كسرة','سكون'],a:'ضمة'},
-{q:'أي الكلمات التالية اسم؟',o:['كتبَ','قلم','هو','في'],a:'قلم'},
-{q:'الجملة الاسمية تبدأ بـ...',o:['فعل','اسم','حرف','ظرف'],a:'اسم'}
+{q:'عدد حروف الأبجدية العربية؟',o:['26','27','28','29'],a:'28',explain:'الأبجدية العربية تتكون من 28 حرفاً.'},
+{q:'ما الحركة على حرف الباء في «بُ»؟',o:['فتحة','ضمة','كسرة','سكون'],a:'ضمة',explain:'الضمة (ـُ) هي الحركة الظاهرة على الباء.'},
+{q:'أي الكلمات التالية اسم؟',o:['كتبَ','قلم','هو','في'],a:'قلم',explain:'قلم اسم يدل على شيء، بينما كتبَ فعل.'},
+{q:'الجملة الاسمية تبدأ بـ...',o:['فعل','اسم','حرف','ظرف'],a:'اسم',explain:'الجملة الاسمية تبدأ باسم (المبتدأ).'}
+]);
+
+Z.addExam('tech_lesson1_exam',[
+{q:'ما هو الحاسوب؟',o:['جهاز إلكتروني لمعالجة البيانات','جهاز لتوليد الكهرباء','جهاز للطباعة فقط','جهاز للتصوير'],a:'جهاز إلكتروني لمعالجة البيانات',explain:'الحاسوب جهاز إلكتروني رقمي يعالج البيانات ويخزنها ويستخرج النتائج.'},
+{q:'أي جيل من الحواسيب استخدم الصمامات المفرغة؟',o:['الجيل الأول','الجيل الثاني','الجيل الثالث','الجيل الرابع'],a:'الجيل الأول',explain:'الجيل الأول (1946-1959) استخدم الصمامات المفرغة، وكانت الأجهزة ضخمة جداً.'},
+{q:'أي أنواع الحواسيب هو الأقوى والأغلى؟',o:['الحاسوب العملاق (Supercomputer)','الحاسوب الشخصي','الحاسوب المحمول','الجهاز اللوحي'],a:'الحاسوب العملاق (Supercomputer)',explain:'الحواسيب العملاقة هي الأقوى والأغلى، تستخدم في الأبحاث الفضائية والتنبؤات الجوية.'},
+{q:'المكونات المادية (Hardware) هي:',o:['الأجزاء الملموسة من الحاسوب','البرامج والتطبيقات','نظام التشغيل','ملفات الصور'],a:'الأجزاء الملموسة من الحاسوب',explain:'Hardware هي الأجزاء المادية الملموسة مثل المعالج والذاكرة والشاشة.'},
+{q:'من مزايا الحاسوب:',o:['السرعة والدقة والتخزين الهائل','استهلاك الطاقة العالي','الحجم الكبير دائماً','التكلفة المرتفعة'],a:'السرعة والدقة والتخزين الهائل',explain:'الحاسوب يوفر الدقة والسرعة والتخزين الهائل، وهي من أهم ميزاته.'}
 ]);
 
 Z.addExam('ai_exam', [
-    { q: 'ما هي الأداة المناسبة لتوليد صور مع نصوص عربية؟', o: ['Ideogram', 'CapCut', 'Whisper', 'Notion AI'], a: 'Ideogram' },
-    { q: 'أي أداة تستخدم لتحويل الفيديو إلى درس تفاعلي بأسئلة؟', o: ['Canva', 'EdPuzzle', 'MagicSchool', 'Speechify'], a: 'EdPuzzle' },
-    { q: 'ما هو الفرع الذي يعتمد على الشبكات العصبية متعددة الطبقات؟', o: ['تعلم الآلة', 'التعلم العميق', 'معالجة اللغة', 'المنطق الضبابي'], a: 'التعلم العميق' },
-    { q: 'ما هي العناصر الأساسية للأمن السيبراني؟', o: ['السرعة، الدقة، الكلفة', 'السرية، التكامل، التوفر', 'الذكاء، التعلم، القرار', 'المرونة، الصلابة، الثبات'], a: 'السرية، التكامل، التوفر' },
-    { q: 'من هو رائد المنطق الضبابي؟', o: ['آلان تورينغ', 'الطفي زداح', 'محمد زايد', 'جون مكارثي'], a: 'الطفي زداح' }
+    { q: 'ما هي الأداة المناسبة لتوليد صور مع نصوص عربية؟', o: ['Ideogram', 'CapCut', 'Whisper', 'Notion AI'], a: 'Ideogram', explain: 'Ideogram متخصص في توليد الصور مع نصوص عربية دقيقة.' },
+    { q: 'أي أداة تستخدم لتحويل الفيديو إلى درس تفاعلي بأسئلة؟', o: ['Canva', 'EdPuzzle', 'MagicSchool', 'Speechify'], a: 'EdPuzzle', explain: 'EdPuzzle يحول الفيديوهات إلى دروس تفاعلية بأسئلة.' },
+    { q: 'ما هو الفرع الذي يعتمد على الشبكات العصبية متعددة الطبقات؟', o: ['تعلم الآلة', 'التعلم العميق', 'معالجة اللغة', 'المنطق الضبابي'], a: 'التعلم العميق', explain: 'التعلم العميق يستخدم شبكات عصبية متعددة الطبقات.' },
+    { q: 'ما هي العناصر الأساسية للأمن السيبراني؟', o: ['السرعة، الدقة، الكلفة', 'السرية، التكامل، التوفر', 'الذكاء، التعلم، القرار', 'المرونة، الصلابة، الثبات'], a: 'السرية، التكامل، التوفر', explain: 'العناصر الثلاثة الأساسية: السرية، التكامل، التوفر (CIA triad).' },
+    { q: 'من هو رائد المنطق الضبابي؟', o: ['آلان تورينغ', 'الطفي زداح', 'محمد زايد', 'جون مكارثي'], a: 'الطفي زداح', explain: 'الطفي زداح (Lotfi Zadeh) طور المنطق الضبابي عام 1965.' }
 ]);
 
 Z.addExam('arabic_exam_2',[
-{q:'أي الكلمات التالية فعل؟',o:['كتاب','كتب','قلم','مدرسة'],a:'كتب'},
-{q:'"في" نوعها...',o:['اسم','فعل','حرف','ضمير'],a:'حرف'},
-{q:'"الطالب مجتهد" جملة...',o:['فعلية','اسمية','شرطية','استفهامية'],a:'اسمية'},
-{q:'"كتب الطالب الدرس" جملة...',o:['اسمية','فعلية','تعجبية','نفي'],a:'فعلية'},
-{q:'"الطالب" في "كتب الطالب الدرس" إعرابه...',o:['مبتدأ','فاعل','مفعول به','خبر'],a:'فاعل'}
+{q:'أي الكلمات التالية فعل؟',o:['كتاب','كتب','قلم','مدرسة'],a:'كتب',explain:'"كتب" فعل يدل على حدث، بينما الباقي أسماء.'},
+{q:'"في" نوعها...',o:['اسم','فعل','حرف','ضمير'],a:'حرف',explain:'"في" حرف جر لا معنى له إلا مع غيره.'},
+{q:'"الطالب مجتهد" جملة...',o:['فعلية','اسمية','شرطية','استفهامية'],a:'اسمية',explain:'تبدأ باسم "الطالب" فهي جملة اسمية.'},
+{q:'"كتب الطالب الدرس" جملة...',o:['اسمية','فعلية','تعجبية','نفي'],a:'فعلية',explain:'تبدأ بفعل "كتب" فهي جملة فعلية.'},
+{q:'"الطالب" في "كتب الطالب الدرس" إعرابه...',o:['مبتدأ','فاعل','مفعول به','خبر'],a:'فاعل',explain:'"الطالب" هو من قام بالفعل، فهو فاعل مرفوع.'}
 ]);
 
 Z.addExam('arabic_exam_3',[
-{q:'الفاعل يكون...',o:['مرفوعاً','منصوباً','مجروراً','مجزوماً'],a:'مرفوعاً'},
-{q:'المفعول به يكون...',o:['مرفوعاً','منصوباً','مجروراً','مجزوماً'],a:'منصوباً'},
-{q:'في "كتاب الطالب" كلمة "الطالب"...',o:['مبتدأ','خبر','فاعل','مضاف إليه'],a:'مضاف إليه'},
-{q:'في "جاء المسافرُ مسرعاً" كلمة "مسرعاً"...',o:['مفعول به','حال','تمييز','خبر'],a:'حال'},
-{q:'في "العلمُ نورٌ" كلمة "نورٌ"...',o:['مبتدأ','خبر','فاعل','مفعول'],a:'خبر'}
+{q:'الفاعل يكون...',o:['مرفوعاً','منصوباً','مجروراً','مجزوماً'],a:'مرفوعاً',explain:'الفاعل دائماً مرفوع.'},
+{q:'المفعول به يكون...',o:['مرفوعاً','منصوباً','مجروراً','مجزوماً'],a:'منصوباً',explain:'المفعول به دائماً منصوب.'},
+{q:'في "كتاب الطالب" كلمة "الطالب"...',o:['مبتدأ','خبر','فاعل','مضاف إليه'],a:'مضاف إليه',explain:'"الطالب" أُضيف إليه "كتاب" فهو مضاف إليه مجرور.'},
+{q:'في "جاء المسافرُ مسرعاً" كلمة "مسرعاً"...',o:['مفعول به','حال','تمييز','خبر'],a:'حال',explain:'"مسرعاً" تبين هيئة الفاعل، فهي حال منصوب.'},
+{q:'في "العلمُ نورٌ" كلمة "نورٌ"...',o:['مبتدأ','خبر','فاعل','مفعول'],a:'خبر',explain:'"العلم" مبتدأ، و"نور" خبر مرفوع.'}
 ]);
 
 Z.addExam('arabic_exam_4',[
-{q:'الفكرة الرئيسية عادة تكون في...',o:['العنوان','الحاشية','الفقرة الوسطى','الهوامش'],a:'العنوان'},
-{q:'الاستنتاج هو...',o:['تكرار النص','استخراج معنى ضمني','تلخيص النص','نقد النص'],a:'استخراج معنى ضمني'},
-{q:'"خرج الطفل مبتلاً" نستنتج أن...',o:['الجو مشمس','الجو ممطر','الجو بارد','الجو حار'],a:'الجو ممطر'},
-{q:'الفكرة الفرعية...',o:['تفصيل للفكرة الرئيسية','نقيض الفكرة الرئيسية','موضوع آخر','عنوان فرعي'],a:'تفصيل للفكرة الرئيسية'},
-{q:'مهارة القراءة تشمل...',o:['الفهم والتركيز','الحفظ الآلي','النقل الحرفي','السرعة فقط'],a:'الفهم والتركيز'}
+{q:'الفكرة الرئيسية عادة تكون في...',o:['العنوان','الحاشية','الفقرة الوسطى','الهوامش'],a:'العنوان',explain:'العنوان يعكس الفكرة الرئيسية للنص.'},
+{q:'الاستنتاج هو...',o:['تكرار النص','استخراج معنى ضمني','تلخيص النص','نقد النص'],a:'استخراج معنى ضمني',explain:'الاستنتاج استخراج معنى غير مذكور صراحة.'},
+{q:'"خرج الطفل مبتلاً" نستنتج أن...',o:['الجو مشمس','الجو ممطر','الجو بارد','الجو حار'],a:'الجو ممطر',explain:'"مبتلاً" تدل على البلل، والسبب المنطقي هو المطر.'},
+{q:'الفكرة الفرعية...',o:['تفصيل للفكرة الرئيسية','نقيض الفكرة الرئيسية','موضوع آخر','عنوان فرعي'],a:'تفصيل للفكرة الرئيسية',explain:'الفكرة الفرعية تفرع وتفصّل الفكرة الرئيسية.'},
+{q:'مهارة القراءة تشمل...',o:['الفهم والتركيز','الحفظ الآلي','النقل الحرفي','السرعة فقط'],a:'الفهم والتركيز',explain:'القراءة الجيدة تحتاج الفهم والتركيز والاستنتاج.'}
 ]);
 
 Z.addExam('arabic_exam_5',[
-{q:'من أنواع التعبير الكتابي...',o:['الرسالة','الرياضيات','الكيمياء','الفيزياء'],a:'الرسالة'},
-{q:'المقال يتكون من...',o:['عنوان ومقدمة وعرض وخاتمة','عنوان فقط','مقدمة فقط','خاتمة فقط'],a:'عنوان ومقدمة وعرض وخاتمة'},
-{q:'القصة تتضمن...',o:['شخصيات وحبكة','معادلات وقوانين','رسوم بيانية','جداول'],a:'شخصيات وحبكة'},
-{q:'الرسالة تبدأ بـ...',o:['التحية','الخاتمة','التوقيع','الموضوع'],a:'التحية'},
-{q:'"العقدة" في القصة هي...',o:['المشكلة','الحل','الشخصية','النهاية'],a:'المشكلة'}
+{q:'من أنواع التعبير الكتابي...',o:['الرسالة','الرياضيات','الكيمياء','الفيزياء'],a:'الرسالة',explain:'الرسالة نوع من أنواع التعبير الكتابي.'},
+{q:'المقال يتكون من...',o:['عنوان ومقدمة وعرض وخاتمة','عنوان فقط','مقدمة فقط','خاتمة فقط'],a:'عنوان ومقدمة وعرض وخاتمة',explain:'هذه هي البنية الكاملة للمقال.'},
+{q:'القصة تتضمن...',o:['شخصيات وحبكة','معادلات وقوانين','رسوم بيانية','جداول'],a:'شخصيات وحبكة',explain:'القصة تحتاج شخصيات وأحداث (حبكة) لتتطور.'},
+{q:'الرسالة تبدأ بـ...',o:['التحية','الخاتمة','التوقيع','الموضوع'],a:'التحية',explain:'الرسالة تبدأ عادة بالتحية (السلام عليكم).'},
+{q:'"العقدة" في القصة هي...',o:['المشكلة','الحل','الشخصية','النهاية'],a:'المشكلة',explain:'العقدة هي المشكلة الأساسية التي تواجه الشخصيات.'}
 ]);
 
+/* ================== إغلاق الملف ================== */
 window.addEventListener('load',function(){
   Z.updateUI();
   Z.showPage('pageWelcome');
