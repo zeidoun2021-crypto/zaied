@@ -13,163 +13,160 @@ html,body{height:100%;width:100%;overflow:hidden}
 body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;display:flex;flex-direction:column;height:100dvh;overflow-x:hidden}
 .hide{display:none!important}
 
-#top{padding:4px 8px;font-size:11px;border-bottom:2px solid #fbbf24;flex-shrink:0;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;z-index:100;background:linear-gradient(135deg,#64748b,#475569)}
+#top{background:linear-gradient(135deg,#64748b,#475569);padding:10px;text-align:center;font-size:14px;border-bottom:3px solid #fbbf24;flex-shrink:0;display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;z-index:100;}
 #top.reg{background:linear-gradient(135deg,#3b82f6,#1e40af)}
 #top.adm{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
-#top button{padding:3px 8px;border-radius:10px;border:none;cursor:pointer;font-weight:900;font-size:10px;font-family:Cairo}
-#ti{font-size:16px!important}
+#top button{padding:5px 15px;border-radius:15px;border:none;cursor:pointer;font-weight:900;font-size:13px;font-family:Cairo}
+#ti{font-size:22px!important}
 
-#yellow{height:26px;border-bottom:2px solid #dc2626;flex-shrink:0;display:flex;align-items:center;overflow:hidden;z-index:99;background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b)}
+#yellow{position:relative;width:100%;background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b);height:40px;display:flex;align-items:center;overflow:hidden;border-bottom:3px solid #dc2626;flex-shrink:0;z-index:99;}
 .yw{flex:1;overflow:hidden;position:relative;height:100%}
-.yt{position:absolute;white-space:nowrap;font-size:10px;line-height:26px;animation:ys 20s linear infinite;font-weight:900;color:#7f1d1d}
-#yellow button{background:#22c55e;color:#fff;border:1px solid #fff;border-radius:12px;padding:2px 8px;font-weight:900;font-size:9px;cursor:pointer;margin:0 8px}
+.yt{position:absolute;white-space:nowrap;font-size:13px;line-height:40px;animation:ys 20s linear infinite;font-weight:900;color:#7f1d1d}
+#yellow button{background:#22c55e;color:#fff;border:2px solid #fff;border-radius:20px;padding:3px 12px;font-weight:900;font-size:12px;cursor:pointer;margin:0 15px}
 
-#main{flex:1;overflow-y:auto;overflow-x:hidden;padding:6px 10px 62px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:0;width:100%}
-#main::-webkit-scrollbar{width:5px}
+#main{flex:1;overflow-y:auto;overflow-x:hidden;padding:15px 20px 80px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:0;width:100%}
+#main::-webkit-scrollbar{width:6px}
 #main::-webkit-scrollbar-track{background:#1e293b}
 #main::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}
 
-#pageWelcome{width:100%;max-width:min(460px,94vw);display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1vh,10px);margin:0 auto;padding:0}
-.logo{width:clamp(80px,17vh,180px);height:clamp(80px,17vh,180px);margin:0 auto;position:relative;flex-shrink:0}
-.ring{position:absolute;width:100%;height:100%;border-radius:50%;border:clamp(2px,0.5vh,4px) solid #dc2626;background:rgba(255,255,255,.98);box-shadow:0 0 clamp(10px,2vh,25px) #dc2626;animation:pl 3s infinite}
-.flags{position:absolute;width:calc(100% - 8px);height:calc(100% - 8px);top:4px;left:4px;animation:rt 22s linear infinite;z-index:2}
-.tv{position:absolute;width:70%;height:70%;top:15%;left:15%;z-index:3}
-.tvb{width:100%;height:82%;background:#fff;border:clamp(2px,0.5vh,3px) solid #dc2626;border-radius:clamp(4px,1vh,8px);overflow:hidden;position:relative}
-.tvb img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:65%;height:65%;object-fit:cover;background:#fff;border-radius:50%;border:2px solid #dc2626;z-index:2;animation:blinkImg 6s infinite alternate}
-.tvt{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;animation:blinkTxt 6s infinite alternate;text-align:center}
-.tvt span:first-child{font-size:clamp(8px,1.4vh,13px);font-weight:900;color:#dc2626;margin-bottom:1px}
-.tvt span:last-child{font-size:clamp(10px,1.8vh,17px);font-weight:900;color:#dc2626}
-.tvs{width:22%;height:7%;background:#dc2626;margin:2% auto 0;border-radius:0 0 3px 3px}
-.tvb2{width:45%;height:4%;background:#dc2626;margin:0 auto;border-radius:2px}
-.wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:clamp(6px,1.2vh,12px);border-radius:10px;text-align:center;border:2px solid #fbbf24;font-size:clamp(10px,1.5vh,14px);line-height:1.4;font-weight:900;width:100%;overflow:hidden;position:relative;flex-shrink:0}
+#pageWelcome{width:100%;max-width:600px;display:flex;flex-direction:column;align-items:center;gap:15px;margin:0 auto;padding:0}
+.logo{position:relative;width:240px;height:240px;margin:0 auto;flex-shrink:0}
+.ring{position:absolute;width:240px;height:240px;border-radius:50%;border:5px solid #dc2626;background:rgba(255,255,255,.98);box-shadow:0 0 30px #dc2626;animation:pl 3s infinite}
+.flags{position:absolute;width:225px;height:225px;top:7.5px;left:7.5px;animation:rt 22s linear infinite;z-index:2}
+.tv{position:absolute;width:170px;height:170px;top:35px;left:35px;z-index:3}
+.tvb{width:100%;height:145px;background:#fff;border:4px solid #dc2626;border-radius:12px;overflow:hidden;position:relative;}
+.tvb img{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:115px;height:115px;object-fit:cover;background:#fff;border-radius:50%;border:3px solid #dc2626;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;animation:blinkImg 6s infinite alternate;}
+.tvt{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;animation:blinkTxt 6s infinite alternate;text-align:center;}
+.tvt span:first-child { font-size: 18px; font-weight: 900; color: #dc2626; margin-bottom: 2px; }
+.tvt span:last-child { font-size: 22px; font-weight: 900; color: #dc2626; }
+.tvs{width:34px;height:12px;background:#dc2626;margin:0 auto;border-radius:0 0 4px 4px}
+.tvb2{width:80px;height:6px;background:#dc2626;margin:0 auto;border-radius:4px}
+.wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:15px;text-align:center;border:3px solid #fbbf24;font-size:16px;line-height:1.6;font-weight:900;width:100%;box-shadow:0 4px 10px rgba(0,0,0,0.3);overflow:hidden;position:relative;flex-shrink:0}
 .wctxt-inner{display:inline-block;white-space:nowrap;padding-left:100%;animation:redMarquee 15s linear infinite}
-#gw{background:#fff;border:2px solid #dc2626;border-radius:10px;padding:clamp(8px,1.5vh,16px);width:100%;color:#0f172a;box-shadow:0 4px 15px rgba(0,0,0,0.4)}
-#gw h2{color:#dc2626;text-align:center;font-size:clamp(13px,1.9vh,18px);margin-bottom:clamp(4px,1vh,10px);font-weight:900}
-#gw>div:first-child{font-size:clamp(18px,2.6vh,30px)!important;margin-bottom:2px!important;text-align:center}
-.err{display:none;color:#991b1b;background:#fee2e2;padding:4px;border-radius:6px;font-size:11px;text-align:center;border:1px solid #dc2626;font-weight:700;margin-bottom:5px}
-.inp{display:block;width:100%;padding:clamp(4px,0.8vh,8px) clamp(8px,1.5vw,12px);margin-bottom:clamp(3px,0.6vh,6px);border:1px solid #cbd5e1;border-radius:14px;background:#f8fafc;color:#0f172a;font-size:clamp(10px,1.4vh,13px);font-weight:600;box-sizing:border-box;height:clamp(28px,4vh,38px);font-family:Cairo}
-.inp:focus{outline:none;border-color:#dc2626;background:#fff;box-shadow:0 0 6px rgba(220,38,38,0.3)}
-.inp-err{border-color:#dc2626!important;background:#fee2e2!important}
-.sbt{display:block;width:100%;padding:clamp(6px,1.2vh,10px);background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:2px solid #fbbf24;border-radius:18px;font-weight:900;font-size:clamp(11px,1.5vh,14px);cursor:pointer;margin-top:clamp(4px,0.8vh,8px);font-family:Cairo;transition:transform 0.15s}
-.sbt:hover{transform:scale(1.01)}
-.cats{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:clamp(4px,0.8vh,8px) 0}
-.cat{background:#fee2e2;color:#991b1b;padding:clamp(3px,0.6vh,5px) clamp(8px,1.5vw,12px);border-radius:10px;font-weight:900;cursor:pointer;font-size:clamp(9px,1.3vh,12px);border:1px solid transparent;transition:0.15s}
-.cat.on{background:#dc2626;color:#fff;border-color:#fbbf24;transform:scale(1.03)}
 
-#pageHome{width:100%;max-width:min(1200px,98vw);display:flex;flex-direction:column;gap:clamp(6px,1vh,12px);margin:0 auto;padding:0}
-.htitle{background:linear-gradient(135deg,#dc2626,#991b1b);padding:clamp(6px,1vh,10px);border-radius:10px;text-align:center;border:2px solid #fbbf24;font-size:clamp(13px,1.8vh,18px);font-weight:900}
+#gw{background:#fff;border:3px solid #dc2626;border-radius:15px;padding:20px;width:100%;color:#0f172a;box-shadow:0 8px 25px rgba(0,0,0,0.5)}
+#gw h2{color:#dc2626;text-align:center;font-size:20px;margin-bottom:15px;font-weight:900}
+#gw>div:first-child{font-size:35px!important;margin-bottom:5px!important;text-align:center}
+.err{display:none;color:#991b1b;background:#fee2e2;padding:8px;border-radius:8px;font-size:13px;text-align:center;border:2px solid #dc2626;font-weight:700;margin-bottom:10px}
+.inp{display:block;width:100%;padding:10px 15px;margin-bottom:10px;border:2px solid #cbd5e1;border-radius:20px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:600;box-sizing:border-box;height:42px;font-family:Cairo}
+.inp:focus{outline:none;border-color:#dc2626;background:#fff;box-shadow:0 0 8px rgba(220,38,38,0.3)}
+.inp-err{border-color:#dc2626!important;background:#fee2e2!important}
+.sbt{display:block;width:100%;padding:12px;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:2px solid #fbbf24;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo;transition:transform 0.2s}
+.sbt:hover{transform:scale(1.02)}
+.cats{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:10px 0}
+.cat{background:#fee2e2;color:#991b1b;padding:6px 14px;border-radius:15px;font-weight:900;cursor:pointer;font-size:13px;border:2px solid transparent;transition:0.2s}
+.cat.on{background:#dc2626;color:#fff;border-color:#fbbf24;transform:scale(1.05)}
+
+#pageHome{width:100%;max-width:1200px;display:flex;flex-direction:column;gap:15px;margin:0 auto;padding:0}
+.htitle{background:linear-gradient(135deg,#dc2626,#991b1b);padding:12px;border-radius:12px;text-align:center;border:3px solid #fbbf24;font-size:20px;font-weight:900}
 /* ✅ إصلاح التمدد: minmax(0,1fr) + min-width:0 */
-.secs{display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:clamp(6px,1vh,12px);width:100%}
+.secs{display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:15px;width:100%}
 @media(max-width:900px){.secs{grid-template-columns:repeat(2, minmax(0, 1fr))}}
 @media(max-width:600px){.secs{grid-template-columns:minmax(0, 1fr)}}
-.card{border-radius:10px;padding:clamp(8px,1.2vh,15px);display:flex;flex-direction:column;height:100%;min-width:0;overflow-wrap:break-word;word-break:break-word}
-.c-edu{background:linear-gradient(135deg,#14532d,#166534);border:2px solid #22c55e}
-.c-res{background:linear-gradient(135deg,#1e3a8a,#1e40af);border:2px solid #3b82f6}
-.c-ai{background:linear-gradient(135deg,#4c1d95,#6d28d9);border:2px solid #fbbf24}
-.c-srv{background:linear-gradient(135deg,#831843,#9d174d);border:2px solid #fbbf24}
-.c-job{background:linear-gradient(135deg,#0e7490,#155e75);border:2px solid #06b6d4}
-.c-dict{background:linear-gradient(135deg,#854d0e,#a16207);border:2px solid #eab308}
-.c-stage{background:linear-gradient(135deg,#7c2d12,#9a3412);border:2px solid #f97316}
-.ci{font-size:clamp(22px,3vh,34px);text-align:center;margin-bottom:4px}
-.ct{font-size:clamp(10px,1.4vh,14px);font-weight:900;color:#fbbf24;text-align:center;margin-bottom:clamp(4px,0.8vh,8px)}
+.card{border-radius:15px;padding:20px;display:flex;flex-direction:column;height:100%;min-width:0;overflow-wrap:break-word;word-break:break-word}
+.c-edu{background:linear-gradient(135deg,#14532d,#166534);border:3px solid #22c55e}
+.c-res{background:linear-gradient(135deg,#1e3a8a,#1e40af);border:3px solid #3b82f6}
+.c-ai{background:linear-gradient(135deg,#4c1d95,#6d28d9);border:3px solid #fbbf24}
+.c-srv{background:linear-gradient(135deg,#831843,#9d174d);border:3px solid #fbbf24}
+.c-job{background:linear-gradient(135deg,#0e7490,#155e75);border:3px solid #06b6d4}
+.c-dict{background:linear-gradient(135deg,#854d0e,#a16207);border:3px solid #eab308}
+.c-stage{background:linear-gradient(135deg,#7c2d12,#9a3412);border:3px solid #f97316}
+.ci{font-size:40px;text-align:center;margin-bottom:10px}
+.ct{font-size:15px;font-weight:900;color:#fbbf24;text-align:center;margin-bottom:15px}
 .card ul{list-style:none;flex:1}
-.card li{background:rgba(255,255,255,.1);padding:clamp(4px,0.7vh,8px) clamp(6px,1vw,10px);border-radius:6px;margin-bottom:clamp(3px,0.5vh,5px);font-size:clamp(10px,1.3vh,12px);font-weight:700;cursor:pointer;transition:0.15s;overflow-wrap:break-word;word-break:break-word}
-.card li:hover{background:rgba(251,191,36,.3);transform:translateX(-3px)}
-.hbtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-.btn{padding:clamp(5px,1vh,9px) clamp(12px,2vw,18px);border-radius:16px;font-family:Cairo;font-size:clamp(11px,1.4vh,13px);font-weight:900;cursor:pointer;color:#fff;border:none}
+.card li{background:rgba(255,255,255,.1);padding:10px 12px;border-radius:10px;margin-bottom:8px;font-size:13px;font-weight:700;cursor:pointer;transition:0.2s;overflow-wrap:break-word;word-break:break-word}
+.card li:hover{background:rgba(251,191,36,.3);transform:translateX(-5px)}
+.hbtns{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-top:15px}
+.btn{padding:10px 20px;border:none;border-radius:20px;font-family:Cairo;font-size:14px;font-weight:900;cursor:pointer;color:#fff}
 .bg{background:#22c55e}.bgr{background:#334155}
 
-#lesson{max-width:min(1000px,98vw);width:100%;margin:0 auto;padding:0 4px}
-.back{background:#334155;color:#fff;padding:clamp(4px,0.8vh,7px) clamp(10px,1.5vw,16px);border-radius:14px;border:none;cursor:pointer;font-weight:900;margin-bottom:6px;font-size:clamp(10px,1.3vh,12px);font-family:Cairo}
-/* ✅ إصلاح البطاقات */
-.lcard{background:linear-gradient(135deg,#16a34a,#14532d);border:2px solid #fbbf24;border-radius:10px;padding:clamp(8px,1.3vh,15px);text-align:center;cursor:pointer;margin-bottom:clamp(5px,1vh,10px);transition:0.2s;min-width:0;overflow-wrap:break-word;word-break:break-word}
-.lcard:hover{transform:translateY(-2px);box-shadow:0 3px 10px rgba(0,0,0,0.3)}
+#lesson{max-width:1000px;width:100%;margin:0 auto;padding:0 4px}
+.back{background:#334155;color:#fff;padding:8px 20px;border-radius:20px;border:none;cursor:pointer;font-weight:900;margin-bottom:15px;font-size:13px;font-family:Cairo}
+.lcard{background:linear-gradient(135deg,#16a34a,#14532d);border:3px solid #fbbf24;border-radius:15px;padding:20px;text-align:center;cursor:pointer;margin-bottom:15px;transition:0.2s;min-width:0;overflow-wrap:break-word;word-break:break-word}
+.lcard:hover{transform:translateY(-3px);box-shadow:0 5px 15px rgba(0,0,0,0.3)}
 .lcard.r{background:linear-gradient(135deg,#dc2626,#991b1b)}
 .lcard.p{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
 .lcard.j{background:linear-gradient(135deg,#0e7490,#155e75);border-color:#06b6d4}
 .lcard.o{background:linear-gradient(135deg,#f97316,#c2410c);border-color:#fbbf24}
-.li{font-size:clamp(24px,3.5vh,40px);margin-bottom:4px}
-.lt{font-size:clamp(12px,1.6vh,16px);font-weight:900;color:#fbbf24;margin-bottom:4px;line-height:1.3}
-.ld{font-size:clamp(10px,1.2vh,12px);color:#cbd5e1;line-height:1.3}
-/* ✅ إصلاح شبكة البطاقات */
-.sel{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%, clamp(150px,22vw,240px)),1fr));gap:clamp(6px,1vh,12px);margin:clamp(8px,1.5vh,15px) 0}
+.li{font-size:50px;margin-bottom:10px}
+.lt{font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:6px}
+.ld{font-size:13px;color:#cbd5e1}
+.sel{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%, 260px),1fr));gap:20px;margin:20px 0}
 
-.slide{background:#f8fafc;border-radius:10px;padding:clamp(8px,1.5vh,15px);margin:5px 0;color:#1e293b;box-shadow:0 2px 6px rgba(0,0,0,0.15);overflow-wrap:break-word;word-break:break-word}
-.sn{display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:clamp(2px,0.5vh,4px) clamp(6px,1vw,10px);border-radius:8px;font-size:clamp(10px,1.3vh,12px);font-weight:bold;margin-bottom:6px}
-.st{font-size:clamp(14px,2vh,20px);font-weight:900;color:#dc2626;text-align:center;margin-bottom:clamp(6px,1vh,12px);line-height:1.3}
-.simg{background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-radius:10px;padding:5px;margin:clamp(5px,0.8vh,10px) 0;text-align:center;border:1px dashed #3b82f6}
-.simg img{max-width:100%;max-height:clamp(80px,16vh,160px);border-radius:6px;object-fit:contain}
-.simg iframe{width:100%;height:clamp(150px,25vh,240px);border-radius:6px;border:none}
-.stxt{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:clamp(6px,1.2vh,12px);border-radius:10px;margin:clamp(6px,1vh,12px) 0;border-right:3px solid #f59e0b;font-size:clamp(11px,1.5vh,14px);line-height:1.55;color:#78350f;font-weight:600;overflow-wrap:break-word;word-break:break-word}
+.slide{background:#f8fafc;border-radius:15px;padding:20px;margin:10px 0;color:#1e293b;box-shadow:0 4px 10px rgba(0,0,0,0.2);overflow-wrap:break-word;word-break:break-word}
+.sn{display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:4px 12px;border-radius:10px;font-size:13px;font-weight:bold;margin-bottom:10px}
+.st{font-size:22px;font-weight:900;color:#dc2626;text-align:center;margin-bottom:15px}
+.simg{background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-radius:12px;padding:10px;margin:15px 0;text-align:center;border:2px dashed #3b82f6}
+.simg img{max-width:100%;max-height:220px;border-radius:10px;object-fit:contain}
+.simg iframe{width:100%;height:250px;border-radius:10px;border:none}
+.stxt{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:12px;border-radius:12px;margin:15px 0;border-right:4px solid #f59e0b;font-size:15px;line-height:1.8;color:#78350f;font-weight:600;overflow-wrap:break-word;word-break:break-word}
 .stxt strong{color:#dc2626;font-weight:900}
-/* ✅ إصلاح grid الترجمة */
-.strans{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-radius:10px;padding:clamp(4px,0.8vh,8px);margin:8px 0;display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:4px;text-align:center}
-.strans>div{background:#fff;padding:clamp(3px,0.5vh,6px);border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.08);min-width:0}
-.strans .lbl{font-size:8px;color:#94a3b8;margin-bottom:2px;font-weight:bold}
-.strans .ar{color:#dc2626;font-size:clamp(10px,1.3vh,13px);font-weight:900}
-.strans .fr{color:#1e88e5;font-size:clamp(9px,1.1vh,11px);font-weight:700}
-.strans .en{color:#16a34a;font-size:clamp(9px,1.1vh,11px);font-weight:700}
-.dc{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border-right:3px solid #3b82f6;padding:5px 8px;border-radius:6px;margin:6px 0;font-size:12px;font-weight:600}
-.dm{background:linear-gradient(135deg,#fce7f3,#fbcfe8);color:#9f1239;border-right:3px solid #e91e63;padding:5px 8px;border-radius:6px;margin:6px 0;font-size:12px;font-weight:600}
-.sb{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:clamp(5px,0.8vh,10px) 0}
-.spb{padding:clamp(3px,0.6vh,6px) clamp(8px,1.5vw,12px);border:none;border-radius:14px;cursor:pointer;font-family:Cairo;font-size:clamp(10px,1.2vh,12px);font-weight:900;color:#fff;transition:0.15s}
-.spb:hover{transform:scale(1.03)}
+.strans{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-radius:12px;padding:10px;margin:15px 0;display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:8px;text-align:center}
+.strans>div{background:#fff;padding:8px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);min-width:0}
+.strans .lbl{font-size:11px;color:#94a3b8;margin-bottom:4px;font-weight:bold}
+.strans .ar{color:#dc2626;font-size:15px;font-weight:900}
+.strans .fr{color:#1e88e5;font-size:13px;font-weight:700}
+.strans .en{color:#16a34a;font-size:13px;font-weight:700}
+.dc{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border-right:4px solid #3b82f6;padding:8px 12px;border-radius:10px;margin:10px 0;font-size:14px;font-weight:600}
+.dm{background:linear-gradient(135deg,#fce7f3,#fbcfe8);color:#9f1239;border-right:4px solid #e91e63;padding:8px 12px;border-radius:10px;margin:10px 0;font-size:14px;font-weight:600}
+.sb{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:15px 0}
+.spb{padding:6px 15px;border:none;border-radius:20px;cursor:pointer;font-family:Cairo;font-size:13px;font-weight:900;color:#fff;transition:0.2s}
+.spb:hover{transform:scale(1.05)}
 .sp-ar{background:linear-gradient(135deg,#dc2626,#991b1b)}
 .sp-fr{background:linear-gradient(135deg,#1e88e5,#0d47a1)}
 .sp-en{background:linear-gradient(135deg,#16a34a,#15803d)}
-.nav{display:flex;gap:5px;margin:clamp(8px,1.5vh,15px) auto;justify-content:center;flex-wrap:wrap}
-.nbtn{padding:clamp(5px,1vh,9px) clamp(10px,1.8vw,16px);border:none;border-radius:16px;font-family:Cairo;font-weight:900;font-size:clamp(10px,1.3vh,13px);cursor:pointer;color:#fff;transition:0.15s}
-.nbtn:hover{transform:scale(1.03)}
+.nav{display:flex;gap:10px;margin:20px auto;justify-content:center;flex-wrap:wrap}
+.nbtn{padding:10px 20px;border:none;border-radius:25px;font-family:Cairo;font-weight:900;font-size:14px;cursor:pointer;color:#fff;transition:0.2s}
+.nbtn:hover{transform:scale(1.05)}
 .np{background:linear-gradient(135deg,#3b82f6,#1e40af)}
 .nn{background:linear-gradient(135deg,#22c55e,#16a34a)}
 .ne{background:linear-gradient(135deg,#f59e0b,#b45309)}
-.prog{background:#334155;height:4px;border-radius:4px;overflow:hidden;margin:6px auto;max-width:100%}
+.prog{background:#334155;height:8px;border-radius:8px;overflow:hidden;margin:10px auto;max-width:100%}
 .progf{background:linear-gradient(90deg,#fbbf24,#22c55e);height:100%;width:0;transition:.3s}
-.opt{display:block;width:100%;padding:clamp(7px,1.2vh,11px);margin:clamp(4px,0.8vh,8px) 0;border:2px solid #475569;border-radius:10px;background:#f1f5f9;color:#1e293b;font-size:clamp(11px,1.4vh,14px);font-weight:900;cursor:pointer;font-family:Cairo;transition:0.15s;overflow-wrap:break-word;word-break:break-word}
+.opt{display:block;width:100%;padding:12px;margin:10px 0;border:3px solid #475569;border-radius:12px;background:#f1f5f9;color:#1e293b;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s;overflow-wrap:break-word;word-break:break-word}
 .opt:hover{background:#e2e8f0;border-color:#dc2626}
-.cert{background:linear-gradient(135deg,#fffef5,#fef3c7);border:4px double #dc2626;border-radius:10px;padding:clamp(10px,2vh,25px);text-align:center;color:#0f172a;margin:10px 0;box-shadow:0 6px 20px rgba(0,0,0,0.3)}
-.cert h1{color:#dc2626;font-size:clamp(16px,2.5vh,24px);margin-bottom:clamp(6px,1vh,10px)}
-.cert h2{color:#991b1b;font-size:clamp(13px,2vh,20px);margin:clamp(8px,1.5vh,15px) 0;border-bottom:2px solid #fbbf24;display:inline-block;padding-bottom:3px}
-.cert p{font-size:clamp(11px,1.5vh,14px);margin:5px 0;line-height:1.6}
-.cert .sign{margin-top:clamp(10px,2vh,20px);font-size:clamp(10px,1.3vh,12px);color:#475569;font-weight:bold}
-.svcard{background:linear-gradient(135deg,#831843,#9d174d);border:2px solid #fbbf24;border-radius:10px;padding:clamp(12px,2vh,20px);color:#fff;margin:8px 0;text-align:center}
-.svcard h3{color:#fbbf24;font-size:clamp(14px,2vh,18px);margin-bottom:8px}
-.svcard p{font-size:clamp(11px,1.4vh,13px);margin-bottom:10px;line-height:1.6}
-.svcard button{padding:clamp(6px,1vh,10px) clamp(15px,2.5vw,20px);background:#22c55e;color:#fff;border:none;border-radius:16px;font-weight:900;font-size:clamp(11px,1.4vh,13px);cursor:pointer;font-family:Cairo}
-.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;color:#fff}
+.cert{background:linear-gradient(135deg,#fffef5,#fef3c7);border:6px double #dc2626;border-radius:15px;padding:30px;text-align:center;color:#0f172a;margin:20px 0;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.cert h1{color:#dc2626;font-size:28px;margin-bottom:15px}
+.cert h2{color:#991b1b;font-size:24px;margin:20px 0;border-bottom:3px solid #fbbf24;display:inline-block;padding-bottom:5px}
+.cert p{font-size:16px;margin:10px 0;line-height:1.8}
+.cert .sign{margin-top:25px;font-size:14px;color:#475569;font-weight:bold}
+.svcard{background:linear-gradient(135deg,#831843,#9d174d);border:3px solid #fbbf24;border-radius:15px;padding:25px;color:#fff;margin:15px 0;text-align:center}
+.svcard h3{color:#fbbf24;font-size:22px;margin-bottom:15px}
+.svcard p{font-size:15px;margin-bottom:20px;line-height:1.8}
+.svcard button{padding:10px 25px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:15px;cursor:pointer;font-family:Cairo}
+.badge{display:inline-block;padding:4px 12px;border-radius:15px;font-size:13px;font-weight:900;color:#fff}
 .lvl-a{background:#64748b}.lvl-b{background:#3b82f6}.lvl-c{background:#22c55e}.lvl-d{background:#f59e0b}.lvl-e{background:#dc2626}
-.job-info{background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border-right:4px solid #0e7490;padding:8px 10px;border-radius:8px;margin:8px 0;color:#134e4a;font-size:12px;line-height:1.7}
+.job-info{background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border-right:6px solid #0e7490;padding:15px;border-radius:12px;margin:15px 0;color:#134e4a;font-size:15px;line-height:2}
 .job-info strong{color:#0e7490;font-weight:900}
-.apply-btn{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:clamp(5px,1vh,9px) clamp(12px,2vw,18px);border:2px solid #fbbf24;border-radius:16px;font-weight:900;cursor:pointer;font-family:Cairo;font-size:clamp(10px,1.3vh,12px);transition:0.15s}
-.del-btn{background:#dc2626;color:#fff;padding:4px 10px;border:none;border-radius:12px;font-weight:900;cursor:pointer;font-family:Cairo;font-size:11px;margin-right:6px}
-/* ✅ إصلاح grid الذاكرة */
-.mem{display:grid;grid-template-columns:repeat(4, minmax(0, 1fr));gap:6px;margin:10px 0}
-.mem .mc{background:#334155;padding:clamp(10px,2vh,18px);border-radius:8px;text-align:center;font-size:clamp(20px,3vh,28px);cursor:pointer;color:transparent;user-select:none;transition:0.15s}
-.mem .mc.on{background:#22c55e;color:#fff;transform:scale(1.03)}
+.apply-btn{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:10px 25px;border:3px solid #fbbf24;border-radius:25px;font-weight:900;cursor:pointer;font-family:Cairo;font-size:15px}
+.del-btn{background:#dc2626;color:#fff;padding:8px 15px;border:none;border-radius:20px;font-weight:900;cursor:pointer;font-family:Cairo;font-size:13px;margin-right:10px}
+.mem{display:grid;grid-template-columns:repeat(4, minmax(0, 1fr));gap:10px;margin:20px 0}
+.mem .mc{background:#334155;padding:20px;border-radius:12px;text-align:center;font-size:30px;cursor:pointer;color:transparent;user-select:none;transition:0.2s}
+.mem .mc.on{background:#22c55e;color:#fff;transform:scale(1.05)}
 .mem .mc.done{background:#fbbf24;color:#fff;cursor:default}
 .mem .mc:hover:not(.done){background:#475569}
-#bottomNav{position:fixed;bottom:0;left:0;width:100%;background:#1e293b;border-top:2px solid #fbbf24;display:flex;justify-content:center;gap:5px;padding:5px;z-index:9998;box-shadow:0 -3px 10px rgba(0,0,0,0.5);flex-shrink:0}
-#bottomNav button{padding:clamp(4px,0.8vh,7px) clamp(8px,1.5vw,14px);border-radius:14px;border:none;font-family:Cairo;font-size:clamp(9px,1.2vh,11px);font-weight:900;cursor:pointer;color:#fff;transition:0.15s}
-#bottomNav button:hover{transform:scale(1.03)}
+#bottomNav{position:fixed;bottom:0;left:0;width:100%;background:#1e293b;border-top:3px solid #fbbf24;display:flex;justify-content:center;gap:10px;padding:10px;z-index:9998;box-shadow:0 -5px 15px rgba(0,0,0,0.5);flex-shrink:0}
+#bottomNav button{padding:8px 15px;border-radius:20px;border:none;font-family:Cairo;font-size:13px;font-weight:900;cursor:pointer;color:#fff;transition:0.2s}
+#bottomNav button:hover{transform:scale(1.05)}
 .bn-home{background:#3b82f6}.bn-reg{background:#22c55e}.bn-exit{background:#dc2626}
-.game-grid{display:grid;gap:3px;justify-content:center;margin:8px 0}
-.game-cell{width:clamp(30px,5vh,42px);height:clamp(30px,5vh,42px);background:white;display:flex;align-items:center;justify-content:center;font-size:clamp(12px,2vh,17px);font-weight:bold;cursor:pointer;border-radius:6px;transition:0.1s;color:#1e293b}
+.game-grid{display:grid;gap:5px;justify-content:center;margin:20px 0}
+.game-cell{width:45px;height:45px;background:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;cursor:pointer;border-radius:10px;transition:0.1s;color:#1e293b}
 .game-cell.selected{background:#ffd700;transform:scale(0.95)}
 .game-cell.found{background:#4caf50;color:white}
-.game-words-list{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:8px 0}
-.game-word-item{background:white;padding:4px 10px;border-radius:20px;cursor:pointer;font-weight:bold;color:#1e293b;font-size:11px}
+.game-words-list{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:15px 0}
+.game-word-item{background:white;padding:8px 15px;border-radius:50px;cursor:pointer;font-weight:bold;color:#1e293b;font-size:14px}
 .game-word-item.found{background:#4caf50;color:white;text-decoration:line-through}
-.feedback{padding:6px;border-radius:20px;margin:6px 0;text-align:center;font-weight:bold;font-size:12px}
+.feedback{padding:10px;border-radius:50px;margin:15px 0;text-align:center;font-weight:bold;font-size:14px}
 .feedback.success{background:#d4edda;color:#155724}
 .feedback.error{background:#f8d7da;color:#721c24}
 .feedback.warning{background:#fff3cd;color:#856404}
-.dict-box{background:#1e293b;padding:12px;border-radius:10px;border:2px solid #eab308;width:100%;max-width:min(800px,98vw);margin:0 auto}
-.dict-select{width:100%;padding:6px;border-radius:6px;margin-bottom:8px;background:#0f172a;color:#fff;border:1px solid #eab308;font-family:Cairo;font-size:12px}
-.dict-term{font-size:clamp(16px,2.3vh,22px);font-weight:bold;color:#eab308;text-align:center;margin-bottom:6px}
-.dict-def{background:#0f172a;padding:8px;border-radius:6px;color:#cbd5e1;line-height:1.5;margin-bottom:8px;font-size:12px}
-.dict-trans{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px}
-.dict-btn{padding:5px 10px;border-radius:14px;border:none;cursor:pointer;font-weight:bold;color:white;font-size:11px}
-#lesson > .nav{position:sticky;bottom:62px;background:rgba(15,23,42,0.92);padding:6px;border-radius:16px;backdrop-filter:blur(8px);z-index:50;box-shadow:0 -2px 10px rgba(0,0,0,0.4)}
+.dict-box{background:#1e293b;padding:20px;border-radius:15px;border:2px solid #eab308;width:100%;max-width:800px;margin:0 auto}
+.dict-select{width:100%;padding:10px;border-radius:10px;margin-bottom:15px;background:#0f172a;color:#fff;border:1px solid #eab308;font-family:Cairo}
+.dict-term{font-size:24px;font-weight:bold;color:#eab308;text-align:center;margin-bottom:10px}
+.dict-def{background:#0f172a;padding:15px;border-radius:10px;color:#cbd5e1;line-height:1.6;margin-bottom:15px}
+.dict-trans{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:15px}
+.dict-btn{padding:8px 15px;border-radius:20px;border:none;cursor:pointer;font-weight:bold;color:white}
+#lesson > .nav{position:sticky;bottom:60px;background:rgba(15,23,42,0.92);padding:8px;border-radius:16px;backdrop-filter:blur(8px);z-index:50}
 #lesson > .prog{position:sticky;top:0;z-index:50}
 @keyframes ys{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
 @keyframes pl{50%{box-shadow:0 0 45px #ef4444}}
@@ -177,20 +174,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 @keyframes blinkImg{0%,70%{opacity:1}85%,100%{opacity:0}}
 @keyframes blinkTxt{0%,70%{opacity:0}85%,100%{opacity:1}}
 @keyframes redMarquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
-@media (max-height:500px){
-  .logo{width:clamp(50px,14vh,90px)!important;height:clamp(50px,14vh,90px)!important}
-  #gw{padding:6px!important}
-  .inp{height:24px!important;font-size:10px!important;margin-bottom:3px!important}
-  #gw>div:first-child{font-size:14px!important}
-  #gw h2{font-size:12px!important;margin-bottom:4px!important}
-  .sbt{padding:5px!important;font-size:11px!important}
-  .cat{padding:2px 6px!important;font-size:9px!important}
-  .stxt{font-size:11px!important;padding:5px!important}
-  .st{font-size:13px!important;margin-bottom:5px!important}
-  .slide{padding:6px!important}
-  .spb{padding:2px 6px!important;font-size:9px!important}
-  .nbtn{padding:4px 8px!important;font-size:10px!important}
-}
 </style>
 </head>
 <body>
@@ -309,6 +292,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
+// ✅ تهيئة Firebase داخل try/catch (تعمل المنصة محلياً إذا لم تُضبط المفاتيح)
 var firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -317,8 +301,15 @@ var firebaseConfig = {
   messagingSenderId: "YOUR_SENDER_ID",
   appId: "YOUR_APP_ID"
 };
-if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-var db = firebase.firestore();
+var db = null;
+try {
+  if (typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    db = firebase.firestore();
+  }
+} catch(e) {
+  console.warn("Firebase not configured. Running in offline mode.");
+}
 
 Z.WEB3FORMS_KEY = 'ضع_مفتاح_الوصول_هنا';
 
@@ -423,9 +414,13 @@ Z.register=function(){
   
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date:new Date().toLocaleDateString('ar-TN'),isSub:false};
   
-  db.collection("users").add(Z.user)
-  .then(function() { console.log("✅ محفوظ في Firebase"); })
-  .catch(function(error) { console.error("❌ خطأ Firebase:", error); });
+  if (db) {
+    db.collection("users").add(Z.user).catch(function(error) { console.error("Firebase:", error); });
+  } else {
+    var localUsers = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
+    localUsers.push(Z.user);
+    localStorage.setItem('zaid_local_users', JSON.stringify(localUsers));
+  }
   
   if(Z.WEB3FORMS_KEY && Z.WEB3FORMS_KEY !== 'ضع_مفتاح_الوصول_هنا') {
     fetch('https://api.web3forms.com/submit', {
@@ -439,9 +434,7 @@ Z.register=function(){
         prof: p, spec: s, country: c, city: ci,
         category: Z.selectedCat, date: Z.user.date
       })
-    }).then(function(res){ return res.json(); })
-    .then(function(data){ console.log('📧 Web3Forms:', data); })
-    .catch(function(err){ console.error('❌ Web3Forms:', err); });
+    }).catch(function(err){ console.error('Web3Forms:', err); });
   }
   
   Z.visitorAttempts=0; 
@@ -476,1180 +469,1058 @@ Z.logout=function(){
     var el=document.getElementById(id); if(el) el.value='';
   });
 };
-<body>
+Z.showStats=function(){
+  var o=document.getElementById('statsModal');if(o)o.remove();
+  var m=document.createElement('div');m.id='statsModal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين...</div>';
+  document.body.appendChild(m);
 
-<div id="top">
-<span id="ti" style="font-size:22px;">🎭</span>
-<span id="tt">مرحباً — أنت زائر</span>
-<button id="br" onclick="ZAID.showPage('pageWelcome')" style="background:#fbbf24;color:#1e293b;">🔑 سجّل</button>
-<button id="bstats" onclick="ZAID.showStats()" style="display:none;background:#06b6d4;color:#fff;">📊 الإحصائيات</button>
-<button id="bs" onclick="ZAID.showSub()" style="display:none;background:#22c55e;color:#fff;">💳 اشترك</button>
-<button id="bo" onclick="ZAID.logout()" style="background:#dc2626;color:#fff;">🚪 خروج</button>
-</div>
+  function renderStats(usersList, fromServer) {
+    var todayStr=new Date().toLocaleDateString('ar-TN');
+    var todayUsers=usersList.filter(function(u){return u.date===todayStr;});
+    var subscribers=usersList.filter(function(u){return u.isSub===true;});
+    
+    var usersHtml='';
+    if(usersList.length===0) usersHtml='<div style="color:#94a3b8;text-align:center;padding:12px;">لا يوجد مسجلون بعد.</div>';
+    else {
+      usersList.forEach(function(u,i){
+        var subBtn = u.isSub 
+          ? '<button onclick="ZAID.toggleSub(\''+(u._docId||i)+'\',true)" style="background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">❌ إلغاء الاشتراك</button>'
+          : '<button onclick="ZAID.toggleSub(\''+(u._docId||i)+'\',false)" style="background:#22c55e;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">✅ تفعيل الاشتراك</button>';
+        
+        var subBadge = u.isSub 
+          ? '<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">مشترك</span>' 
+          : '<span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">غير مشترك</span>';
 
-<div id="yellow">
-<div class="yw"><div class="yt">🔒 التسجيل مجاني • سجّل الآن واستمتع بكل المحتوى • منصة زايد</div></div>
-<button onclick="ZAID.showPage('pageWelcome')">🔑 سجّل</button>
-</div>
-
-<div id="main">
-
-<div id="pageWelcome">
-  <div class="logo">
-    <div class="ring"></div>
-    <div class="flags"><svg viewBox="0 0 185 185"><defs><g id="tn"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="#fff" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="#fff"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="#fff"/></g></defs><use href="#tn" x="92" y="12"/><use href="#tn" x="160" y="54"/><use href="#tn" x="160" y="132"/><use href="#tn" x="92" y="174"/><use href="#tn" x="24" y="132"/><use href="#tn" x="24" y="54"/></svg></div>
-    <div class="tv">
-      <div class="tvb">
-        <img src="https://i.postimg.cc/MHGWk2FL/5120251.jpg" onerror="this.style.display='none';">
-        <div class="tvt"><span>منصة</span><span>زايد</span></div>
-      </div>
-      <div class="tvs"></div><div class="tvb2"></div>
-    </div>
-  </div>
-  
-  <div class="wctxt">
-    <div class="wctxt-inner">مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وبحثا علميا</div>
-  </div>
-  
-  <div id="gw">
-    <div style="text-align:center;font-size:35px;margin-bottom:5px;">👋</div>
-    <h2>🔑 التسجيل المجاني</h2>
-    <div class="err" id="err"></div>
-    <input class="inp" id="fn" placeholder="👤 الاسم الكامل (ثلاثي) *">
-    <input class="inp" id="fp" placeholder="💼 المهنة *">
-    <input class="inp" id="fs" placeholder="🎯 الاختصاص *">
-    <input class="inp" id="fe" type="email" placeholder="📧 البريد الإلكتروني *">
-    <input class="inp" id="fh" type="tel" placeholder="📱 رقم الواتساب *">
-    <input class="inp" id="fc" placeholder="🌍 بلد الإقامة *" value="تونس">
-    <input class="inp" id="fci" placeholder="🏙️ المدينة *">
-    <div class="cats" id="cats"></div>
-    <button class="sbt" onclick="ZAID.register()">🔑 ابدأ الآن مجاناً</button>
-    <button type="button" onclick="ZAID.logout()" style="display:block;width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;font-weight:900;">🚪 خروج / إلغاء</button>
-    <div style="text-align:center;margin-top:10px;">
-      <button type="button" onclick="ZAID.adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:13px;font-family:Cairo;">👑 دخول المشرف</button>
-    </div>
-  </div>
-</div>
-
-<div id="pageHome" class="hide">
-<div class="htitle">🌟 مرحباً <span id="un"></span> 🌟</div>
-<div class="secs">
-<div class="card c-edu"><div class="ci">🎓</div><div class="ct">التعليم والتكوين</div><ul>
-<li onclick="ZAID.openCat('tech')">📖 التربية التكنولوجية</li>
-<li onclick="ZAID.openCat('arabic')">🌙 اللغة العربية</li>
-<li onclick="ZAID.openCat('games')">🎮 الألعاب</li>
-</ul></div>
-<div class="card c-stage"><div class="ci">🏫</div><div class="ct">المراحل التعليمية</div><ul>
-<li onclick="ZAID.openCat('primary')">🎒 الابتدائي</li>
-<li onclick="ZAID.openCat('middle')">📘 الإعدادي</li>
-<li onclick="ZAID.openCat('high')">🎓 الثانوي</li>
-</ul></div>
-<div class="card c-res"><div class="ci">🔬</div><div class="ct">البحث العلمي</div><ul>
-<li onclick="ZAID.openCat('lectures')">🎤 المحاضرات</li>
-<li onclick="ZAID.openCat('books')">📚 الكتب</li>
-</ul></div>
-<div class="card c-ai"><div class="ci">🧠</div><div class="ct">الذكاء الاصطناعي</div><ul>
-<li onclick="ZAID.openCat('ai')">🤖 مسارات AI</li>
-</ul></div>
-<div class="card c-dict"><div class="ci">📖</div><div class="ct">المنجد الرباعي</div><ul>
-<li onclick="ZAID.showDictionary()">🔍 قاموس المصطلحات (4000)</li>
-</ul></div>
-<div class="card c-job"><div class="ci">💼</div><div class="ct">عروض التشغيل</div><ul>
-<li onclick="ZAID.openJobs()">📋 عروض المؤسسات</li>
-<li id="adminAddJob" onclick="ZAID.jobForm()" style="display:none;background:rgba(251,191,36,.3)">➕ إضافة عرض (للمشرف)</li>
-</ul></div>
-<div class="card c-srv"><div class="ci">🏫</div><div class="ct">الخدمات الجامعية</div><ul>
-<li onclick="ZAID.showSeekerForm('seeker')">👤 باحث عن عمل / تربص</li>
-<li onclick="ZAID.openSrv('internship')">📄 طلب تربص</li>
-<li onclick="ZAID.openSrv('job')">💼 طلب شغل</li>
-<li onclick="ZAID.openSrv('consult')">💡 استشارات</li>
-<li onclick="ZAID.openSrv('grad')">🎯 مشاريع تخرج</li>
-</ul></div>
-</div>
-<div class="hbtns">
-<button class="btn bg" onclick="ZAID.showSub()">💳 اشترك</button>
-<button class="btn bgr" onclick="ZAID.logout()">🚪 خروج</button>
-</div>
-</div>
-
-<div id="pageLesson" class="hide">
-<div id="lesson">
-<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
-<div id="lc"></div>
-</div>
-</div>
-
-</div>
-
-<div id="bottomNav">
-  <button id="btnNavHome" class="bn-home" onclick="ZAID.goHome()">🏠 الأقسام</button>
-  <button id="btnNavReg" class="bn-reg" onclick="ZAID.logout()">🔑 العودة للتسجيل</button>
-  <button id="btnNavExit" class="bn-exit" onclick="ZAID.exitPlatform()">🚪 مغادرة المنصة</button>
-</div>
-
-<script>
-(function(){
-'use strict';
-var Z=window.ZAID={};
-
-var firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-var db = firebase.firestore();
-
-Z.WEB3FORMS_KEY = 'ضع_مفتاح_الوصول_هنا';
-
-Z.ADMIN='012345'; 
-Z.WA='21655335477';
-Z.user=null;Z.admin=false;Z.audio=null;Z.selectedCat=null;
-Z.lessons={};Z.exams={};Z.services={};Z.jobs=[];Z.seekers=[];
-Z.cur={key:'',idx:0};Z.exam={key:'',idx:0,score:0,qs:[]};
-Z.visitorAttempts=0;
-Z.LVL=['تقني','تقني سامي','مهندس','ماجستير','دكتوراه'];
-Z.LVL_CLS={'تقني':'lvl-a','تقني سامي':'lvl-b','مهندس':'lvl-c','ماجستير':'lvl-d','دكتوراه':'lvl-e'};
-Z.addLesson=function(k,m,s){Z.lessons[k]={meta:m,slides:s};};
-Z.addExam=function(k,q){Z.exams[k]=q;};
-Z.addSrv=function(k,d){Z.services[k]=d;};
-
-Z.saveJobs=function(){try{localStorage.setItem('zaid_jobs_v4',JSON.stringify(Z.jobs));}catch(e){}};
-Z.loadJobs=function(){try{var j=localStorage.getItem('zaid_jobs_v4');if(j)Z.jobs=JSON.parse(j);}catch(e){}};
-Z.saveSeekers=function(){try{localStorage.setItem('zaid_seekers_v4',JSON.stringify(Z.seekers));}catch(e){}};
-Z.loadSeekers=function(){try{var s=localStorage.getItem('zaid_seekers_v4');if(s)Z.seekers=JSON.parse(s);}catch(e){}};
-
-var cats=['طفل','ولي','طالب','أستاذ','باحث','خبير'];
-var cg=document.getElementById('cats');
-cats.forEach(function(c){
-  var b=document.createElement('div');b.className='cat';b.textContent=c;
-  b.onclick=function(){document.querySelectorAll('.cat').forEach(function(x){x.classList.remove('on');});b.classList.add('on');Z.selectedCat=c;};
-  cg.appendChild(b);
-});
-
-Z.exitPlatform=function(){
-  if(!confirm('هل تريد الخروج تماماً من المنصة؟')) return;
-  document.body.innerHTML = '<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#0f172a;color:#fff;text-align:center;font-family:Cairo,sans-serif;">'
-    + '<h1 style="color:#22c55e;font-size:40px;margin-bottom:20px;">👋 تم الخروج بنجاح</h1>'
-    + '<p style="font-size:20px;margin-bottom:30px;">يمكنك إغلاق هذه النافذة الآن بأمان.</p>'
-    + '<button onclick="location.reload()" style="padding:15px 40px;background:#3b82f6;color:#fff;border:none;border-radius:30px;font-size:18px;font-weight:900;cursor:pointer;font-family:Cairo;">الدخول مجدداً</button></div>';
-};
-
-Z.checkVisitor=function(){
-  if(Z.user || Z.admin) return true;
-  Z.visitorAttempts++;
-  if(Z.visitorAttempts > 1) {
-    document.body.innerHTML = '<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:Cairo,sans-serif;">'
-      + '<h1 style="color:#dc2626;font-size:40px;margin-bottom:20px;">🚫 تم طردك من المنصة</h1>'
-      + '<p style="font-size:20px;line-height:1.8;">لقد حاولت الدخول إلى المحتوى دون تسجيل.<br>التسجيل إلزامي ومجاني، ولقد استنفدت محاولتك الوحيدة.</p>'
-      + '<p style="font-size:16px;color:#fbbf24;margin-top:10px;">يرجى تحديث الصفحة والتسجيل للاستفادة من المنصة.</p>'
-      + '<button onclick="location.reload()" style="margin-top:25px;padding:12px 30px;background:#3b82f6;color:#fff;border:none;border-radius:25px;font-size:16px;cursor:pointer;font-weight:900;font-family:Cairo;">🔄 تحديث الصفحة</button></div>';
-    return false;
+        usersHtml+='<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:12px;line-height:1.7;">'
+          +'<div style="color:#fbbf24;font-weight:900;font-size:13px;">'+subBadge+' 👤 '+(i+1)+'. '+(u.name||'—')+'</div>'
+          +'<div style="color:#cbd5e1;">📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')+'</div>'
+          +'<div style="color:#94a3b8;">💼 '+(u.prof||'—')+' — 🎯 '+(u.spec||'—')+'</div>'
+          +'<div style="color:#94a3b8;">🌍 '+(u.country||'—')+' — '+(u.city||'—')+'</div>'
+          +'<div style="color:#94a3b8;font-size:11px;">🏷️ '+(u.cat||'—')+' — 📅 '+(u.date||'—')+'</div>'
+          +subBtn
+          +'</div>';
+      });
+    }
+    
+    document.getElementById('statsModal').remove();
+    var m2=document.createElement('div');m2.id='statsModal';
+    m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
+      +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2>'
+      +'<div style="font-size:12px;color:'+(fromServer?'#22c55e':'#f59e0b')+';margin-bottom:10px;">'
+      + (fromServer ? '✅ متصل بقاعدة بيانات Firebase' : '⚠️ وضع محلي (لم يتم ربط Firebase بعد)')
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
+        +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 مسجلون اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
+        +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 إجمالي المسجلين:</span><span style="color:#fbbf24">'+usersList.length+'</span></div>'
+        +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
+      +'</div>'
+      +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
+      +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div>'
+      +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
+    document.body.appendChild(m2);
   }
-  alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nلديك محاولة واحدة فقط. إذا حاولت الدخول مرة أخرى دون تسجيل سيتم طردك من المنصة فوراً.');
-  Z.showPage('pageWelcome');
-  return false;
+
+  if (db) {
+    db.collection("users").get().then(function(querySnapshot) {
+      var users = [];
+      querySnapshot.forEach(function(doc) {
+        var u = doc.data();
+        u._docId = doc.id;
+        users.push(u);
+      });
+      renderStats(users, true);
+    }).catch(function(error) {
+      console.error("Firebase error:", error);
+      var localUsers = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
+      renderStats(localUsers, false);
+    });
+  } else {
+    var localUsers = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
+    renderStats(localUsers, false);
+  }
 };
 
-Z.showPage=function(id){
-  if(id !== 'pageWelcome' && !Z.user && !Z.admin){ Z.checkVisitor(); return; }
-  document.querySelectorAll('#main > div[id^="page"]').forEach(function(p){p.classList.add('hide');});
-  document.getElementById(id).classList.remove('hide');
+Z.toggleSub=function(docId, currentStatus){
+  if(!Z.admin){ alert('هذه الميزة للمشرف فقط'); return; }
+  var newStatus = !currentStatus;
+  var msg = newStatus ? 'تفعيل اشتراك هذا المستخدم؟' : 'إلغاء اشتراك هذا المستخدم؟';
+  if(!confirm(msg)) return;
+  
+  if (db) {
+    db.collection("users").doc(docId).update({ isSub: newStatus })
+    .then(function() { alert('✅ تم تحديث حالة الاشتراك'); Z.showStats(); })
+    .catch(function(error) { alert('حدث خطأ: ' + error); });
+  } else {
+    var localUsers = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
+    var idx = parseInt(docId);
+    if (!isNaN(idx) && localUsers[idx]) {
+      localUsers[idx].isSub = newStatus;
+      localStorage.setItem('zaid_local_users', JSON.stringify(localUsers));
+      alert('✅ تم تحديث حالة الاشتراك محلياً');
+      Z.showStats();
+    }
+  }
+};
+
+Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
+Z.speak=function(t,l){
+  if(!t)return;Z.stopSpeak();
+  var tl=l==='ar'?'ar':l==='fr'?'fr':'en';
+  var u='https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURIComponent(t)+'&tl='+tl+'&client=gtx';
+  Z.audio=new Audio(u);
+  Z.audio.play().catch(function(){
+    if('speechSynthesis' in window){
+      var s=new SpeechSynthesisUtterance(t);s.lang=l==='ar'?'ar-SA':l==='fr'?'fr-FR':'en-US';s.rate=0.9;
+      window.speechSynthesis.speak(s);
+    }
+  });
+};
+
+Z.showSub=function(){
+  var o=document.getElementById('sm');if(o)o.remove();
+  var m=document.createElement('div');m.id='sm';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:460px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
+    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
+    +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس)</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">30 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div></div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">20 دولار / 20 يورو</div><div style="font-size:12px;color:#94a3b8">عبر Western Union</div></div>'
+    +'<div style="background:rgba(34,197,94,.15);border-right:4px solid #22c55e;padding:10px;border-radius:8px;font-size:13px;color:#22c55e;text-align:right;margin:10px 0;line-height:1.7;"><strong>⚡ الدفع يستغرق دقيقة واحدة فقط</strong></div>'
+    +'<div style="background:rgba(251,191,36,.1);border-right:4px solid #fbbf24;padding:10px;border-radius:8px;font-size:13px;color:#fbbf24;text-align:right;margin-bottom:10px;line-height:1.7;"><strong>💡 مزايا الاشتراك:</strong><br>• رفع وتحميل كل محتوى المنصة <strong>مرة واحدة سنوياً</strong><br>• شهادة معتمدة بعد كل اختبار ناجح</div>'
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
+    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
+  document.body.appendChild(m);
+};
+
+Z.wa=function(){
+  var u=Z.user||{};
+  var msg='مرحباً، أرغب في الاشتراك في منصة زايد.\n\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'')+'\n\nطريقة الدفع: (e-Dinar / Western Union)';
+  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
+};
+
+Z.openCat=function(cat){
+  if(!Z.checkVisitor()) return;
+  var ks=Object.keys(Z.lessons).filter(function(k){return Z.lessons[k].meta.cat===cat;});
+  var c=document.getElementById('lc');
+  if(!ks.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">🚧</div><div class="st">'+cat+'</div><div class="stxt">قيد الإعداد</div></div>';}
+  else{
+    var h='<div class="sel">';
+    ks.forEach(function(k){var m=Z.lessons[k].meta;
+      h+='<div class="lcard '+(m.color||'')+'" onclick="ZAID.startLesson(\''+k+'\')"><div class="li">'+(m.icon||'📖')+'</div><div class="lt">'+m.name+'</div><div class="ld">'+(m.desc||'')+'</div></div>';
+    });
+    h+='</div>';c.innerHTML=h;
+  }
+  Z.showPage('pageLesson');
+};
+
+Z.openSrv=function(key){
+  if(!Z.checkVisitor()) return;
+  if(key==='seeker' || key==='internship' || key==='job'){ Z.showSeekerForm(key); return; }
+  var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
+  var c=document.getElementById('lc');
+  c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
+  Z.showPage('pageLesson');
+};
+
+Z.openJobs=function(){
+  if(!Z.checkVisitor()) return;
+  var c=document.getElementById('lc');
+  if(!Z.jobs.length){
+    c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">💼</div><div class="st">لا توجد عروض تشغيل حالياً</div><div class="stxt">إذا كنت مؤسسة وترغب في نشر عرض، يرجى التواصل معنا.</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
+  } else {
+    var h='<div class="sel">';
+    Z.jobs.forEach(function(j,idx){
+      h+='<div class="lcard j" onclick="ZAID.viewJob('+idx+')"><div class="li">'+(j.logo?'<img src="'+j.logo+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 auto">':'🏢')+'</div><div class="lt">'+(j.title||'عرض')+'</div><div class="ld">'+(j.company||'')+'</div><div style="margin-top:10px"><span class="badge '+(Z.LVL_CLS[j.level]||'lvl-c')+'">'+(j.level||'غير محدد')+'</span></div></div>';
+    });
+    h+='</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div>';
+    c.innerHTML=h;
+  }
+  Z.showPage('pageLesson');
+};
+
+Z.viewJob=function(idx){
+  var j=Z.jobs[idx];if(!j)return;
+  var c=document.getElementById('lc');
+  var h='<div class="slide" style="padding:0;overflow:hidden;">';
+  h+='<div style="background:#0e7490;padding:20px;text-align:center;color:white">';
+  h+='<img src="'+(j.logo||'https://cdn-icons-png.flaticon.com/512/3106/3106773.png')+'" style="width:80px;height:80px;border-radius:50%;border:3px solid #fff;object-fit:cover;background:#fff;margin-bottom:10px" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/3106/3106773.png\'">';
+  h+='<h2 style="font-size:22px;margin:0">'+(j.company||'اسم المؤسسة')+'</h2>';
+  h+='<div style="font-size:16px;margin-top:5px;color:#cffafe">'+(j.activity||'ميدان النشاط')+'</div></div>';
+  h+='<div style="padding:20px">';
+  h+='<div class="job-info" style="border-right-color:#06b6d4;background:#ecfeff;color:#164e63;line-height:2.2;font-size:15px">';
+  h+='<div><strong>📍 العنوان:</strong> '+(j.address||'—')+'</div>';
+  h+='<div><strong>🧾 السجل الجبائي:</strong> '+(j.tax||'—')+'</div>';
+  h+='<div><strong>📊 المستوى المطلوب:</strong> '+(j.level||'—')+'</div>';
+  h+='<div><strong>💼 المسمى الوظيفي:</strong> '+(j.title||'—')+'</div>';
+  h+='<div style="margin-top:10px;padding-top:10px;border-top:1px dashed #0e7490">';
+  h+='<div><strong>📱 الواتساب:</strong> '+(j.phone||'—')+'</div>';
+  h+='<div><strong>📧 الإيميل:</strong> '+(j.email||'—')+'</div></div></div>';
+  h+='<div class="nav" style="margin-top:20px">';
+  if(j.phone) h+='<button class="apply-btn" onclick="window.open(\'https://wa.me/'+j.phone+'\',\'_blank\')">📱 تقدم للوظيفة</button>';
+  h+='<button class="nbtn ne" onclick="ZAID.openJobs()">🔙 العودة للعروض</button></div>';
+  if(Z.admin) h+='<div style="text-align:center;margin-top:15px"><button class="del-btn" onclick="ZAID.delJob('+idx+')">🗑️ حذف هذا العرض</button></div>';
+  h+='</div></div>';
+  c.innerHTML=h;Z.showPage('pageLesson');
+};
+
+Z.delJob=function(idx){
+  if(!Z.admin){alert('للمشرف فقط');return;}
+  if(!confirm('حذف هذا العرض؟'))return;
+  Z.jobs.splice(idx,1);Z.saveJobs();Z.openJobs();
+};
+
+Z.jobForm=function(){
+  if(!Z.admin){alert('هذه الميزة للمشرف فقط');return;}
+  var old=document.getElementById('jf');if(old)old.remove();
+  var m=document.createElement('div');m.id='jf';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
+  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:600px;width:100%;border:4px solid #06b6d4;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
+    +'<h2 style="color:#06b6d4;text-align:center;margin-bottom:15px;font-size:20px">🏢 إضافة عرض تشغيل</h2>'
+    +'<input class="inp" id="jfCompany" placeholder="اسم المؤسسة / الشركة *">'
+    +'<input class="inp" id="jfActivity" placeholder="ميدان النشاط *">'
+    +'<input class="inp" id="jfAddress" placeholder="العنوان / مكان الإقامة *">'
+    +'<input class="inp" id="jfTax" placeholder="رقم السجل الجبائي *">'
+    +'<input class="inp" id="jfPhone" placeholder="رقم الواتساب *">'
+    +'<input class="inp" id="jfEmail" placeholder="البريد الإلكتروني *">'
+    +'<input class="inp" id="jfLogo" placeholder="رابط شعار المؤسسة (URL) - اختياري">'
+    +'<hr style="margin:10px 0;border-color:#334155">'
+    +'<input class="inp" id="jfTitle" placeholder="المسمى الوظيفي المطلوب *">'
+    +'<select class="inp" id="jfLevel">'+opts+'</select>'
+    +'<button class="sbt" onclick="ZAID.saveJob()" style="background:#06b6d4;border-color:#fff">💾 حفظ العرض</button>'
+    +'<button onclick="document.getElementById(\'jf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+
+Z.saveJob=function(){
+  var c=document.getElementById('jfCompany');
+  var act=document.getElementById('jfActivity');
+  var addr=document.getElementById('jfAddress');
+  var tax=document.getElementById('jfTax');
+  var phone=document.getElementById('jfPhone');
+  var email=document.getElementById('jfEmail');
+  var t=document.getElementById('jfTitle');
+  var l=document.getElementById('jfLevel').value;
+  var logo=document.getElementById('jfLogo').value.trim();
+  [c, act, addr, tax, phone, email, t].forEach(function(el){el.classList.remove('inp-err');});
+  if(!c.value.trim()||!act.value.trim()||!addr.value.trim()||!tax.value.trim()||!phone.value.trim()||!email.value.trim()||!t.value.trim()){
+    alert('يرجى ملء جميع الحقول الإلزامية (*)');
+    if(!c.value.trim()) c.classList.add('inp-err');
+    if(!act.value.trim()) act.classList.add('inp-err');
+    if(!addr.value.trim()) addr.classList.add('inp-err');
+    if(!tax.value.trim()) tax.classList.add('inp-err');
+    if(!phone.value.trim()) phone.classList.add('inp-err');
+    if(!email.value.trim()) email.classList.add('inp-err');
+    if(!t.value.trim()) t.classList.add('inp-err');
+    return;
+  }
+  Z.jobs.unshift({company:c.value.trim(), activity:act.value.trim(), address:addr.value.trim(), tax:tax.value.trim(), phone:phone.value.trim(), email:email.value.trim(), logo:logo||'', title:t.value.trim(), level:l});
+  Z.saveJobs();document.getElementById('jf').remove();alert('✅ تم حفظ العرض بنجاح');Z.openJobs();
+};
+
+Z.showSeekerForm=function(type){
+  if(!Z.checkVisitor()) return;
+  var old=document.getElementById('sf');if(old)old.remove();
+  var m=document.createElement('div');m.id='sf';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
+  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
+  var title = type === 'internship' ? '📄 طلب تربص' : (type === 'job' ? '💼 طلب شغل' : '👤 إضافة سيرة ذاتية');
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:650px;width:100%;border:4px solid #22c55e;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
+    +'<h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">'+title+'</h2>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +'<input class="inp" id="sfName" placeholder="الاسم *">'
+    +'<input class="inp" id="sfSurname" placeholder="اللقب *">'
+    +'</div>'
+    +'<input class="inp" id="sfSection" placeholder="القسم *">'
+    +'<input class="inp" id="sfSchool" placeholder="المدرسة *">'
+    +'<input class="inp" id="sfSpec" placeholder="الاختصاص *">'
+    +'<select class="inp" id="sfLevel">'+opts+'</select>'
+    +'<input class="inp" id="sfPhone" placeholder="رقم الواتساب *">'
+    +'<input class="inp" id="sfEmail" placeholder="البريد الإلكتروني *">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +'<input class="inp" id="sfCity" placeholder="المدينة *">'
+    +'<input class="inp" id="sfCountry" placeholder="البلد *" value="تونس">'
+    +'</div>'
+    +'<input class="inp" id="sfField" placeholder="الموضوع او المجال المطلوب *">'
+    +'<div style="margin-bottom:10px;color:#fbbf24;font-weight:bold;font-size:14px;">📎 ارفاق السيرة الذاتية (PDF أو صورة) *:</div>'
+    +'<input type="file" id="sfCV" class="inp" accept=".pdf,image/*" style="padding:8px;height:auto;background:#0f172a;color:#fff;border:1px solid #334155;">'
+    +'<button class="sbt" onclick="ZAID.saveSeeker(\''+type+'\')" style="background:#22c55e;border-color:#fff;margin-top:15px;">💾 حفظ وإرسال الطلب</button>'
+    +'<button onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+
+Z.saveSeeker=function(type){
+  var name=document.getElementById('sfName');
+  var surname=document.getElementById('sfSurname');
+  var section=document.getElementById('sfSection');
+  var school=document.getElementById('sfSchool');
+  var spec=document.getElementById('sfSpec');
+  var level=document.getElementById('sfLevel').value;
+  var phone=document.getElementById('sfPhone');
+  var email=document.getElementById('sfEmail');
+  var city=document.getElementById('sfCity');
+  var country=document.getElementById('sfCountry');
+  var field=document.getElementById('sfField');
+  var cvFile=document.getElementById('sfCV').files[0];
+  var fields = [name, surname, section, school, spec, phone, email, city, country, field];
+  fields.forEach(function(el){el.classList.remove('inp-err');});
+  if(!name.value.trim()||!surname.value.trim()||!section.value.trim()||!school.value.trim()||!spec.value.trim()||!phone.value.trim()||!email.value.trim()||!city.value.trim()||!country.value.trim()||!field.value.trim()){
+    alert('يرجى ملء جميع الحقول الإلزامية (*)');
+    fields.forEach(function(el){ if(!el.value.trim()) el.classList.add('inp-err'); });
+    return;
+  }
+  if(!cvFile) { alert('يرجى ارفاق السيرة الذاتية'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var cvBase64 = e.target.result;
+    Z.loadSeekers();
+    Z.seekers.unshift({
+      type: type || 'job', name: name.value.trim() + ' ' + surname.value.trim(), section: section.value.trim(), school: school.value.trim(), spec: spec.value.trim(), level: level, phone: phone.value.trim(), email: email.value.trim(), city: city.value.trim(), country: country.value.trim(), field: field.value.trim(), cv: cvBase64, cvName: cvFile.name, date: new Date().toLocaleDateString('ar-TN')
+    });
+    Z.saveSeekers();
+    document.getElementById('sf').remove();
+    alert('✅ تم حفظ طلبك وإرفاق سيرتك الذاتية بنجاح.');
+  };
+  reader.readAsDataURL(cvFile);
+};
+/* ================== الألعاب ================== */
+Z.startMemory=function(){
+  if(!Z.checkVisitor()) return;
+  var pairs=['🍎','🍎','🍌','🍌','🍇','🍇','🍓','🍓'];
+  pairs.sort(function(){return Math.random()-.5;});
+  var st={open:[],done:0,matches:0,moves:0};
+  var c=document.getElementById('lc');
+  function draw(){
+    var h='<div class="slide"><div class="sn">🎮 لعبة الذاكرة</div><div class="st">اعثر على الأزواج!</div><div class="stxt" style="text-align:center;font-size:16px">محاولات: '+st.moves+' — أزواج: '+st.matches+'/4</div><div class="mem">';
+    for(var i=0;i<pairs.length;i++){
+      var isOpen=st.open.indexOf(i)>=0,isDone=(st.done&(1<<i))>0,shown=isOpen||isDone;
+      h+='<div class="mc '+(shown?'on':'')+(isDone?' done':'')+'" onclick="ZAID._mc('+i+')">'+(shown?pairs[i]:'?')+'</div>';
+    }
+    h+='</div><div class="nav"><button class="nbtn ne" onclick="ZAID.openCat(\'games\')">🏠 خروج</button></div></div>';
+    c.innerHTML=h;
+  }
+  Z._mc=function(i){
+    if(st.open.indexOf(i)>=0||(st.done&(1<<i))>0)return;
+    if(st.open.length>=2)return;
+    st.open.push(i);
+    if(st.open.length===2){
+      st.moves++;var a=st.open[0],b=st.open[1];
+      if(pairs[a]===pairs[b]){
+        st.done|=(1<<a)|(1<<b);st.matches++;st.open=[];
+        setTimeout(function(){if(st.matches===4){alert('🎉 أكملت في '+st.moves+' محاولة!');Z.openCat('games');}else draw();},400);
+      } else {setTimeout(function(){st.open=[];draw();},700);}
+    }
+    draw();
+  };
+  draw();Z.showPage('pageLesson');
+};
+
+const GAME_WORDS = {
+    ar: ["انترنت", "متصفح", "خادم", "معالج", "ذاكرة", "طابعة", "شبكة", "فيروس"],
+    en: ["INTERNET", "BROWSER", "SERVER", "PROCESSOR", "MEMORY", "PRINTER", "NETWORK", "VIRUS"],
+    fr: ["INTERNET", "NAVIGATEUR", "SERVEUR", "PROCESSEUR", "MÉMOIRE", "IMPRIMANTE", "RÉSEAU", "VIRUS"]
+};
+let gameLang = "ar";
+let gameCurrentWords = [];
+let gameFoundWords = [];
+let gameWordPositions = [];
+let gameGrid = [];
+let gameGridSize = 8;
+let gameSelectedCells = [];
+let gameScore = 0;
+let gameAttempts = 0;
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+    return arr;
+}
+function placeWordInGrid(word, gridData) {
+    let dirs = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+    let w = word.toUpperCase();
+    for (let [dr, dc] of shuffleArray([...dirs])) {
+        for (let attempt = 0; attempt < 300; attempt++) {
+            let startRow, startCol;
+            if (dr === 1) startRow = Math.floor(Math.random() * (gameGridSize - w.length + 1));
+            else if (dr === -1) startRow = Math.floor(Math.random() * (gameGridSize - w.length + 1)) + (w.length - 1);
+            else startRow = Math.floor(Math.random() * gameGridSize);
+            if (dc === 1) startCol = Math.floor(Math.random() * (gameGridSize - w.length + 1));
+            else if (dc === -1) startCol = Math.floor(Math.random() * (gameGridSize - w.length + 1)) + (w.length - 1);
+            else startCol = Math.floor(Math.random() * gameGridSize);
+            let positions = [], valid = true;
+            for (let i = 0; i < w.length; i++) {
+                let r = startRow + dr * i, c = startCol + dc * i;
+                if (r < 0 || r >= gameGridSize || c < 0 || c >= gameGridSize) { valid = false; break; }
+                if (gridData[r][c] !== '?' && gridData[r][c] !== w[i]) { valid = false; break; }
+                positions.push({ row: r, col: c });
+            }
+            if (valid) {
+                for (let i = 0; i < w.length; i++) { let r = startRow + dr * i, c = startCol + dc * i; gridData[r][c] = w[i]; }
+                return positions;
+            }
+        }
+    }
+    return null;
+}
+Z.startWordSearch=function() {
+    if(!Z.checkVisitor()) return;
+    var c=document.getElementById('lc');
+    c.innerHTML = `
+        <div class="slide" style="background:#1e293b;color:#fff;">
+            <div class="sn">🎮 ابحث عن الكلمة</div>
+            <div class="st" style="color:#fbbf24;">✨ اضغط على الحروف المتجاورة لتكوين الكلمة ✨</div>
+            <div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;color:#fbbf24;font-weight:bold;">
+                <span>✅ تم العثور: <span id="gameFoundCount">0/0</span></span>
+                <span>⭐ النقاط: <span id="gameScore">0</span></span>
+                <span>🔄 المحاولات: <span id="gameAttempts">0</span></span>
+            </div>
+            <div class="game-words-list" id="gameWordsList" style="background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;"></div>
+            <div id="gameGrid" class="game-grid"></div>
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:15px;">
+                <button class="nbtn nn" onclick="ZAID.checkGameWord()">✅ تحقق</button>
+                <button class="nbtn ne" onclick="ZAID.clearGameSelection()">🗑️ مسح</button>
+                <button class="nbtn np" onclick="ZAID.hintGameWord()">💡 تلميحة</button>
+            </div>
+            <div id="gameFeedback" class="feedback"></div>
+            <div class="nav" style="margin-top:20px;">
+                <button class="nbtn ne" onclick="ZAID.initWordSearchGame()">🎲 لعبة جديدة</button>
+                <button class="nbtn np" onclick="ZAID.openCat('games')">🔙 خروج</button>
+            </div>
+        </div>`;
+    Z.showPage('pageLesson');
+    Z.initWordSearchGame();
+};
+Z.initWordSearchGame=function() {
+    let allWords = [...GAME_WORDS[gameLang]];
+    gameCurrentWords = shuffleArray(allWords).slice(0, 6);
+    gameFoundWords = [];
+    gameWordPositions = [];
+    gameSelectedCells = [];
+    gameScore = 0;
+    gameAttempts = 0;
+    gameGridSize = 8;
+    let newGrid = Array(gameGridSize).fill().map(() => Array(gameGridSize).fill('?'));
+    for (let w of gameCurrentWords) {
+        let pos = placeWordInGrid(w, newGrid);
+        if (pos) gameWordPositions.push({ word: w.toUpperCase(), original: w, positions: pos });
+    }
+    let letters = 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'.split('');
+    for (let i = 0; i < gameGridSize; i++) for (let j = 0; j < gameGridSize; j++) if (newGrid[i][j] === '?') newGrid[i][j] = letters[Math.floor(Math.random() * letters.length)];
+    gameGrid = newGrid;
+    Z.renderGame();
+    Z.updateGameUI();
+    Z.showGameMessage(`🎮 لعبة جديدة! ابحث عن ${gameCurrentWords.length} كلمات`, "success");
+};
+function isGameCellFound(row, col) {
+    return gameWordPositions.some(wp => gameFoundWords.includes(wp.word) && wp.positions.some(p => p.row === row && p.col === col));
+}
+Z.selectGameCell=function(row, col) {
+    if (gameSelectedCells.length === 0) { gameSelectedCells = [{ row, col }]; Z.renderGame(); return; }
+    let last = gameSelectedCells[gameSelectedCells.length-1];
+    let adjacent = Math.abs(last.row - row) <= 1 && Math.abs(last.col - col) <= 1;
+    if (adjacent && !gameSelectedCells.some(c => c.row === row && c.col === col)) {
+        gameSelectedCells.push({ row, col }); Z.renderGame();
+    } else if (gameSelectedCells.some(c => c.row === row && c.col === col)) {
+        let idx = gameSelectedCells.findIndex(c => c.row === row && c.col === col);
+        gameSelectedCells = gameSelectedCells.slice(0, idx + 1); Z.renderGame();
+    } else Z.showGameMessage("⚠️ اختر حروفاً متجاورة!", "warning");
+};
+Z.clearGameSelection=function() { gameSelectedCells = []; Z.renderGame(); };
+Z.checkGameWord=function() {
+    if (gameSelectedCells.length === 0) { Z.showGameMessage("⚠️ اضغط على الحروف أولاً!", "warning"); return; }
+    let selectedWord = gameSelectedCells.map(c => gameGrid[c.row][c.col]).join('');
+    gameAttempts++;
+    let wordData = gameWordPositions.find(w => w.word === selectedWord && !gameFoundWords.includes(w.word));
+    if (wordData) {
+        let isValid = gameSelectedCells.length === wordData.positions.length &&
+                     gameSelectedCells.every((cell,i) => cell.row === wordData.positions[i].row && cell.col === wordData.positions[i].col);
+        if (isValid) {
+            gameScore += 20;
+            gameFoundWords.push(selectedWord);
+            Z.speak(wordData.original, "ar");
+            Z.showGameMessage(`✅ ممتاز! وجدت "${wordData.original}"! +20 نقطة`, "success");
+            gameSelectedCells = [];
+            Z.renderGame();
+            if (gameFoundWords.length === gameCurrentWords.length) { gameScore += 100; Z.showGameMessage(`🏆🏆🏆 مذهل! وجدت كل الكلمات! +100 نقطة! 🏆🏆🏆`, "success"); }
+        } else { gameScore = Math.max(0, gameScore - 2); Z.showGameMessage(`⚠️ "${selectedWord}" موجود لكن الترتيب غير صحيح!`, "warning"); gameSelectedCells = []; Z.renderGame(); }
+    } else { gameScore = Math.max(0, gameScore - 3); Z.showGameMessage(`❌ "${selectedWord}" غير صحيحة! -3 نقاط`, "error"); gameSelectedCells = []; Z.renderGame(); }
+    Z.updateGameUI();
+};
+Z.hintGameWord=function() {
+    let notFound = gameWordPositions.filter(w => !gameFoundWords.includes(w.word));
+    if(notFound.length) {
+        let rw = notFound[0];
+        rw.positions.forEach(p => {
+            let idx = p.row * gameGridSize + p.col;
+            let cell = document.querySelectorAll('.game-cell')[idx];
+            if(cell) { cell.style.background = "#ffd700"; setTimeout(() => cell.style.background = "", 1500); }
+        });
+        Z.speak(rw.original, "ar");
+        Z.showGameMessage(`💡 تلميحة: ابحث عن "${rw.original}"`, "warning");
+    }
+};
+Z.renderGame=function() {
+    let gridDiv = document.getElementById('gameGrid');
+    if(!gridDiv) return;
+    gridDiv.style.gridTemplateColumns = `repeat(${gameGridSize}, 45px)`;
+    gridDiv.innerHTML = '';
+    for (let i = 0; i < gameGridSize; i++) {
+        for (let j = 0; j < gameGridSize; j++) {
+            let isSel = gameSelectedCells.some(c => c.row === i && c.col === j);
+            let isFnd = isGameCellFound(i, j);
+            let cell = document.createElement('div');
+            cell.className = `game-cell ${isSel ? 'selected' : ''} ${isFnd ? 'found' : ''}`;
+            cell.textContent = gameGrid[i][j];
+            cell.onclick = () => Z.selectGameCell(i, j);
+            gridDiv.appendChild(cell);
+        }
+    }
+    let wordsDiv = document.getElementById('gameWordsList');
+    if(wordsDiv) {
+        wordsDiv.innerHTML = gameCurrentWords.map(w => `<div class="game-word-item ${gameFoundWords.includes(w.toUpperCase()) ? 'found' : ''}" onclick="ZAID.speak('${w}', 'ar')">${w} ${gameFoundWords.includes(w.toUpperCase()) ? '✓' : ''}<small>🔊</small></div>`).join('');
+    }
+};
+Z.updateGameUI=function() {
+    if(document.getElementById('gameFoundCount')) document.getElementById('gameFoundCount').innerHTML = `${gameFoundWords.length}/${gameCurrentWords.length}`;
+    if(document.getElementById('gameScore')) document.getElementById('gameScore').innerHTML = gameScore;
+    if(document.getElementById('gameAttempts')) document.getElementById('gameAttempts').innerHTML = gameAttempts;
+};
+Z.showGameMessage=function(text, type) {
+    let fb = document.getElementById('gameFeedback');
+    if(!fb) return;
+    fb.innerHTML = text;
+    fb.className = `feedback ${type}`;
+    setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
+};
+
+const crosswordQuestions = [
+    { q: "ما هي الشبكة العالمية التي تربط ملايين الأجهزة؟", correct: "الإنترنت", options: ["الإنترنت", "المتصفح", "الخادم", "الشبكة"] },
+    { q: "ما هو البرنامج المستخدم لعرض صفحات الويب؟", correct: "المتصفح", options: ["المتصفح", "نظام التشغيل", "البريد", "المعالج"] },
+    { q: "ما هو الجهاز الذي يقدم خدمات للأجهزة الأخرى؟", correct: "الخادم", options: ["الخادم", "الماسح", "الطابعة", "الموجه"] },
+    { q: "ما هو عقل الحاسوب (CPU)؟", correct: "المعالج", options: ["المعالج", "الذاكرة", "القرص الصلب", "اللوحة الأم"] },
+    { q: "ما هي الذاكرة المؤقتة السريعة؟", correct: "RAM", options: ["RAM", "ROM", "القرص الصلب", "USB"] },
+    { q: "ما هو الجهاز الذي يطبع على الورق؟", correct: "الطابعة", options: ["الطابعة", "الماسح", "الناسخ", "الفاكس"] },
+    { q: "ما هو البرنامج الضار الذي ينتشر بين الأجهزة؟", correct: "الفيروس", options: ["الفيروس", "جدار الحماية", "مضاد الفيروسات", "التشفير"] },
+    { q: "ما هو نظام حماية الشبكة من الاختراقات؟", correct: "جدار الحماية", options: ["جدار الحماية", "البروتوكول", "الخادم", "الموجه"] }
+];
+let crossCurrentIndex = 0;
+let crossCorrectAnswers = 0;
+let crossScore = 0;
+let crossAttempts = 0;
+let crossAnswered = false;
+
+Z.startCrossword=function() {
+    if(!Z.checkVisitor()) return;
+    var c=document.getElementById('lc');
+    c.innerHTML = `
+        <div class="slide" style="background:#1e293b;color:#fff;">
+            <div class="sn">🔐 الكلمات المتقاطعة</div>
+            <div class="st" style="color:#fbbf24;">✨ اختر الإجابة الصحيحة من القائمة ✨</div>
+            <div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;color:#fbbf24;font-weight:bold;">
+                <span>✅ تم الحل: <span id="crossCorrectCount">0/0</span></span>
+                <span>⭐ النقاط: <span id="crossScore">0</span></span>
+                <span>🔄 المحاولات: <span id="crossAttempts">0</span></span>
+            </div>
+            <div style="background:#f0f2f5; border-radius:15px; padding:20px; margin:15px 0; color:#1e293b;">
+                <div id="crossQuestion" style="font-size:20px; font-weight:bold; text-align:center; margin-bottom:20px;"></div>
+                <div id="crossOptions" class="game-words-list" style="justify-content:center;"></div>
+                <div id="crossFeedback" class="feedback"></div>
+            </div>
+            <div class="nav" style="margin-top:20px;">
+                <button class="nbtn ne" onclick="ZAID.resetCrossword()">🎲 أحجية جديدة</button>
+                <button class="nbtn np" onclick="ZAID.openCat('games')">🔙 خروج</button>
+            </div>
+        </div>`;
+    Z.showPage('pageLesson');
+    Z.resetCrossword();
+};
+Z.resetCrossword=function() {
+    crossCurrentIndex = 0;
+    crossCorrectAnswers = 0;
+    crossScore = 0;
+    crossAttempts = 0;
+    crossAnswered = false;
+    Z.loadCrossword();
+};
+Z.loadCrossword=function() {
+    let q = crosswordQuestions[crossCurrentIndex];
+    if(document.getElementById('crossQuestion')) document.getElementById('crossQuestion').innerHTML = q.q;
+    let shuffled = shuffleArray([...q.options]);
+    if(document.getElementById('crossOptions')) {
+        document.getElementById('crossOptions').innerHTML = shuffled.map(opt => `<div class="game-word-item" style="background:#e2e8f0;color:#1e293b;border:2px solid #cbd5e1;" onclick="ZAID.answerCrossword('${opt}')">${opt}</div>`).join('');
+    }
+    crossAnswered = false;
+    if(document.getElementById('crossFeedback')) document.getElementById('crossFeedback').innerHTML = '';
+    Z.updateCrossUI();
+};
+Z.answerCrossword=function(selected) {
+    if (crossAnswered) { Z.showCrossMessage("⚠️ لقد أجبت على هذا السؤال بالفعل!", "warning"); return; }
+    crossAttempts++;
+    let q = crosswordQuestions[crossCurrentIndex];
+    if (selected === q.correct) {
+        let points = 20;
+        crossScore += points;
+        crossCorrectAnswers++;
+        Z.speak(q.correct, "ar");
+        Z.showCrossMessage(`✅ إجابة صحيحة! +${points} نقطة 🎵 "${q.correct}"`, "success");
+        crossAnswered = true;
+        if (crossCurrentIndex + 1 < crosswordQuestions.length) {
+            setTimeout(() => { crossCurrentIndex++; Z.loadCrossword(); }, 1500);
+        } else {
+            let bonus = 100;
+            crossScore += bonus;
+            Z.showCrossMessage(`🏆🏆🏆 مذهل! أكملت كل الأسئلة! +${bonus} نقطة! 🏆🏆🏆`, "success");
+            if(document.getElementById('crossOptions')) document.getElementById('crossOptions').innerHTML = '<div style="text-align:center; font-weight:bold; color:#155724;">🎉 تهانينا! أكملت اللعبة بنجاح! 🎉</div>';
+        }
+    } else {
+        crossScore = Math.max(0, crossScore - 5);
+        Z.showCrossMessage(`❌ إجابة خاطئة! الإجابة الصحيحة هي: "${q.correct}" -5 نقاط`, "error");
+        crossAnswered = true;
+        if (crossCurrentIndex + 1 < crosswordQuestions.length) {
+            setTimeout(() => { crossCurrentIndex++; Z.loadCrossword(); }, 2000);
+        } else {
+            Z.showCrossMessage(`🏁 انتهت اللعبة! نتيجتك النهائية: ${crossScore} نقطة`, "success");
+            if(document.getElementById('crossOptions')) document.getElementById('crossOptions').innerHTML = '<div style="text-align:center; font-weight:bold; color:#721c24; padding:20px;">🏁 انتهت اللعبة — النتيجة النهائية: ' + crossScore + ' نقطة</div>';
+        }
+    }
+    Z.updateCrossUI();
+};
+Z.updateCrossUI=function() {
+    if(document.getElementById('crossCorrectCount')) document.getElementById('crossCorrectCount').innerHTML = `${crossCorrectAnswers}/${crosswordQuestions.length}`;
+    if(document.getElementById('crossScore')) document.getElementById('crossScore').innerHTML = crossScore;
+    if(document.getElementById('crossAttempts')) document.getElementById('crossAttempts').innerHTML = crossAttempts;
+};
+Z.showCrossMessage=function(text, type) {
+    let fb = document.getElementById('crossFeedback');
+    if(!fb) return;
+    fb.innerHTML = text;
+    fb.className = `feedback ${type}`;
+    setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
+};
+
+/* ================== المنجد الرباعي ================== */
+const sections = {1:[], 2:[], 3:[], 4:[]};
+const techData = [
+    {ar:"الحاسوب", en:"Computer", fr:"Ordinateur", ko:"컴퓨터", def:"جهاز إلكتروني يستقبل البيانات ويعالجها"},
+    {ar:"الإنترنت", en:"Internet", fr:"Internet", ko:"인터넷", def:"شبكة عالمية تربط ملايين الحواسيب"},
+    {ar:"البرمجيات", en:"Software", fr:"Logiciel", ko:"소프트웨어", def:"مجموعة من التعليمات والأكواد"},
+    {ar:"العتاد", en:"Hardware", fr:"Matériel", ko:"하드웨어", def:"المكونات المادية للحاسوب"},
+    {ar:"الشبكة", en:"Network", fr:"Réseau", ko:"네트워크", def:"ربط جهازين أو أكثر لتبادل البيانات"},
+    {ar:"البيانات", en:"Data", fr:"Données", ko:"데이터", def:"معلومات خام غير معالجة"},
+    {ar:"الخادم", en:"Server", fr:"Serveur", ko:"서버", def:"جهاز يقدم خدمات لأجهزة أخرى"},
+    {ar:"المستخدم", en:"User", fr:"Utilisateur", ko:"사용자", def:"الشخص الذي يتفاعل مع النظام"},
+    {ar:"التطبيق", en:"Application", fr:"Application", ko:"앱", def:"برنامج لأداء مهام محددة"},
+    {ar:"قاعدة البيانات", en:"Database", fr:"Base de données", ko:"데이터베이스", def:"مجموعة منظمة من البيانات"},
+    {ar:"نظام التشغيل", en:"Operating System", fr:"Système d'exploitation", ko:"운영체제", def:"يدير موارد الحاسوب"},
+    {ar:"المعالج", en:"CPU", fr:"Processeur", ko:"CPU", def:"وحدة المعالجة المركزية - عقل الحاسوب"},
+    {ar:"القرص الصلب", en:"Hard Disk", fr:"Disque dur", ko:"하드디스크", def:"جهاز تخزين دائم"},
+    {ar:"البروتوكول", en:"Protocol", fr:"Protocole", ko:"프로토콜", def:"قواعد تبادل البيانات"},
+    {ar:"التشفير", en:"Encryption", fr:"Cryptage", ko:"암호화", def:"تحويل البيانات لشكل آمن"},
+    {ar:"جدار الحماية", en:"Firewall", fr:"Pare-feu", ko:"방화벽", def:"نظام أمني للشبكة"},
+    {ar:"الماسح الضوئي", en:"Scanner", fr:"Scanner", ko:"스캐너", def:"جهاز لتحويل المستندات إلى رقمية"},
+    {ar:"الطابعة", en:"Printer", fr:"Imprimante", ko:"프린터", def:"جهاز لطباعة المستندات"},
+    {ar:"الشاشة", en:"Monitor", fr:"Écran", ko:"모니터", def:"شاشة عرض البيانات"},
+    {ar:"لوحة المفاتيح", en:"Keyboard", fr:"Clavier", ko:"키보드", def:"أداة إدخال النصوص"},
+    {ar:"الفأرة", en:"Mouse", fr:"Souris", ko:"마우스", def:"أداة تحكم المؤشر"},
+    {ar:"مكبر الصوت", en:"Speaker", fr:"Haut-parleur", ko:"스피커", def:"جهاز إخراج الصوت"},
+    {ar:"الميكروفون", en:"Microphone", fr:"Microphone", ko:"마이크", def:"جهاز إدخال الصوت"},
+    {ar:"الكاميرا", en:"Camera", fr:"Caméra", ko:"카메라", def:"جهاز التقاط الصور"},
+    {ar:"المودم", en:"Modem", fr:"Modem", ko:"모뎀", def:"جهاز ربط بالإنترنت"},
+    {ar:"الموجه", en:"Router", fr:"Routeur", ko:"라우터", def:"جهاز توجيه البيانات"},
+    {ar:"المحول", en:"Adapter", fr:"Adaptateur", ko:"어댑터", def:"محول الإشارات"},
+    {ar:"المبدل", en:"Switch", fr:"Commutateur", ko:"스위치", def:"جهاز ربط الشبكات"},
+    {ar:"الجسر", en:"Bridge", fr:"Pont", ko:"브리지", def:"جهاز ربط شبكتين"},
+    {ar:"النقطة الساخنة", en:"Hotspot", fr:"Point d'accès", ko:"핫스팟", def:"نقطة اتصال لاسلكية"},
+    {ar:"المجال", en:"Domain", fr:"Domaine", ko:"도메인", def:"مساحة إلكترونية"},
+    {ar:"النطاق", en:"Range", fr:"Plage", ko:"범위", def:"مجموعة من القيم"},
+    {ar:"المسار", en:"Path", fr:"Chemin", ko:"경로", def:"طريق الوصول"},
+    {ar:"البرنامج الثابت", en:"Firmware", fr:"Micrologiciel", ko:"펌웨어", def:"برنامج داخلي للجهاز"},
+    {ar:"برنامج التشغيل", en:"Driver", fr:"Pilote", ko:"드라이버", def:"برنامج تعريفي للعتاد"},
+    {ar:"التطبيق المحمول", en:"Mobile App", fr:"Application mobile", ko:"모바일 앱", def:"تطبيق يعمل على الأجهزة المحمولة"},
+    {ar:"الويب", en:"Web", fr:"Web", ko:"웹", def:"شبكة عالمية"},
+    {ar:"الموقع", en:"Website", fr:"Site", ko:"웹사이트", def:"موقع إلكتروني"},
+    {ar:"الصفحة", en:"Page", fr:"Page", ko:"페이지", def:"صفحة ويب"},
+    {ar:"الرابط", en:"Link", fr:"Lien", ko:"링크", def:"رابط تشعبي"}
+];
+const progData = [
+    {ar:"بايثون", en:"Python", fr:"Python", ko:"파이썬", def:"لغة برمجة عالية المستوى سهلة التعلم"},
+    {ar:"جافا", en:"Java", fr:"Java", ko:"자바", def:"لغة برمجة كائنية التوجه"},
+    {ar:"جافا سكريبت", en:"JavaScript", fr:"JavaScript", ko:"자바스크립트", def:"لغة برمجة الويب"},
+    {ar:"سي بلس بلس", en:"C++", fr:"C++", ko:"C++", def:"لغة برمجة قوية"},
+    {ar:"بي إتش بي", en:"PHP", fr:"PHP", ko:"PHP", def:"لغة برمجة خادم الويب"},
+    {ar:"رياكت", en:"React", fr:"React", ko:"리액트", def:"مكتبة جافا سكريبت"},
+    {ar:"دوكر", en:"Docker", fr:"Docker", ko:"도커", def:"منصة حاويات"},
+    {ar:"جيت", en:"Git", fr:"Git", ko:"깃", def:"نظام تحكم بالإصدارات"},
+    {ar:"إس كيو إل", en:"SQL", fr:"SQL", ko:"SQL", def:"لغة استعلام قواعد البيانات"},
+    {ar:"نو إس كيو إل", en:"NoSQL", fr:"NoSQL", ko:"NoSQL", def:"قواعد بيانات غير علائقية"},
+    {ar:"واجهة برمجة التطبيقات", en:"API", fr:"API", ko:"API", def:"واجهة برمجة التطبيقات"},
+    {ar:"ريست", en:"REST", fr:"REST", ko:"REST", def:"نمط معماري للويب"},
+    {ar:"جيسون", en:"JSON", fr:"JSON", ko:"JSON", def:"صيغة تبادل البيانات"},
+    {ar:"إتش تي إم إل", en:"HTML", fr:"HTML", ko:"HTML", def:"لغة ترميز النصوص"},
+    {ar:"سي إس إس", en:"CSS", fr:"CSS", ko:"CSS", def:"لغة تنسيق الصفحات"},
+    {ar:"كوتلن", en:"Kotlin", fr:"Kotlin", ko:"코틀린", def:"لغة برمجة أندرويد"},
+    {ar:"سويفت", en:"Swift", fr:"Swift", ko:"스위프트", def:"لغة برمجة آبل"},
+    {ar:"روبي", en:"Ruby", fr:"Ruby", ko:"루비", def:"لغة برمجة ديناميكية"},
+    {ar:"أنجولار", en:"Angular", fr:"Angular", ko:"앵귤러", def:"إطار عمل أنجولار"},
+    {ar:"فيو", en:"Vue", fr:"Vue", ko:"뷰", def:"إطار عمل فيو"}
+];
+const netData = [
+    {ar:"تي سي بي", en:"TCP", fr:"TCP", ko:"TCP", def:"بروتوكول التحكم في الإرسال"},
+    {ar:"آي بي", en:"IP", fr:"IP", ko:"IP", def:"بروتوكول الإنترنت"},
+    {ar:"إتش تي تي بي", en:"HTTP", fr:"HTTP", ko:"HTTP", def:"بروتوكول نقل النص التشعبي"},
+    {ar:"إتش تي تي بي إس", en:"HTTPS", fr:"HTTPS", ko:"HTTPS", def:"بروتوكول HTTP الآمن"},
+    {ar:"إف تي بي", en:"FTP", fr:"FTP", ko:"FTP", def:"بروتوكول نقل الملفات"},
+    {ar:"إس إس إتش", en:"SSH", fr:"SSH", ko:"SSH", def:"بروتوكول الصدفة الآمن"},
+    {ar:"دي إن إس", en:"DNS", fr:"DNS", ko:"DNS", def:"نظام أسماء النطاقات"},
+    {ar:"دي إتش سي بي", en:"DHCP", fr:"DHCP", ko:"DHCP", def:"بروتوكول التهيئة الديناميكية"},
+    {ar:"إيه آر بي", en:"ARP", fr:"ARP", ko:"ARP", def:"بروتوكول تحليل العناوين"},
+    {ar:"آي سي إم بي", en:"ICMP", fr:"ICMP", ko:"ICMP", def:"بروتوكول رسائل التحكم"}
+];
+const aiData = [
+    {ar:"الذكاء الاصطناعي", en:"AI", fr:"IA", ko:"인공지능", def:"محاكاة الذكاء البشري في الآلات"},
+    {ar:"تعلم الآلة", en:"Machine Learning", fr:"Apprentissage automatique", ko:"기계학습", def:"تعلم الآلة من البيانات"},
+    {ar:"التعلم العميق", en:"Deep Learning", fr:"Apprentissage profond", ko:"딥러닝", def:"شبكات عصبونية عميقة"},
+    {ar:"الشبكة العصبونية", en:"Neural Network", fr:"Réseau neuronal", ko:"신경망", def:"نموذج يحاكي الدماغ"},
+    {ar:"سي إن إن", en:"CNN", fr:"CNN", ko:"CNN", def:"شبكة عصبونية التفافية"},
+    {ar:"آر إن إن", en:"RNN", fr:"RNN", ko:"RNN", def:"شبكة عصبونية متكررة"},
+    {ar:"جان", en:"GAN", fr:"GAN", ko:"GAN", def:"شبكات الخصومة التوليدية"},
+    {ar:"معالجة اللغة الطبيعية", en:"NLP", fr:"Traitement du langage naturel", ko:"자연어 처리", def:"معالجة وفهم اللغة الطبيعية"},
+    {ar:"الرؤية الحاسوبية", en:"Computer Vision", fr:"Vision par ordinateur", ko:"컴퓨터 비전", def:"تمكين الآلات من رؤية وفهم الصور"},
+    {ar:"تمييز الكلام", en:"Speech Recognition", fr:"Reconnaissance vocale", ko:"음성 인식", def:"تمييز الكلام البشري"}
+];
+
+for(let i=0; i<1000; i++){ let d = techData[i % techData.length]; sections[1].push({...d}); }
+for(let i=0; i<1000; i++){ let d = progData[i % progData.length]; sections[2].push({...d}); }
+for(let i=0; i<1000; i++){ let d = netData[i % netData.length]; sections[3].push({...d}); }
+for(let i=0; i<1000; i++){ let d = aiData[i % aiData.length]; sections[4].push({...d}); }
+
+let dictCurrentSection = 1;
+let dictCurrentTerms = sections[1];
+let dictCurrentIndex = 0;
+let dictFilteredList = dictCurrentTerms.map((_,i)=>i);
+
+Z.showDictionary=function() {
+    if(!Z.checkVisitor()) return;
+    dictCurrentSection = 1;
+    dictCurrentTerms = sections[1];
+    dictFilteredList = dictCurrentTerms.map((_,i)=>i);
+    dictCurrentIndex = 0;
+    
+    var c=document.getElementById('lc');
+    c.innerHTML = `
+        <div class="slide" style="background:#1e293b; padding:0;">
+            <div style="background:#eab308; color:#1e293b; padding:15px; text-align:center; border-radius:15px 15px 0 0;">
+                <h2 style="margin:0;">📖 المنجد الرباعي - 4000 مصطلح</h2>
+                <p style="margin:5px 0 0 0; font-size:14px;">نطق عبر Google | ترجمة 4 لغات | تفسير أصلي</p>
+            </div>
+            <div style="padding:20px;">
+                <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px; flex-wrap:wrap;">
+                    <button class="nbtn ${dictCurrentSection===1?'nn':'np'}" onclick="ZAID.switchDictSection(1)">📚 تكنولوجيا</button>
+                    <button class="nbtn ${dictCurrentSection===2?'nn':'np'}" onclick="ZAID.switchDictSection(2)">💻 برمجة</button>
+                    <button class="nbtn ${dictCurrentSection===3?'nn':'np'}" onclick="ZAID.switchDictSection(3)">🌐 شبكات</button>
+                    <button class="nbtn ${dictCurrentSection===4?'nn':'np'}" onclick="ZAID.switchDictSection(4)">🤖 ذكاء اصطناعي</button>
+                </div>
+                <div class="dict-box">
+                    <input type="text" id="dictSearchInput" class="dict-select" placeholder="🔍 ابحث عن مصطلح..." oninput="ZAID.searchDictTerms()">
+                    <select id="dictTermSelect" class="dict-select" size="5" onchange="ZAID.selectDictTerm()" style="height:150px;"></select>
+                    <div id="dictTermDisplay" style="margin-top:20px;"></div>
+                    <div style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+                        <button class="nbtn np" onclick="ZAID.prevDictTerm()">▶ السابق</button>
+                        <button class="nbtn nn" onclick="ZAID.nextDictTerm()">التالي ◀</button>
+                    </div>
+                    <div id="dictCounter" style="text-align:center; margin-top:10px; color:#94a3b8; font-size:13px;"></div>
+                </div>
+            </div>
+            <div class="nav" style="margin-top:10px; margin-bottom:20px;">
+                <button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button>
+            </div>
+        </div>`;
+    Z.showPage('pageLesson');
+    Z.switchDictSection(1);
+};
+
+Z.switchDictSection=function(s) {
+    dictCurrentSection = s;
+    dictCurrentTerms = sections[s];
+    dictFilteredList = dictCurrentTerms.map((_,i)=>i);
+    dictCurrentIndex = 0;
+    
+    var allBtns = document.querySelectorAll('button[onclick*="switchDictSection"]');
+    for(var i=0; i<allBtns.length; i++){
+        var b = allBtns[i];
+        var oc = b.getAttribute('onclick') || '';
+        var match = oc.match(/switchDictSection\((\d+)\)/);
+        if(match && parseInt(match[1])===s){
+            b.classList.remove('np'); b.classList.add('nn');
+        } else {
+            b.classList.remove('nn'); b.classList.add('np');
+        }
+    }
+    
+    Z.updateDictSelect();
+    Z.displayDictTerm(0);
+};
+Z.searchDictTerms=function() {
+    let txt = document.getElementById('dictSearchInput').value.toLowerCase();
+    dictFilteredList = [];
+    dictCurrentTerms.forEach((t,idx)=>{ if(t.ar.includes(txt)) dictFilteredList.push(idx); });
+    Z.updateDictSelect();
+    if(dictFilteredList.length) Z.displayDictTerm(0);
+    else document.getElementById('dictTermDisplay').innerHTML = '<div style="text-align:center; color:#f87171;">🔍 لا توجد نتائج</div>';
+};
+Z.updateDictSelect=function() {
+    let select = document.getElementById('dictTermSelect');
+    if(!select) return;
+    select.innerHTML = '';
+    for(let i=0; i<dictFilteredList.length; i++) {
+        let term = dictCurrentTerms[dictFilteredList[i]];
+        let option = document.createElement('option');
+        option.value = i;
+        option.textContent = term.ar;
+        select.appendChild(option);
+    }
+};
+Z.selectDictTerm=function() { let v = document.getElementById('dictTermSelect').value; if(v!=='') Z.displayDictTerm(parseInt(v)); };
+Z.prevDictTerm=function() { if(dictCurrentIndex>0) Z.displayDictTerm(dictCurrentIndex-1); };
+Z.nextDictTerm=function() { if(dictCurrentIndex<dictFilteredList.length-1) Z.displayDictTerm(dictCurrentIndex+1); };
+
+Z.displayDictTerm=function(pos) {
+    if(pos<0 || pos>=dictFilteredList.length) return;
+    dictCurrentIndex = pos;
+    let term = dictCurrentTerms[dictFilteredList[pos]];
+    let html = `
+        <div class="dict-term">${term.ar}</div>
+        <div class="dict-trans">
+            <button class="dict-btn" style="background:#dc2626;" onclick="ZAID.speak('${term.ar.replace(/'/g,"\\'")}', 'ar')">🇸🇦 عربي</button>
+            <button class="dict-btn" style="background:#2563eb;" onclick="ZAID.speak('${term.en.replace(/'/g,"\\'")}', 'en')">🇬🇧 English</button>
+            <button class="dict-btn" style="background:#16a34a;" onclick="ZAID.speak('${term.fr.replace(/'/g,"\\'")}', 'fr')">🇫🇷 Français</button>
+        </div>
+        <div class="dict-def"><strong>التفسير:</strong> ${term.def}</div>
+    `;
+    document.getElementById('dictTermDisplay').innerHTML = html;
+    document.getElementById('dictCounter').innerHTML = `📌 ${pos+1} من ${dictFilteredList.length} مصطلح | القسم ${dictCurrentSection}`;
+};
+/* ================== محرك العرض ================== */
+function renderSlide(o){
+  var h='<div class="slide">';
+  if(o.n)h+='<div class="sn">'+o.n+'</div>';
+  if(o.t)h+='<div class="st">'+o.t+'</div>';
+  if(o.i)h+='<div class="simg"><img src="'+o.i+'" onerror="this.style.display=\'none\'"></div>';
+  if(o.c)h+='<div class="dc">'+o.c+'</div>';
+  if(o.m)h+='<div class="dm">'+o.m+'</div>';
+  if(o.x)h+='<div class="stxt">'+o.x+'</div>';
+  if(o.r)h+='<div class="strans"><div><div class="lbl">🇹🇳</div><div class="ar">'+(o.r[0]||'')+'</div></div><div><div class="lbl">🇫🇷</div><div class="fr">'+(o.r[1]||'')+'</div></div><div><div class="lbl">🇬🇧</div><div class="en">'+(o.r[2]||'')+'</div></div></div>';
+  if(o.s&&o.s[0]){
+    var lb=['عربي','FR','EN'],lg=['ar','fr','en'],cls=['sp-ar','sp-fr','sp-en'];
+    h+='<div class="sb">';
+    for(var i=0;i<3;i++)if(o.s[i])h+='<button class="spb '+cls[i]+'" onclick="ZAID.speak(\''+o.s[i].replace(/'/g,"\\'")+'\',\''+lg[i]+'\')">🔊 '+lb[i]+'</button>';
+    h+='</div>';
+  }
+  if(o.v)h+='<div class="simg"><iframe width="100%" height="250" src="'+o.v+'" allowfullscreen style="border-radius:10px;border:none;"></iframe></div>';
+  if(o.e)h+='<div style="text-align:center;padding:30px"><div style="font-size:50px;margin-bottom:15px">📝</div><div class="stxt" style="font-size:16px"><strong>📝 الاختبار النهائي للدرس</strong></div><div style="font-size:13px;color:#475569;margin-top:10px;line-height:1.8">10 أسئلة<br>10 نقاط لكل سؤال (المجموع 100)<br>النجاح: 50 نقطة أو أكثر</div><button onclick="ZAID.startExam(\''+o.e+'\')" style="margin-top:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:16px;padding:12px 30px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo">🚀 ابدأ الاختبار</button></div>';
+  if(Z.user && Z.user.isSub) {
+    h+='<div style="text-align:center;margin-top:15px;"><button onclick="ZAID.downloadSlide()" style="background:#3b82f6;color:#fff;border:none;border-radius:20px;padding:8px 20px;cursor:pointer;font-family:Cairo;font-weight:900;">📥 تحميل كل المحتوى (مرة واحدة سنوياً)</button></div>';
+  }
+  return h+'</div>';
+}
+
+Z.downloadSlide=function(){
+  if(!Z.user || !Z.user.isSub) { alert('⚠️ هذه الميزة للمشتركين فقط. يرجى الاشتراك أولاً.'); return; }
+  var email = Z.user.email;
+  var key = 'zaid_year_download_' + email;
+  var lastDownload = localStorage.getItem(key);
+  if(lastDownload) {
+    var lastDate = new Date(lastDownload);
+    var nextAllowed = new Date(lastDate.getFullYear() + 1, lastDate.getMonth(), lastDate.getDate());
+    if(new Date() < nextAllowed) { alert('⚠️ لقد قمت بتحميل المحتوى هذا العام.\n\nيمكنك التحميل مرة أخرى بعد:\n' + nextAllowed.toLocaleDateString('ar-TN')); return; }
+  }
+  if(!confirm('📥 هل تريد تحميل كل محتوى المنصة؟\n\n(مرة واحدة فقط في السنة)')) return;
+  var allContent = 'منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي\n';
+  allContent += 'تاريخ التحميل: ' + new Date().toLocaleDateString('ar-TN') + '\n';
+  allContent += 'المستخدم: ' + (Z.user.name || '') + ' (' + email + ')\n';
+  allContent += Array(51).join('=') + '\n\n';
+  var lessonCount = 0;
+  for(var lessonKey in Z.lessons) {
+    lessonCount++;
+    var lesson = Z.lessons[lessonKey];
+    allContent += '\n📖 الدرس ' + lessonCount + ': ' + (lesson.meta.name || lessonKey) + '\n';
+    allContent += Array(51).join('-') + '\n\n';
+    lesson.slides.forEach(function(slide) {
+      if(slide.t) allContent += '📌 ' + slide.t.replace(/<[^>]*>/g, '') + '\n';
+      if(slide.x) { var cleanText = slide.x.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n').replace(/<[^>]*>/g, '').trim(); allContent += cleanText + '\n'; }
+      if(slide.s && slide.s[0]) allContent += '(النطق: ' + slide.s[0] + ')\n';
+      allContent += '\n';
+    });
+  }
+  var blob = new Blob([allContent], {type: 'text/plain;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'zaid_full_content_' + new Date().getFullYear() + '.txt';
+  a.click();
+  localStorage.setItem(key, new Date().toISOString());
+  alert('✅ تم تحميل كل المحتوى بنجاح (' + lessonCount + ' درس).');
+};
+
+Z.startLesson=function(k){var L=Z.lessons[k];if(!L)return;Z.cur={key:k,idx:0};renderCur();};
+function renderCur(){
+  Z.stopSpeak();
+  var L=Z.lessons[Z.cur.key];if(!L)return;
+  var c=document.getElementById('lc');
+  var nav='<div class="nav">';
+  if(Z.cur.idx>0)nav+='<button class="nbtn np" onclick="ZAID.prev()">▶ السابق</button>';
+  nav+='<button class="nbtn ne" onclick="ZAID.openCat(\''+(L.meta.cat||'tech')+'\')">🏠 خروج</button>';
+  if(Z.cur.idx<L.slides.length-1)nav+='<button class="nbtn nn" onclick="ZAID.next()">التالي ◀</button>';
+  nav+='</div>';
+  var pr='<div class="prog"><div class="progf" style="width:'+((Z.cur.idx+1)/L.slides.length*100)+'%"></div></div>';
+  c.innerHTML=renderSlide(L.slides[Z.cur.idx])+nav+pr;
   window.scrollTo(0,0);
-  var btnHome = document.getElementById('btnNavHome');
-  var btnReg = document.getElementById('btnNavReg');
-  if(btnHome) btnHome.style.display = (id === 'pageWelcome') ? 'none' : 'inline-block';
-  if(btnReg) btnReg.style.display = (id === 'pageWelcome') ? 'none' : 'inline-block';
-};
+}
+Z.prev=function(){if(Z.cur.idx>0){Z.cur.idx--;renderCur();}};
+Z.next=function(){var L=Z.lessons[Z.cur.key];if(Z.cur.idx<L.slides.length-1){Z.cur.idx++;renderCur();}};
 
-Z.goHome=function(){Z.stopSpeak();Z.showPage(Z.user||Z.admin?'pageHome':'pageWelcome');};
+/* ================== محرك الاختبارات الذكي ================== */
+Z.startExam=function(k){var q=Z.exams[k];if(!q){alert('لا اختبار');return;}Z.exam={key:k,idx:0,score:0,total:q.length,qs:q};renderExam();};
 
-Z.updateUI=function(){
-  var b=document.getElementById('top'),ic=document.getElementById('ti'),tx=document.getElementById('tt');
-  var br=document.getElementById('br'),bo=document.getElementById('bo'),bs=document.getElementById('bs'),bstat=document.getElementById('bstats');
-  var y=document.getElementById('yellow'),aj=document.getElementById('adminAddJob');
-  if(Z.admin){
-    b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف';
-    br.style.display='none';bo.style.display='inline-block';bs.style.display='none';y.style.display='none';
-    if(bstat) bstat.style.display='inline-block'; if(aj) aj.style.display='block';
-  } else if(Z.user){
-    b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name;
-    br.style.display='none';bo.style.display='inline-block';bs.style.display='inline-block';y.style.display='none';
-    if(bstat) bstat.style.display='none'; if(aj) aj.style.display='none';
-  } else {
-    b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر';
-    br.style.display='inline-block';bo.style.display='inline-block';bs.style.display='none';y.style.display='flex';
-    if(bstat) bstat.style.display='none'; if(aj) aj.style.display='none';
-  }
-};
-
-Z.register=function(){
-  var n=document.getElementById('fn').value.trim();
-  var p=document.getElementById('fp').value.trim();
-  var s=document.getElementById('fs').value.trim();
-  var e=document.getElementById('fe').value.trim();
-  var h=document.getElementById('fh').value.trim();
-  var c=document.getElementById('fc').value.trim();
-  var ci=document.getElementById('fci').value.trim();
-  var er=document.getElementById('err');
-  var nameWords = n.split(/\s+/).filter(function(w){return w.length>0;});
-  if(nameWords.length<3||!p||!s||!e||!h||!c||!ci||!Z.selectedCat){
-    er.style.display='block';er.textContent='املأ جميع الحقول، والاسم ثلاثي';return;
-  }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){
-    er.style.display='block';er.textContent='صيغة البريد الإلكتروني غير صحيحة';return;
-  }
-  er.style.display='none';
-  
-  Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date:new Date().toLocaleDateString('ar-TN'),isSub:false};
-  
-  db.collection("users").add(Z.user)
-  .then(function() { console.log("✅ محفوظ في Firebase"); })
-  .catch(function(error) { console.error("❌ خطأ Firebase:", error); });
-  
-  if(Z.WEB3FORMS_KEY && Z.WEB3FORMS_KEY !== 'ضع_مفتاح_الوصول_هنا') {
-    fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        access_key: Z.WEB3FORMS_KEY,
-        subject: '🎉 مسجل جديد في منصة زايد',
-        from_name: 'منصة زايد',
-        name: n, email: e, phone: h,
-        prof: p, spec: s, country: c, city: ci,
-        category: Z.selectedCat, date: Z.user.date
-      })
-    }).then(function(res){ return res.json(); })
-    .then(function(data){ console.log('📧 Web3Forms:', data); })
-    .catch(function(err){ console.error('❌ Web3Forms:', err); });
-  }
-  
-  Z.visitorAttempts=0; 
-  document.getElementById('un').textContent=n;
-  Z.updateUI();
-  Z.showPage('pageHome');
-};
-
-Z.adminLogin=function(){
-  var o=document.getElementById('admModal');if(o)o.remove();
-  var m=document.createElement('div');m.id='admModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;">'
-    +'<div style="font-size:50px;margin-bottom:15px;">👑</div>'
-    +'<h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2>'
-    +'<input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" autocomplete="new-password" value="" style="text-align:center;font-size:20px;letter-spacing:5px;">'
-    +'<button type="button" onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button>'
-    +'<button type="button" onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button></div>';
-  document.body.appendChild(m);
-};
-Z.checkAdmin=function(){
-  var pwd=document.getElementById('adminPwd').value;
-  if(pwd===Z.ADMIN){
-    Z.admin=true; document.getElementById('admModal').remove(); Z.updateUI(); Z.showPage('pageHome');
-  } else { alert('كلمة المرور خاطئة'); }
-};
-
-Z.logout=function(){
-  Z.user=null;Z.admin=false;Z.stopSpeak();
-  Z.updateUI();Z.showPage('pageWelcome');
-  ['fn','fp','fs','fe','fh','fc','fci'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.value='';
-  });
-};
-Z.showStats=function(){
-  var o=document.getElementById('statsModal');if(o)o.remove();
-  var m=document.createElement('div');m.id='statsModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين من Firebase...</div>';
-  document.body.appendChild(m);
-
-  db.collection("users").get().then(function(querySnapshot) {
-      var users = [];
-      querySnapshot.forEach(function(doc) {
-          var u = doc.data();
-          u._docId = doc.id;
-          users.push(u);
-      });
-      
-      var todayStr=new Date().toLocaleDateString('ar-TN');
-      var todayUsers=users.filter(function(u){return u.date===todayStr;});
-      var subscribers=users.filter(function(u){return u.isSub===true;});
-      
-      var usersHtml='';
-      if(users.length===0) usersHtml='<div style="color:#94a3b8;text-align:center;padding:12px;">لا يوجد مسجلون بعد.</div>';
-      else {
-        users.forEach(function(u,i){
-          var subBtn = u.isSub 
-            ? '<button onclick="ZAID.toggleSub(\''+u._docId+'\',true)" style="background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">❌ إلغاء الاشتراك</button>'
-            : '<button onclick="ZAID.toggleSub(\''+u._docId+'\',false)" style="background:#22c55e;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">✅ تفعيل الاشتراك</button>';
-          
-          var subBadge = u.isSub 
-            ? '<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">مشترك</span>' 
-            : '<span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">غير مشترك</span>';
-
-          usersHtml+='<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:12px;line-height:1.7;">'
-            +'<div style="color:#fbbf24;font-weight:900;font-size:13px;">'+subBadge+' 👤 '+(i+1)+'. '+(u.name||'—')+'</div>'
-            +'<div style="color:#cbd5e1;">📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')+'</div>'
-            +'<div style="color:#94a3b8;">💼 '+(u.prof||'—')+' — 🎯 '+(u.spec||'—')+'</div>'
-            +'<div style="color:#94a3b8;">🌍 '+(u.country||'—')+' — '+(u.city||'—')+'</div>'
-            +'<div style="color:#94a3b8;font-size:11px;">🏷️ '+(u.cat||'—')+' — 📅 '+(u.date||'—')+'</div>'
-            +subBtn
-            +'</div>';
-        });
-      }
-      
-      document.getElementById('statsModal').remove();
-      var m2=document.createElement('div');m2.id='statsModal';
-      m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-      m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
-        +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة (Firebase)</h2>'
-        +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
-          +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 مسجلون اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
-          +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 إجمالي المسجلين:</span><span style="color:#fbbf24">'+users.length+'</span></div>'
-          +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
-        +'</div>'
-        +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
-        +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div>'
-        +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
-      document.body.appendChild(m2);
-  }).catch(function(error) {
-      console.error("Error getting documents: ", error);
-      alert("خطأ في جلب البيانات من Firebase.");
-      document.getElementById('statsModal').remove();
-  });
-};
-
-Z.toggleSub=function(docId, currentStatus){
-  if(!Z.admin){ alert('هذه الميزة للمشرف فقط'); return; }
-  var newStatus = !currentStatus;
-  var msg = newStatus ? 'تفعيل اشتراك هذا المستخدم؟' : 'إلغاء اشتراك هذا المستخدم؟';
-  if(!confirm(msg)) return;
-  
-  db.collection("users").doc(docId).update({ isSub: newStatus })
-  .then(function() { alert('✅ تم تحديث حالة الاشتراك بنجاح'); Z.showStats(); })
-  .catch(function(error) { alert('حدث خطأ: ' + error); });
-};
-
-Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
-Z.speak=function(t,l){
-  if(!t)return;Z.stopSpeak();
-  var tl=l==='ar'?'ar':l==='fr'?'fr':'en';
-  var u='https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURIComponent(t)+'&tl='+tl+'&client=gtx';
-  Z.audio=new Audio(u);
-  Z.audio.play().catch(function(){
-    if('speechSynthesis' in window){
-      var s=new SpeechSynthesisUtterance(t);s.lang=l==='ar'?'ar-SA':l==='fr'?'fr-FR':'en-US';s.rate=0.9;
-      window.speechSynthesis.speak(s);
+function renderExam(){
+  var c=document.getElementById('lc'),t=Z.exam.qs.length;
+  if(Z.exam.idx>=t){
+    var p=Math.round((Z.exam.score/(t*10))*100),ok=p>=50;
+    var msg=ok?'🎉 مبروك! نجحت':'😔 لم تنجح';
+    var col=ok?'#22c55e':'#dc2626',cert='';
+    if(ok){
+      var nm=(Z.user&&Z.user.name)?Z.user.name:'المتعلم';
+      var dt=new Date().toLocaleDateString('ar-TN');
+      cert='<div class="cert"><h1>🏆 شهادة إتمام</h1><p>تشهد منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي بأن</p><h2>'+nm+'</h2><p>قد أتم بنجاح هذا الاختبار بنسبة <strong>'+p+'%</strong> وحصل على <strong>'+Z.exam.score+'</strong> نقطة من أصل '+(t*10)+'</p><p>التاريخ: '+dt+'</p><div class="sign">محمد زايد — خبير دولي — تونس 🇹🇳</div></div>';
     }
-  });
-};
-
-Z.showSub=function(){
-  var o=document.getElementById('sm');if(o)o.remove();
-  var m=document.createElement('div');m.id='sm';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:460px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
-    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
-    +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس)</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">30 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div></div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">20 دولار / 20 يورو</div><div style="font-size:12px;color:#94a3b8">عبر Western Union</div></div>'
-    +'<div style="background:rgba(34,197,94,.15);border-right:4px solid #22c55e;padding:10px;border-radius:8px;font-size:13px;color:#22c55e;text-align:right;margin:10px 0;line-height:1.7;"><strong>⚡ الدفع يستغرق دقيقة واحدة فقط</strong></div>'
-    +'<div style="background:rgba(251,191,36,.1);border-right:4px solid #fbbf24;padding:10px;border-radius:8px;font-size:13px;color:#fbbf24;text-align:right;margin-bottom:10px;line-height:1.7;"><strong>💡 مزايا الاشتراك:</strong><br>• رفع وتحميل كل محتوى المنصة <strong>مرة واحدة سنوياً</strong><br>• شهادة معتمدة بعد كل اختبار ناجح</div>'
-    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
-    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
-  document.body.appendChild(m);
-};
-
-Z.wa=function(){
-  var u=Z.user||{};
-  var msg='مرحباً، أرغب في الاشتراك في منصة زايد.\n\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'')+'\n\nطريقة الدفع: (e-Dinar / Western Union)';
-  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
-};
-
-Z.openCat=function(cat){
-  if(!Z.checkVisitor()) return;
-  var ks=Object.keys(Z.lessons).filter(function(k){return Z.lessons[k].meta.cat===cat;});
-  var c=document.getElementById('lc');
-  if(!ks.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">🚧</div><div class="st">'+cat+'</div><div class="stxt">قيد الإعداد</div></div>';}
-  else{
-    var h='<div class="sel">';
-    ks.forEach(function(k){var m=Z.lessons[k].meta;
-      h+='<div class="lcard '+(m.color||'')+'" onclick="ZAID.startLesson(\''+k+'\')"><div class="li">'+(m.icon||'📖')+'</div><div class="lt">'+m.name+'</div><div class="ld">'+(m.desc||'')+'</div></div>';
-    });
-    h+='</div>';c.innerHTML=h;
-  }
-  Z.showPage('pageLesson');
-};
-
-Z.openSrv=function(key){
-  if(!Z.checkVisitor()) return;
-  if(key==='seeker' || key==='internship' || key==='job'){ Z.showSeekerForm(key); return; }
-  var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
-  var c=document.getElementById('lc');
-  c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
-  Z.showPage('pageLesson');
-};
-
-Z.openJobs=function(){
-  if(!Z.checkVisitor()) return;
-  var c=document.getElementById('lc');
-  if(!Z.jobs.length){
-    c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">💼</div><div class="st">لا توجد عروض تشغيل حالياً</div><div class="stxt">إذا كنت مؤسسة وترغب في نشر عرض، يرجى التواصل معنا.</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
-  } else {
-    var h='<div class="sel">';
-    Z.jobs.forEach(function(j,idx){
-      h+='<div class="lcard j" onclick="ZAID.viewJob('+idx+')"><div class="li">'+(j.logo?'<img src="'+j.logo+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 auto">':'🏢')+'</div><div class="lt">'+(j.title||'عرض')+'</div><div class="ld">'+(j.company||'')+'</div><div style="margin-top:10px"><span class="badge '+(Z.LVL_CLS[j.level]||'lvl-c')+'">'+(j.level||'غير محدد')+'</span></div></div>';
-    });
-    h+='</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div>';
-    c.innerHTML=h;
-  }
-  Z.showPage('pageLesson');
-};
-
-Z.viewJob=function(idx){
-  var j=Z.jobs[idx];if(!j)return;
-  var c=document.getElementById('lc');
-  var h='<div class="slide" style="padding:0;overflow:hidden;">';
-  h+='<div style="background:#0e7490;padding:20px;text-align:center;color:white">';
-  h+='<img src="'+(j.logo||'https://cdn-icons-png.flaticon.com/512/3106/3106773.png')+'" style="width:80px;height:80px;border-radius:50%;border:3px solid #fff;object-fit:cover;background:#fff;margin-bottom:10px" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/3106/3106773.png\'">';
-  h+='<h2 style="font-size:22px;margin:0">'+(j.company||'اسم المؤسسة')+'</h2>';
-  h+='<div style="font-size:16px;margin-top:5px;color:#cffafe">'+(j.activity||'ميدان النشاط')+'</div></div>';
-  h+='<div style="padding:20px">';
-  h+='<div class="job-info" style="border-right-color:#06b6d4;background:#ecfeff;color:#164e63;line-height:2.2;font-size:15px">';
-  h+='<div><strong>📍 العنوان:</strong> '+(j.address||'—')+'</div>';
-  h+='<div><strong>🧾 السجل الجبائي:</strong> '+(j.tax||'—')+'</div>';
-  h+='<div><strong>📊 المستوى المطلوب:</strong> '+(j.level||'—')+'</div>';
-  h+='<div><strong>💼 المسمى الوظيفي:</strong> '+(j.title||'—')+'</div>';
-  h+='<div style="margin-top:10px;padding-top:10px;border-top:1px dashed #0e7490">';
-  h+='<div><strong>📱 الواتساب:</strong> '+(j.phone||'—')+'</div>';
-  h+='<div><strong>📧 الإيميل:</strong> '+(j.email||'—')+'</div></div></div>';
-  h+='<div class="nav" style="margin-top:20px">';
-  if(j.phone) h+='<button class="apply-btn" onclick="window.open(\'https://wa.me/'+j.phone+'\',\'_blank\')">📱 تقدم للوظيفة</button>';
-  h+='<button class="nbtn ne" onclick="ZAID.openJobs()">🔙 العودة للعروض</button></div>';
-  if(Z.admin) h+='<div style="text-align:center;margin-top:15px"><button class="del-btn" onclick="ZAID.delJob('+idx+')">🗑️ حذف هذا العرض</button></div>';
-  h+='</div></div>';
-  c.innerHTML=h;Z.showPage('pageLesson');
-};
-
-Z.delJob=function(idx){
-  if(!Z.admin){alert('للمشرف فقط');return;}
-  if(!confirm('حذف هذا العرض؟'))return;
-  Z.jobs.splice(idx,1);Z.saveJobs();Z.openJobs();
-};
-
-Z.jobForm=function(){
-  if(!Z.admin){alert('هذه الميزة للمشرف فقط');return;}
-  var old=document.getElementById('jf');if(old)old.remove();
-  var m=document.createElement('div');m.id='jf';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
-  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:600px;width:100%;border:4px solid #06b6d4;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#06b6d4;text-align:center;margin-bottom:15px;font-size:20px">🏢 إضافة عرض تشغيل</h2>'
-    +'<input class="inp" id="jfCompany" placeholder="اسم المؤسسة / الشركة *">'
-    +'<input class="inp" id="jfActivity" placeholder="ميدان النشاط *">'
-    +'<input class="inp" id="jfAddress" placeholder="العنوان / مكان الإقامة *">'
-    +'<input class="inp" id="jfTax" placeholder="رقم السجل الجبائي *">'
-    +'<input class="inp" id="jfPhone" placeholder="رقم الواتساب *">'
-    +'<input class="inp" id="jfEmail" placeholder="البريد الإلكتروني *">'
-    +'<input class="inp" id="jfLogo" placeholder="رابط شعار المؤسسة (URL) - اختياري">'
-    +'<hr style="margin:10px 0;border-color:#334155">'
-    +'<input class="inp" id="jfTitle" placeholder="المسمى الوظيفي المطلوب *">'
-    +'<select class="inp" id="jfLevel">'+opts+'</select>'
-    +'<button class="sbt" onclick="ZAID.saveJob()" style="background:#06b6d4;border-color:#fff">💾 حفظ العرض</button>'
-    +'<button onclick="document.getElementById(\'jf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
-    +'</div>';
-  document.body.appendChild(m);
-};
-
-Z.saveJob=function(){
-  var c=document.getElementById('jfCompany');
-  var act=document.getElementById('jfActivity');
-  var addr=document.getElementById('jfAddress');
-  var tax=document.getElementById('jfTax');
-  var phone=document.getElementById('jfPhone');
-  var email=document.getElementById('jfEmail');
-  var t=document.getElementById('jfTitle');
-  var l=document.getElementById('jfLevel').value;
-  var logo=document.getElementById('jfLogo').value.trim();
-  [c, act, addr, tax, phone, email, t].forEach(function(el){el.classList.remove('inp-err');});
-  if(!c.value.trim()||!act.value.trim()||!addr.value.trim()||!tax.value.trim()||!phone.value.trim()||!email.value.trim()||!t.value.trim()){
-    alert('يرجى ملء جميع الحقول الإلزامية (*)');
-    if(!c.value.trim()) c.classList.add('inp-err');
-    if(!act.value.trim()) act.classList.add('inp-err');
-    if(!addr.value.trim()) addr.classList.add('inp-err');
-    if(!tax.value.trim()) tax.classList.add('inp-err');
-    if(!phone.value.trim()) phone.classList.add('inp-err');
-    if(!email.value.trim()) email.classList.add('inp-err');
-    if(!t.value.trim()) t.classList.add('inp-err');
-    return;
-  }
-  Z.jobs.unshift({company:c.value.trim(), activity:act.value.trim(), address:addr.value.trim(), tax:tax.value.trim(), phone:phone.value.trim(), email:email.value.trim(), logo:logo||'', title:t.value.trim(), level:l});
-  Z.saveJobs();document.getElementById('jf').remove();alert('✅ تم حفظ العرض بنجاح');Z.openJobs();
-};
-
-Z.showSeekerForm=function(type){
-  if(!Z.checkVisitor()) return;
-  var old=document.getElementById('sf');if(old)old.remove();
-  var m=document.createElement('div');m.id='sf';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
-  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  var title = type === 'internship' ? '📄 طلب تربص' : (type === 'job' ? '💼 طلب شغل' : '👤 إضافة سيرة ذاتية');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:650px;width:100%;border:4px solid #22c55e;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">'+title+'</h2>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
-    +'<input class="inp" id="sfName" placeholder="الاسم *">'
-    +'<input class="inp" id="sfSurname" placeholder="اللقب *">'
-    +'</div>'
-    +'<input class="inp" id="sfSection" placeholder="القسم *">'
-    +'<input class="inp" id="sfSchool" placeholder="المدرسة *">'
-    +'<input class="inp" id="sfSpec" placeholder="الاختصاص *">'
-    +'<select class="inp" id="sfLevel">'+opts+'</select>'
-    +'<input class="inp" id="sfPhone" placeholder="رقم الواتساب *">'
-    +'<input class="inp" id="sfEmail" placeholder="البريد الإلكتروني *">'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
-    +'<input class="inp" id="sfCity" placeholder="المدينة *">'
-    +'<input class="inp" id="sfCountry" placeholder="البلد *" value="تونس">'
-    +'</div>'
-    +'<input class="inp" id="sfField" placeholder="الموضوع او المجال المطلوب *">'
-    +'<div style="margin-bottom:10px;color:#fbbf24;font-weight:bold;font-size:14px;">📎 ارفاق السيرة الذاتية (PDF أو صورة) *:</div>'
-    +'<input type="file" id="sfCV" class="inp" accept=".pdf,image/*" style="padding:8px;height:auto;background:#0f172a;color:#fff;border:1px solid #334155;">'
-    +'<button class="sbt" onclick="ZAID.saveSeeker(\''+type+'\')" style="background:#22c55e;border-color:#fff;margin-top:15px;">💾 حفظ وإرسال الطلب</button>'
-    +'<button onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
-    +'</div>';
-  document.body.appendChild(m);
-};
-
-Z.saveSeeker=function(type){
-  var name=document.getElementById('sfName');
-  var surname=document.getElementById('sfSurname');
-  var section=document.getElementById('sfSection');
-  var school=document.getElementById('sfSchool');
-  var spec=document.getElementById('sfSpec');
-  var level=document.getElementById('sfLevel').value;
-  var phone=document.getElementById('sfPhone');
-  var email=document.getElementById('sfEmail');
-  var city=document.getElementById('sfCity');
-  var country=document.getElementById('sfCountry');
-  var field=document.getElementById('sfField');
-  var cvFile=document.getElementById('sfCV').files[0];
-  var fields = [name, surname, section, school, spec, phone, email, city, country, field];
-  fields.forEach(function(el){el.classList.remove('inp-err');});
-  if(!name.value.trim()||!surname.value.trim()||!section.value.trim()||!school.value.trim()||!spec.value.trim()||!phone.value.trim()||!email.value.trim()||!city.value.trim()||!country.value.trim()||!field.value.trim()){
-    alert('يرجى ملء جميع الحقول الإلزامية (*)');
-    fields.forEach(function(el){ if(!el.value.trim()) el.classList.add('inp-err'); });
-    return;
-  }
-  if(!cvFile) { alert('يرجى ارفاق السيرة الذاتية'); return; }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var cvBase64 = e.target.result;
-    Z.loadSeekers();
-    Z.seekers.unshift({
-      type: type || 'job', name: name.value.trim() + ' ' + surname.value.trim(), section: section.value.trim(), school: school.value.trim(), spec: spec.value.trim(), level: level, phone: phone.value.trim(), email: email.value.trim(), city: city.value.trim(), country: country.value.trim(), field: field.value.trim(), cv: cvBase64, cvName: cvFile.name, date: new Date().toLocaleDateString('ar-TN')
-    });
-    Z.saveSeekers();
-    document.getElementById('sf').remove();
-    alert('✅ تم حفظ طلبك وإرفاق سيرتك الذاتية بنجاح.');
-  };
-  reader.readAsDataURL(cvFile);
-};
-Z.showStats=function(){
-  var o=document.getElementById('statsModal');if(o)o.remove();
-  var m=document.createElement('div');m.id='statsModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين من Firebase...</div>';
-  document.body.appendChild(m);
-
-  db.collection("users").get().then(function(querySnapshot) {
-      var users = [];
-      querySnapshot.forEach(function(doc) {
-          var u = doc.data();
-          u._docId = doc.id;
-          users.push(u);
-      });
-      
-      var todayStr=new Date().toLocaleDateString('ar-TN');
-      var todayUsers=users.filter(function(u){return u.date===todayStr;});
-      var subscribers=users.filter(function(u){return u.isSub===true;});
-      
-      var usersHtml='';
-      if(users.length===0) usersHtml='<div style="color:#94a3b8;text-align:center;padding:12px;">لا يوجد مسجلون بعد.</div>';
-      else {
-        users.forEach(function(u,i){
-          var subBtn = u.isSub 
-            ? '<button onclick="ZAID.toggleSub(\''+u._docId+'\',true)" style="background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">❌ إلغاء الاشتراك</button>'
-            : '<button onclick="ZAID.toggleSub(\''+u._docId+'\',false)" style="background:#22c55e;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">✅ تفعيل الاشتراك</button>';
-          
-          var subBadge = u.isSub 
-            ? '<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">مشترك</span>' 
-            : '<span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">غير مشترك</span>';
-
-          usersHtml+='<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:12px;line-height:1.7;">'
-            +'<div style="color:#fbbf24;font-weight:900;font-size:13px;">'+subBadge+' 👤 '+(i+1)+'. '+(u.name||'—')+'</div>'
-            +'<div style="color:#cbd5e1;">📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')+'</div>'
-            +'<div style="color:#94a3b8;">💼 '+(u.prof||'—')+' — 🎯 '+(u.spec||'—')+'</div>'
-            +'<div style="color:#94a3b8;">🌍 '+(u.country||'—')+' — '+(u.city||'—')+'</div>'
-            +'<div style="color:#94a3b8;font-size:11px;">🏷️ '+(u.cat||'—')+' — 📅 '+(u.date||'—')+'</div>'
-            +subBtn
-            +'</div>';
-        });
-      }
-      
-      document.getElementById('statsModal').remove();
-      var m2=document.createElement('div');m2.id='statsModal';
-      m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-      m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
-        +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة (Firebase)</h2>'
-        +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
-          +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 مسجلون اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
-          +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 إجمالي المسجلين:</span><span style="color:#fbbf24">'+users.length+'</span></div>'
-          +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
-        +'</div>'
-        +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
-        +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div>'
-        +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
-      document.body.appendChild(m2);
-  }).catch(function(error) {
-      console.error("Error getting documents: ", error);
-      alert("خطأ في جلب البيانات من Firebase.");
-      document.getElementById('statsModal').remove();
-  });
-};
-
-Z.toggleSub=function(docId, currentStatus){
-  if(!Z.admin){ alert('هذه الميزة للمشرف فقط'); return; }
-  var newStatus = !currentStatus;
-  var msg = newStatus ? 'تفعيل اشتراك هذا المستخدم؟' : 'إلغاء اشتراك هذا المستخدم؟';
-  if(!confirm(msg)) return;
-  
-  db.collection("users").doc(docId).update({ isSub: newStatus })
-  .then(function() { alert('✅ تم تحديث حالة الاشتراك بنجاح'); Z.showStats(); })
-  .catch(function(error) { alert('حدث خطأ: ' + error); });
-};
-
-Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
-Z.speak=function(t,l){
-  if(!t)return;Z.stopSpeak();
-  var tl=l==='ar'?'ar':l==='fr'?'fr':'en';
-  var u='https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURIComponent(t)+'&tl='+tl+'&client=gtx';
-  Z.audio=new Audio(u);
-  Z.audio.play().catch(function(){
-    if('speechSynthesis' in window){
-      var s=new SpeechSynthesisUtterance(t);s.lang=l==='ar'?'ar-SA':l==='fr'?'fr-FR':'en-US';s.rate=0.9;
-      window.speechSynthesis.speak(s);
+    var buttonsHtml = '';
+    if(ok){
+      buttonsHtml = '<div style="margin-top:20px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap">'
+        + '<button class="nbtn ne" onclick="ZAID.goHome()">🏠 الأقسام</button>'
+        + '<button class="nbtn np" onclick="ZAID.exitPlatform()">🚪 مغادرة المنصة</button>'
+        + '</div>';
+    } else {
+      buttonsHtml = '<div style="margin-top:20px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap">'
+        + '<button class="nbtn nn" onclick="ZAID.startLesson(\''+Z.exam.key.replace(/_exam.*/,'')+'\')">📖 العودة للدرس</button>'
+        + '<button class="nbtn np" onclick="ZAID.startExam(\''+Z.exam.key+'\')">🔄 إعادة الاختبار</button>'
+        + '<button class="nbtn ne" onclick="ZAID.goHome()">🏠 الأقسام</button>'
+        + '</div>';
     }
-  });
-};
-
-Z.showSub=function(){
-  var o=document.getElementById('sm');if(o)o.remove();
-  var m=document.createElement('div');m.id='sm';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:460px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
-    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
-    +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس)</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">30 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div></div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">20 دولار / 20 يورو</div><div style="font-size:12px;color:#94a3b8">عبر Western Union</div></div>'
-    +'<div style="background:rgba(34,197,94,.15);border-right:4px solid #22c55e;padding:10px;border-radius:8px;font-size:13px;color:#22c55e;text-align:right;margin:10px 0;line-height:1.7;"><strong>⚡ الدفع يستغرق دقيقة واحدة فقط</strong></div>'
-    +'<div style="background:rgba(251,191,36,.1);border-right:4px solid #fbbf24;padding:10px;border-radius:8px;font-size:13px;color:#fbbf24;text-align:right;margin-bottom:10px;line-height:1.7;"><strong>💡 مزايا الاشتراك:</strong><br>• رفع وتحميل كل محتوى المنصة <strong>مرة واحدة سنوياً</strong><br>• شهادة معتمدة بعد كل اختبار ناجح</div>'
-    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
-    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
-  document.body.appendChild(m);
-};
-
-Z.wa=function(){
-  var u=Z.user||{};
-  var msg='مرحباً، أرغب في الاشتراك في منصة زايد.\n\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'')+'\n\nطريقة الدفع: (e-Dinar / Western Union)';
-  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
-};
-
-Z.openCat=function(cat){
-  if(!Z.checkVisitor()) return;
-  var ks=Object.keys(Z.lessons).filter(function(k){return Z.lessons[k].meta.cat===cat;});
-  var c=document.getElementById('lc');
-  if(!ks.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">🚧</div><div class="st">'+cat+'</div><div class="stxt">قيد الإعداد</div></div>';}
-  else{
-    var h='<div class="sel">';
-    ks.forEach(function(k){var m=Z.lessons[k].meta;
-      h+='<div class="lcard '+(m.color||'')+'" onclick="ZAID.startLesson(\''+k+'\')"><div class="li">'+(m.icon||'📖')+'</div><div class="lt">'+m.name+'</div><div class="ld">'+(m.desc||'')+'</div></div>';
-    });
-    h+='</div>';c.innerHTML=h;
-  }
-  Z.showPage('pageLesson');
-};
-
-Z.openSrv=function(key){
-  if(!Z.checkVisitor()) return;
-  if(key==='seeker' || key==='internship' || key==='job'){ Z.showSeekerForm(key); return; }
-  var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
-  var c=document.getElementById('lc');
-  c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
-  Z.showPage('pageLesson');
-};
-
-Z.openJobs=function(){
-  if(!Z.checkVisitor()) return;
-  var c=document.getElementById('lc');
-  if(!Z.jobs.length){
-    c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">💼</div><div class="st">لا توجد عروض تشغيل حالياً</div><div class="stxt">إذا كنت مؤسسة وترغب في نشر عرض، يرجى التواصل معنا.</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
-  } else {
-    var h='<div class="sel">';
-    Z.jobs.forEach(function(j,idx){
-      h+='<div class="lcard j" onclick="ZAID.viewJob('+idx+')"><div class="li">'+(j.logo?'<img src="'+j.logo+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 auto">':'🏢')+'</div><div class="lt">'+(j.title||'عرض')+'</div><div class="ld">'+(j.company||'')+'</div><div style="margin-top:10px"><span class="badge '+(Z.LVL_CLS[j.level]||'lvl-c')+'">'+(j.level||'غير محدد')+'</span></div></div>';
-    });
-    h+='</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div>';
-    c.innerHTML=h;
-  }
-  Z.showPage('pageLesson');
-};
-
-Z.viewJob=function(idx){
-  var j=Z.jobs[idx];if(!j)return;
-  var c=document.getElementById('lc');
-  var h='<div class="slide" style="padding:0;overflow:hidden;">';
-  h+='<div style="background:#0e7490;padding:20px;text-align:center;color:white">';
-  h+='<img src="'+(j.logo||'https://cdn-icons-png.flaticon.com/512/3106/3106773.png')+'" style="width:80px;height:80px;border-radius:50%;border:3px solid #fff;object-fit:cover;background:#fff;margin-bottom:10px" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/3106/3106773.png\'">';
-  h+='<h2 style="font-size:22px;margin:0">'+(j.company||'اسم المؤسسة')+'</h2>';
-  h+='<div style="font-size:16px;margin-top:5px;color:#cffafe">'+(j.activity||'ميدان النشاط')+'</div></div>';
-  h+='<div style="padding:20px">';
-  h+='<div class="job-info" style="border-right-color:#06b6d4;background:#ecfeff;color:#164e63;line-height:2.2;font-size:15px">';
-  h+='<div><strong>📍 العنوان:</strong> '+(j.address||'—')+'</div>';
-  h+='<div><strong>🧾 السجل الجبائي:</strong> '+(j.tax||'—')+'</div>';
-  h+='<div><strong>📊 المستوى المطلوب:</strong> '+(j.level||'—')+'</div>';
-  h+='<div><strong>💼 المسمى الوظيفي:</strong> '+(j.title||'—')+'</div>';
-  h+='<div style="margin-top:10px;padding-top:10px;border-top:1px dashed #0e7490">';
-  h+='<div><strong>📱 الواتساب:</strong> '+(j.phone||'—')+'</div>';
-  h+='<div><strong>📧 الإيميل:</strong> '+(j.email||'—')+'</div></div></div>';
-  h+='<div class="nav" style="margin-top:20px">';
-  if(j.phone) h+='<button class="apply-btn" onclick="window.open(\'https://wa.me/'+j.phone+'\',\'_blank\')">📱 تقدم للوظيفة</button>';
-  h+='<button class="nbtn ne" onclick="ZAID.openJobs()">🔙 العودة للعروض</button></div>';
-  if(Z.admin) h+='<div style="text-align:center;margin-top:15px"><button class="del-btn" onclick="ZAID.delJob('+idx+')">🗑️ حذف هذا العرض</button></div>';
-  h+='</div></div>';
-  c.innerHTML=h;Z.showPage('pageLesson');
-};
-
-Z.delJob=function(idx){
-  if(!Z.admin){alert('للمشرف فقط');return;}
-  if(!confirm('حذف هذا العرض؟'))return;
-  Z.jobs.splice(idx,1);Z.saveJobs();Z.openJobs();
-};
-
-Z.jobForm=function(){
-  if(!Z.admin){alert('هذه الميزة للمشرف فقط');return;}
-  var old=document.getElementById('jf');if(old)old.remove();
-  var m=document.createElement('div');m.id='jf';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
-  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:600px;width:100%;border:4px solid #06b6d4;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#06b6d4;text-align:center;margin-bottom:15px;font-size:20px">🏢 إضافة عرض تشغيل</h2>'
-    +'<input class="inp" id="jfCompany" placeholder="اسم المؤسسة / الشركة *">'
-    +'<input class="inp" id="jfActivity" placeholder="ميدان النشاط *">'
-    +'<input class="inp" id="jfAddress" placeholder="العنوان / مكان الإقامة *">'
-    +'<input class="inp" id="jfTax" placeholder="رقم السجل الجبائي *">'
-    +'<input class="inp" id="jfPhone" placeholder="رقم الواتساب *">'
-    +'<input class="inp" id="jfEmail" placeholder="البريد الإلكتروني *">'
-    +'<input class="inp" id="jfLogo" placeholder="رابط شعار المؤسسة (URL) - اختياري">'
-    +'<hr style="margin:10px 0;border-color:#334155">'
-    +'<input class="inp" id="jfTitle" placeholder="المسمى الوظيفي المطلوب *">'
-    +'<select class="inp" id="jfLevel">'+opts+'</select>'
-    +'<button class="sbt" onclick="ZAID.saveJob()" style="background:#06b6d4;border-color:#fff">💾 حفظ العرض</button>'
-    +'<button onclick="document.getElementById(\'jf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
-    +'</div>';
-  document.body.appendChild(m);
-};
-
-Z.saveJob=function(){
-  var c=document.getElementById('jfCompany');
-  var act=document.getElementById('jfActivity');
-  var addr=document.getElementById('jfAddress');
-  var tax=document.getElementById('jfTax');
-  var phone=document.getElementById('jfPhone');
-  var email=document.getElementById('jfEmail');
-  var t=document.getElementById('jfTitle');
-  var l=document.getElementById('jfLevel').value;
-  var logo=document.getElementById('jfLogo').value.trim();
-  [c, act, addr, tax, phone, email, t].forEach(function(el){el.classList.remove('inp-err');});
-  if(!c.value.trim()||!act.value.trim()||!addr.value.trim()||!tax.value.trim()||!phone.value.trim()||!email.value.trim()||!t.value.trim()){
-    alert('يرجى ملء جميع الحقول الإلزامية (*)');
-    if(!c.value.trim()) c.classList.add('inp-err');
-    if(!act.value.trim()) act.classList.add('inp-err');
-    if(!addr.value.trim()) addr.classList.add('inp-err');
-    if(!tax.value.trim()) tax.classList.add('inp-err');
-    if(!phone.value.trim()) phone.classList.add('inp-err');
-    if(!email.value.trim()) email.classList.add('inp-err');
-    if(!t.value.trim()) t.classList.add('inp-err');
+    c.innerHTML='<div class="slide" style="text-align:center"><div class="sn">🏆 النتيجة النهائية</div>'
+      +'<div style="font-size:26px;font-weight:900;color:'+col+';margin:20px 0">'+msg+'</div>'
+      +'<div class="stxt" style="font-size:16px">النتيجة: '+Z.exam.score+' نقطة من '+(t*10)+'<br>النسبة: '+p+'%</div>'
+      + cert + buttonsHtml + '</div>';
     return;
   }
-  Z.jobs.unshift({company:c.value.trim(), activity:act.value.trim(), address:addr.value.trim(), tax:tax.value.trim(), phone:phone.value.trim(), email:email.value.trim(), logo:logo||'', title:t.value.trim(), level:l});
-  Z.saveJobs();document.getElementById('jf').remove();alert('✅ تم حفظ العرض بنجاح');Z.openJobs();
+  var q=Z.exam.qs[Z.exam.idx],op='';
+  for(var i=0;i<q.o.length;i++)op+='<button class="opt" onclick="ZAID.ans(\''+q.o[i].replace(/'/g,"\\'")+'\')">'+q.o[i]+'</button>';
+  c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div>'
+    +'<div style="background:#fef3c7;padding:10px;border-radius:8px;margin-bottom:10px;text-align:center;font-weight:900;color:#78350f;">⭐ النقاط الحالية: '+Z.exam.score+' / '+(t*10)+'</div>'
+    +'<div class="stxt" style="font-size:16px;font-weight:900">'+q.q+'</div>'+op+'</div>';
+}
+
+Z.ans=function(ch){
+  var q=Z.exam.qs[Z.exam.idx];
+  if(ch===q.a){ Z.exam.score += 10; alert('✅ إجابة صحيحة! +10 نقاط\n\n' + (q.explain || 'أحسنت!')); }
+  else { alert('❌ إجابة خاطئة.\n\nالإجابة الصحيحة: ' + q.a + '\n\n' + (q.explain || 'راجع الدرس وحاول مرة أخرى.')); }
+  Z.exam.idx++;
+  renderExam();
 };
 
-Z.showSeekerForm=function(type){
-  if(!Z.checkVisitor()) return;
-  var old=document.getElementById('sf');if(old)old.remove();
-  var m=document.createElement('div');m.id='sf';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
-  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  var title = type === 'internship' ? '📄 طلب تربص' : (type === 'job' ? '💼 طلب شغل' : '👤 إضافة سيرة ذاتية');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:650px;width:100%;border:4px solid #22c55e;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">'+title+'</h2>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
-    +'<input class="inp" id="sfName" placeholder="الاسم *">'
-    +'<input class="inp" id="sfSurname" placeholder="اللقب *">'
-    +'</div>'
-    +'<input class="inp" id="sfSection" placeholder="القسم *">'
-    +'<input class="inp" id="sfSchool" placeholder="المدرسة *">'
-    +'<input class="inp" id="sfSpec" placeholder="الاختصاص *">'
-    +'<select class="inp" id="sfLevel">'+opts+'</select>'
-    +'<input class="inp" id="sfPhone" placeholder="رقم الواتساب *">'
-    +'<input class="inp" id="sfEmail" placeholder="البريد الإلكتروني *">'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
-    +'<input class="inp" id="sfCity" placeholder="المدينة *">'
-    +'<input class="inp" id="sfCountry" placeholder="البلد *" value="تونس">'
-    +'</div>'
-    +'<input class="inp" id="sfField" placeholder="الموضوع او المجال المطلوب *">'
-    +'<div style="margin-bottom:10px;color:#fbbf24;font-weight:bold;font-size:14px;">📎 ارفاق السيرة الذاتية (PDF أو صورة) *:</div>'
-    +'<input type="file" id="sfCV" class="inp" accept=".pdf,image/*" style="padding:8px;height:auto;background:#0f172a;color:#fff;border:1px solid #334155;">'
-    +'<button class="sbt" onclick="ZAID.saveSeeker(\''+type+'\')" style="background:#22c55e;border-color:#fff;margin-top:15px;">💾 حفظ وإرسال الطلب</button>'
-    +'<button onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
-    +'</div>';
-  document.body.appendChild(m);
-};
+Z.loadJobs();
+Z.loadSeekers();
 
-Z.saveSeeker=function(type){
-  var name=document.getElementById('sfName');
-  var surname=document.getElementById('sfSurname');
-  var section=document.getElementById('sfSection');
-  var school=document.getElementById('sfSchool');
-  var spec=document.getElementById('sfSpec');
-  var level=document.getElementById('sfLevel').value;
-  var phone=document.getElementById('sfPhone');
-  var email=document.getElementById('sfEmail');
-  var city=document.getElementById('sfCity');
-  var country=document.getElementById('sfCountry');
-  var field=document.getElementById('sfField');
-  var cvFile=document.getElementById('sfCV').files[0];
-  var fields = [name, surname, section, school, spec, phone, email, city, country, field];
-  fields.forEach(function(el){el.classList.remove('inp-err');});
-  if(!name.value.trim()||!surname.value.trim()||!section.value.trim()||!school.value.trim()||!spec.value.trim()||!phone.value.trim()||!email.value.trim()||!city.value.trim()||!country.value.trim()||!field.value.trim()){
-    alert('يرجى ملء جميع الحقول الإلزامية (*)');
-    fields.forEach(function(el){ if(!el.value.trim()) el.classList.add('inp-err'); });
-    return;
-  }
-  if(!cvFile) { alert('يرجى ارفاق السيرة الذاتية'); return; }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var cvBase64 = e.target.result;
-    Z.loadSeekers();
-    Z.seekers.unshift({
-      type: type || 'job', name: name.value.trim() + ' ' + surname.value.trim(), section: section.value.trim(), school: school.value.trim(), spec: spec.value.trim(), level: level, phone: phone.value.trim(), email: email.value.trim(), city: city.value.trim(), country: country.value.trim(), field: field.value.trim(), cv: cvBase64, cvName: cvFile.name, date: new Date().toLocaleDateString('ar-TN')
-    });
-    Z.saveSeekers();
-    document.getElementById('sf').remove();
-    alert('✅ تم حفظ طلبك وإرفاق سيرتك الذاتية بنجاح.');
-  };
-  reader.readAsDataURL(cvFile);
-};
-Z.showStats=function(){
-  var o=document.getElementById('statsModal');if(o)o.remove();
-  var m=document.createElement('div');m.id='statsModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين من Firebase...</div>';
-  document.body.appendChild(m);
+/* ================== الدرس الأول الكامل: ما هو الحاسوب؟ (11 شريحة) ================== */
+Z.addLesson('tech_lesson1',{cat:'tech',icon:'💻',name:'الدرس 1: ما هو الحاسوب؟',desc:'11 شريحة + فيديوهات + كويز 10 أسئلة'},[
+  {n:'الشريحة 1/11',t:'💻 ما هو الحاسوب؟ (التعريف الأساسي)',
+   i:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Desktop_computer_clipart_-_Yellow_theme.svg/640px-Desktop_computer_clipart_-_Yellow_theme.svg.png',
+   x:'<strong>الحاسوب</strong> هو جهاز <strong>إلكتروني رقمي</strong> له القدرة على استقبال البيانات، ثم معالجتها، ثم تخزينها، ثم استرجاعها، وأخيراً إخراج النتائج في شكل معلومات مفيدة.<br><br>يعمل الحاسوب وفق مجموعة من التعليمات والأوامر التي تُعرف بـ<strong>البرامج (Programs)</strong>. وهو مصمم لتنفيذ العمليات الحسابية والمنطقية بسرعة فائقة ودقة عالية، دون تعب أو ملل، على عكس الإنسان.<br><br><strong>مثال بسيط للطفل:</strong> عندما تكتب "2 + 2" على الآلة الحاسبة، فأنت تدخل بيانات، والحاسوب يعالجها ويعطيك النتيجة "4". هذه هي فكرة عمل الحاسوب.',
+   r:['حاسوب','Ordinateur','Computer'],
+   s:['الحاسوب هو جهاز إلكتروني رقمي لمعالجة البيانات','L\'ordinateur est un appareil électronique numérique','A computer is a digital electronic device']},
+  {n:'الشريحة 2/11',t:'❓ لماذا سُمي "حاسوباً"؟',
+   x:'سُمي الحاسوب بهذا الاسم لأنه في الأصل كان مخصصاً <strong>للحساب</strong> فقط، أي إجراء العمليات الحسابية (الجمع، الطرح، الضرب، القسمة) بسرعة كبيرة.<br><br>لكن مع تطور التكنولوجيا، أصبح الحاسوب قادراً على أكثر من الحساب:<br>• <strong>معالجة النصوص</strong> (كتابة المقالات، الكتب).<br>• <strong>الرسم والتصميم</strong> (الصور، الشعارات، الهندسة).<br>• <strong>الوسائط المتعددة</strong> (الأفلام، الموسيقى، الألعاب).<br>• <strong>الاتصال بالإنترنت</strong> والبحث عن المعلومات.<br><br>رغم هذا التطور، بقي الاسم "حاسوب" لأنه الاسم الأصلي الذي أُطلق عليه.',
+   r:['لماذا سمي حاسوباً؟','Pourquoi s\'appelle-t-il ordinateur ?','Why is it called a computer?'],
+   s:['سمي الحاسوب بهذا الاسم لأنه كان مخصصا للحساب','L\'ordinateur tire son nom du calcul','The computer is named after calculation']},
+  {n:'الشريحة 3/11',t:'📜 التاريخ: الجيلان الأول والثاني',
+   i:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/ENIAC-changing_a_tube.jpg/640px-ENIAC-changing_a_tube.jpg',
+   x:'<strong>الجيل الأول (1946–1959):</strong><br>• استخدم <strong>الصمامات المفرغة (Vacuum Tubes)</strong>.<br>• الأجهزة كانت ضخمة جداً (تشغل غرفة كاملة).<br>• تزن أكثر من 30 طناً وتستهلك طاقة هائلة.<br>• مثال: حاسوب <strong>ENIAC</strong> الشهير.<br><br><strong>الجيل الثاني (1959–1965):</strong><br>• استخدم <strong>الترانزستورات (Transistors)</strong> بدلاً من الصمامات.<br>• أدى إلى تصغير الحجم، وتقليل استهلاك الطاقة.<br>• زيادة السرعة والاعتمادية.<br>• بدأت الحواسيب تظهر في الشركات والجامعات.',
+   r:['التاريخ: الجيلان الأول والثاني','Histoire : 1ère et 2ème génération','History: 1st and 2nd generation'],
+   s:['الجيل الأول استخدم الصمامات المفرغة، والثاني استخدم الترانزستورات','La première génération utilisait des tubes à vide','The first generation used vacuum tubes']},
+  {n:'الشريحة 4/11',t:'📜 التاريخ: الأجيال 3 و4 و5',
+   x:'<strong>الجيل الثالث (1965–1980):</strong><br>• استخدام <strong>الدوائر المتكاملة (Integrated Circuits)</strong>.<br>• أصغر حجماً، أسرع، وأرخص.<br>• ظهور الحواسيب المتوسطة (Minicomputers).<br><br><strong>الجيل الرابع (1980–1990):</strong><br>• ظهور <strong>المعالجات الدقيقة (Microprocessors)</strong>.<br>• اختراع الحاسوب الشخصي (PC) من IBM وApple.<br>• ثورة في عالم الحوسبة الشخصية.<br><br><strong>الجيل الخامس (1990–الآن):</strong><br>• الحوسبة السحابية (Cloud Computing).<br>• <strong>الذكاء الاصطناعي (AI)</strong> والتعلم الآلي.<br>• الهواتف الذكية والأجهزة اللوحية.',
+   r:['التاريخ: الأجيال 3 و4 و5','Histoire : 3ème, 4ème et 5ème génération','History: 3rd, 4th and 5th generation'],
+   s:['الجيل الثالث استخدم الدوائر المتكاملة، والرابع المعالجات الدقيقة، والخامس الذكاء الاصطناعي','La troisième génération a utilisé les circuits intégrés','The third generation used integrated circuits']},
+  {n:'الشريحة 5/11',t:'🖥️ الأنواع: الحاسوب العملاق والكبير',
+   i:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/IBM_Blue_Gene_P_supercomputer.jpg/640px-IBM_Blue_Gene_P_supercomputer.jpg',
+   x:'تُصنَّف الحواسيب حسب <strong>الحجم والأداء</strong> إلى عدة أنواع:<br><br><strong>1. الحواسيب العملاقة (Supercomputers):</strong><br>• الأقوى والأغلى في العالم.<br>• تُستخدم في: الأبحاث الفضائية، التنبؤ بالطقس، محاكاة الانفجارات النووية، تحليل الجينوم.<br>• مثال: <strong>IBM Blue Gene</strong>، <strong>Fugaku</strong> الياباني.<br>• سعرها يتجاوز ملايين الدولارات.<br><br><strong>2. الحواسيب الكبيرة (Mainframes):</strong><br>• تخدم آلاف المستخدمين في وقت واحد.<br>• تُستخدم في: البنوك، شركات التأمين، الحكومات.<br>• قادرة على معالجة ملايين المعاملات في الثانية.',
+   r:['الأنواع: العملاق والكبير','Types : superordinateur et mainframe','Types: supercomputer and mainframe'],
+   s:['الحواسيب العملاقة هي الأقوى، والكبيرة تخدم آلاف المستخدمين','Les superordinateurs sont les plus puissants','Supercomputers are the most powerful']},
+  {n:'الشريحة 6/11',t:'💻 الأنواع: الشخصي والمحمول واللوحي',
+   x:'<strong>3. الحواسيب الشخصية (Personal Computers - PCs):</strong><br>• <strong>الحاسوب المكتبي (Desktop):</strong> يتكون من صندوق + شاشة + لوحة مفاتيح + فأرة. يُستخدم في المنازل والمكاتب.<br>• <strong>الحاسوب المحمول (Laptop):</strong> كل المكونات مدمجة في جهاز واحد قابل للطي، ويعمل ببطارية.<br><br><strong>4. الأجهزة المحمولة:</strong><br>• <strong>الهواتف الذكية (Smartphones):</strong> حواسيب صغيرة في جيبك.<br>• <strong>الأجهزة اللوحية (Tablets):</strong> شاشة لمس كبيرة بدون لوحة مفاتيح.<br>• <strong>الساعات الذكية (Smartwatches):</strong> حواسيب على معصمك.<br><br>كل هذه الأجهزة هي في الحقيقة "حواسيب" بأحجام مختلفة.',
+   r:['الأنواع: الشخصي والمحمول','Types : PC, portable et tablette','Types: PC, laptop and tablet'],
+   s:['الحواسيب الشخصية تشمل المكتبي والمحمول والهواتف الذكية','Les PC incluent les ordinateurs de bureau, portables et smartphones','PCs include desktops, laptops and smartphones']},
+  {n:'الشريحة 7/11',t:'⚙️ المكونات المادية (Hardware)',
+   i:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Personal_computer%2C_exploded_4.svg/640px-Personal_computer%2C_exploded_4.svg.png',
+   x:'<strong>المكونات المادية (Hardware)</strong> هي الأجزاء الملموسة التي يمكنك رؤيتها ولمسها:<br><br><strong>1. وحدة المعالجة المركزية (CPU):</strong> "دماغ الحاسوب". تنفذ كل الأوامر والعمليات الحسابية والمنطقية.<br><br><strong>2. الذاكرة العشوائية (RAM):</strong> ذاكرة مؤقتة تفقد محتواها عند إطفاء الجهاز. تخزن البيانات التي يعمل عليها الحاسوب حالياً.<br><br><strong>3. القرص الصلب (HDD / SSD):</strong> ذاكرة دائمة تخزن الملفات والبرامج حتى بعد إطفاء الجهاز. SSD أسرع من HDD.<br><br><strong>4. اللوحة الأم (Motherboard):</strong> اللوحة الرئيسية التي تتصل بها كل المكونات.<br><br><strong>5. الشاشة (Monitor):</strong> تعرض النتائج والصور.<br><br><strong>6. لوحة المفاتيح (Keyboard):</strong> لإدخال النصوص والأرقام.<br><br><strong>7. الفأرة (Mouse):</strong> للتحكم بالمؤشر والنقر.',
+   r:['المكونات المادية: المعالج والذاكرة','Matériel : processeur et mémoire','Hardware: processor and memory'],
+   s:['المكونات المادية تشمل المعالج والذاكرة والقرص الصلب والشاشة','Le matériel comprend le processeur, la mémoire, le disque dur et l\'écran','Hardware includes CPU, memory, hard disk and screen']},
+  {n:'الشريحة 8/11',t:'💾 المكونات البرمجية (Software)',
+   x:'<strong>المكونات البرمجية (Software)</strong> هي البرامج والتطبيقات التي تُشغّل العتاد وتوجهه. لا يمكنك لمسها، لكنها تعمل داخل الحاسوب.<br><br><strong>1. نظام التشغيل (Operating System):</strong><br>• البرنامج الرئيسي الذي يدير كل شيء.<br>• أمثلة: <strong>Windows</strong>، <strong>macOS</strong>، <strong>Linux</strong>، <strong>Android</strong>، <strong>iOS</strong>.<br><br><strong>2. التطبيقات (Applications):</strong><br>• برامج تؤدي مهام محددة.<br>• أمثلة: <strong>Word</strong> (معالجة نصوص)، <strong>Excel</strong> (جداول)، <strong>Photoshop</strong> (تصميم)، <strong>Chrome</strong> (تصفح).<br><br><strong>3. برامج التشغيل (Drivers):</strong><br>• برامج صغيرة تعرّف الحاسوب على العتاد.<br><br><strong>العلاقة بين العتاد والبرمجيات:</strong><br>العتاد هو "الجسد"، والبرمجيات هي "الروح". لا يعملان بدون بعضهما.',
+   r:['المكونات البرمجية: نظم التشغيل والتطبيقات','Logiciel : systèmes et applications','Software: OS and applications'],
+   s:['المكونات البرمجية تشمل نظام التشغيل والتطبيقات','Les logiciels incluent les systèmes d\'exploitation et les applications','Software includes operating systems and applications']},
+  {n:'الشريحة 9/11',t:'⚖️ مزايا وعيوب الحاسوب',
+   x:'<strong>✅ مزايا الحاسوب:</strong><br>• <strong>الدقة المتناهية:</strong> نتائج صحيحة دون أخطاء بشرية.<br>• <strong>السرعة الفائقة:</strong> ملايين العمليات في الثانية.<br>• <strong>التخزين الهائل:</strong> حفظ ملايين الملفات.<br>• <strong>الاقتصادية:</strong> توفير الوقت والجهد.<br>• <strong>الاتصالات:</strong> ربط العالم عبر الإنترنت.<br><br><strong>❌ عيوب الحاسوب:</strong><br>• <strong>الاعتماد المفرط:</strong> قد يقلل من التفكير البشري.<br>• <strong>الجلوس الطويل:</strong> يسبب مشاكل صحية (الظهر، العين).<br>• <strong>الإدمان:</strong> الاستخدام المفرط للألعاب ووسائل التواصل.<br>• <strong>الخصوصية:</strong> خطر سرقة البيانات.<br>• <strong>البطالة:</strong> قد يحل محل بعض الوظائف.<br><br>التوازن هو الحل: استخدام الحاسوب كأداة مساعدة، لا كبديل عن التفكير.',
+   r:['مزايا وعيوب الحاسوب','Avantages et inconvénients','Advantages and disadvantages'],
+   s:['الحاسوب له مزايا مثل الدقة والسرعة، وعيوب مثل الإدمان','L\'ordinateur a des avantages comme la précision','Computers have advantages like accuracy']},
+  {n:'الشريحة 10/11',t:'🎬 فيديو تعليمي 1',
+   x:'<strong>شاهد هذا الفيديو لفهم أفضل:</strong><br><br>فيديو يشرح ما هو الحاسوب، مكوناته الأساسية، وكيف يعمل بشكل مبسط للأطفال والمبتدئين.',
+   v:'https://www.youtube.com/embed/1I5ZM4h7a5E',
+   s:['فيديو تعليمي عن الحاسوب','Vidéo éducative sur l\'ordinateur','Educational video about computers']},
+  {n:'الشريحة 11/11',t:'🎬 فيديو تعليمي 2 + استعد للاختبار',
+   i:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Personal_computer%2C_exploded_4.svg/640px-Personal_computer%2C_exploded_4.svg.png',
+   x:'<strong>شاهد الفيديو الثاني ثم اضغط "التالي" للاختبار.</strong><br><br>بعد مشاهدة الفيديوهين، أنت جاهز للاختبار!<br><br>📝 <strong>تفاصيل الاختبار:</strong><br>• 10 أسئلة متنوعة.<br>• كل سؤال بـ10 نقاط (المجموع 100).<br>• النجاح يتطلب 50 نقطة أو أكثر.<br>• إذا نجحت، تحصل على <strong>شهادة إتمام</strong>.<br>• إذا رسبت، يمكنك العودة للدرس وإعادة المحاولة.',
+   v:'https://www.youtube.com/embed/mCq8-xTH7jA',
+   s:['استعد للاختبار الآن','Préparez-vous pour le test','Get ready for the quiz']},
+  {n:'📝 الاختبار النهائي',e:'tech_lesson1_exam'}
+]);
 
-  db.collection("users").get().then(function(querySnapshot) {
-      var users = [];
-      querySnapshot.forEach(function(doc) {
-          var u = doc.data();
-          u._docId = doc.id;
-          users.push(u);
-      });
-      
-      var todayStr=new Date().toLocaleDateString('ar-TN');
-      var todayUsers=users.filter(function(u){return u.date===todayStr;});
-      var subscribers=users.filter(function(u){return u.isSub===true;});
-      
-      var usersHtml='';
-      if(users.length===0) usersHtml='<div style="color:#94a3b8;text-align:center;padding:12px;">لا يوجد مسجلون بعد.</div>';
-      else {
-        users.forEach(function(u,i){
-          var subBtn = u.isSub 
-            ? '<button onclick="ZAID.toggleSub(\''+u._docId+'\',true)" style="background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">❌ إلغاء الاشتراك</button>'
-            : '<button onclick="ZAID.toggleSub(\''+u._docId+'\',false)" style="background:#22c55e;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">✅ تفعيل الاشتراك</button>';
-          
-          var subBadge = u.isSub 
-            ? '<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">مشترك</span>' 
-            : '<span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">غير مشترك</span>';
+Z.addExam('tech_lesson1_exam',[
+  {q:'ما هو الحاسوب؟',o:['جهاز إلكتروني لمعالجة البيانات','جهاز لتوليد الكهرباء','جهاز للطباعة فقط','جهاز للتصوير'],a:'جهاز إلكتروني لمعالجة البيانات',explain:'الحاسوب جهاز إلكتروني رقمي يعالج البيانات ويخزنها ويستخرج النتائج.'},
+  {q:'لماذا سُمي الحاسوب بهذا الاسم؟',o:['لأنه كان مخصصاً للحساب','لأنه يشبه الحاسوب','لأنه اخترعه الحسن بن الهيثم','لأنه يعمل بالكهرباء'],a:'لأنه كان مخصصاً للحساب',explain:'سُمي "حاسوباً" لأنه في الأصل كان مخصصاً لإجراء العمليات الحسابية فقط.'},
+  {q:'أي جيل من الحواسيب استخدم الصمامات المفرغة؟',o:['الجيل الأول','الجيل الثاني','الجيل الثالث','الجيل الخامس'],a:'الجيل الأول',explain:'الجيل الأول (1946-1959) استخدم الصمامات المفرغة، وكانت الأجهزة ضخمة جداً.'},
+  {q:'أي جيل استخدم الترانزستورات؟',o:['الجيل الأول','الجيل الثاني','الجيل الثالث','الجيل الرابع'],a:'الجيل الثاني',explain:'الجيل الثاني (1959-1965) استخدم الترانزستورات بدلاً من الصمامات.'},
+  {q:'أي جيل شهد ظهور الذكاء الاصطناعي والحوسبة السحابية؟',o:['الجيل الثالث','الجيل الرابع','الجيل الخامس','الجيل الثاني'],a:'الجيل الخامس',explain:'الجيل الخامس (1990-الآن) شهد الذكاء الاصطناعي والحوسبة السحابية والهواتف الذكية.'},
+  {q:'أي أنواع الحواسيب هو الأقوى والأغلى؟',o:['الحاسوب العملاق (Supercomputer)','الحاسوب الشخصي','الحاسوب المحمول','الجهاز اللوحي'],a:'الحاسوب العملاق (Supercomputer)',explain:'الحواسيب العملاقة هي الأقوى والأغلى، تُستخدم في الأبحاث الفضائية والتنبؤات الجوية.'},
+  {q:'المكونات المادية (Hardware) هي:',o:['الأجزاء الملموسة من الحاسوب','البرامج والتطبيقات','نظام التشغيل','ملفات الصور'],a:'الأجزاء الملموسة من الحاسوب',explain:'Hardware هي الأجزاء المادية الملموسة مثل المعالج والذاكرة والشاشة.'},
+  {q:'ما هي وظيفة المعالج (CPU)؟',o:['تنفيذ الأوامر والعمليات','تخزين الملفات','عرض الصور','طباعة المستندات'],a:'تنفيذ الأوامر والعمليات',explain:'المعالج هو "دماغ الحاسوب"، ينفذ كل الأوامر والعمليات الحسابية والمنطقية.'},
+  {q:'أي ذاكرة تفقد محتواها عند إطفاء الحاسوب؟',o:['ROM','RAM','القرص الصلب','USB'],a:'RAM',explain:'RAM ذاكرة مؤقتة تفقد محتواها عند إيقاف التشغيل، بينما القرص الصلب دائم.'},
+  {q:'من مزايا الحاسوب:',o:['السرعة والدقة والتخزين الهائل','استهلاك الطاقة العالي','الحجم الكبير دائماً','التكلفة المرتفعة'],a:'السرعة والدقة والتخزين الهائل',explain:'الحاسوب يوفر الدقة والسرعة والتخزين الهائل، وهي من أهم ميزاته.'}
+]);
 
-          usersHtml+='<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:12px;line-height:1.7;">'
-            +'<div style="color:#fbbf24;font-weight:900;font-size:13px;">'+subBadge+' 👤 '+(i+1)+'. '+(u.name||'—')+'</div>'
-            +'<div style="color:#cbd5e1;">📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')+'</div>'
-            +'<div style="color:#94a3b8;">💼 '+(u.prof||'—')+' — 🎯 '+(u.spec||'—')+'</div>'
-            +'<div style="color:#94a3b8;">🌍 '+(u.country||'—')+' — '+(u.city||'—')+'</div>'
-            +'<div style="color:#94a3b8;font-size:11px;">🏷️ '+(u.cat||'—')+' — 📅 '+(u.date||'—')+'</div>'
-            +subBtn
-            +'</div>';
-        });
-      }
-      
-      document.getElementById('statsModal').remove();
-      var m2=document.createElement('div');m2.id='statsModal';
-      m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-      m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
-        +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة (Firebase)</h2>'
-        +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
-          +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 مسجلون اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
-          +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 إجمالي المسجلين:</span><span style="color:#fbbf24">'+users.length+'</span></div>'
-          +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
-        +'</div>'
-        +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
-        +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div>'
-        +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
-      document.body.appendChild(m2);
-  }).catch(function(error) {
-      console.error("Error getting documents: ", error);
-      alert("خطأ في جلب البيانات من Firebase.");
-      document.getElementById('statsModal').remove();
-  });
-};
+/* ================== كتاب الأطفال والحاسوب (في قسم الكتب) ================== */
+Z.addLesson('book',{cat:'books',icon:'📖',name:'📚 الأطفال والحاسوب',desc:'كتاب تعليمي + اختبار'},[
+{n:'📖 1',t:'📚 مقدمة',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'مرحباً بكم في كتاب "الأطفال والحاسوب". بقلم: <strong>محمد زايد</strong>',s:['الأطفال والحاسوب','Les enfants','Children']},
+{n:'📖 2',t:'💻 ما هو الحاسوب؟',i:'https://i.postimg.cc/CKcnB72y/haswb1.jpg',x:'الحاسوب هو جهاز <strong>إلكتروني رقمي</strong> يمكنه تخزين ومعالجة البيانات واستقبالها وإخراج النتائج.',r:['حاسوب','Ordinateur','Computer'],s:['الحاسوب','Ordinateur','Computer']},
+{n:'📖 3',t:'🧠 مكونات الحاسوب',i:'https://i.postimg.cc/Hk9XKgqm/whdt-mrkzyt.jpg',x:'يتكون الحاسوب من جزئين: <strong>المادي (Hardware)</strong> وهو الأجزاء الملموسة، و<strong>المعنوي (Software)</strong> وهو البرامج.',r:['مكونات الحاسوب','Composants','Components'],s:['مكونات الحاسوب','Composants','Components']},
+{n:'📖 4',t:'⚙️ المعالج',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Personal_computer%2C_exploded_4.svg/640px-Personal_computer%2C_exploded_4.svg.png',x:'<strong>المعالج</strong> هو دماغ الحاسوب، وهو المسؤول عن تنفيذ جميع الأوامر والعمليات.',r:['معالج','Processeur','Processor'],s:['المعالج','Processeur','Processor']},
+{n:'📖 5',t:'💾 الذاكرة',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/RAM_Module.jpg/640px-RAM_Module.jpg',x:'الذاكرة <strong>RAM</strong> هي ذاكرة مؤقتة (حية) تفقد محتواها عند إيقاف التشغيل، بينما <strong>ROM</strong> هي ذاكرة دائمة.',r:['ذاكرة حية / دائمة','RAM / ROM','RAM / ROM'],s:['الذاكرة الحية','RAM','RAM']},
+{n:'📖 6',t:'🖱️ وسائل الإدخال',i:'https://i.postimg.cc/sDQv7rjc/souris.jpg',x:'<strong>الفأرة</strong> و<strong>لوحة المفاتيح</strong> هما وسيلتا الإدخال الأساسيتان لإدخال البيانات.',r:['فأرة / لوحة','Souris / Clavier','Mouse / Keyboard'],s:['الفأرة ولوحة المفاتيح','Souris et Clavier','Mouse and Keyboard']},
+{n:'📖 7',t:'🖨️ وسائل الإخراج',i:'https://i.postimg.cc/bNm0m8kf/tabʿat.jpg',x:'<strong>الشاشة</strong> و<strong>الطابعة</strong> هما وسيلتا الإخراج الأساسيتان لعرض النتائج.',r:['شاشة / طابعة','Écran / Imprimante','Screen / Printer'],s:['الشاشة والطابعة','Écran et Imprimante','Screen and Printer']},
+{n:'📖 8',t:'🌐 الشبكات',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Network.jpg/640px-Network.jpg',x:'<strong>الشبكة</strong> هي ربط جهازين أو أكثر لتبادل البيانات. <strong>الإنترنت</strong> هو أكبر شبكة في العالم.',r:['شبكة / إنترنت','Réseau / Internet','Network / Internet'],s:['الشبكات','Réseaux','Networks']},
+{n:'📖 9 — الاختبار',e:'book_exam'}
+]);
 
-Z.toggleSub=function(docId, currentStatus){
-  if(!Z.admin){ alert('هذه الميزة للمشرف فقط'); return; }
-  var newStatus = !currentStatus;
-  var msg = newStatus ? 'تفعيل اشتراك هذا المستخدم؟' : 'إلغاء اشتراك هذا المستخدم؟';
-  if(!confirm(msg)) return;
-  
-  db.collection("users").doc(docId).update({ isSub: newStatus })
-  .then(function() { alert('✅ تم تحديث حالة الاشتراك بنجاح'); Z.showStats(); })
-  .catch(function(error) { alert('حدث خطأ: ' + error); });
-};
-
-Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
-Z.speak=function(t,l){
-  if(!t)return;Z.stopSpeak();
-  var tl=l==='ar'?'ar':l==='fr'?'fr':'en';
-  var u='https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURIComponent(t)+'&tl='+tl+'&client=gtx';
-  Z.audio=new Audio(u);
-  Z.audio.play().catch(function(){
-    if('speechSynthesis' in window){
-      var s=new SpeechSynthesisUtterance(t);s.lang=l==='ar'?'ar-SA':l==='fr'?'fr-FR':'en-US';s.rate=0.9;
-      window.speechSynthesis.speak(s);
-    }
-  });
-};
-
-Z.showSub=function(){
-  var o=document.getElementById('sm');if(o)o.remove();
-  var m=document.createElement('div');m.id='sm';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:460px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
-    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
-    +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس)</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">30 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div></div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">20 دولار / 20 يورو</div><div style="font-size:12px;color:#94a3b8">عبر Western Union</div></div>'
-    +'<div style="background:rgba(34,197,94,.15);border-right:4px solid #22c55e;padding:10px;border-radius:8px;font-size:13px;color:#22c55e;text-align:right;margin:10px 0;line-height:1.7;"><strong>⚡ الدفع يستغرق دقيقة واحدة فقط</strong></div>'
-    +'<div style="background:rgba(251,191,36,.1);border-right:4px solid #fbbf24;padding:10px;border-radius:8px;font-size:13px;color:#fbbf24;text-align:right;margin-bottom:10px;line-height:1.7;"><strong>💡 مزايا الاشتراك:</strong><br>• رفع وتحميل كل محتوى المنصة <strong>مرة واحدة سنوياً</strong><br>• شهادة معتمدة بعد كل اختبار ناجح</div>'
-    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
-    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
-  document.body.appendChild(m);
-};
-
-Z.wa=function(){
-  var u=Z.user||{};
-  var msg='مرحباً، أرغب في الاشتراك في منصة زايد.\n\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'')+'\n\nطريقة الدفع: (e-Dinar / Western Union)';
-  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
-};
-
-Z.openCat=function(cat){
-  if(!Z.checkVisitor()) return;
-  var ks=Object.keys(Z.lessons).filter(function(k){return Z.lessons[k].meta.cat===cat;});
-  var c=document.getElementById('lc');
-  if(!ks.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">🚧</div><div class="st">'+cat+'</div><div class="stxt">قيد الإعداد</div></div>';}
-  else{
-    var h='<div class="sel">';
-    ks.forEach(function(k){var m=Z.lessons[k].meta;
-      h+='<div class="lcard '+(m.color||'')+'" onclick="ZAID.startLesson(\''+k+'\')"><div class="li">'+(m.icon||'📖')+'</div><div class="lt">'+m.name+'</div><div class="ld">'+(m.desc||'')+'</div></div>';
-    });
-    h+='</div>';c.innerHTML=h;
-  }
-  Z.showPage('pageLesson');
-};
-
-Z.openSrv=function(key){
-  if(!Z.checkVisitor()) return;
-  if(key==='seeker' || key==='internship' || key==='job'){ Z.showSeekerForm(key); return; }
-  var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
-  var c=document.getElementById('lc');
-  c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
-  Z.showPage('pageLesson');
-};
-
-Z.openJobs=function(){
-  if(!Z.checkVisitor()) return;
-  var c=document.getElementById('lc');
-  if(!Z.jobs.length){
-    c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">💼</div><div class="st">لا توجد عروض تشغيل حالياً</div><div class="stxt">إذا كنت مؤسسة وترغب في نشر عرض، يرجى التواصل معنا.</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
-  } else {
-    var h='<div class="sel">';
-    Z.jobs.forEach(function(j,idx){
-      h+='<div class="lcard j" onclick="ZAID.viewJob('+idx+')"><div class="li">'+(j.logo?'<img src="'+j.logo+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 auto">':'🏢')+'</div><div class="lt">'+(j.title||'عرض')+'</div><div class="ld">'+(j.company||'')+'</div><div style="margin-top:10px"><span class="badge '+(Z.LVL_CLS[j.level]||'lvl-c')+'">'+(j.level||'غير محدد')+'</span></div></div>';
-    });
-    h+='</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div>';
-    c.innerHTML=h;
-  }
-  Z.showPage('pageLesson');
-};
-
-Z.viewJob=function(idx){
-  var j=Z.jobs[idx];if(!j)return;
-  var c=document.getElementById('lc');
-  var h='<div class="slide" style="padding:0;overflow:hidden;">';
-  h+='<div style="background:#0e7490;padding:20px;text-align:center;color:white">';
-  h+='<img src="'+(j.logo||'https://cdn-icons-png.flaticon.com/512/3106/3106773.png')+'" style="width:80px;height:80px;border-radius:50%;border:3px solid #fff;object-fit:cover;background:#fff;margin-bottom:10px" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/3106/3106773.png\'">';
-  h+='<h2 style="font-size:22px;margin:0">'+(j.company||'اسم المؤسسة')+'</h2>';
-  h+='<div style="font-size:16px;margin-top:5px;color:#cffafe">'+(j.activity||'ميدان النشاط')+'</div></div>';
-  h+='<div style="padding:20px">';
-  h+='<div class="job-info" style="border-right-color:#06b6d4;background:#ecfeff;color:#164e63;line-height:2.2;font-size:15px">';
-  h+='<div><strong>📍 العنوان:</strong> '+(j.address||'—')+'</div>';
-  h+='<div><strong>🧾 السجل الجبائي:</strong> '+(j.tax||'—')+'</div>';
-  h+='<div><strong>📊 المستوى المطلوب:</strong> '+(j.level||'—')+'</div>';
-  h+='<div><strong>💼 المسمى الوظيفي:</strong> '+(j.title||'—')+'</div>';
-  h+='<div style="margin-top:10px;padding-top:10px;border-top:1px dashed #0e7490">';
-  h+='<div><strong>📱 الواتساب:</strong> '+(j.phone||'—')+'</div>';
-  h+='<div><strong>📧 الإيميل:</strong> '+(j.email||'—')+'</div></div></div>';
-  h+='<div class="nav" style="margin-top:20px">';
-  if(j.phone) h+='<button class="apply-btn" onclick="window.open(\'https://wa.me/'+j.phone+'\',\'_blank\')">📱 تقدم للوظيفة</button>';
-  h+='<button class="nbtn ne" onclick="ZAID.openJobs()">🔙 العودة للعروض</button></div>';
-  if(Z.admin) h+='<div style="text-align:center;margin-top:15px"><button class="del-btn" onclick="ZAID.delJob('+idx+')">🗑️ حذف هذا العرض</button></div>';
-  h+='</div></div>';
-  c.innerHTML=h;Z.showPage('pageLesson');
-};
-
-Z.delJob=function(idx){
-  if(!Z.admin){alert('للمشرف فقط');return;}
-  if(!confirm('حذف هذا العرض؟'))return;
-  Z.jobs.splice(idx,1);Z.saveJobs();Z.openJobs();
-};
-
-Z.jobForm=function(){
-  if(!Z.admin){alert('هذه الميزة للمشرف فقط');return;}
-  var old=document.getElementById('jf');if(old)old.remove();
-  var m=document.createElement('div');m.id='jf';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
-  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:600px;width:100%;border:4px solid #06b6d4;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#06b6d4;text-align:center;margin-bottom:15px;font-size:20px">🏢 إضافة عرض تشغيل</h2>'
-    +'<input class="inp" id="jfCompany" placeholder="اسم المؤسسة / الشركة *">'
-    +'<input class="inp" id="jfActivity" placeholder="ميدان النشاط *">'
-    +'<input class="inp" id="jfAddress" placeholder="العنوان / مكان الإقامة *">'
-    +'<input class="inp" id="jfTax" placeholder="رقم السجل الجبائي *">'
-    +'<input class="inp" id="jfPhone" placeholder="رقم الواتساب *">'
-    +'<input class="inp" id="jfEmail" placeholder="البريد الإلكتروني *">'
-    +'<input class="inp" id="jfLogo" placeholder="رابط شعار المؤسسة (URL) - اختياري">'
-    +'<hr style="margin:10px 0;border-color:#334155">'
-    +'<input class="inp" id="jfTitle" placeholder="المسمى الوظيفي المطلوب *">'
-    +'<select class="inp" id="jfLevel">'+opts+'</select>'
-    +'<button class="sbt" onclick="ZAID.saveJob()" style="background:#06b6d4;border-color:#fff">💾 حفظ العرض</button>'
-    +'<button onclick="document.getElementById(\'jf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
-    +'</div>';
-  document.body.appendChild(m);
-};
-
-Z.saveJob=function(){
-  var c=document.getElementById('jfCompany');
-  var act=document.getElementById('jfActivity');
-  var addr=document.getElementById('jfAddress');
-  var tax=document.getElementById('jfTax');
-  var phone=document.getElementById('jfPhone');
-  var email=document.getElementById('jfEmail');
-  var t=document.getElementById('jfTitle');
-  var l=document.getElementById('jfLevel').value;
-  var logo=document.getElementById('jfLogo').value.trim();
-  [c, act, addr, tax, phone, email, t].forEach(function(el){el.classList.remove('inp-err');});
-  if(!c.value.trim()||!act.value.trim()||!addr.value.trim()||!tax.value.trim()||!phone.value.trim()||!email.value.trim()||!t.value.trim()){
-    alert('يرجى ملء جميع الحقول الإلزامية (*)');
-    if(!c.value.trim()) c.classList.add('inp-err');
-    if(!act.value.trim()) act.classList.add('inp-err');
-    if(!addr.value.trim()) addr.classList.add('inp-err');
-    if(!tax.value.trim()) tax.classList.add('inp-err');
-    if(!phone.value.trim()) phone.classList.add('inp-err');
-    if(!email.value.trim()) email.classList.add('inp-err');
-    if(!t.value.trim()) t.classList.add('inp-err');
-    return;
-  }
-  Z.jobs.unshift({company:c.value.trim(), activity:act.value.trim(), address:addr.value.trim(), tax:tax.value.trim(), phone:phone.value.trim(), email:email.value.trim(), logo:logo||'', title:t.value.trim(), level:l});
-  Z.saveJobs();document.getElementById('jf').remove();alert('✅ تم حفظ العرض بنجاح');Z.openJobs();
-};
-
-Z.showSeekerForm=function(type){
-  if(!Z.checkVisitor()) return;
-  var old=document.getElementById('sf');if(old)old.remove();
-  var m=document.createElement('div');m.id='sf';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
-  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  var title = type === 'internship' ? '📄 طلب تربص' : (type === 'job' ? '💼 طلب شغل' : '👤 إضافة سيرة ذاتية');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:650px;width:100%;border:4px solid #22c55e;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
-    +'<h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">'+title+'</h2>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
-    +'<input class="inp" id="sfName" placeholder="الاسم *">'
-    +'<input class="inp" id="sfSurname" placeholder="اللقب *">'
-    +'</div>'
-    +'<input class="inp" id="sfSection" placeholder="القسم *">'
-    +'<input class="inp" id="sfSchool" placeholder="المدرسة *">'
-    +'<input class="inp" id="sfSpec" placeholder="الاختصاص *">'
-    +'<select class="inp" id="sfLevel">'+opts+'</select>'
-    +'<input class="inp" id="sfPhone" placeholder="رقم الواتساب *">'
-    +'<input class="inp" id="sfEmail" placeholder="البريد الإلكتروني *">'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
-    +'<input class="inp" id="sfCity" placeholder="المدينة *">'
-    +'<input class="inp" id="sfCountry" placeholder="البلد *" value="تونس">'
-    +'</div>'
-    +'<input class="inp" id="sfField" placeholder="الموضوع او المجال المطلوب *">'
-    +'<div style="margin-bottom:10px;color:#fbbf24;font-weight:bold;font-size:14px;">📎 ارفاق السيرة الذاتية (PDF أو صورة) *:</div>'
-    +'<input type="file" id="sfCV" class="inp" accept=".pdf,image/*" style="padding:8px;height:auto;background:#0f172a;color:#fff;border:1px solid #334155;">'
-    +'<button class="sbt" onclick="ZAID.saveSeeker(\''+type+'\')" style="background:#22c55e;border-color:#fff;margin-top:15px;">💾 حفظ وإرسال الطلب</button>'
-    +'<button onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
-    +'</div>';
-  document.body.appendChild(m);
-};
-
-Z.saveSeeker=function(type){
-  var name=document.getElementById('sfName');
-  var surname=document.getElementById('sfSurname');
-  var section=document.getElementById('sfSection');
-  var school=document.getElementById('sfSchool');
-  var spec=document.getElementById('sfSpec');
-  var level=document.getElementById('sfLevel').value;
-  var phone=document.getElementById('sfPhone');
-  var email=document.getElementById('sfEmail');
-  var city=document.getElementById('sfCity');
-  var country=document.getElementById('sfCountry');
-  var field=document.getElementById('sfField');
-  var cvFile=document.getElementById('sfCV').files[0];
-  var fields = [name, surname, section, school, spec, phone, email, city, country, field];
-  fields.forEach(function(el){el.classList.remove('inp-err');});
-  if(!name.value.trim()||!surname.value.trim()||!section.value.trim()||!school.value.trim()||!spec.value.trim()||!phone.value.trim()||!email.value.trim()||!city.value.trim()||!country.value.trim()||!field.value.trim()){
-    alert('يرجى ملء جميع الحقول الإلزامية (*)');
-    fields.forEach(function(el){ if(!el.value.trim()) el.classList.add('inp-err'); });
-    return;
-  }
-  if(!cvFile) { alert('يرجى ارفاق السيرة الذاتية'); return; }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var cvBase64 = e.target.result;
-    Z.loadSeekers();
-    Z.seekers.unshift({
-      type: type || 'job', name: name.value.trim() + ' ' + surname.value.trim(), section: section.value.trim(), school: school.value.trim(), spec: spec.value.trim(), level: level, phone: phone.value.trim(), email: email.value.trim(), city: city.value.trim(), country: country.value.trim(), field: field.value.trim(), cv: cvBase64, cvName: cvFile.name, date: new Date().toLocaleDateString('ar-TN')
-    });
-    Z.saveSeekers();
-    document.getElementById('sf').remove();
-    alert('✅ تم حفظ طلبك وإرفاق سيرتك الذاتية بنجاح.');
-  };
-  reader.readAsDataURL(cvFile);
-};
+Z.addExam('book_exam',[
+{q:'الجزء المادي؟',o:['Hardware','Software','Internet','Windows'],a:'Hardware',explain:'الجزء المادي هو الأجزاء الملموسة من الحاسوب.'},
+{q:'الجزء المعنوي؟',o:['Hardware','Software','CPU','RAM'],a:'Software',explain:'البرمجيات هي الجزء غير الملموس من الحاسوب.'},
+{q:'وظيفة المعالج؟',o:['تخزين','عرض','تنفيذ الأوامر','طباعة'],a:'تنفيذ الأوامر',explain:'المعالج هو دماغ الحاسوب وينفذ جميع الأوامر.'},
+{q:'ذاكرة تفقد محتواها؟',o:['ROM','RAM','Hard Disk','CD'],a:'RAM',explain:'RAM ذاكرة مؤقتة تفقد محتواها عند إيقاف التشغيل.'},
+{q:'جهاز إخراج؟',o:['فأرة','لوحة','طابعة','ماسح'],a:'طابعة',explain:'الطابعة تعرض النتائج على الورق فهي جهاز إخراج.'},
+{q:'نظام تشغيل؟',o:['Word','Windows','Excel','Chrome'],a:'Windows',explain:'Windows نظام تشغيل، بينما Word وExcel تطبيقات.'}
+]);
 /* ================== اللغة العربية: المستوى 1 ================== */
 Z.addLesson('ar1',{cat:'arabic',icon:'🌙',name:'المستوى 1: الحروف والحركات',desc:'7 شرائح + اختبار'},[
 {n:'الدرس 1',t:'الأبجدية العربية',x:'تتكون الأبجدية العربية من <strong>28 حرفاً</strong>، وتُكتب من اليمين إلى اليسار.<br><br>أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي.<br><br>كل حرف له شكل في أول الكلمة، ووسطها، وآخرها، وشكل منفرد.',s:['الأبجدية العربية ثمانية وعشرون حرفا','L alphabet arabe a 28 lettres','The Arabic alphabet has 28 letters'],r:['أبجدية عربية','Alphabet arabe','Arabic alphabet']},
