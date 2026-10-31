@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Cairo,sans-serif}
 html,body{height:100%;overflow:hidden}
@@ -174,6 +177,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 </div>
 
 <div id="main">
+
 <div id="pageWelcome">
   <div class="logo">
     <div class="ring"></div>
@@ -181,12 +185,19 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <div class="tv">
       <div class="tvb">
         <img src="https://i.postimg.cc/MHGWk2FL/5120251.jpg" onerror="this.style.display='none';">
-        <div class="tvt"><span>منصة</span><span>زايد</span></div>
+        <div class="tvt">
+            <span>منصة</span>
+            <span>زايد</span>
+        </div>
       </div>
       <div class="tvs"></div><div class="tvb2"></div>
     </div>
   </div>
-  <div class="wctxt"><div class="wctxt-inner">مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وبحثا علميا</div></div>
+  
+  <div class="wctxt">
+    <div class="wctxt-inner">مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وبحثا علميا</div>
+  </div>
+  
   <div id="gw">
     <div style="text-align:center;font-size:35px;margin-bottom:5px;">👋</div>
     <h2>🔑 التسجيل المجاني</h2>
@@ -254,6 +265,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <div id="lc"></div>
 </div>
 </div>
+
 </div>
 
 <div id="bottomNav">
@@ -266,7 +278,20 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 (function(){
 'use strict';
 var Z=window.ZAID={};
-Z.SHEET_URL = 'ضع_الرابط_هنا'; 
+
+/* ⚠️⚠️⚠️ إعدادات Firebase (ضع مفاتيحك هنا لاحقاً) ⚠️⚠️⚠️ */
+var firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+var db = firebase.firestore();
+/* ⚠️⚠️⚠️ نهاية إعدادات Firebase ⚠️⚠️⚠️ */
+
 Z.ADMIN='012345'; 
 Z.WA='21655335477';
 Z.user=null;Z.admin=false;Z.audio=null;Z.selectedCat=null;
@@ -368,10 +393,18 @@ Z.register=function(){
     er.style.display='block';er.textContent='صيغة البريد الإلكتروني غير صحيحة';return;
   }
   er.style.display='none';
+  
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date:new Date().toLocaleDateString('ar-TN'),isSub:false};
-  if(Z.SHEET_URL && Z.SHEET_URL !== 'ضع_الرابط_هنا'){
-    fetch(Z.SHEET_URL, {method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(Z.user)}).catch(function(err){ console.error('خطأ في الإرسال:', err); });
-  }
+  
+  // حفظ في Firebase
+  db.collection("users").add(Z.user)
+  .then(function() {
+    console.log("✅ تم حفظ المستخدم في Firebase");
+  })
+  .catch(function(error) {
+    console.error("❌ خطأ في Firebase: ", error);
+  });
+  
   Z.visitorAttempts=0; 
   document.getElementById('un').textContent=n;
   Z.updateUI();
@@ -408,27 +441,20 @@ Z.showStats=function(){
   var o=document.getElementById('statsModal');if(o)o.remove();
   var m=document.createElement('div');m.id='statsModal';
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المصفوفة من السيرفر...</div>';
+  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين من Firebase...</div>';
   document.body.appendChild(m);
 
-  if(!Z.SHEET_URL || Z.SHEET_URL === 'ضع_الرابط_هنا') {
-    alert('يرجى إعداد رابط Google Sheets أولاً.');
-    document.getElementById('statsModal').remove();
-    return;
-  }
-
-  fetch(Z.SHEET_URL)
-    .then(res => res.json())
-    .then(data => {
-      var users = data.slice(1).map(row => ({
-        name: row[0], prof: row[1], spec: row[2], email: row[3],
-        phone: row[4], country: row[5], city: row[6], cat: row[7], date: row[8]
-      }));
+  db.collection("users").get().then(function(querySnapshot) {
+      var users = [];
+      querySnapshot.forEach(function(doc) {
+          users.push(doc.data());
+      });
+      
       var todayStr=new Date().toLocaleDateString('ar-TN');
       var todayUsers=users.filter(function(u){return u.date===todayStr;});
       
       var usersHtml='';
-      if(users.length===0) usersHtml='<div style="color:#94a3b8;text-align:center;padding:12px;">لا يوجد مسجلون بعد</div>';
+      if(users.length===0) usersHtml='<div style="color:#94a3b8;text-align:center;padding:12px;">لا يوجد مسجلون بعد.</div>';
       else {
         users.forEach(function(u,i){
           usersHtml+='<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:12px;line-height:1.7;">'
@@ -444,20 +470,21 @@ Z.showStats=function(){
       var m2=document.createElement('div');m2.id='statsModal';
       m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
       m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
-        +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة (من السيرفر)</h2>'
+        +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة (Firebase)</h2>'
+        +'<div style="font-size:12px;color:#22c55e;margin-bottom:10px;">✅ متصل بقاعدة بيانات Firebase</div>'
         +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
           +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 مسجلون اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
           +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 إجمالي المسجلين:</span><span style="color:#fbbf24">'+users.length+'</span></div>'
         +'</div>'
         +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
         +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div>'
-        +'<button type="button" onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
+        +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
       document.body.appendChild(m2);
-    })
-    .catch(err => {
-      alert('خطأ في جلب البيانات: ' + err);
+  }).catch(function(error) {
+      console.error("Error getting documents: ", error);
+      alert("خطأ في جلب البيانات من Firebase. تأكد من إعدادات قاعدة البيانات.");
       document.getElementById('statsModal').remove();
-    });
+  });
 };
 
 Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
@@ -484,8 +511,8 @@ Z.showSub=function(){
     +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي</div><div style="font-size:18px;font-weight:700;margin:5px 0">50 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">e-Dinar / D17</div></div>'
     +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:18px;font-weight:700;margin:5px 0">30 دولار / 30 يورو</div><div style="font-size:12px;color:#94a3b8">Western Union</div></div>'
     +'<div style="font-size:13px;color:#fbbf24;text-align:center;margin-bottom:10px;">للمشترك الحق في تحميل أي محتوى يريده (نسخة واحدة).</div>'
-    +'<button type="button" onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع</button>'
-    +'<button type="button" onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع</button>'
+    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
   document.body.appendChild(m);
 };
 Z.wa=function(){
@@ -514,7 +541,7 @@ Z.openSrv=function(key){
   if(key==='seeker' || key==='internship' || key==='job'){ Z.showSeekerForm(key); return; }
   var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
   var c=document.getElementById('lc');
-  c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button type="button" onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
+  c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
   Z.showPage('pageLesson');
 };
 
@@ -584,7 +611,7 @@ Z.jobForm=function(){
     +'<input class="inp" id="jfTitle" placeholder="المسمى الوظيفي المطلوب *">'
     +'<select class="inp" id="jfLevel">'+opts+'</select>'
     +'<button class="sbt" onclick="ZAID.saveJob()" style="background:#06b6d4;border-color:#fff">💾 حفظ العرض</button>'
-    +'<button type="button" onclick="document.getElementById(\'jf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
+    +'<button onclick="document.getElementById(\'jf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
     +'</div>';
   document.body.appendChild(m);
 };
@@ -642,7 +669,7 @@ Z.showSeekerForm=function(type){
     +'<div style="margin-bottom:10px;color:#fbbf24;font-weight:bold;font-size:14px;">📎 ارفاق السيرة الذاتية (PDF أو صورة) *:</div>'
     +'<input type="file" id="sfCV" class="inp" accept=".pdf,image/*" style="padding:8px;height:auto;background:#0f172a;color:#fff;border:1px solid #334155;">'
     +'<button class="sbt" onclick="ZAID.saveSeeker(\''+type+'\')" style="background:#22c55e;border-color:#fff;margin-top:15px;">💾 حفظ وإرسال الطلب</button>'
-    +'<button type="button" onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
+    +'<button onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
     +'</div>';
   document.body.appendChild(m);
 };
@@ -713,17 +740,37 @@ Z.startMemory=function(){
   draw();Z.showPage('pageLesson');
 };
 
-const GAME_WORDS = { ar: ["انترنت", "متصفح", "خادم", "معالج", "ذاكرة", "طابعة", "شبكة", "فيروس"], en: ["INTERNET", "BROWSER", "SERVER", "PROCESSOR", "MEMORY", "PRINTER", "NETWORK", "VIRUS"], fr: ["INTERNET", "NAVIGATEUR", "SERVEUR", "PROCESSEUR", "MÉMOIRE", "IMPRIMANTE", "RÉSEAU", "VIRUS"] };
-let gameLang = "ar", gameCurrentWords = [], gameFoundWords = [], gameWordPositions = [], gameGrid = [], gameGridSize = 8, gameSelectedCells = [], gameScore = 0, gameAttempts = 0;
+const GAME_WORDS = {
+    ar: ["انترنت", "متصفح", "خادم", "معالج", "ذاكرة", "طابعة", "شبكة", "فيروس"],
+    en: ["INTERNET", "BROWSER", "SERVER", "PROCESSOR", "MEMORY", "PRINTER", "NETWORK", "VIRUS"],
+    fr: ["INTERNET", "NAVIGATEUR", "SERVEUR", "PROCESSEUR", "MÉMOIRE", "IMPRIMANTE", "RÉSEAU", "VIRUS"]
+};
+let gameLang = "ar";
+let gameCurrentWords = [];
+let gameFoundWords = [];
+let gameWordPositions = [];
+let gameGrid = [];
+let gameGridSize = 8;
+let gameSelectedCells = [];
+let gameScore = 0;
+let gameAttempts = 0;
 
-function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+    return arr;
+}
 function placeWordInGrid(word, gridData) {
-    let dirs = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]; let w = word.toUpperCase();
+    let dirs = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+    let w = word.toUpperCase();
     for (let [dr, dc] of shuffleArray([...dirs])) {
         for (let attempt = 0; attempt < 300; attempt++) {
             let startRow, startCol;
-            if (dr === 1) startRow = Math.floor(Math.random() * (gameGridSize - w.length + 1)); else if (dr === -1) startRow = Math.floor(Math.random() * (gameGridSize - w.length + 1)) + (w.length - 1); else startRow = Math.floor(Math.random() * gameGridSize);
-            if (dc === 1) startCol = Math.floor(Math.random() * (gameGridSize - w.length + 1)); else if (dc === -1) startCol = Math.floor(Math.random() * (gameGridSize - w.length + 1)) + (w.length - 1); else startCol = Math.floor(Math.random() * gameGridSize);
+            if (dr === 1) startRow = Math.floor(Math.random() * (gameGridSize - w.length + 1));
+            else if (dr === -1) startRow = Math.floor(Math.random() * (gameGridSize - w.length + 1)) + (w.length - 1);
+            else startRow = Math.floor(Math.random() * gameGridSize);
+            if (dc === 1) startCol = Math.floor(Math.random() * (gameGridSize - w.length + 1));
+            else if (dc === -1) startCol = Math.floor(Math.random() * (gameGridSize - w.length + 1)) + (w.length - 1);
+            else startCol = Math.floor(Math.random() * gameGridSize);
             let positions = [], valid = true;
             for (let i = 0; i < w.length; i++) {
                 let r = startRow + dr * i, c = startCol + dc * i;
@@ -731,7 +778,10 @@ function placeWordInGrid(word, gridData) {
                 if (gridData[r][c] !== '?' && gridData[r][c] !== w[i]) { valid = false; break; }
                 positions.push({ row: r, col: c });
             }
-            if (valid) { for (let i = 0; i < w.length; i++) { let r = startRow + dr * i, c = startCol + dc * i; gridData[r][c] = w[i]; } return positions; }
+            if (valid) {
+                for (let i = 0; i < w.length; i++) { let r = startRow + dr * i, c = startCol + dc * i; gridData[r][c] = w[i]; }
+                return positions;
+            }
         }
     }
     return null;
@@ -739,34 +789,82 @@ function placeWordInGrid(word, gridData) {
 Z.startWordSearch=function() {
     if(!Z.checkVisitor()) return;
     var c=document.getElementById('lc');
-    c.innerHTML = `<div class="slide" style="background:#1e293b;color:#fff;"><div class="sn">🎮 ابحث عن الكلمة</div><div class="st" style="color:#fbbf24;">✨ اضغط على الحروف المتجاورة لتكوين الكلمة ✨</div><div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;color:#fbbf24;font-weight:bold;"><span>✅ تم العثور: <span id="gameFoundCount">0/0</span></span><span>⭐ النقاط: <span id="gameScore">0</span></span><span>🔄 المحاولات: <span id="gameAttempts">0</span></span></div><div class="game-words-list" id="gameWordsList" style="background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;"></div><div id="gameGrid" class="game-grid"></div><div style="display:flex;gap:10px;justify-content:center;margin-top:15px;"><button class="nbtn nn" onclick="ZAID.checkGameWord()">✅ تحقق</button><button class="nbtn ne" onclick="ZAID.clearGameSelection()">🗑️ مسح</button><button class="nbtn np" onclick="ZAID.hintGameWord()">💡 تلميحة</button></div><div id="gameFeedback" class="feedback"></div><div class="nav" style="margin-top:20px;"><button class="nbtn ne" onclick="ZAID.initWordSearchGame()">🎲 لعبة جديدة</button><button class="nbtn np" onclick="ZAID.openCat('games')">🔙 خروج</button></div></div>`;
-    Z.showPage('pageLesson'); Z.initWordSearchGame();
+    c.innerHTML = `
+        <div class="slide" style="background:#1e293b;color:#fff;">
+            <div class="sn">🎮 ابحث عن الكلمة</div>
+            <div class="st" style="color:#fbbf24;">✨ اضغط على الحروف المتجاورة لتكوين الكلمة ✨</div>
+            <div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;color:#fbbf24;font-weight:bold;">
+                <span>✅ تم العثور: <span id="gameFoundCount">0/0</span></span>
+                <span>⭐ النقاط: <span id="gameScore">0</span></span>
+                <span>🔄 المحاولات: <span id="gameAttempts">0</span></span>
+            </div>
+            <div class="game-words-list" id="gameWordsList" style="background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;"></div>
+            <div id="gameGrid" class="game-grid"></div>
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:15px;">
+                <button class="nbtn nn" onclick="ZAID.checkGameWord()">✅ تحقق</button>
+                <button class="nbtn ne" onclick="ZAID.clearGameSelection()">🗑️ مسح</button>
+                <button class="nbtn np" onclick="ZAID.hintGameWord()">💡 تلميحة</button>
+            </div>
+            <div id="gameFeedback" class="feedback"></div>
+            <div class="nav" style="margin-top:20px;">
+                <button class="nbtn ne" onclick="ZAID.initWordSearchGame()">🎲 لعبة جديدة</button>
+                <button class="nbtn np" onclick="ZAID.openCat('games')">🔙 خروج</button>
+            </div>
+        </div>`;
+    Z.showPage('pageLesson');
+    Z.initWordSearchGame();
 };
 Z.initWordSearchGame=function() {
-    let allWords = [...GAME_WORDS[gameLang]]; gameCurrentWords = shuffleArray(allWords).slice(0, 6); gameFoundWords = []; gameWordPositions = []; gameSelectedCells = []; gameScore = 0; gameAttempts = 0; gameGridSize = 8;
+    let allWords = [...GAME_WORDS[gameLang]];
+    gameCurrentWords = shuffleArray(allWords).slice(0, 6);
+    gameFoundWords = [];
+    gameWordPositions = [];
+    gameSelectedCells = [];
+    gameScore = 0;
+    gameAttempts = 0;
+    gameGridSize = 8;
     let newGrid = Array(gameGridSize).fill().map(() => Array(gameGridSize).fill('?'));
-    for (let w of gameCurrentWords) { let pos = placeWordInGrid(w, newGrid); if (pos) gameWordPositions.push({ word: w.toUpperCase(), original: w, positions: pos }); }
+    for (let w of gameCurrentWords) {
+        let pos = placeWordInGrid(w, newGrid);
+        if (pos) gameWordPositions.push({ word: w.toUpperCase(), original: w, positions: pos });
+    }
     let letters = 'ابتثجحخدذرزسشصضطظعغفقكلمنهوي'.split('');
     for (let i = 0; i < gameGridSize; i++) for (let j = 0; j < gameGridSize; j++) if (newGrid[i][j] === '?') newGrid[i][j] = letters[Math.floor(Math.random() * letters.length)];
-    gameGrid = newGrid; Z.renderGame(); Z.updateGameUI(); Z.showGameMessage(`🎮 لعبة جديدة! ابحث عن ${gameCurrentWords.length} كلمات`, "success");
+    gameGrid = newGrid;
+    Z.renderGame();
+    Z.updateGameUI();
+    Z.showGameMessage(`🎮 لعبة جديدة! ابحث عن ${gameCurrentWords.length} كلمات`, "success");
 };
-function isGameCellFound(row, col) { return gameWordPositions.some(wp => gameFoundWords.includes(wp.word) && wp.positions.some(p => p.row === row && p.col === col)); }
+function isGameCellFound(row, col) {
+    return gameWordPositions.some(wp => gameFoundWords.includes(wp.word) && wp.positions.some(p => p.row === row && p.col === col));
+}
 Z.selectGameCell=function(row, col) {
     if (gameSelectedCells.length === 0) { gameSelectedCells = [{ row, col }]; Z.renderGame(); return; }
-    let last = gameSelectedCells[gameSelectedCells.length-1]; let adjacent = Math.abs(last.row - row) <= 1 && Math.abs(last.col - col) <= 1;
-    if (adjacent && !gameSelectedCells.some(c => c.row === row && c.col === col)) { gameSelectedCells.push({ row, col }); Z.renderGame(); }
-    else if (gameSelectedCells.some(c => c.row === row && c.col === col)) { let idx = gameSelectedCells.findIndex(c => c.row === row && c.col === col); gameSelectedCells = gameSelectedCells.slice(0, idx + 1); Z.renderGame(); }
-    else Z.showGameMessage("⚠️ اختر حروفاً متجاورة!", "warning");
+    let last = gameSelectedCells[gameSelectedCells.length-1];
+    let adjacent = Math.abs(last.row - row) <= 1 && Math.abs(last.col - col) <= 1;
+    if (adjacent && !gameSelectedCells.some(c => c.row === row && c.col === col)) {
+        gameSelectedCells.push({ row, col }); Z.renderGame();
+    } else if (gameSelectedCells.some(c => c.row === row && c.col === col)) {
+        let idx = gameSelectedCells.findIndex(c => c.row === row && c.col === col);
+        gameSelectedCells = gameSelectedCells.slice(0, idx + 1); Z.renderGame();
+    } else Z.showGameMessage("⚠️ اختر حروفاً متجاورة!", "warning");
 };
 Z.clearGameSelection=function() { gameSelectedCells = []; Z.renderGame(); };
 Z.checkGameWord=function() {
     if (gameSelectedCells.length === 0) { Z.showGameMessage("⚠️ اضغط على الحروف أولاً!", "warning"); return; }
-    let selectedWord = gameSelectedCells.map(c => gameGrid[c.row][c.col]).join(''); gameAttempts++;
+    let selectedWord = gameSelectedCells.map(c => gameGrid[c.row][c.col]).join('');
+    gameAttempts++;
     let wordData = gameWordPositions.find(w => w.word === selectedWord && !gameFoundWords.includes(w.word));
     if (wordData) {
-        let isValid = gameSelectedCells.length === wordData.positions.length && gameSelectedCells.every((cell,i) => cell.row === wordData.positions[i].row && cell.col === wordData.positions[i].col);
+        let isValid = gameSelectedCells.length === wordData.positions.length &&
+                     gameSelectedCells.every((cell,i) => cell.row === wordData.positions[i].row && cell.col === wordData.positions[i].col);
         if (isValid) {
-            gameScore += 20; gameFoundWords.push(selectedWord); Z.speak(wordData.original, "ar"); Z.showGameMessage(`✅ ممتاز! وجدت "${wordData.original}"! +20 نقطة`, "success"); gameSelectedCells = []; Z.renderGame();
+            gameScore += 20;
+            gameFoundWords.push(selectedWord);
+            Z.speak(wordData.original, "ar");
+            Z.showGameMessage(`✅ ممتاز! وجدت "${wordData.original}"! +20 نقطة`, "success");
+            gameSelectedCells = [];
+            Z.renderGame();
             if (gameFoundWords.length === gameCurrentWords.length) { gameScore += 100; Z.showGameMessage(`🏆🏆🏆 مذهل! وجدت كل الكلمات! +100 نقطة! 🏆🏆🏆`, "success"); }
         } else { gameScore = Math.max(0, gameScore - 2); Z.showGameMessage(`⚠️ "${selectedWord}" موجود لكن الترتيب غير صحيح!`, "warning"); gameSelectedCells = []; Z.renderGame(); }
     } else { gameScore = Math.max(0, gameScore - 3); Z.showGameMessage(`❌ "${selectedWord}" غير صحيحة! -3 نقاط`, "error"); gameSelectedCells = []; Z.renderGame(); }
@@ -774,16 +872,52 @@ Z.checkGameWord=function() {
 };
 Z.hintGameWord=function() {
     let notFound = gameWordPositions.filter(w => !gameFoundWords.includes(w.word));
-    if(notFound.length) { let rw = notFound[0]; rw.positions.forEach(p => { let idx = p.row * gameGridSize + p.col; let cell = document.querySelectorAll('.game-cell')[idx]; if(cell) { cell.style.background = "#ffd700"; setTimeout(() => cell.style.background = "", 1500); } }); Z.speak(rw.original, "ar"); Z.showGameMessage(`💡 تلميحة: ابحث عن "${rw.original}"`, "warning"); }
+    if(notFound.length) {
+        let rw = notFound[0];
+        rw.positions.forEach(p => {
+            let idx = p.row * gameGridSize + p.col;
+            let cell = document.querySelectorAll('.game-cell')[idx];
+            if(cell) { cell.style.background = "#ffd700"; setTimeout(() => cell.style.background = "", 1500); }
+        });
+        Z.speak(rw.original, "ar");
+        Z.showGameMessage(`💡 تلميحة: ابحث عن "${rw.original}"`, "warning");
+    }
 };
 Z.renderGame=function() {
-    let gridDiv = document.getElementById('gameGrid'); if(!gridDiv) return; gridDiv.style.gridTemplateColumns = `repeat(${gameGridSize}, 45px)`; gridDiv.innerHTML = '';
-    for (let i = 0; i < gameGridSize; i++) { for (let j = 0; j < gameGridSize; j++) { let isSel = gameSelectedCells.some(c => c.row === i && c.col === j); let isFnd = isGameCellFound(i, j); let cell = document.createElement('div'); cell.className = `game-cell ${isSel ? 'selected' : ''} ${isFnd ? 'found' : ''}`; cell.textContent = gameGrid[i][j]; cell.onclick = () => Z.selectGameCell(i, j); gridDiv.appendChild(cell); } }
-    let wordsDiv = document.getElementById('gameWordsList'); if(wordsDiv) { wordsDiv.innerHTML = gameCurrentWords.map(w => `<div class="game-word-item ${gameFoundWords.includes(w.toUpperCase()) ? 'found' : ''}" onclick="ZAID.speak('${w}', 'ar')">${w} ${gameFoundWords.includes(w.toUpperCase()) ? '✓' : ''}<small>🔊</small></div>`).join(''); }
+    let gridDiv = document.getElementById('gameGrid');
+    if(!gridDiv) return;
+    gridDiv.style.gridTemplateColumns = `repeat(${gameGridSize}, 45px)`;
+    gridDiv.innerHTML = '';
+    for (let i = 0; i < gameGridSize; i++) {
+        for (let j = 0; j < gameGridSize; j++) {
+            let isSel = gameSelectedCells.some(c => c.row === i && c.col === j);
+            let isFnd = isGameCellFound(i, j);
+            let cell = document.createElement('div');
+            cell.className = `game-cell ${isSel ? 'selected' : ''} ${isFnd ? 'found' : ''}`;
+            cell.textContent = gameGrid[i][j];
+            cell.onclick = () => Z.selectGameCell(i, j);
+            gridDiv.appendChild(cell);
+        }
+    }
+    let wordsDiv = document.getElementById('gameWordsList');
+    if(wordsDiv) {
+        wordsDiv.innerHTML = gameCurrentWords.map(w => `<div class="game-word-item ${gameFoundWords.includes(w.toUpperCase()) ? 'found' : ''}" onclick="ZAID.speak('${w}', 'ar')">${w} ${gameFoundWords.includes(w.toUpperCase()) ? '✓' : ''}<small>🔊</small></div>`).join('');
+    }
 };
-Z.updateGameUI=function() { if(document.getElementById('gameFoundCount')) document.getElementById('gameFoundCount').innerHTML = `${gameFoundWords.length}/${gameCurrentWords.length}`; if(document.getElementById('gameScore')) document.getElementById('gameScore').innerHTML = gameScore; if(document.getElementById('gameAttempts')) document.getElementById('gameAttempts').innerHTML = gameAttempts; };
-Z.showGameMessage=function(text, type) { let fb = document.getElementById('gameFeedback'); if(!fb) return; fb.innerHTML = text; fb.className = `feedback ${type}`; setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000); };
+Z.updateGameUI=function() {
+    if(document.getElementById('gameFoundCount')) document.getElementById('gameFoundCount').innerHTML = `${gameFoundWords.length}/${gameCurrentWords.length}`;
+    if(document.getElementById('gameScore')) document.getElementById('gameScore').innerHTML = gameScore;
+    if(document.getElementById('gameAttempts')) document.getElementById('gameAttempts').innerHTML = gameAttempts;
+};
+Z.showGameMessage=function(text, type) {
+    let fb = document.getElementById('gameFeedback');
+    if(!fb) return;
+    fb.innerHTML = text;
+    fb.className = `feedback ${type}`;
+    setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
+};
 
+/* ===== Crossword (تم إصلاح التعليق عند الإجابة الخاطئة) ===== */
 const crosswordQuestions = [
     { q: "ما هي الشبكة العالمية التي تربط ملايين الأجهزة؟", correct: "الإنترنت", options: ["الإنترنت", "المتصفح", "الخادم", "الشبكة"] },
     { q: "ما هو البرنامج المستخدم لعرض صفحات الويب؟", correct: "المتصفح", options: ["المتصفح", "نظام التشغيل", "البريد", "المعالج"] },
@@ -794,105 +928,378 @@ const crosswordQuestions = [
     { q: "ما هو البرنامج الضار الذي ينتشر بين الأجهزة؟", correct: "الفيروس", options: ["الفيروس", "جدار الحماية", "مضاد الفيروسات", "التشفير"] },
     { q: "ما هو نظام حماية الشبكة من الاختراقات؟", correct: "جدار الحماية", options: ["جدار الحماية", "البروتوكول", "الخادم", "الموجه"] }
 ];
-let crossCurrentIndex = 0, crossCorrectAnswers = 0, crossScore = 0, crossAttempts = 0, crossAnswered = false;
+let crossCurrentIndex = 0;
+let crossCorrectAnswers = 0;
+let crossScore = 0;
+let crossAttempts = 0;
+let crossAnswered = false;
 
 Z.startCrossword=function() {
     if(!Z.checkVisitor()) return;
     var c=document.getElementById('lc');
-    c.innerHTML = `<div class="slide" style="background:#1e293b;color:#fff;"><div class="sn">🔐 الكلمات المتقاطعة</div><div class="st" style="color:#fbbf24;">✨ اختر الإجابة الصحيحة من القائمة ✨</div><div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;color:#fbbf24;font-weight:bold;"><span>✅ تم الحل: <span id="crossCorrectCount">0/0</span></span><span>⭐ النقاط: <span id="crossScore">0</span></span><span>🔄 المحاولات: <span id="crossAttempts">0</span></span></div><div style="background:#f0f2f5; border-radius:15px; padding:20px; margin:15px 0; color:#1e293b;"><div id="crossQuestion" style="font-size:20px; font-weight:bold; text-align:center; margin-bottom:20px;"></div><div id="crossOptions" class="game-words-list" style="justify-content:center;"></div><div id="crossFeedback" class="feedback"></div></div><div class="nav" style="margin-top:20px;"><button class="nbtn ne" onclick="ZAID.resetCrossword()">🎲 أحجية جديدة</button><button class="nbtn np" onclick="ZAID.openCat('games')">🔙 خروج</button></div></div>`;
-    Z.showPage('pageLesson'); Z.resetCrossword();
+    c.innerHTML = `
+        <div class="slide" style="background:#1e293b;color:#fff;">
+            <div class="sn">🔐 الكلمات المتقاطعة</div>
+            <div class="st" style="color:#fbbf24;">✨ اختر الإجابة الصحيحة من القائمة ✨</div>
+            <div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;color:#fbbf24;font-weight:bold;">
+                <span>✅ تم الحل: <span id="crossCorrectCount">0/0</span></span>
+                <span>⭐ النقاط: <span id="crossScore">0</span></span>
+                <span>🔄 المحاولات: <span id="crossAttempts">0</span></span>
+            </div>
+            <div style="background:#f0f2f5; border-radius:15px; padding:20px; margin:15px 0; color:#1e293b;">
+                <div id="crossQuestion" style="font-size:20px; font-weight:bold; text-align:center; margin-bottom:20px;"></div>
+                <div id="crossOptions" class="game-words-list" style="justify-content:center;"></div>
+                <div id="crossFeedback" class="feedback"></div>
+            </div>
+            <div class="nav" style="margin-top:20px;">
+                <button class="nbtn ne" onclick="ZAID.resetCrossword()">🎲 أحجية جديدة</button>
+                <button class="nbtn np" onclick="ZAID.openCat('games')">🔙 خروج</button>
+            </div>
+        </div>`;
+    Z.showPage('pageLesson');
+    Z.resetCrossword();
 };
-Z.resetCrossword=function() { crossCurrentIndex = 0; crossCorrectAnswers = 0; crossScore = 0; crossAttempts = 0; crossAnswered = false; Z.loadCrossword(); };
+Z.resetCrossword=function() {
+    crossCurrentIndex = 0;
+    crossCorrectAnswers = 0;
+    crossScore = 0;
+    crossAttempts = 0;
+    crossAnswered = false;
+    Z.loadCrossword();
+};
 Z.loadCrossword=function() {
-    let q = crosswordQuestions[crossCurrentIndex]; if(document.getElementById('crossQuestion')) document.getElementById('crossQuestion').innerHTML = q.q;
-    let shuffled = shuffleArray([...q.options]); if(document.getElementById('crossOptions')) { document.getElementById('crossOptions').innerHTML = shuffled.map(opt => `<div class="game-word-item" style="background:#e2e8f0;color:#1e293b;border:2px solid #cbd5e1;" onclick="ZAID.answerCrossword('${opt}')">${opt}</div>`).join(''); }
-    crossAnswered = false; if(document.getElementById('crossFeedback')) document.getElementById('crossFeedback').innerHTML = ''; Z.updateCrossUI();
+    let q = crosswordQuestions[crossCurrentIndex];
+    if(document.getElementById('crossQuestion')) document.getElementById('crossQuestion').innerHTML = q.q;
+    let shuffled = shuffleArray([...q.options]);
+    if(document.getElementById('crossOptions')) {
+        document.getElementById('crossOptions').innerHTML = shuffled.map(opt => `<div class="game-word-item" style="background:#e2e8f0;color:#1e293b;border:2px solid #cbd5e1;" onclick="ZAID.answerCrossword('${opt}')">${opt}</div>`).join('');
+    }
+    crossAnswered = false;
+    if(document.getElementById('crossFeedback')) document.getElementById('crossFeedback').innerHTML = '';
+    Z.updateCrossUI();
 };
 Z.answerCrossword=function(selected) {
     if (crossAnswered) { Z.showCrossMessage("⚠️ لقد أجبت على هذا السؤال بالفعل!", "warning"); return; }
-    crossAttempts++; let q = crosswordQuestions[crossCurrentIndex];
+    crossAttempts++;
+    let q = crosswordQuestions[crossCurrentIndex];
     if (selected === q.correct) {
-        let points = 20; crossScore += points; crossCorrectAnswers++; Z.speak(q.correct, "ar"); Z.showCrossMessage(`✅ إجابة صحيحة! +${points} نقطة 🎵 "${q.correct}"`, "success"); crossAnswered = true;
-        if (crossCurrentIndex + 1 < crosswordQuestions.length) { setTimeout(() => { crossCurrentIndex++; Z.loadCrossword(); }, 1500); }
-        else { let bonus = 100; crossScore += bonus; Z.showCrossMessage(`🏆🏆🏆 مذهل! أكملت كل الأسئلة! +${bonus} نقطة! 🏆🏆🏆`, "success"); if(document.getElementById('crossOptions')) document.getElementById('crossOptions').innerHTML = '<div style="text-align:center; font-weight:bold; color:#155724;">🎉 تهانينا! أكملت اللعبة بنجاح! 🎉</div>'; }
+        let points = 20;
+        crossScore += points;
+        crossCorrectAnswers++;
+        Z.speak(q.correct, "ar");
+        Z.showCrossMessage(`✅ إجابة صحيحة! +${points} نقطة 🎵 "${q.correct}"`, "success");
+        crossAnswered = true;
+        if (crossCurrentIndex + 1 < crosswordQuestions.length) {
+            setTimeout(() => { crossCurrentIndex++; Z.loadCrossword(); }, 1500);
+        } else {
+            let bonus = 100;
+            crossScore += bonus;
+            Z.showCrossMessage(`🏆🏆🏆 مذهل! أكملت كل الأسئلة! +${bonus} نقطة! 🏆🏆🏆`, "success");
+            if(document.getElementById('crossOptions')) document.getElementById('crossOptions').innerHTML = '<div style="text-align:center; font-weight:bold; color:#155724;">🎉 تهانينا! أكملت اللعبة بنجاح! 🎉</div>';
+        }
     } else {
-        crossScore = Math.max(0, crossScore - 5); Z.showCrossMessage(`❌ إجابة خاطئة! الإجابة الصحيحة هي: "${q.correct}" -5 نقاط`, "error"); crossAnswered = true;
-        if (crossCurrentIndex + 1 < crosswordQuestions.length) { setTimeout(() => { crossCurrentIndex++; Z.loadCrossword(); }, 2000); }
-        else { Z.showCrossMessage(`🏁 انتهت اللعبة! نتيجتك النهائية: ${crossScore} نقطة`, "success"); if(document.getElementById('crossOptions')) document.getElementById('crossOptions').innerHTML = '<div style="text-align:center; font-weight:bold; color:#721c24; padding:20px;">🏁 انتهت اللعبة — النتيجة النهائية: ' + crossScore + ' نقطة</div>'; }
+        crossScore = Math.max(0, crossScore - 5);
+        Z.showCrossMessage(`❌ إجابة خاطئة! الإجابة الصحيحة هي: "${q.correct}" -5 نقاط`, "error");
+        crossAnswered = true;
+        if (crossCurrentIndex + 1 < crosswordQuestions.length) {
+            setTimeout(() => { crossCurrentIndex++; Z.loadCrossword(); }, 2000);
+        } else {
+            Z.showCrossMessage(`🏁 انتهت اللعبة! نتيجتك النهائية: ${crossScore} نقطة`, "success");
+            if(document.getElementById('crossOptions')) document.getElementById('crossOptions').innerHTML = '<div style="text-align:center; font-weight:bold; color:#721c24; padding:20px;">🏁 انتهت اللعبة — النتيجة النهائية: ' + crossScore + ' نقطة</div>';
+        }
     }
     Z.updateCrossUI();
 };
-Z.updateCrossUI=function() { if(document.getElementById('crossCorrectCount')) document.getElementById('crossCorrectCount').innerHTML = `${crossCorrectAnswers}/${crosswordQuestions.length}`; if(document.getElementById('crossScore')) document.getElementById('crossScore').innerHTML = crossScore; if(document.getElementById('crossAttempts')) document.getElementById('crossAttempts').innerHTML = crossAttempts; };
-Z.showCrossMessage=function(text, type) { let fb = document.getElementById('crossFeedback'); if(!fb) return; fb.innerHTML = text; fb.className = `feedback ${type}`; setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000); };
+Z.updateCrossUI=function() {
+    if(document.getElementById('crossCorrectCount')) document.getElementById('crossCorrectCount').innerHTML = `${crossCorrectAnswers}/${crosswordQuestions.length}`;
+    if(document.getElementById('crossScore')) document.getElementById('crossScore').innerHTML = crossScore;
+    if(document.getElementById('crossAttempts')) document.getElementById('crossAttempts').innerHTML = crossAttempts;
+};
+Z.showCrossMessage=function(text, type) {
+    let fb = document.getElementById('crossFeedback');
+    if(!fb) return;
+    fb.innerHTML = text;
+    fb.className = `feedback ${type}`;
+    setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
+};
 
 /* ================== المنجد الرباعي ================== */
 const sections = {1:[], 2:[], 3:[], 4:[]};
-const techData = [ {ar:"الحاسوب", en:"Computer", fr:"Ordinateur", ko:"컴퓨터", def:"جهاز إلكتروني يستقبل البيانات ويعالجها"}, {ar:"الإنترنت", en:"Internet", fr:"Internet", ko:"인터넷", def:"شبكة عالمية تربط ملايين الحواسيب"}, {ar:"البرمجيات", en:"Software", fr:"Logiciel", ko:"소프트웨어", def:"مجموعة من التعليمات والأكواد"}, {ar:"العتاد", en:"Hardware", fr:"Matériel", ko:"하드웨어", def:"المكونات المادية للحاسوب"}, {ar:"الشبكة", en:"Network", fr:"Réseau", ko:"네트워크", def:"ربط جهازين أو أكثر لتبادل البيانات"}, {ar:"البيانات", en:"Data", fr:"Données", ko:"데이터", def:"معلومات خام غير معالجة"}, {ar:"الخادم", en:"Server", fr:"Serveur", ko:"서버", def:"جهاز يقدم خدمات لأجهزة أخرى"}, {ar:"المستخدم", en:"User", fr:"Utilisateur", ko:"사용자", def:"الشخص الذي يتفاعل مع النظام"}, {ar:"التطبيق", en:"Application", fr:"Application", ko:"앱", def:"برنامج لأداء مهام محددة"}, {ar:"قاعدة البيانات", en:"Database", fr:"Base de données", ko:"데이터베이스", def:"مجموعة منظمة من البيانات"}, {ar:"نظام التشغيل", en:"Operating System", fr:"Système d'exploitation", ko:"운영체제", def:"يدير موارد الحاسوب"}, {ar:"المعالج", en:"CPU", fr:"Processeur", ko:"CPU", def:"وحدة المعالجة المركزية - عقل الحاسوب"}, {ar:"القرص الصلب", en:"Hard Disk", fr:"Disque dur", ko:"하드디스크", def:"جهاز تخزين دائم"}, {ar:"البروتوكول", en:"Protocol", fr:"Protocole", ko:"프로토콜", def:"قواعد تبادل البيانات"}, {ar:"التشفير", en:"Encryption", fr:"Cryptage", ko:"암호화", def:"تحويل البيانات لشكل آمن"}, {ar:"جدار الحماية", en:"Firewall", fr:"Pare-feu", ko:"방화벽", def:"نظام أمني للشبكة"}, {ar:"الماسح الضوئي", en:"Scanner", fr:"Scanner", ko:"스캐너", def:"جهاز لتحويل المستندات إلى رقمية"}, {ar:"الطابعة", en:"Printer", fr:"Imprimante", ko:"프린터", def:"جهاز لطباعة المستندات"}, {ar:"الشاشة", en:"Monitor", fr:"Écran", ko:"모니터", def:"شاشة عرض البيانات"}, {ar:"لوحة المفاتيح", en:"Keyboard", fr:"Clavier", ko:"키보드", def:"أداة إدخال النصوص"}, {ar:"الفأرة", en:"Mouse", fr:"Souris", ko:"마우스", def:"أداة تحكم المؤشر"}, {ar:"مكبر الصوت", en:"Speaker", fr:"Haut-parleur", ko:"스피커", def:"جهاز إخراج الصوت"}, {ar:"الميكروفون", en:"Microphone", fr:"Microphone", ko:"마이크", def:"جهاز إدخال الصوت"}, {ar:"الكاميرا", en:"Camera", fr:"Caméra", ko:"카메라", def:"جهاز التقاط الصور"}, {ar:"المودم", en:"Modem", fr:"Modem", ko:"모뎀", def:"جهاز ربط بالإنترنت"}, {ar:"الموجه", en:"Router", fr:"Routeur", ko:"라우터", def:"جهاز توجيه البيانات"}, {ar:"المحول", en:"Adapter", fr:"Adaptateur", ko:"어댑터", def:"محول الإشارات"}, {ar:"المبدل", en:"Switch", fr:"Commutateur", ko:"스위치", def:"جهاز ربط الشبكات"}, {ar:"الجسر", en:"Bridge", fr:"Pont", ko:"브리지", def:"جهاز ربط شبكتين"}, {ar:"النقطة الساخنة", en:"Hotspot", fr:"Point d'accès", ko:"핫스팟", def:"نقطة اتصال لاسلكية"}, {ar:"المجال", en:"Domain", fr:"Domaine", ko:"도메인", def:"مساحة إلكترونية"}, {ar:"النطاق", en:"Range", fr:"Plage", ko:"범위", def:"مجموعة من القيم"}, {ar:"المسار", en:"Path", fr:"Chemin", ko:"경로", def:"طريق الوصول"}, {ar:"البرنامج الثابت", en:"Firmware", fr:"Micrologiciel", ko:"펌웨어", def:"برنامج داخلي للجهاز"}, {ar:"برنامج التشغيل", en:"Driver", fr:"Pilote", ko:"드라이버", def:"برنامج تعريفي للعتاد"}, {ar:"التطبيق المحمول", en:"Mobile App", fr:"Application mobile", ko:"모바일 앱", def:"تطبيق يعمل على الأجهزة المحمولة"}, {ar:"الويب", en:"Web", fr:"Web", ko:"웹", def:"شبكة عالمية"}, {ar:"الموقع", en:"Website", fr:"Site", ko:"웹사이트", def:"موقع إلكتروني"}, {ar:"الصفحة", en:"Page", fr:"Page", ko:"페이지", def:"صفحة ويب"}, {ar:"الرابط", en:"Link", fr:"Lien", ko:"링크", def:"رابط تشعبي"} ];
-const progData = [ {ar:"بايثون", en:"Python", fr:"Python", ko:"파이썬", def:"لغة برمجة عالية المستوى سهلة التعلم"}, {ar:"جافا", en:"Java", fr:"Java", ko:"자바", def:"لغة برمجة كائنية التوجه"}, {ar:"جافا سكريبت", en:"JavaScript", fr:"JavaScript", ko:"자바스크립트", def:"لغة برمجة الويب"}, {ar:"سي بلس بلس", en:"C++", fr:"C++", ko:"C++", def:"لغة برمجة قوية"}, {ar:"بي إتش بي", en:"PHP", fr:"PHP", ko:"PHP", def:"لغة برمجة خادم الويب"}, {ar:"رياكت", en:"React", fr:"React", ko:"리액트", def:"مكتبة جافا سكريبت"}, {ar:"دوكر", en:"Docker", fr:"Docker", ko:"도커", def:"منصة حاويات"}, {ar:"جيت", en:"Git", fr:"Git", ko:"깃", def:"نظام تحكم بالإصدارات"}, {ar:"إس كيو إل", en:"SQL", fr:"SQL", ko:"SQL", def:"لغة استعلام قواعد البيانات"}, {ar:"نو إس كيو إل", en:"NoSQL", fr:"NoSQL", ko:"NoSQL", def:"قواعد بيانات غير علائقية"}, {ar:"واجهة برمجة التطبيقات", en:"API", fr:"API", ko:"API", def:"واجهة برمجة التطبيقات"}, {ar:"ريست", en:"REST", fr:"REST", ko:"REST", def:"نمط معماري للويب"}, {ar:"جيسون", en:"JSON", fr:"JSON", ko:"JSON", def:"صيغة تبادل البيانات"}, {ar:"إتش تي إم إل", en:"HTML", fr:"HTML", ko:"HTML", def:"لغة ترميز النصوص"}, {ar:"سي إس إس", en:"CSS", fr:"CSS", ko:"CSS", def:"لغة تنسيق الصفحات"}, {ar:"كوتلن", en:"Kotlin", fr:"Kotlin", ko:"코틀린", def:"لغة برمجة أندرويد"}, {ar:"سويفت", en:"Swift", fr:"Swift", ko:"스위프트", def:"لغة برمجة آبل"}, {ar:"روبي", en:"Ruby", fr:"Ruby", ko:"루비", def:"لغة برمجة ديناميكية"}, {ar:"أنجولار", en:"Angular", fr:"Angular", ko:"앵귤러", def:"إطار عمل أنجولار"}, {ar:"فيو", en:"Vue", fr:"Vue", ko:"뷰", def:"إطار عمل فيو"} ];
-const netData = [ {ar:"تي سي بي", en:"TCP", fr:"TCP", ko:"TCP", def:"بروتوكول التحكم في الإرسال"}, {ar:"آي بي", en:"IP", fr:"IP", ko:"IP", def:"بروتوكول الإنترنت"}, {ar:"إتش تي تي بي", en:"HTTP", fr:"HTTP", ko:"HTTP", def:"بروتوكول نقل النص التشعبي"}, {ar:"إتش تي تي بي إس", en:"HTTPS", fr:"HTTPS", ko:"HTTPS", def:"بروتوكول HTTP الآمن"}, {ar:"إف تي بي", en:"FTP", fr:"FTP", ko:"FTP", def:"بروتوكول نقل الملفات"}, {ar:"إس إس إتش", en:"SSH", fr:"SSH", ko:"SSH", def:"بروتوكول الصدفة الآمن"}, {ar:"دي إن إس", en:"DNS", fr:"DNS", ko:"DNS", def:"نظام أسماء النطاقات"}, {ar:"دي إتش سي بي", en:"DHCP", fr:"DHCP", ko:"DHCP", def:"بروتوكول التهيئة الديناميكية"}, {ar:"إيه آر بي", en:"ARP", fr:"ARP", ko:"ARP", def:"بروتوكول تحليل العناوين"}, {ar:"آي سي إم بي", en:"ICMP", fr:"ICMP", ko:"ICMP", def:"بروتوكول رسائل التحكم"} ];
-const aiData = [ {ar:"الذكاء الاصطناعي", en:"AI", fr:"IA", ko:"인공지능", def:"محاكاة الذكاء البشري في الآلات"}, {ar:"تعلم الآلة", en:"Machine Learning", fr:"Apprentissage automatique", ko:"기계학습", def:"تعلم الآلة من البيانات"}, {ar:"التعلم العميق", en:"Deep Learning", fr:"Apprentissage profond", ko:"딥러닝", def:"شبكات عصبونية عميقة"}, {ar:"الشبكة العصبونية", en:"Neural Network", fr:"Réseau neuronal", ko:"신경망", def:"نموذج يحاكي الدماغ"}, {ar:"سي إن إن", en:"CNN", fr:"CNN", ko:"CNN", def:"شبكة عصبونية التفافية"}, {ar:"آر إن إن", en:"RNN", fr:"RNN", ko:"RNN", def:"شبكة عصبونية متكررة"}, {ar:"جان", en:"GAN", fr:"GAN", ko:"GAN", def:"شبكات الخصومة التوليدية"}, {ar:"معالجة اللغة الطبيعية", en:"NLP", fr:"Traitement du langage naturel", ko:"자연어 처리", def:"معالجة وفهم اللغة الطبيعية"}, {ar:"الرؤية الحاسوبية", en:"Computer Vision", fr:"Vision par ordinateur", ko:"컴퓨터 비전", def:"تمكين الآلات من رؤية وفهم الصور"}, {ar:"تمييز الكلام", en:"Speech Recognition", fr:"Reconnaissance vocale", ko:"음성 인식", def:"تمييز الكلام البشري"} ];
+const techData = [
+    {ar:"الحاسوب", en:"Computer", fr:"Ordinateur", ko:"컴퓨터", def:"جهاز إلكتروني يستقبل البيانات ويعالجها"},
+    {ar:"الإنترنت", en:"Internet", fr:"Internet", ko:"인터넷", def:"شبكة عالمية تربط ملايين الحواسيب"},
+    {ar:"البرمجيات", en:"Software", fr:"Logiciel", ko:"소프트웨어", def:"مجموعة من التعليمات والأكواد"},
+    {ar:"العتاد", en:"Hardware", fr:"Matériel", ko:"하드웨어", def:"المكونات المادية للحاسوب"},
+    {ar:"الشبكة", en:"Network", fr:"Réseau", ko:"네트워크", def:"ربط جهازين أو أكثر لتبادل البيانات"},
+    {ar:"البيانات", en:"Data", fr:"Données", ko:"데이터", def:"معلومات خام غير معالجة"},
+    {ar:"الخادم", en:"Server", fr:"Serveur", ko:"서버", def:"جهاز يقدم خدمات لأجهزة أخرى"},
+    {ar:"المستخدم", en:"User", fr:"Utilisateur", ko:"사용자", def:"الشخص الذي يتفاعل مع النظام"},
+    {ar:"التطبيق", en:"Application", fr:"Application", ko:"앱", def:"برنامج لأداء مهام محددة"},
+    {ar:"قاعدة البيانات", en:"Database", fr:"Base de données", ko:"데이터베이스", def:"مجموعة منظمة من البيانات"},
+    {ar:"نظام التشغيل", en:"Operating System", fr:"Système d'exploitation", ko:"운영체제", def:"يدير موارد الحاسوب"},
+    {ar:"المعالج", en:"CPU", fr:"Processeur", ko:"CPU", def:"وحدة المعالجة المركزية - عقل الحاسوب"},
+    {ar:"القرص الصلب", en:"Hard Disk", fr:"Disque dur", ko:"하드디스크", def:"جهاز تخزين دائم"},
+    {ar:"البروتوكول", en:"Protocol", fr:"Protocole", ko:"프로토콜", def:"قواعد تبادل البيانات"},
+    {ar:"التشفير", en:"Encryption", fr:"Cryptage", ko:"암호화", def:"تحويل البيانات لشكل آمن"},
+    {ar:"جدار الحماية", en:"Firewall", fr:"Pare-feu", ko:"방화벽", def:"نظام أمني للشبكة"},
+    {ar:"الماسح الضوئي", en:"Scanner", fr:"Scanner", ko:"스캐너", def:"جهاز لتحويل المستندات إلى رقمية"},
+    {ar:"الطابعة", en:"Printer", fr:"Imprimante", ko:"프린터", def:"جهاز لطباعة المستندات"},
+    {ar:"الشاشة", en:"Monitor", fr:"Écran", ko:"모니터", def:"شاشة عرض البيانات"},
+    {ar:"لوحة المفاتيح", en:"Keyboard", fr:"Clavier", ko:"키보드", def:"أداة إدخال النصوص"},
+    {ar:"الفأرة", en:"Mouse", fr:"Souris", ko:"마우스", def:"أداة تحكم المؤشر"},
+    {ar:"مكبر الصوت", en:"Speaker", fr:"Haut-parleur", ko:"스피커", def:"جهاز إخراج الصوت"},
+    {ar:"الميكروفون", en:"Microphone", fr:"Microphone", ko:"마이크", def:"جهاز إدخال الصوت"},
+    {ar:"الكاميرا", en:"Camera", fr:"Caméra", ko:"카메라", def:"جهاز التقاط الصور"},
+    {ar:"المودم", en:"Modem", fr:"Modem", ko:"모뎀", def:"جهاز ربط بالإنترنت"},
+    {ar:"الموجه", en:"Router", fr:"Routeur", ko:"라우터", def:"جهاز توجيه البيانات"},
+    {ar:"المحول", en:"Adapter", fr:"Adaptateur", ko:"어댑터", def:"محول الإشارات"},
+    {ar:"المبدل", en:"Switch", fr:"Commutateur", ko:"스위치", def:"جهاز ربط الشبكات"},
+    {ar:"الجسر", en:"Bridge", fr:"Pont", ko:"브리지", def:"جهاز ربط شبكتين"},
+    {ar:"النقطة الساخنة", en:"Hotspot", fr:"Point d'accès", ko:"핫스팟", def:"نقطة اتصال لاسلكية"},
+    {ar:"المجال", en:"Domain", fr:"Domaine", ko:"도메인", def:"مساحة إلكترونية"},
+    {ar:"النطاق", en:"Range", fr:"Plage", ko:"범위", def:"مجموعة من القيم"},
+    {ar:"المسار", en:"Path", fr:"Chemin", ko:"경로", def:"طريق الوصول"},
+    {ar:"البرنامج الثابت", en:"Firmware", fr:"Micrologiciel", ko:"펌웨어", def:"برنامج داخلي للجهاز"},
+    {ar:"برنامج التشغيل", en:"Driver", fr:"Pilote", ko:"드라이버", def:"برنامج تعريفي للعتاد"},
+    {ar:"التطبيق المحمول", en:"Mobile App", fr:"Application mobile", ko:"모바일 앱", def:"تطبيق يعمل على الأجهزة المحمولة"},
+    {ar:"الويب", en:"Web", fr:"Web", ko:"웹", def:"شبكة عالمية"},
+    {ar:"الموقع", en:"Website", fr:"Site", ko:"웹사이트", def:"موقع إلكتروني"},
+    {ar:"الصفحة", en:"Page", fr:"Page", ko:"페이지", def:"صفحة ويب"},
+    {ar:"الرابط", en:"Link", fr:"Lien", ko:"링크", def:"رابط تشعبي"}
+];
+const progData = [
+    {ar:"بايثون", en:"Python", fr:"Python", ko:"파이썬", def:"لغة برمجة عالية المستوى سهلة التعلم"},
+    {ar:"جافا", en:"Java", fr:"Java", ko:"자바", def:"لغة برمجة كائنية التوجه"},
+    {ar:"جافا سكريبت", en:"JavaScript", fr:"JavaScript", ko:"자바스크립트", def:"لغة برمجة الويب"},
+    {ar:"سي بلس بلس", en:"C++", fr:"C++", ko:"C++", def:"لغة برمجة قوية"},
+    {ar:"بي إتش بي", en:"PHP", fr:"PHP", ko:"PHP", def:"لغة برمجة خادم الويب"},
+    {ar:"رياكت", en:"React", fr:"React", ko:"리액트", def:"مكتبة جافا سكريبت"},
+    {ar:"دوكر", en:"Docker", fr:"Docker", ko:"도커", def:"منصة حاويات"},
+    {ar:"جيت", en:"Git", fr:"Git", ko:"깃", def:"نظام تحكم بالإصدارات"},
+    {ar:"إس كيو إل", en:"SQL", fr:"SQL", ko:"SQL", def:"لغة استعلام قواعد البيانات"},
+    {ar:"نو إس كيو إل", en:"NoSQL", fr:"NoSQL", ko:"NoSQL", def:"قواعد بيانات غير علائقية"},
+    {ar:"واجهة برمجة التطبيقات", en:"API", fr:"API", ko:"API", def:"واجهة برمجة التطبيقات"},
+    {ar:"ريست", en:"REST", fr:"REST", ko:"REST", def:"نمط معماري للويب"},
+    {ar:"جيسون", en:"JSON", fr:"JSON", ko:"JSON", def:"صيغة تبادل البيانات"},
+    {ar:"إتش تي إم إل", en:"HTML", fr:"HTML", ko:"HTML", def:"لغة ترميز النصوص"},
+    {ar:"سي إس إس", en:"CSS", fr:"CSS", ko:"CSS", def:"لغة تنسيق الصفحات"},
+    {ar:"كوتلن", en:"Kotlin", fr:"Kotlin", ko:"코틀린", def:"لغة برمجة أندرويد"},
+    {ar:"سويفت", en:"Swift", fr:"Swift", ko:"스위프트", def:"لغة برمجة آبل"},
+    {ar:"روبي", en:"Ruby", fr:"Ruby", ko:"루비", def:"لغة برمجة ديناميكية"},
+    {ar:"أنجولار", en:"Angular", fr:"Angular", ko:"앵귤러", def:"إطار عمل أنجولار"},
+    {ar:"فيو", en:"Vue", fr:"Vue", ko:"뷰", def:"إطار عمل فيو"}
+];
+const netData = [
+    {ar:"تي سي بي", en:"TCP", fr:"TCP", ko:"TCP", def:"بروتوكول التحكم في الإرسال"},
+    {ar:"آي بي", en:"IP", fr:"IP", ko:"IP", def:"بروتوكول الإنترنت"},
+    {ar:"إتش تي تي بي", en:"HTTP", fr:"HTTP", ko:"HTTP", def:"بروتوكول نقل النص التشعبي"},
+    {ar:"إتش تي تي بي إس", en:"HTTPS", fr:"HTTPS", ko:"HTTPS", def:"بروتوكول HTTP الآمن"},
+    {ar:"إف تي بي", en:"FTP", fr:"FTP", ko:"FTP", def:"بروتوكول نقل الملفات"},
+    {ar:"إس إس إتش", en:"SSH", fr:"SSH", ko:"SSH", def:"بروتوكول الصدفة الآمن"},
+    {ar:"دي إن إس", en:"DNS", fr:"DNS", ko:"DNS", def:"نظام أسماء النطاقات"},
+    {ar:"دي إتش سي بي", en:"DHCP", fr:"DHCP", ko:"DHCP", def:"بروتوكول التهيئة الديناميكية"},
+    {ar:"إيه آر بي", en:"ARP", fr:"ARP", ko:"ARP", def:"بروتوكول تحليل العناوين"},
+    {ar:"آي سي إم بي", en:"ICMP", fr:"ICMP", ko:"ICMP", def:"بروتوكول رسائل التحكم"}
+];
+const aiData = [
+    {ar:"الذكاء الاصطناعي", en:"AI", fr:"IA", ko:"인공지능", def:"محاكاة الذكاء البشري في الآلات"},
+    {ar:"تعلم الآلة", en:"Machine Learning", fr:"Apprentissage automatique", ko:"기계학습", def:"تعلم الآلة من البيانات"},
+    {ar:"التعلم العميق", en:"Deep Learning", fr:"Apprentissage profond", ko:"딥러닝", def:"شبكات عصبونية عميقة"},
+    {ar:"الشبكة العصبونية", en:"Neural Network", fr:"Réseau neuronal", ko:"신경망", def:"نموذج يحاكي الدماغ"},
+    {ar:"سي إن إن", en:"CNN", fr:"CNN", ko:"CNN", def:"شبكة عصبونية التفافية"},
+    {ar:"آر إن إن", en:"RNN", fr:"RNN", ko:"RNN", def:"شبكة عصبونية متكررة"},
+    {ar:"جان", en:"GAN", fr:"GAN", ko:"GAN", def:"شبكات الخصومة التوليدية"},
+    {ar:"معالجة اللغة الطبيعية", en:"NLP", fr:"Traitement du langage naturel", ko:"자연어 처리", def:"معالجة وفهم اللغة الطبيعية"},
+    {ar:"الرؤية الحاسوبية", en:"Computer Vision", fr:"Vision par ordinateur", ko:"컴퓨터 비전", def:"تمكين الآلات من رؤية وفهم الصور"},
+    {ar:"تمييز الكلام", en:"Speech Recognition", fr:"Reconnaissance vocale", ko:"음성 인식", def:"تمييز الكلام البشري"}
+];
 
 for(let i=0; i<1000; i++){ let d = techData[i % techData.length]; sections[1].push({...d}); }
 for(let i=0; i<1000; i++){ let d = progData[i % progData.length]; sections[2].push({...d}); }
 for(let i=0; i<1000; i++){ let d = netData[i % netData.length]; sections[3].push({...d}); }
 for(let i=0; i<1000; i++){ let d = aiData[i % aiData.length]; sections[4].push({...d}); }
 
-let dictCurrentSection = 1, dictCurrentTerms = sections[1], dictCurrentIndex = 0, dictFilteredList = dictCurrentTerms.map((_,i)=>i);
+let dictCurrentSection = 1;
+let dictCurrentTerms = sections[1];
+let dictCurrentIndex = 0;
+let dictFilteredList = dictCurrentTerms.map((_,i)=>i);
 
 Z.showDictionary=function() {
-    if(!Z.checkVisitor()) return; dictCurrentSection = 1; dictCurrentTerms = sections[1]; dictFilteredList = dictCurrentTerms.map((_,i)=>i); dictCurrentIndex = 0;
+    if(!Z.checkVisitor()) return;
+    dictCurrentSection = 1;
+    dictCurrentTerms = sections[1];
+    dictFilteredList = dictCurrentTerms.map((_,i)=>i);
+    dictCurrentIndex = 0;
+    
     var c=document.getElementById('lc');
-    c.innerHTML = `<div class="slide" style="background:#1e293b; padding:0;"><div style="background:#eab308; color:#1e293b; padding:15px; text-align:center; border-radius:15px 15px 0 0;"><h2 style="margin:0;">📖 المنجد الرباعي - 4000 مصطلح</h2><p style="margin:5px 0 0 0; font-size:14px;">نطق عبر Google | ترجمة 4 لغات | تفسير أصلي</p></div><div style="padding:20px;"><div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px; flex-wrap:wrap;"><button class="nbtn ${dictCurrentSection===1?'nn':'np'}" onclick="ZAID.switchDictSection(1)">📚 تكنولوجيا</button><button class="nbtn ${dictCurrentSection===2?'nn':'np'}" onclick="ZAID.switchDictSection(2)">💻 برمجة</button><button class="nbtn ${dictCurrentSection===3?'nn':'np'}" onclick="ZAID.switchDictSection(3)">🌐 شبكات</button><button class="nbtn ${dictCurrentSection===4?'nn':'np'}" onclick="ZAID.switchDictSection(4)">🤖 ذكاء اصطناعي</button></div><div class="dict-box"><input type="text" id="dictSearchInput" class="dict-select" placeholder="🔍 ابحث عن مصطلح..." oninput="ZAID.searchDictTerms()"><select id="dictTermSelect" class="dict-select" size="5" onchange="ZAID.selectDictTerm()" style="height:150px;"></select><div id="dictTermDisplay" style="margin-top:20px;"></div><div style="display:flex; gap:10px; justify-content:center; margin-top:15px;"><button class="nbtn np" onclick="ZAID.prevDictTerm()">▶ السابق</button><button class="nbtn nn" onclick="ZAID.nextDictTerm()">التالي ◀</button></div><div id="dictCounter" style="text-align:center; margin-top:10px; color:#94a3b8; font-size:13px;"></div></div></div><div class="nav" style="margin-top:10px; margin-bottom:20px;"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>`;
-    Z.showPage('pageLesson'); Z.switchDictSection(1);
+    c.innerHTML = `
+        <div class="slide" style="background:#1e293b; padding:0;">
+            <div style="background:#eab308; color:#1e293b; padding:15px; text-align:center; border-radius:15px 15px 0 0;">
+                <h2 style="margin:0;">📖 المنجد الرباعي - 4000 مصطلح</h2>
+                <p style="margin:5px 0 0 0; font-size:14px;">نطق عبر Google | ترجمة 4 لغات | تفسير أصلي</p>
+            </div>
+            <div style="padding:20px;">
+                <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px; flex-wrap:wrap;">
+                    <button class="nbtn ${dictCurrentSection===1?'nn':'np'}" onclick="ZAID.switchDictSection(1)">📚 تكنولوجيا</button>
+                    <button class="nbtn ${dictCurrentSection===2?'nn':'np'}" onclick="ZAID.switchDictSection(2)">💻 برمجة</button>
+                    <button class="nbtn ${dictCurrentSection===3?'nn':'np'}" onclick="ZAID.switchDictSection(3)">🌐 شبكات</button>
+                    <button class="nbtn ${dictCurrentSection===4?'nn':'np'}" onclick="ZAID.switchDictSection(4)">🤖 ذكاء اصطناعي</button>
+                </div>
+                <div class="dict-box">
+                    <input type="text" id="dictSearchInput" class="dict-select" placeholder="🔍 ابحث عن مصطلح..." oninput="ZAID.searchDictTerms()">
+                    <select id="dictTermSelect" class="dict-select" size="5" onchange="ZAID.selectDictTerm()" style="height:150px;"></select>
+                    <div id="dictTermDisplay" style="margin-top:20px;"></div>
+                    <div style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+                        <button class="nbtn np" onclick="ZAID.prevDictTerm()">▶ السابق</button>
+                        <button class="nbtn nn" onclick="ZAID.nextDictTerm()">التالي ◀</button>
+                    </div>
+                    <div id="dictCounter" style="text-align:center; margin-top:10px; color:#94a3b8; font-size:13px;"></div>
+                </div>
+            </div>
+            <div class="nav" style="margin-top:10px; margin-bottom:20px;">
+                <button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button>
+            </div>
+        </div>`;
+    Z.showPage('pageLesson');
+    Z.switchDictSection(1);
 };
+
 Z.switchDictSection=function(s) {
-    dictCurrentSection = s; dictCurrentTerms = sections[s]; dictFilteredList = dictCurrentTerms.map((_,i)=>i); dictCurrentIndex = 0;
+    dictCurrentSection = s;
+    dictCurrentTerms = sections[s];
+    dictFilteredList = dictCurrentTerms.map((_,i)=>i);
+    dictCurrentIndex = 0;
+    
     var allBtns = document.querySelectorAll('button[onclick*="switchDictSection"]');
-    for(var i=0; i<allBtns.length; i++){ var b = allBtns[i]; var oc = b.getAttribute('onclick') || ''; var match = oc.match(/switchDictSection\((\d+)\)/); if(match && parseInt(match[1])===s){ b.classList.remove('np'); b.classList.add('nn'); } else { b.classList.remove('nn'); b.classList.add('np'); } }
-    Z.updateDictSelect(); Z.displayDictTerm(0);
+    for(var i=0; i<allBtns.length; i++){
+        var b = allBtns[i];
+        var oc = b.getAttribute('onclick') || '';
+        var match = oc.match(/switchDictSection\((\d+)\)/);
+        if(match && parseInt(match[1])===s){
+            b.classList.remove('np'); b.classList.add('nn');
+        } else {
+            b.classList.remove('nn'); b.classList.add('np');
+        }
+    }
+    
+    Z.updateDictSelect();
+    Z.displayDictTerm(0);
 };
-Z.searchDictTerms=function() { let txt = document.getElementById('dictSearchInput').value.toLowerCase(); dictFilteredList = []; dictCurrentTerms.forEach((t,idx)=>{ if(t.ar.includes(txt)) dictFilteredList.push(idx); }); Z.updateDictSelect(); if(dictFilteredList.length) Z.displayDictTerm(0); else document.getElementById('dictTermDisplay').innerHTML = '<div style="text-align:center; color:#f87171;">🔍 لا توجد نتائج</div>'; };
-Z.updateDictSelect=function() { let select = document.getElementById('dictTermSelect'); if(!select) return; select.innerHTML = ''; for(let i=0; i<dictFilteredList.length; i++) { let term = dictCurrentTerms[dictFilteredList[i]]; let option = document.createElement('option'); option.value = i; option.textContent = term.ar; select.appendChild(option); } };
+Z.searchDictTerms=function() {
+    let txt = document.getElementById('dictSearchInput').value.toLowerCase();
+    dictFilteredList = [];
+    dictCurrentTerms.forEach((t,idx)=>{ if(t.ar.includes(txt)) dictFilteredList.push(idx); });
+    Z.updateDictSelect();
+    if(dictFilteredList.length) Z.displayDictTerm(0);
+    else document.getElementById('dictTermDisplay').innerHTML = '<div style="text-align:center; color:#f87171;">🔍 لا توجد نتائج</div>';
+};
+Z.updateDictSelect=function() {
+    let select = document.getElementById('dictTermSelect');
+    if(!select) return;
+    select.innerHTML = '';
+    for(let i=0; i<dictFilteredList.length; i++) {
+        let term = dictCurrentTerms[dictFilteredList[i]];
+        let option = document.createElement('option');
+        option.value = i;
+        option.textContent = term.ar;
+        select.appendChild(option);
+    }
+};
 Z.selectDictTerm=function() { let v = document.getElementById('dictTermSelect').value; if(v!=='') Z.displayDictTerm(parseInt(v)); };
 Z.prevDictTerm=function() { if(dictCurrentIndex>0) Z.displayDictTerm(dictCurrentIndex-1); };
 Z.nextDictTerm=function() { if(dictCurrentIndex<dictFilteredList.length-1) Z.displayDictTerm(dictCurrentIndex+1); };
-Z.displayDictTerm=function(pos) { if(pos<0 || pos>=dictFilteredList.length) return; dictCurrentIndex = pos; let term = dictCurrentTerms[dictFilteredList[pos]]; let html = `<div class="dict-term">${term.ar}</div><div class="dict-trans"><button class="dict-btn" style="background:#dc2626;" onclick="ZAID.speak('${term.ar.replace(/'/g,"\\'")}', 'ar')">🇸🇦 عربي</button><button class="dict-btn" style="background:#2563eb;" onclick="ZAID.speak('${term.en.replace(/'/g,"\\'")}', 'en')">🇬🇧 English</button><button class="dict-btn" style="background:#16a34a;" onclick="ZAID.speak('${term.fr.replace(/'/g,"\\'")}', 'fr')">🇫🇷 Français</button></div><div class="dict-def"><strong>التفسير:</strong> ${term.def}</div>`; document.getElementById('dictTermDisplay').innerHTML = html; document.getElementById('dictCounter').innerHTML = `📌 ${pos+1} من ${dictFilteredList.length} مصطلح | القسم ${dictCurrentSection}`; };
 
-/* ================== محرك العرض ================== */
+Z.displayDictTerm=function(pos) {
+    if(pos<0 || pos>=dictFilteredList.length) return;
+    dictCurrentIndex = pos;
+    let term = dictCurrentTerms[dictFilteredList[pos]];
+    let html = `
+        <div class="dict-term">${term.ar}</div>
+        <div class="dict-trans">
+            <button class="dict-btn" style="background:#dc2626;" onclick="ZAID.speak('${term.ar.replace(/'/g,"\\'")}', 'ar')">🇸🇦 عربي</button>
+            <button class="dict-btn" style="background:#2563eb;" onclick="ZAID.speak('${term.en.replace(/'/g,"\\'")}', 'en')">🇬🇧 English</button>
+            <button class="dict-btn" style="background:#16a34a;" onclick="ZAID.speak('${term.fr.replace(/'/g,"\\'")}', 'fr')">🇫🇷 Français</button>
+        </div>
+        <div class="dict-def"><strong>التفسير:</strong> ${term.def}</div>
+    `;
+    document.getElementById('dictTermDisplay').innerHTML = html;
+    document.getElementById('dictCounter').innerHTML = `📌 ${pos+1} من ${dictFilteredList.length} مصطلح | القسم ${dictCurrentSection}`;
+};
+/* ================== عرض الشرائح والاختبارات ================== */
 function renderSlide(o){
   var h='<div class="slide">';
-  if(o.n)h+='<div class="sn">'+o.n+'</div>'; if(o.t)h+='<div class="st">'+o.t+'</div>'; if(o.i)h+='<div class="simg"><img src="'+o.i+'" onerror="this.style.display=\'none\'"></div>'; if(o.c)h+='<div class="dc">'+o.c+'</div>'; if(o.m)h+='<div class="dm">'+o.m+'</div>'; if(o.x)h+='<div class="stxt">'+o.x+'</div>';
+  if(o.n)h+='<div class="sn">'+o.n+'</div>';
+  if(o.t)h+='<div class="st">'+o.t+'</div>';
+  if(o.i)h+='<div class="simg"><img src="'+o.i+'" onerror="this.style.display=\'none\'"></div>';
+  if(o.c)h+='<div class="dc">'+o.c+'</div>';
+  if(o.m)h+='<div class="dm">'+o.m+'</div>';
+  if(o.x)h+='<div class="stxt">'+o.x+'</div>';
   if(o.r)h+='<div class="strans"><div><div class="lbl">🇹🇳</div><div class="ar">'+(o.r[0]||'')+'</div></div><div><div class="lbl">🇫🇷</div><div class="fr">'+(o.r[1]||'')+'</div></div><div><div class="lbl">🇬🇧</div><div class="en">'+(o.r[2]||'')+'</div></div></div>';
-  if(o.s&&o.s[0]){ var lb=['عربي','FR','EN'],lg=['ar','fr','en'],cls=['sp-ar','sp-fr','sp-en']; h+='<div class="sb">'; for(var i=0;i<3;i++)if(o.s[i])h+='<button class="spb '+cls[i]+'" onclick="ZAID.speak(\''+o.s[i].replace(/'/g,"\\'")+'\',\''+lg[i]+'\')">🔊 '+lb[i]+'</button>'; h+='</div>'; }
+  if(o.s&&o.s[0]){
+    var lb=['عربي','FR','EN'],lg=['ar','fr','en'],cls=['sp-ar','sp-fr','sp-en'];
+    h+='<div class="sb">';
+    for(var i=0;i<3;i++)if(o.s[i])h+='<button class="spb '+cls[i]+'" onclick="ZAID.speak(\''+o.s[i].replace(/'/g,"\\'")+'\',\''+lg[i]+'\')">🔊 '+lb[i]+'</button>';
+    h+='</div>';
+  }
   if(o.v)h+='<div class="simg"><iframe width="100%" height="250" src="'+o.v+'" allowfullscreen style="border-radius:10px;border:none;"></iframe></div>';
   if(o.e)h+='<div style="text-align:center;padding:30px"><div style="font-size:50px;margin-bottom:15px">📝</div><div class="stxt" style="font-size:16px"><strong>📝 الاختبار</strong></div><button onclick="ZAID.startExam(\''+o.e+'\')" style="margin-top:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:16px;padding:12px 30px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🚀 ابدأ</button></div>';
-  if(Z.user && Z.user.isSub) { h+='<div style="text-align:center;margin-top:15px;"><button onclick="ZAID.downloadSlide()" style="background:#3b82f6;color:#fff;border:none;border-radius:20px;padding:8px 20px;cursor:pointer;font-family:Cairo;font-weight:900;">📥 تحميل هذا المحتوى (نسخة واحدة)</button></div>'; }
+  
+  if(Z.user && Z.user.isSub) {
+    h+='<div style="text-align:center;margin-top:15px;"><button onclick="ZAID.downloadSlide()" style="background:#3b82f6;color:#fff;border:none;border-radius:20px;padding:8px 20px;cursor:pointer;font-family:Cairo;font-weight:900;">📥 تحميل هذا المحتوى (نسخة واحدة)</button></div>';
+  }
   return h+'</div>';
 }
-Z.downloadSlide=function(){ var txt = document.getElementById('lc').innerText; var blob = new Blob([txt], {type: 'text/plain;charset=utf-8'}); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'zaid_content.txt'; a.click(); };
+Z.downloadSlide=function(){
+  var txt = document.getElementById('lc').innerText;
+  var blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'zaid_content.txt';
+  a.click();
+};
 Z.startLesson=function(k){var L=Z.lessons[k];if(!L)return;Z.cur={key:k,idx:0};renderCur();};
+
 function renderCur(){
-  Z.stopSpeak(); var L=Z.lessons[Z.cur.key];if(!L)return; var c=document.getElementById('lc');
-  var nav='<div class="nav">'; if(Z.cur.idx>0)nav+='<button class="nbtn np" onclick="ZAID.prev()">▶ السابق</button>'; nav+='<button class="nbtn ne" onclick="ZAID.openCat(\''+(L.meta.cat||'tech')+'\')">🏠 خروج</button>'; if(Z.cur.idx<L.slides.length-1)nav+='<button class="nbtn nn" onclick="ZAID.next()">التالي ◀</button>'; nav+='</div>';
+  Z.stopSpeak();
+  var L=Z.lessons[Z.cur.key];if(!L)return;
+  var c=document.getElementById('lc');
+  var nav='<div class="nav">';
+  if(Z.cur.idx>0)nav+='<button class="nbtn np" onclick="ZAID.prev()">▶ السابق</button>';
+  nav+='<button class="nbtn ne" onclick="ZAID.openCat(\''+(L.meta.cat||'tech')+'\')">🏠 خروج</button>';
+  if(Z.cur.idx<L.slides.length-1)nav+='<button class="nbtn nn" onclick="ZAID.next()">التالي ◀</button>';
+  nav+='</div>';
   var pr='<div class="prog"><div class="progf" style="width:'+((Z.cur.idx+1)/L.slides.length*100)+'%"></div></div>';
-  c.innerHTML=renderSlide(L.slides[Z.cur.idx])+nav+pr; window.scrollTo(0,0);
+  c.innerHTML=renderSlide(L.slides[Z.cur.idx])+nav+pr;
+  window.scrollTo(0,0);
 }
 Z.prev=function(){if(Z.cur.idx>0){Z.cur.idx--;renderCur();}};
 Z.next=function(){var L=Z.lessons[Z.cur.key];if(Z.cur.idx<L.slides.length-1){Z.cur.idx++;renderCur();}};
+
 Z.startExam=function(k){var q=Z.exams[k];if(!q){alert('لا اختبار');return;}Z.exam={key:k,idx:0,score:0,qs:q};renderExam();};
 function renderExam(){
   var c=document.getElementById('lc'),t=Z.exam.qs.length;
   if(Z.exam.idx>=t){
-    var p=Math.round(Z.exam.score/t*100),ok=p>=50; var msg=ok?'🎉 مبروك! نجحت':'😔 لم تنجح'; var col=ok?'#22c55e':'#dc2626',cert='';
-    if(ok){ var nm=(Z.user&&Z.user.name)?Z.user.name:'المتعلم'; var dt=new Date().toLocaleDateString('ar-TN'); cert='<div class="cert"><h1>🏆 شهادة إتمام</h1><p>تشهد منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي بأن</p><h2>'+nm+'</h2><p>قد أتم بنجاح هذا الاختبار بنسبة <strong>'+p+'%</strong></p><p>التاريخ: '+dt+'</p><div class="sign">محمد زايد — خبير دولي — تونس 🇹🇳</div></div>'; }
+    var p=Math.round(Z.exam.score/t*100),ok=p>=50;
+    var msg=ok?'🎉 مبروك! نجحت':'😔 لم تنجح';
+    var col=ok?'#22c55e':'#dc2626',cert='';
+    if(ok){
+      var nm=(Z.user&&Z.user.name)?Z.user.name:'المتعلم';
+      var dt=new Date().toLocaleDateString('ar-TN');
+      cert='<div class="cert"><h1>🏆 شهادة إتمام</h1><p>تشهد منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي بأن</p><h2>'+nm+'</h2><p>قد أتم بنجاح هذا الاختبار بنسبة <strong>'+p+'%</strong></p><p>التاريخ: '+dt+'</p><div class="sign">محمد زايد — خبير دولي — تونس 🇹🇳</div></div>';
+    }
     c.innerHTML='<div class="slide" style="text-align:center"><div class="sn">🏆 النتيجة</div><div style="font-size:26px;font-weight:900;color:'+col+';margin:20px 0">'+msg+'</div><div class="stxt" style="font-size:16px">درجتك: '+Z.exam.score+' من '+t+'<br>النسبة: '+p+'%</div>'+cert+'<div style="margin-top:20px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap"><button class="nbtn nn" onclick="ZAID.startExam(\''+Z.exam.key+'\')">🔄 إعادة</button><button class="nbtn ne" onclick="ZAID.goHome()">🔙 الرئيسية</button></div></div>';
     return;
   }
-  var q=Z.exam.qs[Z.exam.idx],op=''; for(var i=0;i<q.o.length;i++)op+='<button class="opt" onclick="ZAID.ans(\''+q.o[i].replace(/'/g,"\\'")+'\')">'+q.o[i]+'</button>';
+  var q=Z.exam.qs[Z.exam.idx],op='';
+  for(var i=0;i<q.o.length;i++)op+='<button class="opt" onclick="ZAID.ans(\''+q.o[i].replace(/'/g,"\\'")+'\')">'+q.o[i]+'</button>';
   c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div><div class="stxt" style="font-size:16px;font-weight:900">'+q.q+'</div>'+op+'</div>';
 }
 Z.ans=function(ch){var q=Z.exam.qs[Z.exam.idx];if(ch===q.a){Z.exam.score++;alert('✅ صحيح!');}else{alert('❌ خطأ. الصحيح: '+q.a);}Z.exam.idx++;renderExam();};
-/* ================== المحتوى (الدروس) ================== */
+
+Z.loadJobs();
+Z.loadSeekers();
+
+/* ================== المحتوى (الدروس الأصلية) ================== */
 Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحاسوب',desc:'شرائح تعليمية + اختبار'},[
 {n:'📖 1',t:'📚 مقدمة',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'مرحباً بكم في كتاب "الأطفال والحاسوب". بقلم: <strong>محمد زايد</strong>',s:['الأطفال والحاسوب','Les enfants','Children']},
 {n:'📖 2',t:'💻 ما هو الحاسوب؟',i:'https://i.postimg.cc/CKcnB72y/haswb1.jpg',x:'الحاسوب هو جهاز <strong>إلكتروني رقمي</strong> يمكنه تخزين ومعالجة البيانات واستقبالها وإخراج النتائج.',r:['حاسوب','Ordinateur','Computer'],s:['الحاسوب','Ordinateur','Computer']},
@@ -915,9 +1322,15 @@ Z.addLesson('ar1',{cat:'arabic',icon:'🌙',name:'المستوى 1: الحروف
 {n:'الدرس 7',e:'arabic_exam'}
 ]);
 
-Z.addLesson('mem_game',{cat:'games',icon:'🧠',name:'لعبة الذاكرة',desc:'اعثر على الأزواج',color:'p'},[{n:'لعبة',t:'🎮 لعبة الذاكرة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startMemory()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}]);
-Z.addLesson('word_game',{cat:'games',icon:'🔍',name:'ابحث عن الكلمة',desc:'لعبة حروف تفاعلية',color:'r'},[{n:'لعبة',t:'🔍 ابحث عن الكلمة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startWordSearch()" style="background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}]);
-Z.addLesson('cross_game',{cat:'games',icon:'🔐',name:'الكلمات المتقاطعة',desc:'أسئلة تكنولوجية',color:'j'},[{n:'لعبة',t:'🔐 الكلمات المتقاطعة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startCrossword()" style="background:linear-gradient(135deg,#0e7490,#155e75);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}]);
+Z.addLesson('mem_game',{cat:'games',icon:'🧠',name:'لعبة الذاكرة',desc:'اعثر على الأزواج',color:'p'},[
+{n:'لعبة',t:'🎮 لعبة الذاكرة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startMemory()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}
+]);
+Z.addLesson('word_game',{cat:'games',icon:'🔍',name:'ابحث عن الكلمة',desc:'لعبة حروف تفاعلية',color:'r'},[
+{n:'لعبة',t:'🔍 ابحث عن الكلمة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startWordSearch()" style="background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}
+]);
+Z.addLesson('cross_game',{cat:'games',icon:'🔐',name:'الكلمات المتقاطعة',desc:'أسئلة تكنولوجية',color:'j'},[
+{n:'لعبة',t:'🔐 الكلمات المتقاطعة',x:'ستُفتح اللعبة التفاعلية.<div style="text-align:center;margin-top:20px"><button onclick="ZAID.startCrossword()" style="background:linear-gradient(135deg,#0e7490,#155e75);color:#fff;font-size:18px;padding:15px 40px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;transition:0.2s">🎯 ابدأ</button></div>'}
+]);
 
 Z.addLesson('ai_intro',{cat:'ai',icon:'🤖',name:'مقدمة في AI',desc:'5 شرائح',color:'p'},[
 {n:'1/5',t:'ما هو AI؟',x:'محاكاة <strong>الذكاء البشري</strong> في الآلات.'},
@@ -953,7 +1366,6 @@ Z.addLesson('bk_smart_campus',{cat:'books',icon:'🏫',name:'المدينة ال
 {n:'3',t:'⚙️ المكونات الرقمية',x:'يعتمد على:<br><strong>إنترنت الأشياء (IoT)</strong> للحساسات.<br><strong>السحابة المعلوماتية (Cloud)</strong> لتخزين البيانات.<br><strong>البيانات الضخمة (Big Data)</strong> للتحليل.<br><strong>الذكاء الاصطناعي</strong> لاتخاذ القرار.'},
 {n:'4',t:'🚀 الخدمات الذكية',x:'تشمل:<br>- أنظمة الدخول الذكية.<br>- إدارة ذكية للفصول الدراسية.<br>- منصات تعلم إلكتروني متكاملة.<br>- مراقبة أمنية ذكية.<br>- إدارة ذكية للمياه والطاقة.'}
 ]);
-
 /* ================== إضافات AI (الورشات والكتاب الشامل) ================== */
 Z.addLesson('ai_full_workshop1', {cat: 'ai', icon: '📄', name: 'دليل المعلم الشامل', desc: 'ورشة 1 - نص حرفي', color: 'p'}, [
 {n: 'الورشة 1', t: 'الذكاء الاصطناعي في خدمة التعليم', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الذكاء الاصطناعي في خدمة التعليم دليل المعلم الشامل لاستخدام أدوات الذكاء الاصطناعي (1)
@@ -1278,9 +1690,6 @@ Z.addExam('arabic_exam_5',[
 {q:'الرسالة تبدأ بـ...',o:['التحية','الخاتمة','التوقيع','الموضوع'],a:'التحية'},
 {q:'"العقدة" في القصة هي...',o:['المشكلة','الحل','الشخصية','النهاية'],a:'المشكلة'}
 ]);
-
-Z.loadJobs();
-Z.loadSeekers();
 
 window.addEventListener('load',function(){
   Z.updateUI();
