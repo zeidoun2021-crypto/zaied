@@ -468,6 +468,29 @@ Z.speak=function(t,l){
   });
 };
 
+Z.clearAllUsers = function(){
+  if(!Z.admin){alert('للمشرف فقط');return;}
+  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً؟ لا يمكن التراجع!'))return;
+
+  if(db){
+    db.collection("users").get().then(function(qs){
+      var batch = db.batch();
+      qs.forEach(function(doc){ batch.delete(doc.ref); });
+      return batch.commit();
+    }).then(function(){
+      localStorage.removeItem('zaid_registered_users_v4');
+      alert('✅ تم حذف جميع المسجلين بنجاح من Firebase.');
+      Z.showStats();
+    }).catch(function(err){
+      alert('❌ خطأ أثناء الحذف: ' + err.message);
+    });
+  } else {
+    localStorage.removeItem('zaid_registered_users_v4');
+    alert('✅ تم تصفير البيانات المحلية.');
+    Z.showStats();
+  }
+};
+
 Z.showStats=function(){
   var o=document.getElementById('statsModal');if(o)o.remove();
   var m=document.createElement('div');m.id='statsModal';
@@ -492,7 +515,21 @@ Z.showStats=function(){
     document.getElementById('statsModal').remove();
     var m2=document.createElement('div');m2.id='statsModal';
     m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;"><h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2><div style="font-size:12px;color:'+(fromServer?'#22c55e':'#f59e0b')+';margin-bottom:10px;">'+(fromServer?'✅ متصل بقاعدة بيانات Firebase':'⚠️ وضع محلي (لم يتم الاتصال بالسحابة)')+'</div><div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;"><div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div><div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div><div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div></div><div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 القائمة:</div><div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div><button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
+    m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
+      +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2>'
+      +'<div style="font-size:12px;color:'+(fromServer?'#22c55e':'#f59e0b')+';margin-bottom:10px;">'
+      + (fromServer?'✅ متصل بقاعدة بيانات Firebase':'⚠️ وضع محلي (لم يتم الاتصال بالسحابة)')
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
+        +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
+        +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div>'
+        +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
+      +'</div>'
+      +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 القائمة:</div>'
+      +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:250px;">'+usersHtml+'</div>'
+      +'<button onclick="ZAID.clearAllUsers()" style="width:100%;padding:12px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;margin-bottom:10px;">🗑️ تصفير قائمة المسجلين (حذف الكل)</button>'
+      +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button>'
+      +'</div>';
     document.body.appendChild(m2);
   }
 
@@ -501,7 +538,7 @@ Z.showStats=function(){
       var users=[];qs.forEach(function(doc){var u=doc.data();u._docId=doc.id;users.push(u);});
       renderStats(users,true);
     }).catch(function(err){
-      alert("❌ فشل جلب البيانات من Firebase:\n" + err.message + "\n\nتأكد من تفعيل قواعد Firestore (Rules) كما شرحنا سابقاً.");
+      alert("❌ فشل جلب البيانات من Firebase:\n" + err.message + "\n\nتأكد من تفعيل قواعد Firestore (Rules).");
       renderStats(Z.getUsers(),false);
     });
   } else {
