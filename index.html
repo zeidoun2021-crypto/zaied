@@ -212,7 +212,10 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <input class="inp" id="fh" type="tel" placeholder="📱 رقم الواتساب *">
     <input class="inp" id="fc" placeholder="🌍 بلد الإقامة *" value="تونس">
     <input class="inp" id="fci" placeholder="🏙️ المدينة *">
+    
+    <div style="text-align:center;font-size:13px;font-weight:900;color:#dc2626;margin-bottom:5px;">⬇️ يرجى اختيار التصنيف المناسب ⬇️</div>
     <div class="cats" id="cats"></div>
+    
     <button class="sbt" onclick="ZAID.register()">🔑 ابدأ الآن مجاناً</button>
     <button type="button" onclick="ZAID.logout()" style="display:block;width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;font-weight:900;">🚪 خروج / إلغاء</button>
     <div style="text-align:center;margin-top:10px;">
@@ -329,10 +332,15 @@ Z.saveUsers=function(arr){ try{ localStorage.setItem('zaid_registered_users_v4',
 
 var cats=['طفل','ولي','طالب','أستاذ','باحث','خبير'];
 var cg=document.getElementById('cats');
-cats.forEach(function(c){
+cats.forEach(function(c, index){
   var b=document.createElement('div');b.className='cat';b.textContent=c;
   b.onclick=function(){document.querySelectorAll('.cat').forEach(function(x){x.classList.remove('on');});b.classList.add('on');Z.selectedCat=c;};
   cg.appendChild(b);
+  // تحديد التصنيف الأول تلقائياً لتجنب خطأ "لم تختر التصنيف"
+  if(index === 0) {
+    b.classList.add('on');
+    Z.selectedCat = c;
+  }
 });
 
 Z.exitPlatform=function(){
@@ -392,10 +400,21 @@ Z.register=function(){
   var c=document.getElementById('fc').value.trim();
   var ci=document.getElementById('fci').value.trim();
   var er=document.getElementById('err');
-  var nameWords=n.split(/\s+/).filter(function(w){return w.length>0;});
-  if(nameWords.length<3||!p||!s||!e||!h||!c||!ci||!Z.selectedCat){ er.style.display='block';er.textContent='املأ جميع الحقول، والاسم ثلاثي';return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){ er.style.display='block';er.textContent='صيغة البريد غير صحيحة';return; }
-  er.style.display='none';
+  
+  var nameWords = n.split(/\s+/).filter(function(w){return w.length>0;});
+  
+  // تشخيص دقيق جداً: يظهر تنبيه بالضبط ما الذي ينقص
+  if(nameWords.length < 3) { alert('❌ الاسم غير مكتمل: يجب كتابة 3 كلمات مفصولة بمسافات (مثال: محمد علي أحمد)'); return; }
+  if(!p) { alert('❌ حقل "المهنة" فارغ.'); return; }
+  if(!s) { alert('❌ حقل "الاختصاص" فارغ.'); return; }
+  if(!e) { alert('❌ حقل "البريد الإلكتروني" فارغ.'); return; }
+  if(e.indexOf('@') === -1 || e.indexOf('.') === -1) { alert('❌ صيغة البريد الإلكتروني غير صحيحة (يجب أن يحتوي على @ ونقطة، مثال: user@gmail.com)'); return; }
+  if(!h) { alert('❌ حقل "رقم الواتساب" فارغ.'); return; }
+  if(!c) { alert('❌ حقل "بلد الإقامة" فارغ.'); return; }
+  if(!ci) { alert('❌ حقل "المدينة" فارغ (يجب التمرير للأسفل لملئه).'); return; }
+  if(!Z.selectedCat) { alert('❌ لم تقم باختيار التصنيف! (يجب الضغط على أحد الأزرار الملونة: طفل، ولي، طالب...)'); return; }
+
+  if(er) er.style.display='none';
   
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date:new Date().toLocaleDateString('ar-TN'),isSub:false};
   var arr=Z.getUsers();arr.push(Z.user);Z.saveUsers(arr);
