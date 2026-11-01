@@ -281,6 +281,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
+/* ✅ إعدادات Firebase الخاصة بك */
 var firebaseConfig = {
   apiKey: "AIzaSyA8LK52iXBPZFbqHnXyaAsldgqcjz7Bj4o",
   authDomain: "zaied-platform.firebaseapp.com",
@@ -395,9 +396,18 @@ Z.register=function(){
   if(nameWords.length<3||!p||!s||!e||!h||!c||!ci||!Z.selectedCat){ er.style.display='block';er.textContent='املأ جميع الحقول، والاسم ثلاثي';return; }
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){ er.style.display='block';er.textContent='صيغة البريد غير صحيحة';return; }
   er.style.display='none';
+  
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date:new Date().toLocaleDateString('ar-TN'),isSub:false};
   var arr=Z.getUsers();arr.push(Z.user);Z.saveUsers(arr);
-  if(db){ db.collection("users").add(Z.user).catch(function(err){console.error("FB:",err);}); }
+  
+  if(db){ 
+      db.collection("users").add(Z.user)
+      .then(function(){ alert('✅ تم الحفظ في قاعدة بيانات Firebase بنجاح!'); })
+      .catch(function(err){ alert('❌ خطأ في Firebase أثناء التسجيل:\n' + err.message); }); 
+  } else {
+      alert('⚠️ تحذير: Firebase غير متصل (db = null)! تأكد من الإنترنت.');
+  }
+  
   if(Z.WEB3FORMS_KEY){
     fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:Z.WEB3FORMS_KEY,subject:'🎉 مسجل جديد - منصة زايد',from_name:'منصة زايد',name:n,email:e,phone:h,prof:p,spec:s,country:c,city:ci,category:Z.selectedCat,date:Z.user.date})}).catch(function(err){console.error('W3F:',err);});
   }
@@ -445,6 +455,7 @@ Z.showStats=function(){
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
   m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين...</div>';
   document.body.appendChild(m);
+
   function renderStats(usersList, fromServer) {
     var todayStr=new Date().toLocaleDateString('ar-TN');
     var todayUsers=usersList.filter(function(u){return u.date===todayStr;});
@@ -462,12 +473,22 @@ Z.showStats=function(){
     document.getElementById('statsModal').remove();
     var m2=document.createElement('div');m2.id='statsModal';
     m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;"><h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2><div style="font-size:12px;color:'+(fromServer?'#22c55e':'#f59e0b')+';margin-bottom:10px;">'+(fromServer?'✅ متصل بـ Firebase':'⚠️ وضع محلي')+'</div><div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;"><div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div><div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div><div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div></div><div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 القائمة:</div><div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div><button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
+    m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;"><h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2><div style="font-size:12px;color:'+(fromServer?'#22c55e':'#f59e0b')+';margin-bottom:10px;">'+(fromServer?'✅ متصل بقاعدة بيانات Firebase':'⚠️ وضع محلي (لم يتم الاتصال بالسحابة)')+'</div><div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;"><div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div><div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div><div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div></div><div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 القائمة:</div><div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div><button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button></div>';
     document.body.appendChild(m2);
   }
+
   if(db){
-    db.collection("users").get().then(function(qs){var users=[];qs.forEach(function(doc){var u=doc.data();u._docId=doc.id;users.push(u);});renderStats(users,true);}).catch(function(err){console.error(err);renderStats(Z.getUsers(),false);});
-  } else { renderStats(Z.getUsers(),false); }
+    db.collection("users").get().then(function(qs){
+      var users=[];qs.forEach(function(doc){var u=doc.data();u._docId=doc.id;users.push(u);});
+      renderStats(users,true);
+    }).catch(function(err){
+      alert("❌ فشل جلب البيانات من Firebase:\n" + err.message + "\n\nتأكد من تفعيل قواعد Firestore (Rules) كما شرحنا سابقاً.");
+      renderStats(Z.getUsers(),false);
+    });
+  } else {
+    alert("⚠️ قاعدة البيانات غير متصلة (db = null)!\nسيتم عرض البيانات المحفوظة في هذا المتصفح فقط.");
+    renderStats(Z.getUsers(),false);
+  }
 };
 
 Z.toggleSub=function(docId,currentStatus){
@@ -475,10 +496,10 @@ Z.toggleSub=function(docId,currentStatus){
   var newStatus=!currentStatus;
   if(!confirm(newStatus?'تفعيل اشتراك هذا المستخدم؟':'إلغاء اشتراك هذا المستخدم؟'))return;
   if(db){
-    db.collection("users").doc(docId).update({isSub:newStatus}).then(function(){alert('✅ تم التحديث');Z.showStats();}).catch(function(e){alert('خطأ: '+e);});
+    db.collection("users").doc(docId).update({isSub:newStatus}).then(function(){alert('✅ تم تحديث حالة الاشتراك في Firebase');Z.showStats();}).catch(function(e){alert('خطأ أثناء التحديث: '+e.message);});
   } else {
     var users=Z.getUsers();var idx=parseInt(docId);
-    if(!isNaN(idx)&&users[idx]){users[idx].isSub=newStatus;Z.saveUsers(users);alert('✅ تم التحديث');Z.showStats();}
+    if(!isNaN(idx)&&users[idx]){users[idx].isSub=newStatus;Z.saveUsers(users);alert('✅ تم التحديث محلياً');Z.showStats();}
   }
 };
 
@@ -595,7 +616,6 @@ Z.saveSeeker=function(type){
   };
   reader.readAsDataURL(cvFile);
 };
-
 Z.startMemory=function(){
   if(!Z.checkVisitor()) return;
   var pairs=['🍎','🍎','🍌','🍌','🍇','🍇','🍓','🍓'];
@@ -969,7 +989,7 @@ Z.ans=function(ch){
 };
 
 Z.loadJobs();Z.loadSeekers();
-/* ===== محتوى الدروس الحرفي (الورشات والكتب) ===== */
+/* ===== محتوى الدروس ===== */
 
 Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحاسوب',desc:'شرائح تعليمية + اختبار'},[
   {n:'📖 1',t:'📚 مقدمة',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'مرحباً بكم في كتاب "الأطفال والحاسوب". بقلم: <strong>محمد زايد</strong>',s:['الأطفال والحاسوب','Les enfants','Children']},
@@ -1052,6 +1072,7 @@ Z.addLesson('bk_smart_campus',{cat:'books',icon:'🏫',name:'المدينة ال
   {n:'4',t:'🚀 الخدمات',x:'دخول ذكي، فصول ذكية، منصات تعلم، مراقبة أمنية، إدارة ذكية للمياه والطاقة.'}
 ]);
 
+/* ===== النصوص الحرفية للورشات ===== */
 Z.addLesson('ai_full_workshop1', {
     cat: 'ai', icon: '📄', name: 'دليل المعلم الشامل', desc: 'ورشة 1 - نص حرفي', color: 'p'
 }, [
@@ -1132,6 +1153,7 @@ Z.addLesson('ai_full_workshop2', {
 شروط الشهادة: إرسال العمل عبر الواتساب في أسبوع، معدل 10/20.</div>` }
 ]);
 
+/* ===== النصوص الحرفية للكتاب الشامل ===== */
 Z.addLesson('ai_book_part1', {
     cat: 'ai', icon: '📚', name: 'الكتاب الشامل (1)', desc: 'المقدمة والآليات', color: 'r'
 }, [
@@ -1219,6 +1241,39 @@ Z.addLesson('ai_book_part6', {
 طرق AI: تستخدم التعلم العميق والآلي (تكتشف التهديدات المعروفة وغير المعروفة). إيجابيات: فعالية، دقة، كشف سريع. تحديات: التحيز، الاستخدام الضار من القراصنة.</div>` }
 ]);
 
+/* ===== دروس المرحلة الابتدائية ===== */
+Z.addLesson('prim3', {cat: 'primary', icon: '🎒', name: 'السنة الثالثة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
+  { n: 'الرياضيات', t: '📐 محيط المستطيل', i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Rectangle_Geometry.svg/200px-Rectangle_Geometry.svg.png', x: 'محيط المستطيل هو مجموع أطوال أضلاعه الأربعة. <br> <strong>القانون: (الطول + العرض) × 2</strong>', s: ['محيط المستطيل هو مجموع أطوال أضلاعه الأربعة', 'Le périmètre du rectangle est la somme de ses quatre côtés', 'The perimeter of a rectangle is the sum of its four sides'], v: 'https://www.youtube.com/embed/IrJpRkqQ2tM' },
+  { n: 'اللغة العربية', t: '🌙 المبتدأ والخبر', i: 'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80', x: 'الجملة الاسمية تتكون من <strong>مبتدأ</strong> (اسم في بداية الجملة) و<strong>خبر</strong> (يتمم معنى المبتدأ).<br>مثال: الطقسُ جميلٌ. (الطقس: مبتدأ، جميل: خبر)', s: ['الجملة الاسمية تتكون من مبتدأ وخبر', 'La phrase nominale se compose d un sujet et d un attribut', 'The nominal sentence consists of a subject and a predicate'], v: 'https://www.youtube.com/embed/3Z8g7W7zY2Y' },
+  { n: 'الإيقاظ العلمي', t: '💧 التبخر والغليان', i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Water_cycle.png/300px-Water_cycle.png', x: '<strong>التبخر</strong> هو تحول الماء من الحالة السائلة إلى الحالة الغازية ببطء (مثل جفاف الغسيل).<br><strong>الغليان</strong> هو تحول سريع يحدث عند درجة حرارة 100 درجة مئوية.', s: ['التبخر هو تحول الماء من الحالة السائلة إلى الغازية', 'L évaporation est le passage de l état liquide à l état gazeux', 'Evaporation is the transition from liquid to gas'], v: 'https://www.youtube.com/embed/al-do-HGuIk' },
+  { n: 'الفرنسية', t: '🇫🇷 Les articles', x: '<strong>Les articles indéfinis:</strong> un, une, des.<br><strong>Les articles définis:</strong> le, la, les.<br>مثال: <em>Un</em> livre -> <em>Le</em> livre.', s: ['أدوات التعريف والنكرة في اللغة الفرنسية', 'Les articles définis et indéfinis', 'Definite and indefinite articles in French'], v: 'https://www.youtube.com/embed/1zS8mG_4XyY' },
+  { n: 'الاختبار', e: 'prim3_exam' }
+]);
+
+Z.addLesson('prim4', {cat: 'primary', icon: '📘', name: 'السنة الرابعة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
+  { n: 'الرياضيات', t: '📐 مساحة المربع والمستطيل', i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Area.svg/200px-Area.svg.png', x: '<strong>مساحة المربع = الضلع × الضلع</strong><br><strong>مساحة المستطيل = الطول × العرض</strong>', s: ['مساحة المربع تساوي الضلع في الضلع', 'L aire du carré est côté fois côté', 'The area of a square is side times side'], v: 'https://www.youtube.com/embed/xC-yX_zY2yY' },
+  { n: 'اللغة العربية', t: '🌙 الجملة الفعلية', x: 'الجملة الفعلية تبدأ بـ <strong>فعل</strong>، ويتكون معظمها من: فعل + فاعل + مفعول به.<br>مثال: كتبَ التلميذُ الدرسَ.', s: ['الجملة الفعلية تبدأ بفعل وتتكون من فعل وفاعل ومفعول به', 'La phrase verbale commence par un verbe', 'The verbal sentence begins with a verb'], v: 'https://www.youtube.com/embed/3Xy8zW7yY2Y' },
+  { n: 'الإيقاظ العلمي', t: '🐾 التنقل عند الحيوان', i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Animal_locomotion.jpg/300px-Animal_locomotion.jpg', x: 'تتنقل الحيوانات بطرق مختلفة حسب بيئتها:<br>المشي (الأسد)، الزحف (الأفعى)، الطيران (النسر)، السباحة (السمكة).', s: ['تتنقل الحيوانات بطرق مختلفة حسب بيئتها', 'Les animaux se déplacent de différentes manières selon leur environnement', 'Animals move in different ways depending on their environment'], v: 'https://www.youtube.com/embed/y8W7zY2yY3Y' },
+  { n: 'الفرنسية', t: '🇫🇷 Le présent', x: 'زمن المضارع في الفرنسية (Le présent) يُستخدم للتعبير عن حدث يقع الآن.<br>مثال: Je <strong>parle</strong>, Tu <strong>parles</strong>, Il <strong>parle</strong>...', s: ['زمن المضارع في اللغة الفرنسية', 'Le présent de l indicatif', 'The present indicative tense'], v: 'https://www.youtube.com/embed/XyY2zW7yY3Y' },
+  { n: 'الاختبار', e: 'prim4_exam' }
+]);
+
+Z.addLesson('prim5', {cat: 'primary', icon: '📗', name: 'السنة الخامسة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
+  { n: 'الرياضيات', t: '📐 الأعداد العشرية', x: 'العدد العشري يتكون من <strong>جزء صحيح</strong> و<strong>جزء عشري</strong> يفصل بينهما فاصلة.<br>مثال: 12,45 (12 جزء صحيح، 45 جزء عشري).', s: ['العدد العشري يتكون من جزء صحيح وجزء عشري', 'Un nombre décimal se compose d une partie entière et d une partie décimale', 'A decimal number consists of an integer part and a decimal part'], v: 'https://www.youtube.com/embed/yY2zW7yY3Y4' },
+  { n: 'اللغة العربية', t: '🌙 الفعل المعتل', x: 'الفعل المعتل هو كل فعل يحتوي على حرف علة (ا، و، ي).<br>ينقسم إلى: <strong>مثال</strong> (وعد)، <strong>أجوف</strong> (قال)، <strong>ناقص</strong> (دعا).', s: ['الفعل المعتل هو كل فعل يحتوي على حرف علة', 'Le verbe défectueux contient une lettre de faiblesse', 'The defective verb contains a weak letter'], v: 'https://www.youtube.com/embed/Y2zW7yY3Y4Y' },
+  { n: 'الإيقاظ العلمي', t: '⚡ الدارة الكهربائية', i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Simple_circuit.svg/200px-Simple_circuit.svg.png', x: 'الدارة الكهربائية البسيطة تتكون من: <strong>مولد</strong> (بطارية)، <strong>مصباح</strong>، <strong>أسلاك توصيل</strong>، و<strong>قاطعة</strong>.<br>لكي يضيء المصباح، يجب أن تكون الدارة <strong>مغلقة</strong>.', s: ['الدارة الكهربائية البسيطة تتكون من مولد ومصباح وأسلاك وقاطعة', 'Un circuit électrique simple se compose d un générateur, d une lampe, de fils et d un interrupteur', 'A simple electrical circuit consists of a generator, a lamp, wires and a switch'], v: 'https://www.youtube.com/embed/2zW7yY3Y4Y5' },
+  { n: 'الفرنسية', t: '🇫🇷 Le futur simple', x: 'زمن المستقبل البسيط (Le futur simple) يُستخدم للتعبير عن حدث سيقع في المستقبل.<br>مثال: Je <strong>parlerai</strong>, Tu <strong>parleras</strong>...', s: ['زمن المستقبل البسيط في اللغة الفرنسية', 'Le futur simple', 'The simple future tense'], v: 'https://www.youtube.com/embed/zW7yY3Y4Y5Y' },
+  { n: 'الاختبار', e: 'prim5_exam' }
+]);
+
+Z.addLesson('prim6', {cat: 'primary', icon: '📕', name: 'السنة السادسة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
+  { n: 'الرياضيات', t: '📐 التناسب والسلم', x: 'التناسب هو تساوي نسبتين. <br>مثال: إذا كان 3 أقلام بـ 6 دنانير، فكم يكون 5 أقلام؟<br>نستخدم <strong>الضرب التبادلي</strong> أو الرجوع إلى الوحدة.', s: ['التناسب هو تساوي نسبتين', 'La proportionnalité est l égalité de deux rapports', 'Proportionality is the equality of two ratios'], v: 'https://www.youtube.com/embed/W7yY3Y4Y5Y6' },
+  { n: 'اللغة العربية', t: '🌙 المفعول به', x: 'المفعول به هو اسم منصوب يقع عليه فعل الفاعل.<br>مثال: قرأ التلميذُ <strong>الكتابَ</strong>. (الكتاب: مفعول به منصوب بالفتحة).', s: ['المفعول به هو اسم منصوب يقع عليه فعل الفاعل', 'L objet direct est un nom à l accusatif', 'The direct object is an accusative noun'], v: 'https://www.youtube.com/embed/7yY3Y4Y5Y6Y' },
+  { n: 'الإيقاظ العلمي', t: '💡 انتشار الضوء', i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Light_dispersion_conceptual_waves350px.gif/350px-Light_dispersion_conceptual_waves350px.gif', x: 'ينتشر الضوء في <strong>خطوط مستقيمة</strong> في وسط متجانس.<br>يمكن أن ينعكس (مثل المرآة) أو ينكسر (مثل الماء).', s: ['ينتشر الضوء في خطوط مستقيمة في وسط متجانس', 'La lumière se propage en ligne droite dans un milieu homogène', 'Light travels in straight lines in a homogeneous medium'], v: 'https://www.youtube.com/embed/yY3Y4Y5Y6Y7' },
+  { n: 'الفرنسية', t: '🇫🇷 Le passé composé', x: 'الماضي المركب (Le passé composé) يُستخدم للتعبير عن حدث وقع وانتهى في الماضي.<br>يتكون من فعل مساعد (avoir/être) + اسم المفعول (Participe passé).', s: ['الماضي المركب يتكون من فعل مساعد واسم المفعول', 'Le passé composé se compose d un auxiliaire et d un participe passé', 'The past tense consists of an auxiliary verb and a past participle'], v: 'https://www.youtube.com/embed/Y3Y4Y5Y6Y7Y' },
+  { n: 'الاختبار', e: 'prim6_exam' }
+]);
+
 /* ===== الاختبارات ===== */
 Z.addExam('book_exam',[
   {q:'الجزء المادي (الملموس) في الحاسوب يسمى؟',o:['المعدات (Hardware)','البرمجيات (Software)','الإنترنت (Internet)','نظام التشغيل (OS)'],a:'المعدات (Hardware)'},
@@ -1243,140 +1298,7 @@ Z.addExam('ai_exam',[
   {q:'عناصر الأمن السيبراني؟',o:['السرعة، الدقة','السرية، التكامل، التوفر','الذكاء، التعلم','المرونة، الصلابة'],a:'السرية، التكامل، التوفر'},
   {q:'رائد المنطق الضبابي؟',o:['آلان تورينغ','الطفي زداح','محمد زايد','جون مكارثي'],a:'الطفي زداح'}
 ]);
-/* ===== دروس المرحلة الابتدائية (السنوات 3، 4، 5، 6) ===== */
 
-// ---------------------------------------------------------
-// 🎒 السنة الثالثة ابتدائي
-// ---------------------------------------------------------
-Z.addLesson('prim3', {cat: 'primary', icon: '🎒', name: 'السنة الثالثة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
-  { 
-    n: 'الرياضيات', t: '📐 محيط المستطيل', 
-    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Rectangle_Geometry.svg/200px-Rectangle_Geometry.svg.png',
-    x: 'محيط المستطيل هو مجموع أطوال أضلاعه الأربعة. <br> <strong>القانون: (الطول + العرض) × 2</strong>', 
-    s: ['محيط المستطيل هو مجموع أطوال أضلاعه الأربعة', 'Le périmètre du rectangle est la somme de ses quatre côtés', 'The perimeter of a rectangle is the sum of its four sides'],
-    v: 'https://www.youtube.com/embed/IrJpRkqQ2tM'
-  },
-  { 
-    n: 'اللغة العربية', t: '🌙 المبتدأ والخبر', 
-    i: 'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',
-    x: 'الجملة الاسمية تتكون من <strong>مبتدأ</strong> (اسم في بداية الجملة) و<strong>خبر</strong> (يتمم معنى المبتدأ).<br>مثال: الطقسُ جميلٌ. (الطقس: مبتدأ، جميل: خبر)', 
-    s: ['الجملة الاسمية تتكون من مبتدأ وخبر', 'La phrase nominale se compose d un sujet et d un attribut', 'The nominal sentence consists of a subject and a predicate'],
-    v: 'https://www.youtube.com/embed/3Z8g7W7zY2Y'
-  },
-  { 
-    n: 'الإيقاظ العلمي', t: '💧 التبخر والغليان', 
-    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Water_cycle.png/300px-Water_cycle.png',
-    x: '<strong>التبخر</strong> هو تحول الماء من الحالة السائلة إلى الحالة الغازية ببطء (مثل جفاف الغسيل).<br><strong>الغليان</strong> هو تحول سريع يحدث عند درجة حرارة 100 درجة مئوية.', 
-    s: ['التبخر هو تحول الماء من الحالة السائلة إلى الغازية', 'L évaporation est le passage de l état liquide à l état gazeux', 'Evaporation is the transition from liquid to gas'],
-    v: 'https://www.youtube.com/embed/al-do-HGuIk'
-  },
-  { 
-    n: 'الفرنسية', t: '🇫🇷 Les articles définis et indéfinis', 
-    x: '<strong>Les articles indéfinis:</strong> un, une, des.<br><strong>Les articles définis:</strong> le, la, les.<br>مثال: <em>Un</em> livre -> <em>Le</em> livre.', 
-    s: ['أدوات التعريف والنكرة في اللغة الفرنسية', 'Les articles définis et indéfinis', 'Definite and indefinite articles in French'],
-    v: 'https://www.youtube.com/embed/1zS8mG_4XyY'
-  },
-  { n: 'الاختبار', e: 'prim3_exam' }
-]);
-
-// ---------------------------------------------------------
-// 📘 السنة الرابعة ابتدائي
-// ---------------------------------------------------------
-Z.addLesson('prim4', {cat: 'primary', icon: '📘', name: 'السنة الرابعة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
-  { 
-    n: 'الرياضيات', t: '📐 مساحة المربع والمستطيل', 
-    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Area.svg/200px-Area.svg.png',
-    x: '<strong>مساحة المربع = الضلع × الضلع</strong><br><strong>مساحة المستطيل = الطول × العرض</strong>', 
-    s: ['مساحة المربع تساوي الضلع في الضلع', 'L aire du carré est côté fois côté', 'The area of a square is side times side'],
-    v: 'https://www.youtube.com/embed/xC-yX_zY2yY'
-  },
-  { 
-    n: 'اللغة العربية', t: '🌙 الجملة الفعلية', 
-    x: 'الجملة الفعلية تبدأ بـ <strong>فعل</strong>، ويتكون معظمها من: فعل + فاعل + مفعول به.<br>مثال: كتبَ التلميذُ الدرسَ.', 
-    s: ['الجملة الفعلية تبدأ بفعل وتتكون من فعل وفاعل ومفعول به', 'La phrase verbale commence par un verbe', 'The verbal sentence begins with a verb'],
-    v: 'https://www.youtube.com/embed/3Xy8zW7yY2Y'
-  },
-  { 
-    n: 'الإيقاظ العلمي', t: '🐾 التنقل عند الحيوان', 
-    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Animal_locomotion.jpg/300px-Animal_locomotion.jpg',
-    x: 'تتنقل الحيوانات بطرق مختلفة حسب بيئتها:<br>المشي (الأسد)، الزحف (الأفعى)، الطيران (النسر)، السباحة (السمكة).', 
-    s: ['تتنقل الحيوانات بطرق مختلفة حسب بيئتها', 'Les animaux se déplacent de différentes manières selon leur environnement', 'Animals move in different ways depending on their environment'],
-    v: 'https://www.youtube.com/embed/y8W7zY2yY3Y'
-  },
-  { 
-    n: 'الفرنسية', t: '🇫🇷 Le présent de l\'indicatif', 
-    x: 'زمن المضارع في الفرنسية (Le présent) يُستخدم للتعبير عن حدث يقع الآن.<br>مثال: Je <strong>parle</strong>, Tu <strong>parles</strong>, Il <strong>parle</strong>...', 
-    s: ['زمن المضارع في اللغة الفرنسية', 'Le présent de l indicatif', 'The present indicative tense'],
-    v: 'https://www.youtube.com/embed/XyY2zW7yY3Y'
-  },
-  { n: 'الاختبار', e: 'prim4_exam' }
-]);
-
-// ---------------------------------------------------------
-// 📗 السنة الخامسة ابتدائي
-// ---------------------------------------------------------
-Z.addLesson('prim5', {cat: 'primary', icon: '📗', name: 'السنة الخامسة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
-  { 
-    n: 'الرياضيات', t: '📐 الأعداد العشرية', 
-    x: 'العدد العشري يتكون من <strong>جزء صحيح</strong> و<strong>جزء عشري</strong> يفصل بينهما فاصلة.<br>مثال: 12,45 (12 جزء صحيح، 45 جزء عشري).', 
-    s: ['العدد العشري يتكون من جزء صحيح وجزء عشري', 'Un nombre décimal se compose d une partie entière et d une partie décimale', 'A decimal number consists of an integer part and a decimal part'],
-    v: 'https://www.youtube.com/embed/yY2zW7yY3Y4'
-  },
-  { 
-    n: 'اللغة العربية', t: '🌙 الفعل المعتل', 
-    x: 'الفعل المعتل هو كل فعل يحتوي على حرف علة (ا، و، ي).<br>ينقسم إلى: <strong>مثال</strong> (وعد)، <strong>أجوف</strong> (قال)، <strong>ناقص</strong> (دعا).', 
-    s: ['الفعل المعتل هو كل فعل يحتوي على حرف علة', 'Le verbe défectueux contient une lettre de faiblesse', 'The defective verb contains a weak letter'],
-    v: 'https://www.youtube.com/embed/Y2zW7yY3Y4Y'
-  },
-  { 
-    n: 'الإيقاظ العلمي', t: '⚡ الدارة الكهربائية', 
-    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Simple_circuit.svg/200px-Simple_circuit.svg.png',
-    x: 'الدارة الكهربائية البسيطة تتكون من: <strong>مولد</strong> (بطارية)، <strong>مصباح</strong>، <strong>أسلاك توصيل</strong>، و<strong>قاطعة</strong>.<br>لكي يضيء المصباح، يجب أن تكون الدارة <strong>مغلقة</strong>.', 
-    s: ['الدارة الكهربائية البسيطة تتكون من مولد ومصباح وأسلاك وقاطعة', 'Un circuit électrique simple se compose d un générateur, d une lampe, de fils et d un interrupteur', 'A simple electrical circuit consists of a generator, a lamp, wires and a switch'],
-    v: 'https://www.youtube.com/embed/2zW7yY3Y4Y5'
-  },
-  { 
-    n: 'الفرنسية', t: '🇫🇷 Le futur simple', 
-    x: 'زمن المستقبل البسيط (Le futur simple) يُستخدم للتعبير عن حدث سيقع في المستقبل.<br>مثال: Je <strong>parlerai</strong>, Tu <strong>parleras</strong>...', 
-    s: ['زمن المستقبل البسيط في اللغة الفرنسية', 'Le futur simple', 'The simple future tense'],
-    v: 'https://www.youtube.com/embed/zW7yY3Y4Y5Y'
-  },
-  { n: 'الاختبار', e: 'prim5_exam' }
-]);
-
-// ---------------------------------------------------------
-// 📕 السنة السادسة ابتدائي (تحضير السيزيام)
-// ---------------------------------------------------------
-Z.addLesson('prim6', {cat: 'primary', icon: '📕', name: 'السنة السادسة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
-  { 
-    n: 'الرياضيات', t: '📐 التناسب والسلم', 
-    x: 'التناسب هو تساوي نسبتين. <br>مثال: إذا كان 3 أقلام بـ 6 دنانير، فكم يكون 5 أقلام؟<br>نستخدم <strong>الضرب التبادلي</strong> أو الرجوع إلى الوحدة.', 
-    s: ['التناسب هو تساوي نسبتين', 'La proportionnalité est l égalité de deux rapports', 'Proportionality is the equality of two ratios'],
-    v: 'https://www.youtube.com/embed/W7yY3Y4Y5Y6'
-  },
-  { 
-    n: 'اللغة العربية', t: '🌙 المفعول به', 
-    x: 'المفعول به هو اسم منصوب يقع عليه فعل الفاعل.<br>مثال: قرأ التلميذُ <strong>الكتابَ</strong>. (الكتاب: مفعول به منصوب بالفتحة).', 
-    s: ['المفعول به هو اسم منصوب يقع عليه فعل الفاعل', 'L objet direct est un nom à l accusatif', 'The direct object is an accusative noun'],
-    v: 'https://www.youtube.com/embed/7yY3Y4Y5Y6Y'
-  },
-  { 
-    n: 'الإيقاظ العلمي', t: '💡 انتشار الضوء', 
-    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Light_dispersion_conceptual_waves350px.gif/350px-Light_dispersion_conceptual_waves350px.gif',
-    x: 'ينتشر الضوء في <strong>خطوط مستقيمة</strong> في وسط متجانس.<br>يمكن أن ينعكس (مثل المرآة) أو ينكسر (مثل الماء).', 
-    s: ['ينتشر الضوء في خطوط مستقيمة في وسط متجانس', 'La lumière se propage en ligne droite dans un milieu homogène', 'Light travels in straight lines in a homogeneous medium'],
-    v: 'https://www.youtube.com/embed/yY3Y4Y5Y6Y7'
-  },
-  { 
-    n: 'الفرنسية', t: '🇫🇷 Le passé composé', 
-    x: 'الماضي المركب (Le passé composé) يُستخدم للتعبير عن حدث وقع وانتهى في الماضي.<br>يتكون من فعل مساعد (avoir/être) + اسم المفعول (Participe passé).', 
-    s: ['الماضي المركب يتكون من فعل مساعد واسم المفعول', 'Le passé composé se compose d un auxiliaire et d un participe passé', 'The past tense consists of an auxiliary verb and a past participle'],
-    v: 'https://www.youtube.com/embed/Y3Y4Y5Y6Y7Y'
-  },
-  { n: 'الاختبار', e: 'prim6_exam' }
-]);
-
-/* ===== اختبارات الابتدائي ===== */
 Z.addExam('prim3_exam',[
   {q:'ما هو قانون محيط المستطيل؟',o:['الطول × العرض','(الطول + العرض) × 2','الطول + العرض'],a:'(الطول + العرض) × 2'},
   {q:'في جملة "الطقسُ جميلٌ"، ما هو المبتدأ؟',o:['جميل','الطقس','لا يوجد'],a:'الطقس'},
