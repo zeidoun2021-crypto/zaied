@@ -230,7 +230,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <li onclick="ZAID.openCat('games')">🎮 الألعاب</li>
 </ul></div>
 <div class="card c-stage"><div class="ci">🏫</div><div class="ct">المراحل التعليمية</div><ul>
-<li onclick="ZAID.openCat('primary')">🎒 الابتدائي</li>
+<li onclick="ZAID.openCat('primary')">🎒 الابتدائي (السنة 3-6)</li>
 <li onclick="ZAID.openCat('middle')">📘 الإعدادي</li>
 <li onclick="ZAID.openCat('high')">🎓 الثانوي</li>
 </ul></div>
@@ -281,7 +281,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
-/* ===== Firebase ===== */
 var firebaseConfig = {
   apiKey: "AIzaSyA8LK52iXBPZFbqHnXyaAsldgqcjz7Bj4o",
   authDomain: "zaied-platform.firebaseapp.com",
@@ -300,7 +299,6 @@ try {
 } catch(e) { console.warn("Firebase offline:", e); }
 
 Z.WEB3FORMS_KEY = '85fc306f-6ead-40a4-a1f0-c3ffeeefcdc7';
-
 Z.ADMIN='012345';
 Z.WA='21655335477';
 Z.user=null;Z.admin=false;Z.audio=null;Z.selectedCat=null;
@@ -520,7 +518,6 @@ Z.openSrv=function(key){
   Z.showPage('pageLesson');
 };
 
-/* ===== عروض التشغيل ===== */
 Z.openJobs=function(){
   if(!Z.checkVisitor()) return;
   var c=document.getElementById('lc');
@@ -599,7 +596,6 @@ Z.saveSeeker=function(type){
   reader.readAsDataURL(cvFile);
 };
 
-/* ===== الألعاب ===== */
 Z.startMemory=function(){
   if(!Z.checkVisitor()) return;
   var pairs=['🍎','🍎','🍌','🍌','🍇','🍇','🍓','🍓'];
@@ -667,8 +663,7 @@ Z.startWordSearch=function(){
   if(!Z.checkVisitor()) return;
   var c=document.getElementById('lc');
   c.innerHTML='<div class="slide" style="background:#1e293b;color:#fff;"><div class="sn">🎮 ابحث عن الكلمة</div><div class="st" style="color:#fbbf24;">✨ اضغط على الحروف المتجاورة ✨</div><div style="display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;color:#fbbf24;font-weight:bold;"><span>✅ <span id="gameFoundCount">0/0</span></span><span>⭐ <span id="gameScore">0</span></span><span>🔄 <span id="gameAttempts">0</span></span></div><div class="game-words-list" id="gameWordsList" style="background:#0f172a;padding:10px;border-radius:10px;margin-bottom:15px;"></div><div id="gameGrid" class="game-grid"></div><div style="display:flex;gap:10px;justify-content:center;margin-top:15px;"><button class="nbtn nn" onclick="ZAID.checkGameWord()">✅ تحقق</button><button class="nbtn ne" onclick="ZAID.clearGameSelection()">🗑️ مسح</button><button class="nbtn np" onclick="ZAID.hintGameWord()">💡 تلميحة</button></div><div id="gameFeedback" class="feedback"></div><div class="nav" style="margin-top:20px;"><button class="nbtn ne" onclick="ZAID.initWordSearchGame()">🎲 جديدة</button><button class="nbtn np" onclick="ZAID.openCat(\'games\')">🔙 خروج</button></div></div>';
-  Z.showPage('pageLesson');
-  Z.initWordSearchGame();
+  Z.showPage('pageLesson');Z.initWordSearchGame();
 };
 Z.initWordSearchGame=function(){
   var allWords=[...GAME_WORDS[gameLang]];
@@ -795,7 +790,6 @@ Z.showCrossMessage=function(text,type){
   setTimeout(function(){if(fb.innerHTML===text)fb.innerHTML='';},3000);
 };
 
-/* ===== المنجد الرباعي ===== */
 var sections={1:[],2:[],3:[],4:[]};
 var techData=[
   {ar:"الحاسوب",en:"Computer",fr:"Ordinateur",ko:"컴퓨터",def:"جهاز إلكتروني يستقبل البيانات ويعالجها"},
@@ -894,7 +888,6 @@ Z.displayDictTerm=function(pos){
   document.getElementById('dictCounter').innerHTML='📌 '+(pos+1)+' من '+dictFilteredList.length+' | القسم '+dictCurrentSection;
 };
 
-/* ===== عرض الشرائح ===== */
 function renderSlide(o){
   var h='<div class="slide">';
   if(o.n)h+='<div class="sn">'+o.n+'</div>';
@@ -937,6 +930,10 @@ function renderCur(){
 Z.prev=function(){if(Z.cur.idx>0){Z.cur.idx--;renderCur();}};
 Z.next=function(){var L=Z.lessons[Z.cur.key];if(Z.cur.idx<L.slides.length-1){Z.cur.idx++;renderCur();}};
 Z.startExam=function(k){var q=Z.exams[k];if(!q){alert('لا اختبار');return;}Z.exam={key:k,idx:0,score:0,qs:q};renderExam();};
+
+Z.prevExam=function(){if(Z.exam.idx>0){Z.exam.idx--;renderExam();}};
+Z.nextExam=function(){if(Z.exam.idx<Z.exam.qs.length){Z.exam.idx++;renderExam();}};
+
 function renderExam(){
   var c=document.getElementById('lc'),t=Z.exam.qs.length;
   if(Z.exam.idx>=t){
@@ -951,16 +948,29 @@ function renderExam(){
     c.innerHTML='<div class="slide" style="text-align:center"><div class="sn">🏆 النتيجة</div><div style="font-size:26px;font-weight:900;color:'+col+';margin:20px 0">'+msg+'</div><div class="stxt" style="font-size:16px">درجتك: '+Z.exam.score+' من '+t+'<br>النسبة: '+p+'%</div>'+cert+'<div style="margin-top:20px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap"><button class="nbtn nn" onclick="ZAID.startExam(\''+Z.exam.key+'\')">🔄 إعادة</button><button class="nbtn ne" onclick="ZAID.goHome()">🔙 الرئيسية</button></div></div>';
     return;
   }
+  
   var q=Z.exam.qs[Z.exam.idx],op='';
   for(var i=0;i<q.o.length;i++)op+='<button class="opt" onclick="ZAID.ans(\''+q.o[i].replace(/'/g,"\\'")+'\')">'+q.o[i]+'</button>';
-  c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div><div class="stxt" style="font-size:16px;font-weight:900">'+q.q+'</div>'+op+'</div>';
+  
+  var nav = '<div class="nav" style="margin-top:20px;">';
+  if(Z.exam.idx > 0) nav += '<button class="nbtn np" onclick="ZAID.prevExam()">▶ السابق</button>';
+  nav += '<button class="nbtn ne" onclick="ZAID.nextExam()">التالي (تخطي) ◀</button>';
+  nav += '</div>';
+
+  c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div><div class="stxt" style="font-size:16px;font-weight:900">'+q.q+'</div>'+op+nav+'</div>';
 }
-Z.ans=function(ch){var q=Z.exam.qs[Z.exam.idx];if(ch===q.a){Z.exam.score++;alert('✅ صحيح!');}else{alert('❌ خطأ. الصحيح: '+q.a);}Z.exam.idx++;renderExam();};
+
+Z.ans=function(ch){
+  var q=Z.exam.qs[Z.exam.idx];
+  if(ch===q.a){Z.exam.score++;alert('✅ صحيح!');}
+  else{alert('❌ خطأ. الصحيح: '+q.a);}
+  Z.exam.idx++;
+  renderExam();
+};
 
 Z.loadJobs();Z.loadSeekers();
+/* ===== محتوى الدروس الحرفي (الورشات والكتب) ===== */
 
-/* ===== محتوى الدروس ===== */
-/* 📚 درس الأطفال والحاسوب - بكل صوره الثمانية */
 Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحاسوب',desc:'شرائح تعليمية + اختبار'},[
   {n:'📖 1',t:'📚 مقدمة',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'مرحباً بكم في كتاب "الأطفال والحاسوب". بقلم: <strong>محمد زايد</strong>',s:['الأطفال والحاسوب','Les enfants','Children']},
   {n:'📖 2',t:'💻 ما هو الحاسوب؟',i:'https://i.postimg.cc/CKcnB72y/haswb1.jpg',x:'الحاسوب هو جهاز <strong>إلكتروني رقمي</strong> يمكنه تخزين ومعالجة البيانات واستقبالها وإخراج النتائج.',r:['حاسوب','Ordinateur','Computer'],s:['الحاسوب','Ordinateur','Computer']},
@@ -1042,55 +1052,181 @@ Z.addLesson('bk_smart_campus',{cat:'books',icon:'🏫',name:'المدينة ال
   {n:'4',t:'🚀 الخدمات',x:'دخول ذكي، فصول ذكية، منصات تعلم، مراقبة أمنية، إدارة ذكية للمياه والطاقة.'}
 ]);
 
-Z.addLesson('ai_full_workshop1',{cat:'ai',icon:'📄',name:'دليل المعلم الشامل',desc:'ورشة 1',color:'p'},[
-  {n:'الورشة 1',t:'AI في خدمة التعليم',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">الذكاء الاصطناعي في خدمة التعليم - دليل المعلم الشامل\n\nتقديم: محمد زايد - خبير دولي\n\nالمحتويات: التعريف، التكنولوجيات، الأدوات المختارة، تطبيقات المعلم (7)، أدوات الطالب (3)، فوائد AI، مخاطر AI، كيفية تجنب المخاطر.\n\nتعريف AI: فرع من علوم الحاسوب يحاكي القدرات الذهنية البشرية (التعلم، اتخاذ القرار، فهم اللغة).\n\nتقنيات AI في التعليم: NLP، التعلم الآلي، التوليد الإبداعي، تحليل الصوت والصورة، أنظمة التوصية، التحليلات التنبؤية.\n\nالأدوات: MagicSchool AI (تخطيط)، Canva Education (تصميم)، Quizizz AI (تقييم)، EdPuzzle (فيديو تفاعلي)، Diffit (تكييف النصوص)، Xmind AI (خرائط ذهنية)، ClassDojo + Koalendar (إدارة)، Notion AI (تنظيم)، Immersive Reader (قراءة)، Speechify (نص لصوت).\n\nالمخاطر: معلومات خاطئة، تحيز، انتهاك خصوصية، اعتماد مفرط.\n\nتجنبها: المراجعة البشرية، عدم الاعتماد الكامل، حماية البيانات، الإفصاح، التوازن، التحديث المستمر.</div>'}
+Z.addLesson('ai_full_workshop1', {
+    cat: 'ai', icon: '📄', name: 'دليل المعلم الشامل', desc: 'ورشة 1 - نص حرفي', color: 'p'
+}, [
+    { n: 'الورشة 1', t: 'الذكاء الاصطناعي في خدمة التعليم', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الذكاء الاصطناعي في خدمة التعليم دليل المعلم الشامل لاستخدام أدوات الذكاء الاصطناعي (1)
+تقديم وتنشيط: محمد زايد - خبير دولي في التكنولوجيات الحاسوبية - أستاذ جامعي - رئيس جمعية اللغة العربية الرقمية - تونس
+
+• المحتويات:
+1. التعريف بالذكاء الاصطناعي 2. تكنولوجيات الذكاء الاصطناعي في التعليم 3. الأدوات المختارة 4. تطبيقات المعلم (7 تطبيقات) 5. أدوات الطالب (3 أدوات) 6. فوائد AI للمعلم 7. مخاطر AI 8. كيفية تجنب المخاطر 9. ملخص سريع 10. شكر وتواصل.
+• تعريف الذكاء الاصطناعي:
+فرع من علوم الحاسوب يهدف إلى محاكاة القدرات الذهنية البشرية (التعلم، اتخاذ القرار، فهم اللغة، التعرف على الصور). يُستخدم كمساعد ذكي للمعلم لتوفير الوقت وتخصيص التعلم.
+• تقنيات AI في التعليم:
+1. معالجة اللغة الطبيعية (NLP): تصحيح المقالات، روبوتات دردشة، تلخيص الدروس.
+2. التعلم الآلي: تعلم تكيفي، التنبؤ بأداء الطالب.
+3. التوليد الإبداعي: خطط دروس، تمارين.
+4. تحليل الصوت والصورة.
+5. أنظمة التوصية.
+6. التحليلات التنبؤية.
+• الأدوات المختارة:
+MagicSchool AI (تخطيط)، Canva Education (تصميم)، Quizizz AI (تقييم)، EdPuzzle (فيديو تفاعلي)، Diffit (تكييف النصوص)، Xmind AI (خرائط ذهنية)، ClassDojo + Koalendar (إدارة الصف)، Notion AI (تنظيم الطالب)، Immersive Reader (قراءة مساعدة)، Speechify (تحويل النص لصوت).
+• المخاطر وتجنبها:
+مخاطر: معلومات خاطئة، تحيز، انتهاك خصوصية، اعتماد مفرط.
+تجنبها: المراجعة البشرية، عدم الاعتماد الكامل، حماية البيانات، الإفصاح، التوازن، التحديث المستمر.
+• التطبيق 1: MagicSchool AI (تخطيط الدروس)
+الموقع: www.magicschool.ai
+الخطوات: إنشاء حساب -> اختيار Lesson Plan -> تعيين البيانات (موضوع، مستوى، مدة، أهداف) -> Generate.
+تمرين: إنشاء خطة درس "دورة الماء" للسنة الخامسة في 20 دقيقة.
+• التطبيق 2: Canva Education (التصميم)
+الموقع: www.canva.com
+الخطوات: اختيار Magic Design -> كتابة الوصف -> اختيار التصميم -> التعديل بـ Magic Write و Magic Edit -> تصدير PDF.
+تمرين: إنشاء ملصق تعليمي عن دورة الماء في 20 دقيقة.
+• التطبيق 3: Quizizz AI (التقييم)
+الموقع: quizizz.com
+الخطوات: Create -> Generate with AI -> إدخال الموضوع -> توليد 10-15 سؤال -> تخصيص الأسئلة -> نشر الرابط.
+تمرين: إنشاء اختبار عن دورة الماء في 20 دقيقة.
+• التطبيق 4: EdPuzzle (فيديو تفاعلي)
+الموقع: edpuzzle.com
+الخطوات: Add Content -> YouTube -> بحث -> Use this video -> إضافة أسئلة AI -> Assign.
+تمرين: تحويل فيديو دورة الماء إلى درس تفاعلي في 25 دقيقة.
+• التطبيق 5: Diffit (تكييف النصوص)
+الموقع: www.diffit.me
+الخطوات: لصق النص -> اختيار 3 مستويات (CE2, CM2, 3ème) -> Generate -> تصدير PDF/Google Docs.
+تمرين: تكييف نص "دورة الماء" في 20 دقيقة.
+• التطبيق 6: Xmind AI (خرائط ذهنية)
+الموقع: xmind.net
+الخطوات: AI Mind Map -> إدخال الموضوع -> توليد الخريطة -> AI Explanation -> Pitch Mode.
+تمرين: إنشاء خريطة ذهنية لدورة الماء في 25 دقيقة.
+• التطبيق 7: ClassDojo + Koalendar (إدارة)
+ClassDojo: إدارة السلوك. Koalendar: حجز المواعيد.
+تمرين: إنشاء فصل وهمي وتحديد مواعيد المقابلات في 20 دقيقة.
+• أدوات الطالب:
+Notion AI: تنظيم الواجبات. Immersive Reader: قراءة مساعدة. Speechify: تحويل النص لصوت.
+تمارين تطبيقية لكل أداة (15-20 دقيقة).</div>` }
 ]);
 
-Z.addLesson('ai_full_workshop2',{cat:'ai',icon:'📄',name:'من الفكرة إلى الدرس',desc:'ورشة 2',color:'j'},[
-  {n:'الورشة 2',t:'من الفكرة للدرس الجاهز',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">ورشة: من الفكرة إلى الدرس الجاهز (3 ساعات)\n\nالأدوات: Ideogram (توليد صور)، ElevenLabs (تحويل نص لصوت)، Speechify، HeyGen (PPT لفيديو)، Canva Magic Media، CapCut (تجميع فيديو)، Whisper (صوت لنص).\n\nتطبيقات عملية: ملصق عن البراكين، صورتين، فيديو 3 صور، تفريغ نصي.\n\nمخاطر AI: الاستسلام المعرفي، المعلومات المغلوطة، التراجع اللغوي، فقدان الفضول.\n\nمشروع التخرج: درس تفاعلي (3-5 صور + ملف صوتي + فيديو + عرض + سؤال).</div>'}
+Z.addLesson('ai_full_workshop2', {
+    cat: 'ai', icon: '📄', name: 'من الفكرة إلى الدرس', desc: 'ورشة 2 - نص حرفي', color: 'j'
+}, [
+    { n: 'الورشة 2', t: 'من الفكرة إلى الدرس الجاهز', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الورشة التطبيقية: من الفكرة إلى الدرس الجاهز
+المدة: 3 ساعات. الفئة: جميع المستويات التعليمية.
+الأدوات:
+1. Ideogram: توليد الصور (مناسبة للملصقات والعناوين).
+2. ElevenLabs: تحويل النص لصوت.
+3. Speechify: إضافة الصوت للعروض.
+4. HeyGen: تحويل PPT لفيديو.
+5. Canva Magic Media: صور للمبتدئين.
+6. CapCut: تجميع الفيديو.
+7. Whisper: تحويل الصوت لنص.
+تطبيقات عملية:
+- Ideogram: ملصق عن البراكين أو المعلقات (10 دقائق).
+- Canva: صورتين عن البراكين (15 دقيقة).
+- CapCut: تجميع 3 صور وصوت في فيديو (15 دقيقة).
+- Whisper: تفريغ نصي لشرح عن البراكين (10 دقائق).
+مخاطر AI:
+الاستسلام المعرفي، المعلومات المغلوطة، التراجع اللغوي، فقدان الفضول.
+تجنب المخاطر: التكوين، المراجعة البشرية، التحقق من المصادر، احترام الخصوصية، الإفصاح، تنويع التقييم، تعليم الاستخدام المسؤول.
+مشروع التخرج:
+إنتاج درس تفاعلي (3-5 صور + ملف صوتي + فيديو + عرض + سؤال).
+شروط الشهادة: إرسال العمل عبر الواتساب في أسبوع، معدل 10/20.</div>` }
 ]);
 
-Z.addLesson('ai_book_part1',{cat:'ai',icon:'📚',name:'الكتاب الشامل (1)',desc:'المقدمة والآليات',color:'r'},[
-  {n:'المقدمة',t:'المقدمة العامة',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">كتاب الذكاء الاصطناعي: الآليات والتطبيقات - محمد بن عبدالله زايد.\n\nالمقدمة: في عالم يتسارع فيه التطور التكنولوجي، أصبح الذكاء الاصطناعي محوراً رئيسياً في القرن 21. هذا الكتاب رحلة متكاملة تبدأ من الأساسيات، مروراً بالتطبيقات، وصولاً للتحديات الأمنية.\n\nالمميزات: الشمولية، التعددية اللغوية (معجم ثلاثي)، التطبيق العملي، التركيز على اللغة العربية.\n\nالهيكل: 6 أجزاء (الآليات، اللغة العربية، البحث العلمي، الورشة التطبيقية، الجريمة الإلكترونية، الأمن السيبراني).</div>'},
-  {n:'الفصل 1',t:'التعريف بمفهوم AI',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">تعريف AI: منظومات حاسوبية قادرة على القيام بوظائف معقدة (تفكير، قرار، حل مسائل).\n\nالذكاء البشري vs الاصطناعي:\n- البشر: ابتكار، حدس، ذكاء عاطفي، تأقلم.\n- الآلات: سرعة، معالجة بيانات ضخمة، عمل 24/7.\n\nنقاط التقاطع: كلاهما يتعلم، يحل المسائل، يعالج المعلومات.</div>'}
+Z.addLesson('ai_book_part1', {
+    cat: 'ai', icon: '📚', name: 'الكتاب الشامل (1)', desc: 'المقدمة والآليات', color: 'r'
+}, [
+    { n: 'المقدمة', t: 'المقدمة العامة', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">كتاب الذكاء الاصطناعي: الآليات والتطبيقات - محمد بن عبدالله زايد.
+المقدمة: في عالم يتسارع فيه التطور التكنولوجي، أصبح الذكاء الاصطناعي محوراً رئيسياً في القرن 21. هذا الكتاب رحلة متكاملة تبدأ من الأساسيات، مروراً بالتطبيقات، وصولاً للتحديات الأمنية.
+المميزات: الشمولية، التعددية اللغوية (معجم ثلاثي)، التطبيق العملي (10 تمارين)، التركيز على اللغة العربية، الجمع بين الإيجابيات والسلبيات، الأخلاقيات.
+الهيكل: 6 أجزاء (الآليات، اللغة العربية، البحث العلمي، الورشة التطبيقية، الجريمة الإلكترونية، الأمن السيبراني).</div>` },
+    { n: 'الفصل 1', t: 'التعريف بمفهوم AI', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">تعريف AI: منظومات حاسوبية قادرة على القيام بوظائف معقدة (تفكير، قرار، حل مسائل). هو مصطلح عام يشمل التعلم الآلي، العميق، ومعالجة اللغة.
+الذكاء البشري vs الاصطناعي: البشر يتفوقون في الابتكار، الحدس، الذكاء العاطفي، التأقلم، والأخلاق. الآلات تتفوق في السرعة، معالجة البيانات الضخمة، والعمل 24/7 دون تعب. نقاط التقاطع: كلاهما يتعلم ويتحسن، يحل المسائل المعقدة، ويعالج معلومات البيئة.
+حدود الذكاء البشري: قيود الذاكرة، التحيزات المعرفية، محدودية التركيز، والأخطاء.
+مقارنة: AI يعالج البيانات أسرع، لكنه لا يبتكر ولا يملك حدساً. البشر يبتكرون لكنهم يتعبون ويخطئون.</div>` }
 ]);
 
-Z.addLesson('ai_book_part2',{cat:'ai',icon:'⚙️',name:'الكتاب الشامل (2)',desc:'الأنواع والتعلم',color:'j'},[
-  {n:'الأنواع',t:'تصنيف AI',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">1. الضيق (Narrow): مهام محددة.\n2. العام (General): قدرات بشرية (نظري).\n3. الفائق (Super): يتجاوز البشر (نظري).\n4. التفاعلي: يتفاعل دون تذكر.\n5. محدود الذاكرة: يتذكر الأحداث.\n6. نظرية العقل: يفهم مشاعر البشر.\n7. الواعي بذاته: يفهم حالته الداخلية.</div>'},
-  {n:'التعلم الآلي',t:'Machine Learning',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">تعلم الآلة: جعل الخوارزميات تكتشف أنماطاً.\n\nأنواع التعلم:\n1. المراقب: بيانات موسومة.\n2. غير المراقب: بيانات غير موسومة.\n3. النصف مراقب: مزيج.\n4. المعزز: تجربة وخطأ ومكافآت.</div>'},
-  {n:'التعلم العميق',t:'Deep Learning',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">شبكات عصبية متعددة الطبقات، أساس GPT وAlphaGo. تحلل البيانات ببنية منطقية متعددة المستويات.</div>'}
+Z.addLesson('ai_book_part2', {
+    cat: 'ai', icon: '⚙️', name: 'الكتاب الشامل (2)', desc: 'الأنواع والتعلم الآلي', color: 'j'
+}, [
+    { n: 'الأنواع', t: 'تصنيف AI', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">أنواع AI:
+1. الضيق (Narrow): مهام محددة (تعرف صوتي، أرشاد).
+2. العام (General): قدرات معرفية بشرية (نظري).
+3. الفائق (Super): يتجاوز البشر (نظري).
+4. التفاعلي: يتفاعل مع المدخلات دون تذكر.
+5. محدود الذاكرة: يتذكر الأحداث (سيارات ذاتية).
+6. نظرية العقل: يفهم مشاعر البشر.
+7. الواعي بنفسه: يفهم حالته الداخلية (نظري).</div>` },
+    { n: 'التعلم الآلي', t: 'Machine Learning', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">تعلم الآلة: جعل الخوارزميات تكتشف أنماطاً في البيانات (أرقام، كلمات، صور).
+الخوارزمية: مجموعة تعليمات لحل مشكلة. تتكون من: مدخلات (X)، عمليات حسابية، مخرجات (Y).
+أنواع التعلم:
+1. المراقب: بيانات موسومة (مدخلات ومخرجات معروفة) لتكوين دالة.
+2. غير المراقب: بيانات غير موسومة لاكتشاف هياكل خفية (تجميع، عنقدة).
+3. النصف مراقب: مزيج بين القليل من الموسوم والكثير من غير الموسوم.
+4. المعزز: وكيل يتعلم عبر التجربة والخطأ والمكافآت.</div>` },
+    { n: 'التعلم العميق', t: 'Deep Learning', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">التعلم العميق: فرع من التعلم الآلي مستوحى من الدماغ البشري، يستخدم شبكات عصبية متعددة الطبقات. يمكنه التعلم بنفسه دون برمجة صريحة.
+الآلية: تحليل مستمر للبيانات ببنية منطقية متعددة المستويات. الطبقات الأولى تكتشف الأشكال، والطبقات العميقة تكتشف المفاهيم المعقدة.
+أهميته: أساس السيارات المستقلة، الدردشة الآلية، والترجمة. يُعتبر الثورة الصناعية الجديدة في AI.</div>` }
 ]);
 
-Z.addLesson('ai_book_part3',{cat:'ai',icon:'🧠',name:'الكتاب الشامل (3)',desc:'الشبكات والرؤية',color:'p'},[
-  {n:'الشبكات',t:'Neural Networks',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">بنية تحاكي الدماغ: مدخلات، طبقات مخفية، مخرجات. خصائص: التعقيد، التكوين، الأداء.</div>'},
-  {n:'اللغة والرؤية',t:'NLP والرؤية',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">NLP: تفاعل الحواسيب مع اللغة البشرية.\nالرؤية الحاسوبية: تمكين الآلات من الرؤية والفهم.</div>'}
+Z.addLesson('ai_book_part3', {
+    cat: 'ai', icon: '🧠', name: 'الكتاب الشامل (3)', desc: 'الشبكات العصبية والرؤية', color: 'p'
+}, [
+    { n: 'الشبكات العصبية', t: 'Neural Networks', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الشبكات العصبية: بنية معلوماتية تحاكي الدماغ البشري (خلايا تتناقل نبضات). تتكون من طبقات (مدخلات، مخفية، مخرجات).
+الخصائص: التعقيد (أوزان وانحيازات)، التكوين (طبقات قليلة = تدريب أسرع لكن محدود)، الأداء (تشتغل بشكل أفضل في المهام الأساسية).</div>` },
+    { n: 'اللغة والرؤية', t: 'NLP والرؤية الحاسوبية', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">NLP: تفاعل الحواسيب مع اللغة البشرية (نصية أو صوتية). يشمل: التعرف الصوتي، الوسم النحوي، فك الغموض، التعرف على الوحدات المسماة، تحليل المشاعر.
+الرؤية الحاسوبية: تمكين الآلات من رؤية العالم (تحديد كائنات، ملامح وجه، ترتيب صور). تعتمد على التعلم العميق والبيانات الضخمة. مهامها: فهم مكونات الصورة، تصنيفها، فهم المشهد. تُستخدم في الطب، السيارات، والصناعة.
+التعرف على الكلام: تحويل الصوت لنص. يُستخدم في الهواتف والمساعدات الذكية. يعتمد على خصائص الإشارة الصوتية (الطاقة، نسبة المرور للصفر، النبرة العالية).</div>` }
 ]);
 
-Z.addLesson('ai_book_part4',{cat:'ai',icon:'🧩',name:'الكتاب الشامل (4)',desc:'الأنظمة والمنطق',color:'j'},[
-  {n:'الأنظمة',t:'Expert Systems',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">تطبيقات تحاكي تفكير الخبراء (1965). المكونات: قاعدة المعلومات، محرك الاستنساخ، واجهة المستخدم.</div>'},
-  {n:'المنطق',t:'Fuzzy Logic',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">قيم بين 0 و1. طوره الطفي زداح (1965). يتعامل مع المفاهيم الذاتية.</div>'},
-  {n:'الجريمة',t:'مقدمة',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">أعمال إجرامية عبر الحاسوب أو الشبكة. عابرة للحدود، صعبة الاكتشاف.</div>'}
+Z.addLesson('ai_book_part4', {
+    cat: 'ai', icon: '🧩', name: 'الكتاب الشامل (4)', desc: 'الأنظمة الخبيرة والمنطق', color: 'j'
+}, [
+    { n: 'الأنظمة الخبيرة', t: 'Expert Systems', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الأنظمة الخبيرة: تطبيقات AI تحاكي تفكير الخبراء البشر. ظهرت عام 1965 (Feigenbaum).
+المكونات: قاعدة المعلومات، محرك الاستنساخ (الأمامي، الخلفي، المختلط)، واجهة المستخدم.
+الخصائص: أداء عالٍ، وثوقية، قابلية تكيف، سهولة استخدام، قابلية تفسير.</div>` },
+    { n: 'المنطق الضبابي', t: 'Fuzzy Logic', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">المنطق الضبابي: يعتمد على قيم حقيقية بين 0 و1 (وليس فقط 0 أو 1). طوره "الطفي زداح" عام 1965.
+يتعامل مع المفاهيم الذاتية (حار، بارد، متوسط) بدلاً من القيم الدقيقة. يُستخدم في الأنظمة المعقدة غير القابلة للنمذجة (مثل التحكم في السرعة).</div>` },
+    { n: 'الجريمة الإلكترونية', t: 'مقدمة', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الجريمة الإلكترونية: أعمال إجرامية عبر الحاسوب أو الشبكة. تشمل: القرصنة، التصيد، انتحال الهوية، طلب الفدية.
+تتميز بأنها عابرة للحدود، صعبة الاكتشاف، وتستغل الثغرات الأمنية. تكلفتها تصل لمليارات الدولارات.</div>` }
 ]);
 
-Z.addLesson('ai_book_part5',{cat:'ai',icon:'🚨',name:'الكتاب الشامل (5)',desc:'الجرائم',color:'r'},[
-  {n:'DDoS',t:'هجمات قطع الخدمة',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">إغراق الخادم بطلبات وهمية. المراحل: اختيار الهدف، بناء Botnet، الإطلاق.</div>'},
-  {n:'التصيد',t:'Phishing',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">خداع المستخدمين لسرقة بياناتهم. أنواع: بريد، رمح، هاتفي، حيتان، انتحال نطاق.</div>'},
-  {n:'البرمجيات',t:'Malware',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">فيروسات، ديدان، أحصنة طروادة، برامج فدية، برامج تجسس.</div>'}
+Z.addLesson('ai_book_part5', {
+    cat: 'ai', icon: '🚨', name: 'الكتاب الشامل (5)', desc: 'الجرائم الإلكترونية', color: 'r'
+}, [
+    { n: 'هجمات DDoS', t: 'هجمات قطع الخدمة', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">هجوم DDoS: إغراق الخادم بطلبات وهمية لمنع المستخدمين الشرعيين من الوصول.
+المراحل: اختيار الهدف -> بناء شبكة موبوءة (Botnet) -> إطلاق الهجوم.
+الأنواع: هجوم على طبقة التطبيقات، الهجوم البروتوكولي، الهجمات الحجمية.</div>` },
+    { n: 'التصيد', t: 'Phishing', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">التصيد: خداع المستخدمين لسرقة معلوماتهم (كلمات المرور، بطاقات الائتمان) عبر انتحال شخصية جهة موثوقة.
+الأنواع: تصيد بالبريد، تصيد بالرمح (Spear)، تصيد هاتفي (Smishing, Vishing)، صيد الحيتان (Whaling)، انتحال المجال (Spoofing)، توأم شرير (Evil Twin)، استنساخ (Clone)، ثقب مائي (Watering hole).</div>` },
+    { n: 'البوت نت والبرمجيات', t: 'Botnets & Malware', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">Botnet: شبكة حواسيب مصابة تتحكم فيها جهة مهاجمة (Bot Herder). تستخدم للهجمات والتوزيع.
+البرمجيات الضارة: فيروسات (تثبت على ملفات)، ديدان (تتكاثر وتنتشر عبر الشبكة)، فيروسات متعددة الأشكال (تغير شفرتها)، أحصنة طروادة، برامج الفدية (تشفير الملفات)، برامج تجسس.</div>` }
 ]);
 
-Z.addLesson('ai_book_part6',{cat:'ai',icon:'🛡️',name:'الكتاب الشامل (6)',desc:'الأمن السيبراني',color:'p'},[
-  {n:'الأمن',t:'المفاهيم',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">العناصر: الهوية، التوثيق، التكامل، السرية، التوفر، عدم التنصل.</div>'},
-  {n:'AI والحماية',t:'AI في الأمن',x:'<div style="white-space:pre-wrap;text-align:justify;font-size:15px;line-height:1.8;color:#1e293b;background:#f8fafc;padding:15px;border-radius:10px;border:1px solid #cbd5e1;">الكشف الآلي عن التهديدات، تحليل البيانات الضخمة، التعلم من الهجمات السابقة.</div>'}
+Z.addLesson('ai_book_part6', {
+    cat: 'ai', icon: '🛡️', name: 'الكتاب الشامل (6)', desc: 'الأمن السيبراني', color: 'p'
+}, [
+    { n: 'الأمن السيبراني', t: 'المفاهيم الأساسية', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الأمن السيبراني: حماية الأنظمة والشبكات والبيانات من الهجمات.
+المجاالت المؤمنة: الموظفين، البنية التحتية، الثغرات، التكنولوجيا.
+العناصر الأساسية:
+1. الهوية (Identification).
+2. التوثيق (Authentication): ما تعرفه، ما تملكه، من أنت.
+3. التكامل (Integrity): صحة البيانات.
+4. السرية (Confidentiality): منع الوصول غير المصرح.
+5. التوفر (Availability): ضمان الوصول عند الحاجة.
+6. عدم التنصل (Non-repudiation): لا يمكن إنكار إرسال/استلام رسالة.</div>` },
+    { n: 'الذكاء الاصطناعي والأمن', t: 'AI في الحماية', x: `<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">AI في الأمن السيبراني: الكشف الآلي عن التهديدات، تحليل البيانات الضخمة، التعلم من الهجمات السابقة.
+الطرق التقليدية: تعتمد على التوقيعات (تفشل مع التهديدات الجديدة).
+طرق AI: تستخدم التعلم العميق والآلي (تكتشف التهديدات المعروفة وغير المعروفة). إيجابيات: فعالية، دقة، كشف سريع. تحديات: التحيز، الاستخدام الضار من القراصنة.</div>` }
 ]);
 
 /* ===== الاختبارات ===== */
 Z.addExam('book_exam',[
-  {q:'الجزء المادي؟',o:['Hardware','Software','Internet','Windows'],a:'Hardware'},
-  {q:'الجزء المعنوي؟',o:['Hardware','Software','CPU','RAM'],a:'Software'},
-  {q:'وظيفة المعالج؟',o:['تخزين','عرض','تنفيذ الأوامر','طباعة'],a:'تنفيذ الأوامر'},
-  {q:'ذاكرة تفقد محتواها؟',o:['ROM','RAM','Hard Disk','CD'],a:'RAM'},
-  {q:'جهاز إخراج؟',o:['فأرة','لوحة','طابعة','ماسح'],a:'طابعة'},
-  {q:'نظام تشغيل؟',o:['Word','Windows','Excel','Chrome'],a:'Windows'}
+  {q:'الجزء المادي (الملموس) في الحاسوب يسمى؟',o:['المعدات (Hardware)','البرمجيات (Software)','الإنترنت (Internet)','نظام التشغيل (OS)'],a:'المعدات (Hardware)'},
+  {q:'الجزء المعنوي (البرامج) يسمى؟',o:['المعدات (Hardware)','البرمجيات (Software)','المعالج (CPU)','الذاكرة (RAM)'],a:'البرمجيات (Software)'},
+  {q:'وظيفة المعالج (CPU)؟',o:['تخزين البيانات','عرض الصور','تنفيذ الأوامر','طباعة المستندات'],a:'تنفيذ الأوامر'},
+  {q:'أي ذاكرة تفقد محتواها عند إيقاف التشغيل؟',o:['ROM','RAM','القرص الصلب','CD'],a:'RAM'},
+  {q:'أي مما يلي يعتبر جهاز إخراج؟',o:['الفأرة','لوحة المفاتيح','الطابعة','الماسح الضوئي'],a:'الطابعة'},
+  {q:'أي مما يلي يعتبر نظام تشغيل؟',o:['Word','Windows','Excel','Chrome'],a:'Windows'}
 ]);
 
 Z.addExam('arabic_exam',[
@@ -1106,6 +1242,167 @@ Z.addExam('ai_exam',[
   {q:'فرع يعتمد على الشبكات العصبية؟',o:['تعلم الآلة','التعلم العميق','معالجة اللغة','المنطق الضبابي'],a:'التعلم العميق'},
   {q:'عناصر الأمن السيبراني؟',o:['السرعة، الدقة','السرية، التكامل، التوفر','الذكاء، التعلم','المرونة، الصلابة'],a:'السرية، التكامل، التوفر'},
   {q:'رائد المنطق الضبابي؟',o:['آلان تورينغ','الطفي زداح','محمد زايد','جون مكارثي'],a:'الطفي زداح'}
+]);
+/* ===== دروس المرحلة الابتدائية (السنوات 3، 4، 5، 6) ===== */
+
+// ---------------------------------------------------------
+// 🎒 السنة الثالثة ابتدائي
+// ---------------------------------------------------------
+Z.addLesson('prim3', {cat: 'primary', icon: '🎒', name: 'السنة الثالثة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
+  { 
+    n: 'الرياضيات', t: '📐 محيط المستطيل', 
+    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Rectangle_Geometry.svg/200px-Rectangle_Geometry.svg.png',
+    x: 'محيط المستطيل هو مجموع أطوال أضلاعه الأربعة. <br> <strong>القانون: (الطول + العرض) × 2</strong>', 
+    s: ['محيط المستطيل هو مجموع أطوال أضلاعه الأربعة', 'Le périmètre du rectangle est la somme de ses quatre côtés', 'The perimeter of a rectangle is the sum of its four sides'],
+    v: 'https://www.youtube.com/embed/IrJpRkqQ2tM'
+  },
+  { 
+    n: 'اللغة العربية', t: '🌙 المبتدأ والخبر', 
+    i: 'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',
+    x: 'الجملة الاسمية تتكون من <strong>مبتدأ</strong> (اسم في بداية الجملة) و<strong>خبر</strong> (يتمم معنى المبتدأ).<br>مثال: الطقسُ جميلٌ. (الطقس: مبتدأ، جميل: خبر)', 
+    s: ['الجملة الاسمية تتكون من مبتدأ وخبر', 'La phrase nominale se compose d un sujet et d un attribut', 'The nominal sentence consists of a subject and a predicate'],
+    v: 'https://www.youtube.com/embed/3Z8g7W7zY2Y'
+  },
+  { 
+    n: 'الإيقاظ العلمي', t: '💧 التبخر والغليان', 
+    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Water_cycle.png/300px-Water_cycle.png',
+    x: '<strong>التبخر</strong> هو تحول الماء من الحالة السائلة إلى الحالة الغازية ببطء (مثل جفاف الغسيل).<br><strong>الغليان</strong> هو تحول سريع يحدث عند درجة حرارة 100 درجة مئوية.', 
+    s: ['التبخر هو تحول الماء من الحالة السائلة إلى الغازية', 'L évaporation est le passage de l état liquide à l état gazeux', 'Evaporation is the transition from liquid to gas'],
+    v: 'https://www.youtube.com/embed/al-do-HGuIk'
+  },
+  { 
+    n: 'الفرنسية', t: '🇫🇷 Les articles définis et indéfinis', 
+    x: '<strong>Les articles indéfinis:</strong> un, une, des.<br><strong>Les articles définis:</strong> le, la, les.<br>مثال: <em>Un</em> livre -> <em>Le</em> livre.', 
+    s: ['أدوات التعريف والنكرة في اللغة الفرنسية', 'Les articles définis et indéfinis', 'Definite and indefinite articles in French'],
+    v: 'https://www.youtube.com/embed/1zS8mG_4XyY'
+  },
+  { n: 'الاختبار', e: 'prim3_exam' }
+]);
+
+// ---------------------------------------------------------
+// 📘 السنة الرابعة ابتدائي
+// ---------------------------------------------------------
+Z.addLesson('prim4', {cat: 'primary', icon: '📘', name: 'السنة الرابعة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
+  { 
+    n: 'الرياضيات', t: '📐 مساحة المربع والمستطيل', 
+    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Area.svg/200px-Area.svg.png',
+    x: '<strong>مساحة المربع = الضلع × الضلع</strong><br><strong>مساحة المستطيل = الطول × العرض</strong>', 
+    s: ['مساحة المربع تساوي الضلع في الضلع', 'L aire du carré est côté fois côté', 'The area of a square is side times side'],
+    v: 'https://www.youtube.com/embed/xC-yX_zY2yY'
+  },
+  { 
+    n: 'اللغة العربية', t: '🌙 الجملة الفعلية', 
+    x: 'الجملة الفعلية تبدأ بـ <strong>فعل</strong>، ويتكون معظمها من: فعل + فاعل + مفعول به.<br>مثال: كتبَ التلميذُ الدرسَ.', 
+    s: ['الجملة الفعلية تبدأ بفعل وتتكون من فعل وفاعل ومفعول به', 'La phrase verbale commence par un verbe', 'The verbal sentence begins with a verb'],
+    v: 'https://www.youtube.com/embed/3Xy8zW7yY2Y'
+  },
+  { 
+    n: 'الإيقاظ العلمي', t: '🐾 التنقل عند الحيوان', 
+    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Animal_locomotion.jpg/300px-Animal_locomotion.jpg',
+    x: 'تتنقل الحيوانات بطرق مختلفة حسب بيئتها:<br>المشي (الأسد)، الزحف (الأفعى)، الطيران (النسر)، السباحة (السمكة).', 
+    s: ['تتنقل الحيوانات بطرق مختلفة حسب بيئتها', 'Les animaux se déplacent de différentes manières selon leur environnement', 'Animals move in different ways depending on their environment'],
+    v: 'https://www.youtube.com/embed/y8W7zY2yY3Y'
+  },
+  { 
+    n: 'الفرنسية', t: '🇫🇷 Le présent de l\'indicatif', 
+    x: 'زمن المضارع في الفرنسية (Le présent) يُستخدم للتعبير عن حدث يقع الآن.<br>مثال: Je <strong>parle</strong>, Tu <strong>parles</strong>, Il <strong>parle</strong>...', 
+    s: ['زمن المضارع في اللغة الفرنسية', 'Le présent de l indicatif', 'The present indicative tense'],
+    v: 'https://www.youtube.com/embed/XyY2zW7yY3Y'
+  },
+  { n: 'الاختبار', e: 'prim4_exam' }
+]);
+
+// ---------------------------------------------------------
+// 📗 السنة الخامسة ابتدائي
+// ---------------------------------------------------------
+Z.addLesson('prim5', {cat: 'primary', icon: '📗', name: 'السنة الخامسة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
+  { 
+    n: 'الرياضيات', t: '📐 الأعداد العشرية', 
+    x: 'العدد العشري يتكون من <strong>جزء صحيح</strong> و<strong>جزء عشري</strong> يفصل بينهما فاصلة.<br>مثال: 12,45 (12 جزء صحيح، 45 جزء عشري).', 
+    s: ['العدد العشري يتكون من جزء صحيح وجزء عشري', 'Un nombre décimal se compose d une partie entière et d une partie décimale', 'A decimal number consists of an integer part and a decimal part'],
+    v: 'https://www.youtube.com/embed/yY2zW7yY3Y4'
+  },
+  { 
+    n: 'اللغة العربية', t: '🌙 الفعل المعتل', 
+    x: 'الفعل المعتل هو كل فعل يحتوي على حرف علة (ا، و، ي).<br>ينقسم إلى: <strong>مثال</strong> (وعد)، <strong>أجوف</strong> (قال)، <strong>ناقص</strong> (دعا).', 
+    s: ['الفعل المعتل هو كل فعل يحتوي على حرف علة', 'Le verbe défectueux contient une lettre de faiblesse', 'The defective verb contains a weak letter'],
+    v: 'https://www.youtube.com/embed/Y2zW7yY3Y4Y'
+  },
+  { 
+    n: 'الإيقاظ العلمي', t: '⚡ الدارة الكهربائية', 
+    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Simple_circuit.svg/200px-Simple_circuit.svg.png',
+    x: 'الدارة الكهربائية البسيطة تتكون من: <strong>مولد</strong> (بطارية)، <strong>مصباح</strong>، <strong>أسلاك توصيل</strong>، و<strong>قاطعة</strong>.<br>لكي يضيء المصباح، يجب أن تكون الدارة <strong>مغلقة</strong>.', 
+    s: ['الدارة الكهربائية البسيطة تتكون من مولد ومصباح وأسلاك وقاطعة', 'Un circuit électrique simple se compose d un générateur, d une lampe, de fils et d un interrupteur', 'A simple electrical circuit consists of a generator, a lamp, wires and a switch'],
+    v: 'https://www.youtube.com/embed/2zW7yY3Y4Y5'
+  },
+  { 
+    n: 'الفرنسية', t: '🇫🇷 Le futur simple', 
+    x: 'زمن المستقبل البسيط (Le futur simple) يُستخدم للتعبير عن حدث سيقع في المستقبل.<br>مثال: Je <strong>parlerai</strong>, Tu <strong>parleras</strong>...', 
+    s: ['زمن المستقبل البسيط في اللغة الفرنسية', 'Le futur simple', 'The simple future tense'],
+    v: 'https://www.youtube.com/embed/zW7yY3Y4Y5Y'
+  },
+  { n: 'الاختبار', e: 'prim5_exam' }
+]);
+
+// ---------------------------------------------------------
+// 📕 السنة السادسة ابتدائي (تحضير السيزيام)
+// ---------------------------------------------------------
+Z.addLesson('prim6', {cat: 'primary', icon: '📕', name: 'السنة السادسة ابتدائي', desc: 'الرياضيات، العربية، الإيقاظ، الفرنسية'}, [
+  { 
+    n: 'الرياضيات', t: '📐 التناسب والسلم', 
+    x: 'التناسب هو تساوي نسبتين. <br>مثال: إذا كان 3 أقلام بـ 6 دنانير، فكم يكون 5 أقلام؟<br>نستخدم <strong>الضرب التبادلي</strong> أو الرجوع إلى الوحدة.', 
+    s: ['التناسب هو تساوي نسبتين', 'La proportionnalité est l égalité de deux rapports', 'Proportionality is the equality of two ratios'],
+    v: 'https://www.youtube.com/embed/W7yY3Y4Y5Y6'
+  },
+  { 
+    n: 'اللغة العربية', t: '🌙 المفعول به', 
+    x: 'المفعول به هو اسم منصوب يقع عليه فعل الفاعل.<br>مثال: قرأ التلميذُ <strong>الكتابَ</strong>. (الكتاب: مفعول به منصوب بالفتحة).', 
+    s: ['المفعول به هو اسم منصوب يقع عليه فعل الفاعل', 'L objet direct est un nom à l accusatif', 'The direct object is an accusative noun'],
+    v: 'https://www.youtube.com/embed/7yY3Y4Y5Y6Y'
+  },
+  { 
+    n: 'الإيقاظ العلمي', t: '💡 انتشار الضوء', 
+    i: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Light_dispersion_conceptual_waves350px.gif/350px-Light_dispersion_conceptual_waves350px.gif',
+    x: 'ينتشر الضوء في <strong>خطوط مستقيمة</strong> في وسط متجانس.<br>يمكن أن ينعكس (مثل المرآة) أو ينكسر (مثل الماء).', 
+    s: ['ينتشر الضوء في خطوط مستقيمة في وسط متجانس', 'La lumière se propage en ligne droite dans un milieu homogène', 'Light travels in straight lines in a homogeneous medium'],
+    v: 'https://www.youtube.com/embed/yY3Y4Y5Y6Y7'
+  },
+  { 
+    n: 'الفرنسية', t: '🇫🇷 Le passé composé', 
+    x: 'الماضي المركب (Le passé composé) يُستخدم للتعبير عن حدث وقع وانتهى في الماضي.<br>يتكون من فعل مساعد (avoir/être) + اسم المفعول (Participe passé).', 
+    s: ['الماضي المركب يتكون من فعل مساعد واسم المفعول', 'Le passé composé se compose d un auxiliaire et d un participe passé', 'The past tense consists of an auxiliary verb and a past participle'],
+    v: 'https://www.youtube.com/embed/Y3Y4Y5Y6Y7Y'
+  },
+  { n: 'الاختبار', e: 'prim6_exam' }
+]);
+
+/* ===== اختبارات الابتدائي ===== */
+Z.addExam('prim3_exam',[
+  {q:'ما هو قانون محيط المستطيل؟',o:['الطول × العرض','(الطول + العرض) × 2','الطول + العرض'],a:'(الطول + العرض) × 2'},
+  {q:'في جملة "الطقسُ جميلٌ"، ما هو المبتدأ؟',o:['جميل','الطقس','لا يوجد'],a:'الطقس'},
+  {q:'متى يحدث الغليان؟',o:['عند 0 درجة','عند 50 درجة','عند 100 درجة'],a:'عند 100 درجة'},
+  {q:'ما هو المقال النكرة (Article indéfini) في "livre"؟',o:['Le','Un','La'],a:'Un'}
+]);
+
+Z.addExam('prim4_exam',[
+  {q:'مربع طول ضلعه 4 سم، ما هي مساحته؟',o:['8 سم²','16 سم²','12 سم²'],a:'16 سم²'},
+  {q:'في جملة "كتبَ التلميذُ الدرسَ"، ما هو الفاعل؟',o:['كتب','التلميذ','الدرس'],a:'التلميذ'},
+  {q:'كيف يتنقل النسر؟',o:['بالزحف','بالمشي','بالطيران'],a:'بالطيران'},
+  {q:'كيف نقول "أنا أتكلم" بالمضارع الفرنسي؟',o:['Je parle','Tu parles','Il parle'],a:'Je parle'}
+]);
+
+Z.addExam('prim5_exam',[
+  {q:'ما هو العدد العشري في 15,75؟',o:['15','75','15,75'],a:'15,75'},
+  {q:'الفعل "قال" هو فعل معتل: ',o:['مثال','أجوف','ناقص'],a:'أجوف'},
+  {q:'لكي يضيء المصباح في الدارة الكهربائية يجب أن تكون الدارة:',o:['مفتوحة','مغلقة','مقطوعة'],a:'مغلقة'},
+  {q:'كيف نقول "سأتحدث" بالمستقبل الفرنسي؟',o:['Je parle','Je parlerai','J ai parlé'],a:'Je parlerai'}
+]);
+
+Z.addExam('prim6_exam',[
+  {q:'إذا كان 2 كغ من التفاح بـ 4 دنانير، فكم ثمن 5 كغ؟',o:['8 دنانير','10 دنانير','12 دينار'],a:'10 دنانير'},
+  {q:'في جملة "قرأ التلميذ الكتاب"، ما هو المفعول به؟',o:['قرأ','التلميذ','الكتاب'],a:'الكتاب'},
+  {q:'ينتشر الضوء في:',o:['خطوط متعرجة','خطوط مستقيمة','دوائر'],a:'خطوط مستقيمة'},
+  {q:'كيف نقول "أنا تكلمت" بالماضي المركب الفرنسي؟',o:['Je parle','Je parlerai','J ai parlé'],a:'J ai parlé'}
 ]);
 
 window.addEventListener('load',function(){
