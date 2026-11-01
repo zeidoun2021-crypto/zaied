@@ -284,7 +284,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
-/* ✅ إعدادات Firebase الخاصة بك */
+/* إعدادات Firebase */
 var firebaseConfig = {
   apiKey: "AIzaSyA8LK52iXBPZFbqHnXyaAsldgqcjz7Bj4o",
   authDomain: "zaied-platform.firebaseapp.com",
@@ -308,7 +308,10 @@ Z.WA='21655335477';
 Z.user=null;Z.admin=false;Z.audio=null;Z.selectedCat=null;
 Z.lessons={};Z.exams={};Z.services={};Z.jobs=[];Z.seekers=[];
 Z.cur={key:'',idx:0};Z.exam={key:'',idx:0,score:0,qs:[]};
-Z.visitorAttempts=0;
+
+// العداد المعتمد على localStorage (يمنع الالتفاف عليه بتحديث الصفحة)
+Z.visitorAttempts = parseInt(localStorage.getItem('zaid_visitor_attempts') || '0');
+
 Z.LVL=['تقني','تقني سامي','مهندس','ماجستير','دكتوراه'];
 Z.LVL_CLS={'تقني':'lvl-a','تقني سامي':'lvl-b','مهندس':'lvl-c','ماجستير':'lvl-d','دكتوراه':'lvl-e'};
 Z.addLesson=function(k,m,s){Z.lessons[k]={meta:m,slides:s};};
@@ -336,32 +339,42 @@ cats.forEach(function(c, index){
   var b=document.createElement('div');b.className='cat';b.textContent=c;
   b.onclick=function(){document.querySelectorAll('.cat').forEach(function(x){x.classList.remove('on');});b.classList.add('on');Z.selectedCat=c;};
   cg.appendChild(b);
-  // تحديد التصنيف الأول تلقائياً لتجنب خطأ "لم تختر التصنيف"
-  if(index === 0) {
-    b.classList.add('on');
-    Z.selectedCat = c;
-  }
+  if(index === 0) { b.classList.add('on'); Z.selectedCat = c; }
 });
 
-Z.exitPlatform=function(){
-  if(!confirm('هل تريد الخروج تماماً من المنصة؟')) return;
-  document.body.innerHTML='<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#0f172a;color:#fff;text-align:center;font-family:Cairo,sans-serif;"><h1 style="color:#22c55e;font-size:40px;margin-bottom:20px;">👋 تم الخروج بنجاح</h1><p style="font-size:20px;margin-bottom:30px;">يمكنك إغلاق هذه النافذة الآن بأمان.</p><button onclick="location.reload()" style="padding:15px 40px;background:#3b82f6;color:#fff;border:none;border-radius:30px;font-size:18px;font-weight:900;cursor:pointer;font-family:Cairo;">الدخول مجدداً</button></div>';
-};
-
+/* 🛡️ درع الحماية القاسي: منع الزوار نهائياً إذا لم يسجلوا */
 Z.checkVisitor=function(){
-  if(Z.user||Z.admin) return true;
-  Z.visitorAttempts++;
-  if(Z.visitorAttempts>1){
-    document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:Cairo,sans-serif;"><h1 style="color:#dc2626;font-size:40px;margin-bottom:20px;">🚫 تم طردك من المنصة</h1><p style="font-size:20px;line-height:1.8;">لقد حاولت الدخول إلى المحتوى دون تسجيل.<br>التسجيل إلزامي ومجاني، ولقد استنفدت محاولتك الوحيدة.</p><button onclick="location.reload()" style="margin-top:25px;padding:12px 30px;background:#3b82f6;color:#fff;border:none;border-radius:25px;font-size:16px;cursor:pointer;font-weight:900;font-family:Cairo;">🔄 تحديث الصفحة</button></div>';
+  if(Z.user || Z.admin) return true;
+  
+  // إذا كان محظوراً مسبقاً
+  if(localStorage.getItem('zaid_platform_banned') === 'true') {
+    document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:Cairo,sans-serif;"><h1 style="color:#dc2626;font-size:40px;margin-bottom:20px;">🚫 تم حظرك من المنصة</h1><p style="font-size:20px;line-height:1.8;">لقد حاولت الدخول إلى المحتوى دون تسجيل.<br>التسجيل إلزامي ومجاني، لا يمكنك استخدام المنصة الآن.</p></div>';
     return false;
   }
-  alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nلديك محاولة واحدة فقط.');
+
+  Z.visitorAttempts++;
+  localStorage.setItem('zaid_visitor_attempts', Z.visitorAttempts);
+  
+  if(Z.visitorAttempts > 2){
+    localStorage.setItem('zaid_platform_banned', 'true');
+    document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:Cairo,sans-serif;"><h1 style="color:#dc2626;font-size:40px;margin-bottom:20px;">🚫 تم حظرك من المنصة</h1><p style="font-size:20px;line-height:1.8;">لقد حاولت الدخول إلى المحتوى 3 مرات دون تسجيل.<br>التسجيل إلزامي ومجاني، يرجى إغلاق النافذة.</p></div>';
+    return false;
+  }
+  
+  alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nهذه المحاولة رقم ' + Z.visitorAttempts + ' من أصل 3. إذا حاولت مجدداً سيتم حظرك.');
   Z.showPage('pageWelcome');
   return false;
 };
 
+Z.exitPlatform=function(){
+  if(!confirm('هل تريد الخروج تماماً من المنصة؟')) return;
+  localStorage.removeItem('zaid_visitor_attempts');
+  localStorage.removeItem('zaid_platform_banned');
+  document.body.innerHTML='<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#0f172a;color:#fff;text-align:center;font-family:Cairo,sans-serif;"><h1 style="color:#22c55e;font-size:40px;margin-bottom:20px;">👋 تم الخروج بنجاح</h1><p style="font-size:20px;margin-bottom:30px;">يمكنك إغلاق هذه النافذة الآن بأمان.</p><button onclick="location.reload()" style="padding:15px 40px;background:#3b82f6;color:#fff;border:none;border-radius:30px;font-size:18px;font-weight:900;cursor:pointer;font-family:Cairo;">الدخول مجدداً</button></div>';
+};
+
 Z.showPage=function(id){
-  if(id!=='pageWelcome'&&!Z.user&&!Z.admin){ Z.checkVisitor(); return; }
+  if(id!=='pageWelcome' && !Z.user && !Z.admin){ Z.checkVisitor(); return; }
   document.querySelectorAll('#main > div[id^="page"]').forEach(function(p){p.classList.add('hide');});
   document.getElementById(id).classList.remove('hide');
   window.scrollTo(0,0);
@@ -391,6 +404,7 @@ Z.updateUI=function(){
   }
 };
 
+/* 📝 التسجيل مع الإشعارات القوية (ضمان حفظ البيانات وإرسالها) */
 Z.register=function(){
   var n=document.getElementById('fn').value.trim();
   var p=document.getElementById('fp').value.trim();
@@ -403,16 +417,15 @@ Z.register=function(){
   
   var nameWords = n.split(/\s+/).filter(function(w){return w.length>0;});
   
-  // تشخيص دقيق جداً: يظهر تنبيه بالضبط ما الذي ينقص
-  if(nameWords.length < 3) { alert('❌ الاسم غير مكتمل: يجب كتابة 3 كلمات مفصولة بمسافات (مثال: محمد علي أحمد)'); return; }
+  if(nameWords.length < 3) { alert('❌ الاسم غير مكتمل: يجب كتابة 3 كلمات مفصولة بمسافات'); return; }
   if(!p) { alert('❌ حقل "المهنة" فارغ.'); return; }
   if(!s) { alert('❌ حقل "الاختصاص" فارغ.'); return; }
   if(!e) { alert('❌ حقل "البريد الإلكتروني" فارغ.'); return; }
-  if(e.indexOf('@') === -1 || e.indexOf('.') === -1) { alert('❌ صيغة البريد الإلكتروني غير صحيحة (يجب أن يحتوي على @ ونقطة، مثال: user@gmail.com)'); return; }
+  if(e.indexOf('@') === -1 || e.indexOf('.') === -1) { alert('❌ صيغة البريد الإلكتروني غير صحيحة'); return; }
   if(!h) { alert('❌ حقل "رقم الواتساب" فارغ.'); return; }
   if(!c) { alert('❌ حقل "بلد الإقامة" فارغ.'); return; }
-  if(!ci) { alert('❌ حقل "المدينة" فارغ (يجب التمرير للأسفل لملئه).'); return; }
-  if(!Z.selectedCat) { alert('❌ لم تقم باختيار التصنيف! (يجب الضغط على أحد الأزرار الملونة: طفل، ولي، طالب...)'); return; }
+  if(!ci) { alert('❌ حقل "المدينة" فارغ.'); return; }
+  if(!Z.selectedCat) { alert('❌ لم تقم باختيار التصنيف!'); return; }
 
   if(er) er.style.display='none';
   
@@ -421,18 +434,41 @@ Z.register=function(){
   
   if(db){ 
       db.collection("users").add(Z.user)
-      .then(function(){ alert('✅ تم الحفظ في قاعدة بيانات Firebase بنجاح!'); })
-      .catch(function(err){ alert('❌ خطأ في Firebase أثناء التسجيل:\n' + err.message); }); 
+      .then(function(){ 
+          if(Z.WEB3FORMS_KEY){
+            fetch('https://api.web3forms.com/submit',{
+                method:'POST',
+                headers:{'Content-Type':'application/json','Accept':'application/json'},
+                body:JSON.stringify({access_key:Z.WEB3FORMS_KEY,subject:'🎉 مسجل جديد - منصة زايد',name:n,email:e,phone:h,prof:p,spec:s,country:c,city:ci,category:Z.selectedCat,date:Z.user.date})
+            })
+            .then(function(res){ return res.json(); })
+            .then(function(data){ 
+                if(data.success) alert('✅ تم التسجيل بنجاح!\nتم الحفظ في قاعدة البيانات وتم إرسال الإشعار.');
+                else alert('⚠️ تم التسجيل في Firebase، لكن فشل إرسال إشعار الإيميل: ' + data.message);
+                Z.showPage('pageHome');
+            })
+            .catch(function(err){ 
+                alert('⚠️ تم التسجيل في Firebase، لكن فشل الاتصال بالإنترنت لإرسال الإيميل.');
+                Z.showPage('pageHome'); 
+            });
+          } else {
+            alert('✅ تم التسجيل والحفظ في Firebase بنجاح!');
+            Z.showPage('pageHome');
+          }
+      })
+      .catch(function(err){ 
+          alert('❌ فشل الحفظ في Firebase! تأكد من تفعيل قواعد Firestore.\nالخطأ: ' + err.message); 
+      }); 
   } else {
-      alert('⚠️ تحذير: Firebase غير متصل (db = null)! تأكد من الإنترنت.');
+      alert('⚠️ تحذير: Firebase غير متصل! سيتم الحفظ محلياً فقط.');
+      Z.showPage('pageHome');
   }
   
-  if(Z.WEB3FORMS_KEY){
-    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:Z.WEB3FORMS_KEY,subject:'🎉 مسجل جديد - منصة زايد',from_name:'منصة زايد',name:n,email:e,phone:h,prof:p,spec:s,country:c,city:ci,category:Z.selectedCat,date:Z.user.date})}).catch(function(err){console.error('W3F:',err);});
-  }
   Z.visitorAttempts=0;
+  localStorage.removeItem('zaid_visitor_attempts');
+  localStorage.removeItem('zaid_platform_banned');
   document.getElementById('un').textContent=n;
-  Z.updateUI();Z.showPage('pageHome');
+  Z.updateUI();
 };
 
 Z.adminLogin=function(){
@@ -442,9 +478,14 @@ Z.adminLogin=function(){
   m.innerHTML='<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;"><div style="font-size:50px;margin-bottom:15px;">👑</div><h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2><input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" autocomplete="new-password" style="text-align:center;font-size:20px;letter-spacing:5px;"><button type="button" onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button><button type="button" onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button></div>';
   document.body.appendChild(m);
 };
+
 Z.checkAdmin=function(){
   var pwd=document.getElementById('adminPwd').value;
-  if(pwd===Z.ADMIN){ Z.admin=true;document.getElementById('admModal').remove();Z.updateUI();Z.showPage('pageHome'); }
+  if(pwd===Z.ADMIN){ 
+      Z.admin=true;document.getElementById('admModal').remove();
+      Z.visitorAttempts=0;localStorage.removeItem('zaid_visitor_attempts');localStorage.removeItem('zaid_platform_banned');
+      Z.updateUI();Z.showPage('pageHome'); 
+  }
   else{ alert('كلمة المرور خاطئة'); }
 };
 
