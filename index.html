@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Cairo,sans-serif}
 html,body{height:100%;width:100%;overflow:hidden}
@@ -284,24 +282,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
-/* إعدادات Firebase */
-var firebaseConfig = {
-  apiKey: "AIzaSyA8LK52iXBPZFbqHnXyaAsldgqcjz7Bj4o",
-  authDomain: "zaied-platform.firebaseapp.com",
-  projectId: "zaied-platform",
-  storageBucket: "zaied-platform.firebasestorage.app",
-  messagingSenderId: "703013673948",
-  appId: "1:703013673948:web:585875a9a69312cfe48d19",
-  measurementId: "G-8CSEE1FY32"
-};
-var db = null;
-try {
-  if (typeof firebase !== 'undefined') {
-    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-    db = firebase.firestore();
-  }
-} catch(e) { console.warn("Firebase offline:", e); }
-
+// مفتاح إرسال الإشعارات (Web3Forms) - يعمل بدون بطاقة بنكية
 Z.WEB3FORMS_KEY = '85fc306f-6ead-40a4-a1f0-c3ffeeefcdc7';
 Z.ADMIN='012345';
 Z.WA='21655335477';
@@ -346,7 +327,6 @@ cats.forEach(function(c, index){
 Z.checkVisitor=function(){
   if(Z.user || Z.admin) return true;
   
-  // إذا كان محظوراً مسبقاً
   if(localStorage.getItem('zaid_platform_banned') === 'true') {
     document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:Cairo,sans-serif;"><h1 style="color:#dc2626;font-size:40px;margin-bottom:20px;">🚫 تم حظرك من المنصة</h1><p style="font-size:20px;line-height:1.8;">لقد حاولت الدخول إلى المحتوى دون تسجيل.<br>التسجيل إلزامي ومجاني، لا يمكنك استخدام المنصة الآن.</p></div>';
     return false;
@@ -404,7 +384,7 @@ Z.updateUI=function(){
   }
 };
 
-/* 📝 التسجيل مع الإشعارات القوية (ضمان حفظ البيانات وإرسالها) */
+/* 📝 التسجيل مع الإشعارات القوية */
 Z.register=function(){
   var n=document.getElementById('fn').value.trim();
   var p=document.getElementById('fp').value.trim();
@@ -432,36 +412,25 @@ Z.register=function(){
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date:new Date().toLocaleDateString('ar-TN'),isSub:false};
   var arr=Z.getUsers();arr.push(Z.user);Z.saveUsers(arr);
   
-  if(db){ 
-      db.collection("users").add(Z.user)
-      .then(function(){ 
-          if(Z.WEB3FORMS_KEY){
-            fetch('https://api.web3forms.com/submit',{
-                method:'POST',
-                headers:{'Content-Type':'application/json','Accept':'application/json'},
-                body:JSON.stringify({access_key:Z.WEB3FORMS_KEY,subject:'🎉 مسجل جديد - منصة زايد',name:n,email:e,phone:h,prof:p,spec:s,country:c,city:ci,category:Z.selectedCat,date:Z.user.date})
-            })
-            .then(function(res){ return res.json(); })
-            .then(function(data){ 
-                if(data.success) alert('✅ تم التسجيل بنجاح!\nتم الحفظ في قاعدة البيانات وتم إرسال الإشعار.');
-                else alert('⚠️ تم التسجيل في Firebase، لكن فشل إرسال إشعار الإيميل: ' + data.message);
-                Z.showPage('pageHome');
-            })
-            .catch(function(err){ 
-                alert('⚠️ تم التسجيل في Firebase، لكن فشل الاتصال بالإنترنت لإرسال الإيميل.');
-                Z.showPage('pageHome'); 
-            });
-          } else {
-            alert('✅ تم التسجيل والحفظ في Firebase بنجاح!');
-            Z.showPage('pageHome');
-          }
-      })
-      .catch(function(err){ 
-          alert('❌ فشل الحفظ في Firebase! تأكد من تفعيل قواعد Firestore.\nالخطأ: ' + err.message); 
-      }); 
+  if(Z.WEB3FORMS_KEY){
+    fetch('https://api.web3forms.com/submit',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({access_key:Z.WEB3FORMS_KEY,subject:'🎉 مسجل جديد - منصة زايد',name:n,email:e,phone:h,prof:p,spec:s,country:c,city:ci,category:Z.selectedCat,date:Z.user.date})
+    })
+    .then(function(res){ return res.json(); })
+    .then(function(data){ 
+        if(data.success) alert('✅ تم التسجيل بنجاح!\nتم إرسال إشعار إلى بريد المشرف، وتم الحفظ محلياً.');
+        else alert('⚠️ تم التسجيل محلياً، لكن فشل إرسال إشعار الإيميل: ' + data.message);
+        Z.showPage('pageHome');
+    })
+    .catch(function(err){ 
+        alert('⚠️ تم التسجيل محلياً، لكن فشل الاتصال بالإنترنت لإرسال الإيميل.');
+        Z.showPage('pageHome'); 
+    });
   } else {
-      alert('⚠️ تحذير: Firebase غير متصل! سيتم الحفظ محلياً فقط.');
-      Z.showPage('pageHome');
+    alert('✅ تم التسجيل والحفظ بنجاح!');
+    Z.showPage('pageHome');
   }
   
   Z.visitorAttempts=0;
@@ -511,207 +480,59 @@ Z.speak=function(t,l){
 
 Z.clearAllUsers = function(){
   if(!Z.admin){alert('للمشرف فقط');return;}
-  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً؟ لا يمكن التراجع!'))return;
-
-  if(db){
-    db.collection("users").get().then(function(qs){
-      var batch = db.batch();
-      qs.forEach(function(doc){ batch.delete(doc.ref); });
-      return batch.commit();
-    }).then(function(){
-      localStorage.removeItem('zaid_registered_users_v4');
-      alert('✅ تم حذف جميع المسجلين بنجاح من Firebase.');
-      Z.showStats();
-    }).catch(function(err){
-      alert('❌ خطأ أثناء الحذف: ' + err.message);
-    });
-  } else {
-    localStorage.removeItem('zaid_registered_users_v4');
-    alert('✅ تم تصفير البيانات المحلية.');
-    Z.showStats();
-  }
+  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً من هذا الجهاز؟'))return;
+  localStorage.removeItem('zaid_registered_users_v4');
+  alert('✅ تم تصفير البيانات المحلية.');
+  Z.showStats();
 };
 
+/* 📊 الإحصائيات المحلية (بدون أخطاء وبدون Firebase) */
 Z.showStats=function(){
   var o=document.getElementById('statsModal');if(o)o.remove();
   var m=document.createElement('div');m.id='statsModal';
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين...</div>';
-  document.body.appendChild(m);
-
-  function renderStats(usersList, fromServer) {
-    var todayStr=new Date().toLocaleDateString('ar-TN');
-    var todayUsers=usersList.filter(function(u){return u.date===todayStr;});
-    var subscribers=usersList.filter(function(u){return u.isSub===true;});
-    var usersHtml='';
-    if(usersList.length===0) usersHtml='<div style="color:#94a3b8;text-align:center;padding:12px;">لا يوجد مسجلون بعد.</div>';
-    else{
-      usersList.forEach(function(u,i){
-        var id=u._docId||i;
-        var subBtn=u.isSub?'<button onclick="ZAID.toggleSub(\''+id+'\',true)" style="background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">❌ إلغاء الاشتراك</button>':'<button onclick="ZAID.toggleSub(\''+id+'\',false)" style="background:#22c55e;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">✅ تفعيل الاشتراك</button>';
-        var subBadge=u.isSub?'<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">مشترك</span>':'<span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;margin-right:5px;">غير مشترك</span>';
-        usersHtml+='<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:12px;line-height:1.7;"><div style="color:#fbbf24;font-weight:900;font-size:13px;">'+subBadge+' 👤 '+(i+1)+'. '+(u.name||'—')+'</div><div style="color:#cbd5e1;">📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')+'</div><div style="color:#94a3b8;">💼 '+(u.prof||'—')+' — 🎯 '+(u.spec||'—')+'</div><div style="color:#94a3b8;">🌍 '+(u.country||'—')+' — '+(u.city||'—')+'</div><div style="color:#94a3b8;font-size:11px;">🏷️ '+(u.cat||'—')+' — 📅 '+(u.date||'—')+'</div>'+subBtn+'</div>';
-      });
-    }
-    document.getElementById('statsModal').remove();
-    var m2=document.createElement('div');m2.id='statsModal';
-    m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
-      +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2>'
-      +'<div style="font-size:12px;color:'+(fromServer?'#22c55e':'#f59e0b')+';margin-bottom:10px;">'
-      + (fromServer?'✅ متصل بقاعدة بيانات Firebase':'⚠️ وضع محلي (لم يتم الاتصال بالسحابة)')
-      +'</div>'
-      +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
-        +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
-        +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div>'
-        +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
-      +'</div>'
-      +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 القائمة:</div>'
-      +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:250px;">'+usersHtml+'</div>'
-      +'<button onclick="ZAID.clearAllUsers()" style="width:100%;padding:12px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;margin-bottom:10px;">🗑️ تصفير قائمة المسجلين (حذف الكل)</button>'
-      +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button>'
-      +'</div>';
-    document.body.appendChild(m2);
-  }
-
-  if(db){
-    db.collection("users").get().then(function(qs){
-      var users=[];qs.forEach(function(doc){var u=doc.data();u._docId=doc.id;users.push(u);});
-      renderStats(users,true);
-    }).catch(function(err){
-      alert("❌ فشل جلب البيانات من Firebase:\n" + err.message + "\n\nتأكد من تفعيل قواعد Firestore (Rules).");
-      renderStats(Z.getUsers(),false);
+  
+  var usersList = Z.getUsers();
+  var todayStr = new Date().toLocaleDateString('ar-TN');
+  var todayUsers = usersList.filter(function(u){return u.date===todayStr;});
+  var subscribers = usersList.filter(function(u){return u.isSub===true;});
+  
+  var usersHtml = '';
+  if(usersList.length === 0) {
+    usersHtml = '<div style="color:#fbbf24;text-align:center;padding:12px;font-weight:bold;line-height:1.8;">📭 لا يوجد مسجلون في هذا المتصفح.<br><span style="font-size:12px;color:#cbd5e1;">(كل من يسجل الآن سيصلك إيميله على بريدك)</span></div>';
+  } else {
+    usersList.forEach(function(u,i){
+      var subBtn=u.isSub?'<button onclick="ZAID.toggleSub('+i+')" style="background:#dc2626;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">❌ إلغاء الاشتراك</button>':'<button onclick="ZAID.toggleSub('+i+')" style="background:#22c55e;color:#fff;border:none;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:Cairo;font-size:11px;font-weight:900;margin-top:5px;">✅ تفعيل الاشتراك</button>';
+      usersHtml += '<div style="background:#0f172a;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155;font-size:12px;line-height:1.7;"><div style="color:#fbbf24;font-weight:900;font-size:13px;">👤 '+(i+1)+'. '+(u.name||'—')+'</div><div style="color:#cbd5e1;">📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')+'</div><div style="color:#94a3b8;">🏷️ '+(u.cat||'—')+' — 📅 '+(u.date||'—')+'</div>'+subBtn+'</div>';
     });
-  } else {
-    alert("⚠️ قاعدة البيانات غير متصلة (db = null)!\nسيتم عرض البيانات المحفوظة في هذا المتصفح فقط.");
-    renderStats(Z.getUsers(),false);
   }
-};
 
-Z.toggleSub=function(docId,currentStatus){
-  if(!Z.admin){alert('للمشرف فقط');return;}
-  var newStatus=!currentStatus;
-  if(!confirm(newStatus?'تفعيل اشتراك هذا المستخدم؟':'إلغاء اشتراك هذا المستخدم؟'))return;
-  if(db){
-    db.collection("users").doc(docId).update({isSub:newStatus}).then(function(){alert('✅ تم تحديث حالة الاشتراك في Firebase');Z.showStats();}).catch(function(e){alert('خطأ أثناء التحديث: '+e.message);});
-  } else {
-    var users=Z.getUsers();var idx=parseInt(docId);
-    if(!isNaN(idx)&&users[idx]){users[idx].isSub=newStatus;Z.saveUsers(users);alert('✅ تم التحديث محلياً');Z.showStats();}
-  }
-};
-
-Z.showSub=function(){
-  var o=document.getElementById('sm');if(o)o.remove();
-  var m=document.createElement('div');m.id='sm';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:460px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box"><div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div><h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2><div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e"><div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس)</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">30 دينار تونسي</div><div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div></div><div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6"><div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div><div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">20 دولار / 20 يورو</div><div style="font-size:12px;color:#94a3b8">عبر Western Union</div></div><button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button><button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button></div>';
+  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
+    +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2>'
+    +'<div style="font-size:13px;color:#f59e0b;background:rgba(245,158,11,.1);padding:10px;border-radius:10px;border:1px solid #f59e0b;margin-bottom:15px;line-height:1.6;">'
+    +'💡 <strong>ملاحظة:</strong> يتم عرض المسجلين على هذا الجهاز فقط.<br>'
+    +'📧 <strong>كل من يسجل الآن سيصلك إشعاره في إيميلك.</strong>'
+    +'</div>'
+    +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
+      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
+      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div>'
+      +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
+    +'</div>'
+    +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين:</div>'
+    +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:250px;">'+usersHtml+'</div>'
+    +'<button onclick="ZAID.clearAllUsers()" style="width:100%;padding:12px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;margin-bottom:10px;">🗑️ تصفير قائمة المسجلين (حذف الكل)</button>'
+    +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button>'
+    +'</div>';
   document.body.appendChild(m);
 };
 
-Z.wa=function(){
-  var u=Z.user||{};
-  var msg='مرحباً، أرغب في الاشتراك في منصة زايد.\n\nالاسم: '+(u.name||'')+'\nالبريد: '+(u.email||'')+'\n\nطريقة الدفع: (e-Dinar / Western Union)';
-  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
-};
-
-Z.openCat=function(cat){
-  if(!Z.checkVisitor()) return;
-  var ks=Object.keys(Z.lessons).filter(function(k){return Z.lessons[k].meta.cat===cat;});
-  var c=document.getElementById('lc');
-  if(!ks.length){c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">🚧</div><div class="st">'+cat+'</div><div class="stxt">قيد الإعداد</div></div>';}
-  else{
-    var h='<div class="sel">';
-    ks.forEach(function(k){var m=Z.lessons[k].meta;h+='<div class="lcard '+(m.color||'')+'" onclick="ZAID.startLesson(\''+k+'\')"><div class="li">'+(m.icon||'📖')+'</div><div class="lt">'+m.name+'</div><div class="ld">'+(m.desc||'')+'</div></div>';});
-    h+='</div>';c.innerHTML=h;
+Z.toggleSub=function(idx){
+  var users=Z.getUsers();
+  if(users[idx]) {
+    users[idx].isSub = !users[idx].isSub;
+    Z.saveUsers(users);
+    Z.showStats();
   }
-  Z.showPage('pageLesson');
-};
-
-Z.openSrv=function(key){
-  if(!Z.checkVisitor()) return;
-  if(key==='seeker'||key==='internship'||key==='job'){ Z.showSeekerForm(key); return; }
-  var d=Z.services[key]||{icon:'💡',title:key,desc:'اتصل بنا'};
-  var c=document.getElementById('lc');
-  c.innerHTML='<div class="svcard"><div style="font-size:60px;margin-bottom:10px">'+d.icon+'</div><h3>'+d.title+'</h3><p>'+d.desc+'</p><button onclick="window.open(\'https://wa.me/'+Z.WA+'?text='+encodeURIComponent('أرغب في '+d.title)+'\',\'_blank\')">📱 تواصل واتساب</button></div>';
-  Z.showPage('pageLesson');
-};
-
-Z.openJobs=function(){
-  if(!Z.checkVisitor()) return;
-  var c=document.getElementById('lc');
-  if(!Z.jobs.length){
-    c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">💼</div><div class="st">لا توجد عروض تشغيل حالياً</div><div class="stxt">إذا كنت مؤسسة وترغب في نشر عرض، يرجى التواصل معنا.</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
-  } else {
-    var h='<div class="sel">';
-    Z.jobs.forEach(function(j,idx){
-      h+='<div class="lcard j" onclick="ZAID.viewJob('+idx+')"><div class="li">'+(j.logo?'<img src="'+j.logo+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 auto">':'🏢')+'</div><div class="lt">'+(j.title||'عرض')+'</div><div class="ld">'+(j.company||'')+'</div><div style="margin-top:10px"><span class="badge '+(Z.LVL_CLS[j.level]||'lvl-c')+'">'+(j.level||'غير محدد')+'</span></div></div>';
-    });
-    h+='</div><div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div>';
-    c.innerHTML=h;
-  }
-  Z.showPage('pageLesson');
-};
-
-Z.viewJob=function(idx){
-  var j=Z.jobs[idx];if(!j)return;
-  var c=document.getElementById('lc');
-  var h='<div class="slide" style="padding:0;overflow:hidden;"><div style="background:#0e7490;padding:20px;text-align:center;color:white"><img src="'+(j.logo||'https://cdn-icons-png.flaticon.com/512/3106/3106773.png')+'" style="width:80px;height:80px;border-radius:50%;border:3px solid #fff;object-fit:cover;background:#fff;margin-bottom:10px" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/3106/3106773.png\'"><h2 style="font-size:22px;margin:0">'+(j.company||'اسم المؤسسة')+'</h2><div style="font-size:16px;margin-top:5px;color:#cffafe">'+(j.activity||'ميدان النشاط')+'</div></div><div style="padding:20px"><div class="job-info" style="border-right-color:#06b6d4;background:#ecfeff;color:#164e63;line-height:2.2;font-size:15px"><div><strong>📍 العنوان:</strong> '+(j.address||'—')+'</div><div><strong>🧾 السجل الجبائي:</strong> '+(j.tax||'—')+'</div><div><strong>📊 المستوى:</strong> '+(j.level||'—')+'</div><div><strong>💼 المسمى:</strong> '+(j.title||'—')+'</div><div style="margin-top:10px;padding-top:10px;border-top:1px dashed #0e7490"><div><strong>📱 الواتساب:</strong> '+(j.phone||'—')+'</div><div><strong>📧 الإيميل:</strong> '+(j.email||'—')+'</div></div></div><div class="nav" style="margin-top:20px">';
-  if(j.phone) h+='<button class="apply-btn" onclick="window.open(\'https://wa.me/'+j.phone+'\',\'_blank\')">📱 تقدم للوظيفة</button>';
-  h+='<button class="nbtn ne" onclick="ZAID.openJobs()">🔙 العودة</button></div>';
-  if(Z.admin) h+='<div style="text-align:center;margin-top:15px"><button class="del-btn" onclick="ZAID.delJob('+idx+')">🗑️ حذف</button></div>';
-  h+='</div></div>';
-  c.innerHTML=h;Z.showPage('pageLesson');
-};
-
-Z.delJob=function(idx){if(!Z.admin){alert('للمشرف فقط');return;}if(!confirm('حذف؟'))return;Z.jobs.splice(idx,1);Z.saveJobs();Z.openJobs();};
-
-Z.jobForm=function(){
-  if(!Z.admin){alert('للمشرف فقط');return;}
-  var old=document.getElementById('jf');if(old)old.remove();
-  var m=document.createElement('div');m.id='jf';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
-  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:600px;width:100%;border:4px solid #06b6d4;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto"><h2 style="color:#06b6d4;text-align:center;margin-bottom:15px;font-size:20px">🏢 إضافة عرض تشغيل</h2><input class="inp" id="jfCompany" placeholder="اسم المؤسسة *"><input class="inp" id="jfActivity" placeholder="ميدان النشاط *"><input class="inp" id="jfAddress" placeholder="العنوان *"><input class="inp" id="jfTax" placeholder="السجل الجبائي *"><input class="inp" id="jfPhone" placeholder="رقم الواتساب *"><input class="inp" id="jfEmail" placeholder="البريد الإلكتروني *"><input class="inp" id="jfLogo" placeholder="رابط الشعار (اختياري)"><hr style="margin:10px 0;border-color:#334155"><input class="inp" id="jfTitle" placeholder="المسمى الوظيفي *"><select class="inp" id="jfLevel">'+opts+'</select><button class="sbt" onclick="ZAID.saveJob()" style="background:#06b6d4;border-color:#fff">💾 حفظ</button><button onclick="document.getElementById(\'jf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button></div>';
-  document.body.appendChild(m);
-};
-
-Z.saveJob=function(){
-  var c=document.getElementById('jfCompany'),act=document.getElementById('jfActivity'),addr=document.getElementById('jfAddress');
-  var tax=document.getElementById('jfTax'),phone=document.getElementById('jfPhone'),email=document.getElementById('jfEmail');
-  var t=document.getElementById('jfTitle'),l=document.getElementById('jfLevel').value,logo=document.getElementById('jfLogo').value.trim();
-  [c,act,addr,tax,phone,email,t].forEach(function(el){el.classList.remove('inp-err');});
-  if(!c.value.trim()||!act.value.trim()||!addr.value.trim()||!tax.value.trim()||!phone.value.trim()||!email.value.trim()||!t.value.trim()){alert('املأ الحقول (*)');[c,act,addr,tax,phone,email,t].forEach(function(el){if(!el.value.trim())el.classList.add('inp-err');});return;}
-  Z.jobs.unshift({company:c.value.trim(),activity:act.value.trim(),address:addr.value.trim(),tax:tax.value.trim(),phone:phone.value.trim(),email:email.value.trim(),logo:logo||'',title:t.value.trim(),level:l});
-  Z.saveJobs();document.getElementById('jf').remove();alert('✅ تم الحفظ');Z.openJobs();
-};
-
-Z.showSeekerForm=function(type){
-  if(!Z.checkVisitor()) return;
-  var old=document.getElementById('sf');if(old)old.remove();
-  var m=document.createElement('div');m.id='sf';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
-  var opts=Z.LVL.map(function(l){return '<option value="'+l+'">'+l+'</option>';}).join('');
-  var title=type==='internship'?'📄 طلب تربص':(type==='job'?'💼 طلب شغل':'👤 إضافة سيرة');
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:650px;width:100%;border:4px solid #22c55e;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto"><h2 style="color:#22c55e;text-align:center;margin-bottom:15px;font-size:20px">'+title+'</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><input class="inp" id="sfName" placeholder="الاسم *"><input class="inp" id="sfSurname" placeholder="اللقب *"></div><input class="inp" id="sfSection" placeholder="القسم *"><input class="inp" id="sfSchool" placeholder="المدرسة *"><input class="inp" id="sfSpec" placeholder="الاختصاص *"><select class="inp" id="sfLevel">'+opts+'</select><input class="inp" id="sfPhone" placeholder="الواتساب *"><input class="inp" id="sfEmail" placeholder="البريد *"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><input class="inp" id="sfCity" placeholder="المدينة *"><input class="inp" id="sfCountry" placeholder="البلد *" value="تونس"></div><input class="inp" id="sfField" placeholder="الموضوع/المجال *"><div style="margin-bottom:10px;color:#fbbf24;font-weight:bold;font-size:14px;">📎 السيرة الذاتية (PDF أو صورة) *:</div><input type="file" id="sfCV" class="inp" accept=".pdf,image/*" style="padding:8px;height:auto;background:#0f172a;color:#fff;border:1px solid #334155;"><button class="sbt" onclick="ZAID.saveSeeker(\''+type+'\')" style="background:#22c55e;border-color:#fff;margin-top:15px;">💾 حفظ وإرسال</button><button onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button></div>';
-  document.body.appendChild(m);
-};
-
-Z.saveSeeker=function(type){
-  var name=document.getElementById('sfName'),surname=document.getElementById('sfSurname'),section=document.getElementById('sfSection');
-  var school=document.getElementById('sfSchool'),spec=document.getElementById('sfSpec'),level=document.getElementById('sfLevel').value;
-  var phone=document.getElementById('sfPhone'),email=document.getElementById('sfEmail'),city=document.getElementById('sfCity');
-  var country=document.getElementById('sfCountry'),field=document.getElementById('sfField'),cvFile=document.getElementById('sfCV').files[0];
-  var fields=[name,surname,section,school,spec,phone,email,city,country,field];
-  fields.forEach(function(el){el.classList.remove('inp-err');});
-  if(!name.value.trim()||!surname.value.trim()||!section.value.trim()||!school.value.trim()||!spec.value.trim()||!phone.value.trim()||!email.value.trim()||!city.value.trim()||!country.value.trim()||!field.value.trim()){alert('املأ الحقول (*)');fields.forEach(function(el){if(!el.value.trim())el.classList.add('inp-err');});return;}
-  if(!cvFile){alert('ارفق السيرة');return;}
-  var reader=new FileReader();
-  reader.onload=function(e){
-    Z.loadSeekers();
-    Z.seekers.unshift({type:type||'job',name:name.value.trim()+' '+surname.value.trim(),section:section.value.trim(),school:school.value.trim(),spec:spec.value.trim(),level:level,phone:phone.value.trim(),email:email.value.trim(),city:city.value.trim(),country:country.value.trim(),field:field.value.trim(),cv:e.target.result,cvName:cvFile.name,date:new Date().toLocaleDateString('ar-TN')});
-    Z.saveSeekers();document.getElementById('sf').remove();alert('✅ تم حفظ طلبك');
-  };
-  reader.readAsDataURL(cvFile);
 };
 Z.startMemory=function(){
   if(!Z.checkVisitor()) return;
