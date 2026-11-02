@@ -1316,6 +1316,84 @@ Z.addExam('prim6_exam',[
   {q:'ينتشر الضوء في:',o:['خطوط متعرجة','خطوط مستقيمة','دوائر'],a:'خطوط مستقيمة'},
   {q:'كيف نقول "أنا تكلمت" بالماضي المركب الفرنسي؟',o:['Je parle','Je parlerai','J ai parlé'],a:'J ai parlé'}
 ]);
+Z.adminLogin=function(){
+  var o=document.getElementById('admModal');if(o)o.remove();
+  var m=document.createElement('div');m.id='admModal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML='<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;"><div style="font-size:50px;margin-bottom:15px;">👑</div><h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2><input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" autocomplete="new-password" value="" style="text-align:center;font-size:20px;letter-spacing:5px;"><button type="button" onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button><button type="button" onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button></div>';
+  document.body.appendChild(m);
+  setTimeout(function(){ var el = document.getElementById('adminPwd'); if(el) el.value = ""; }, 50);
+};
+
+Z.showStats=function(){
+  var o=document.getElementById('statsModal');if(o)o.remove();
+  var m=document.createElement('div');m.id='statsModal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين من السحابة...</div>';
+  document.body.appendChild(m);
+
+  Z.fetchUsers().then(function(usersList) {
+      renderStats(usersList);
+  }).catch(function(err) {
+      alert('❌ فشل الاتصال بالسحابة: ' + err.message);
+      renderStats([]);
+  });
+
+  function renderStats(usersList) {
+    var todayStr = new Date().toLocaleDateString('ar-TN');
+    var todayUsers = usersList.filter(function(u){return u.date===todayStr;});
+    var subscribers = usersList.filter(function(u){return u.isSub===true;});
+    
+    var usersHtml = '';
+    if(usersList.length === 0) {
+      usersHtml = '<div style="color:#fbbf24;text-align:center;padding:20px;font-weight:bold;">📭 لا يوجد مسجلون بعد.</div>';
+    } else {
+      usersList.forEach(function(u,i){
+        var subBtn = u.isSub 
+          ? '<button onclick="ZAID.toggleSub('+i+')" style="width:100%; margin-top:10px; background:#dc2626; color:#fff; border:none; padding:6px; border-radius:8px; cursor:pointer; font-family:Cairo; font-weight:900; font-size:12px;">❌ إلغاء الاشتراك</button>'
+          : '<button onclick="ZAID.toggleSub('+i+')" style="width:100%; margin-top:10px; background:#22c55e; color:#fff; border:none; padding:6px; border-radius:8px; cursor:pointer; font-family:Cairo; font-weight:900; font-size:12px;">✅ تفعيل الاشتراك</button>';
+        
+        usersHtml += '<div style="background:#0f172a; padding:15px; border-radius:10px; margin-bottom:10px; border:1px solid #334155; font-size:14px; line-height:1.9; text-align:right;">'
+          + '<div style="color:#fbbf24; font-weight:900; font-size:16px; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:8px;">👤 ' + (i+1) + '. ' + (u.name||'—') + '</div>'
+          + '<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; color:#cbd5e1;">'
+          + '<div><strong>💼 المهنة:</strong> ' + (u.prof||'—') + '</div>'
+          + '<div><strong>🎯 الاختصاص:</strong> ' + (u.spec||'—') + '</div>'
+          + '<div><strong>📧 الإيميل:</strong> ' + (u.email||'—') + '</div>'
+          + '<div><strong>📱 الواتساب:</strong> ' + (u.phone||'—') + '</div>'
+          + '<div><strong>🌍 البلد:</strong> ' + (u.country||'—') + '</div>'
+          + '<div><strong>🏙️ المدينة:</strong> ' + (u.city||'—') + '</div>'
+          + '</div>'
+          + '<div style="color:#94a3b8; font-size:12px; margin-top:8px; border-top:1px dashed #334155; padding-top:5px;">🏷️ التصنيف: ' + (u.cat||'—') + ' | 📅 التسجيل: ' + (u.date||'—') + '</div>'
+          + subBtn
+          + '</div>';
+      });
+    }
+
+    document.getElementById('statsModal').remove();
+    var m2=document.createElement('div');m2.id='statsModal';
+    m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:900px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:95vh;display:flex;flex-direction:column;">'
+      +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة (حقيقية)</h2>'
+      +'<div style="font-size:13px;color:#22c55e;margin-bottom:15px;font-weight:bold;">'
+      +'✅ متصل بقاعدة البيانات السحابية - إجمالي المسجلين: ' + usersList.length
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
+        +'<div style="display:flex; gap:10px;">'
+        +'<div style="flex:1;background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
+        +'<div style="flex:1;background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div>'
+        +'<div style="flex:1;background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
+        +'</div>'
+      +'</div>'
+      +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين (من جميع الأجهزة):</div>'
+      +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:15px;text-align:right;margin-bottom:15px;">'+usersHtml+'</div>'
+      +'<div style="display:flex; gap:10px;">'
+      +'<button onclick="ZAID.clearAllUsers()" style="flex:1;padding:12px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;">🗑️ تصفير قاعدة البيانات</button>'
+      +'<button onclick="document.getElementById(\'statsModal\').remove();" style="flex:1;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;">إغلاق</button>'
+      +'</div>'
+      +'</div>';
+    document.body.appendChild(m2);
+  }
+};
 
 window.addEventListener('load',function(){
   Z.updateUI();
