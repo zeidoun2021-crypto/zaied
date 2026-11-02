@@ -55,7 +55,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .secs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;width:100%}
 @media(max-width:900px){.secs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.secs{grid-template-columns:minmax(0,1fr)}}
-.card{border-radius:15px;padding:20px;display:flex;flex-direction:column;height:100%;min-width:0;overflow-wrap:break-word;word-break:break-word}
+.card{border-radius:15px;padding:20px;display:flex;flex-direction:column;height:100%;min-width:0;overflow-wrap:break-word;word-break:break-word;min-height:180px}
 .c-edu{background:linear-gradient(135deg,#14532d,#166534);border:3px solid #22c55e}
 .c-res{background:linear-gradient(135deg,#1e3a8a,#1e40af);border:3px solid #3b82f6}
 .c-ai{background:linear-gradient(135deg,#4c1d95,#6d28d9);border:3px solid #fbbf24}
@@ -182,7 +182,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <button onclick="ZAID.showPage('pageWelcome')">🔑 سجّل</button>
 </div>
 
-<!-- ✅ FormSubmit: iframe مخفي لاستقبال إرسال البريد بدون إعادة تحميل -->
 <iframe name="hidden_email_iframe" style="display:none;"></iframe>
 
 <div id="main">
@@ -239,6 +238,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <li onclick="ZAID.openCat('primary')">🎒 الابتدائي (السنة 3-6)</li>
 <li onclick="ZAID.openCat('middle')">📘 الإعدادي</li>
 <li onclick="ZAID.openCat('high')">🎓 الثانوي</li>
+<li onclick="ZAID.openCat('univ')">🏛️ الجامعي</li>
 </ul></div>
 <div class="card c-res"><div class="ci">🔬</div><div class="ct">البحث العلمي</div><ul>
 <li onclick="ZAID.openCat('lectures')">🎤 المحاضرات</li>
@@ -287,16 +287,16 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
-/* Firebase */
+/* ✅ إعدادات Firebase الجديدة (zaied-v2) */
 var firebaseConfig = {
-  apiKey: "AIzaSyA8LK52iXBPZFbqHnXyaAsldgqcjz7Bj4o",
-  authDomain: "zaied-platform.firebaseapp.com",
-  projectId: "zaied-platform",
-  storageBucket: "zaied-platform.firebasestorage.app",
-  messagingSenderId: "703013673948",
-  appId: "1:703013673948:web:585875a9a69312cfe48d19",
-  measurementId: "G-8CSEE1FY32"
+  apiKey: "AIzaSyAoeT0z0Z3CGg43XV8PljirV6ZAClzzRAA",
+  authDomain: "zaied-v2.firebaseapp.com",
+  projectId: "zaied-v2",
+  storageBucket: "zaied-v2.firebasestorage.app",
+  messagingSenderId: "370541125225",
+  appId: "1:370541125225:web:8314e299d3e83514354cf8"
 };
+
 var db = null;
 try {
   if (typeof firebase !== 'undefined') {
@@ -424,7 +424,6 @@ Z.register=function(){
       console.warn('⚠️ Firebase غير متصل (db = null)');
   }
   
-  /* ✅ FormSubmit - مجاني 100% بدون بطاقة وبدون مفتاح */
   try {
     var form = document.createElement('form');
     form.method = 'POST';
@@ -448,9 +447,7 @@ Z.register=function(){
     form.submit();
     document.body.removeChild(form);
     console.log('✅ FormSubmit: تم إرسال الإيميل');
-  } catch(err) {
-    console.error('FormSubmit error:', err);
-  }
+  } catch(err) { console.error('FormSubmit error:', err); }
   
   Z.visitorAttempts=0;
   document.getElementById('un').textContent=n;
@@ -470,7 +467,6 @@ Z.checkAdmin=function(){
   else{ alert('كلمة المرور خاطئة'); }
 };
 
-/* ✅ إصلاح: تصفير محاولات الزائر عند الخروج */
 Z.logout=function(){
   Z.user=null;Z.admin=false;Z.stopSpeak();
   Z.visitorAttempts=0;
@@ -479,8 +475,6 @@ Z.logout=function(){
 };
 
 Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
-
-/* ✅ إصلاح: speechSynthesis أولاً، Google TTS احتياطياً */
 Z.speak=function(t,l){
   if(!t)return;Z.stopSpeak();
   if('speechSynthesis' in window){
@@ -554,7 +548,7 @@ Z.showStats=function(){
         +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
       +'</div>'
       +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 القائمة:</div>'
-      +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:250px;">'+usersHtml+'</div>'
+      +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:50vh;">'+usersHtml+'</div>'
       +'<button onclick="ZAID.clearAllUsers()" style="width:100%;padding:12px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;margin-bottom:10px;">🗑️ تصفير قائمة المسجلين</button>'
       +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button>'
       +'</div>';
@@ -601,7 +595,6 @@ Z.wa=function(){
   window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
 };
 
-/* ✅ إصلاح: أسماء عربية للأقسام الفارغة */
 Z.openCat=function(cat){
   if(!Z.checkVisitor()) return;
   var ks=Object.keys(Z.lessons).filter(function(k){return Z.lessons[k].meta.cat===cat;});
@@ -898,6 +891,7 @@ Z.showCrossMessage=function(text,type){
   fb.innerHTML=text;fb.className='feedback '+type;
   setTimeout(function(){if(fb.innerHTML===text)fb.innerHTML='';},3000);
 };
+
 var sections={1:[],2:[],3:[],4:[]};
 var techData=[
   {ar:"الحاسوب",en:"Computer",fr:"Ordinateur",ko:"컴퓨터",def:"جهاز إلكتروني يستقبل البيانات ويعالجها"},
@@ -963,7 +957,6 @@ Z.showDictionary=function(){
   c.innerHTML='<div class="slide" style="background:#1e293b;padding:0;"><div style="background:#eab308;color:#1e293b;padding:15px;text-align:center;border-radius:15px 15px 0 0;"><h2 style="margin:0;">📖 المنجد الرباعي - 4000 مصطلح</h2><p style="margin:5px 0 0 0;font-size:14px;">نطق عبر المتصفح | ترجمة 4 لغات</p></div><div style="padding:20px;"><div style="display:flex;gap:5px;justify-content:center;margin-bottom:15px;flex-wrap:wrap;"><button id="dictBtn1" class="nbtn nn" onclick="ZAID.switchDictSection(1)">📚 تكنولوجيا</button><button id="dictBtn2" class="nbtn np" onclick="ZAID.switchDictSection(2)">💻 برمجة</button><button id="dictBtn3" class="nbtn np" onclick="ZAID.switchDictSection(3)">🌐 شبكات</button><button id="dictBtn4" class="nbtn np" onclick="ZAID.switchDictSection(4)">🤖 AI</button></div><div class="dict-box"><input type="text" id="dictSearchInput" class="dict-select" placeholder="🔍 ابحث..." oninput="ZAID.searchDictTerms()"><select id="dictTermSelect" class="dict-select" size="5" onchange="ZAID.selectDictTerm()" style="height:150px;"></select><div id="dictTermDisplay" style="margin-top:20px;"></div><div style="display:flex;gap:10px;justify-content:center;margin-top:15px;"><button class="nbtn np" onclick="ZAID.prevDictTerm()">▶ السابق</button><button class="nbtn nn" onclick="ZAID.nextDictTerm()">التالي ◀</button></div><div id="dictCounter" style="text-align:center;margin-top:10px;color:#94a3b8;font-size:13px;"></div></div></div><div class="nav" style="margin-top:10px;margin-bottom:20px;"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
   Z.showPage('pageLesson');Z.switchDictSection(1);
 };
-/* ✅ إصلاح: تحديث ألوان الأزرار عند التبديل */
 Z.switchDictSection=function(s){
   dictCurrentSection=s;dictCurrentTerms=sections[s];
   dictFilteredList=dictCurrentTerms.map(function(_,i){return i;});dictCurrentIndex=0;
@@ -1043,7 +1036,6 @@ function renderCur(){
 Z.prev=function(){if(Z.cur.idx>0){Z.cur.idx--;renderCur();}};
 Z.next=function(){var L=Z.lessons[Z.cur.key];if(Z.cur.idx<L.slides.length-1){Z.cur.idx++;renderCur();}};
 
-/* ✅ إصلاح: تتبع الأسئلة المجابة لمنع احتساب الدرجة مرتين */
 Z.startExam=function(k){var q=Z.exams[k];if(!q){alert('لا اختبار');return;}Z.exam={key:k,idx:0,score:0,qs:q,answered:[]};renderExam();};
 Z.prevExam=function(){if(Z.exam.idx>0){Z.exam.idx--;renderExam();}};
 Z.nextExam=function(){if(Z.exam.idx<Z.exam.qs.length){Z.exam.idx++;renderExam();}};
@@ -1073,7 +1065,6 @@ function renderExam(){
   c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div><div class="stxt" style="font-size:16px;font-weight:900">'+q.q+'</div>'+op+ansNote+nav+'</div>';
 }
 
-/* ✅ إصلاح: منع احتساب الدرجة مرتين */
 Z.ans=function(ch){
   var q=Z.exam.qs[Z.exam.idx];
   if(!Z.exam.answered) Z.exam.answered=[];
@@ -1239,6 +1230,20 @@ Z.addLesson('prim6',{cat:'primary',icon:'📕',name:'السنة السادسة �
   {n:'الإيقاظ العلمي',t:'💡 انتشار الضوء',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Light_dispersion_conceptual_waves350px.gif/350px-Light_dispersion_conceptual_waves350px.gif',x:'ينتشر الضوء في <strong>خطوط مستقيمة</strong> في وسط متجانس.<br>يمكن أن ينعكس أو ينكسر.',s:['ينتشر الضوء في خطوط مستقيمة في وسط متجانس','La lumière se propage en ligne droite dans un milieu homogène','Light travels in straight lines in a homogeneous medium'],v:'https://www.youtube.com/embed/yY3Y4Y5Y6Y7'},
   {n:'الفرنسية',t:'🇫🇷 Le passé composé',x:'الماضي المركب (Le passé composé) يُستخدم للتعبير عن حدث وقع وانتهى في الماضي.<br>يتكون من فعل مساعد (avoir/être) + اسم المفعول.',s:['الماضي المركب يتكون من فعل مساعد واسم المفعول','Le passé composé se compose d un auxiliaire et d un participe passé','The past tense consists of an auxiliary verb and a past participle'],v:'https://www.youtube.com/embed/Y3Y4Y5Y6Y7Y'},
   {n:'الاختبار',e:'prim6_exam'}
+]);
+
+/* دروس الأقسام الفارغة (الإعدادي، الثانوي، الجامعي) */
+Z.addLesson('mid_math',{cat:'middle',icon:'📐',name:'الرياضيات: المعادلات',desc:'درس تفاعلي + اختبار'},[
+  {n:'1/2',t:'المعادلات من الدرجة الأولى',x:'المعادلة هي متساوية تتضمن مجهولاً. مثال: 2س + 3 = 7. لحلها، ننقل الأعداد (7-3=4) ثم نقسم على معامل س (4÷2=2). إذن س = 2.',s:['المعادلة هي متساوية تتضمن مجهولا','Une équation est une égalité','An equation is an equality']},
+  {n:'2/2',t:'حل المعادلة',x:'الخطوات: 1. عزل المجهول في طرف. 2. تبسيط الطرفين. 3. إيجاد القيمة النهائية.'}
+]);
+Z.addLesson('high_physics',{cat:'high',icon:'⚛️',name:'الفيزياء: الحركة',desc:'السرعة والتسارع'},[
+  {n:'1/2',t:'مفهوم السرعة',x:'السرعة هي المسافة المقطوعة خلال وحدة الزمن. قانونها: V = d / t (السرعة = المسافة ÷ الزمن).',s:['السرعة هي المسافة المقطوعة خلال وحدة الزمن','La vitesse est la distance divisée par le temps','Speed is distance divided by time']},
+  {n:'2/2',t:'أنواع الحركة',x:'حركة منتظمة (سرعة ثابتة)، حركة متسارعة (السرعة تزيد)، حركة متباطئة (السرعة تنقص).'}
+]);
+Z.addLesson('univ_algo',{cat:'univ',icon:'💻',name:'الخوارزميات وهياكل البيانات',desc:'مقدمة في علوم الحاسوب'},[
+  {n:'1/2',t:'ما هي الخوارزمية؟',x:'الخوارزمية هي سلسلة من الخطوات المنطقية المحددة لحل مشكلة أو إنجاز مهمة. مثال: خوارزمية تحضير القهوة.',s:['الخوارزمية هي سلسلة من الخطوات المنطقية','Un algorithme est une suite d étapes logiques','An algorithm is a sequence of logical steps']},
+  {n:'2/2',t:'المتغيرات وأنواع البيانات',x:'المتغير هو مكان في الذاكرة لتخزين البيانات. أنواعه: أعداد صحيحة (Int)، نصوص (String)، أعداد عشرية (Float).'}
 ]);
 
 /* ===== الاختبارات ===== */
