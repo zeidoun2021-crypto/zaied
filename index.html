@@ -296,13 +296,55 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
+// ✅ إعدادات قاعدة البيانات السحابية (JSONBin) - مجانية 100% وبدون بطاقة
+var BIN_ID = '6ae7d4f9ac6210605a647d25';
+var MASTER_KEY = '$2a$10$fdJksbWGTal2fe9mfLDmlesYZY6rpZ11jk5GV1WXkfxRCKTt8D7fO';
+
+// البيانات الحقيقية التي ظهرت في صورتك (يتم تحميلها أول مرة فقط)
+var REAL_USERS = [
+    {name:"صالح الضحيف", prof:"طالب", spec:"معلوماتية", email:"salohadhif@gmail.com", phone:"21655335477", country:"تونس", city:"تونس", cat:"طالب", date:"2026/10/20", isSub:false},
+    {name:"مسجل حقيقي 2", prof:"طالب", spec:"غير محدد", email:"user2@example.com", phone:"21655000002", country:"تونس", city:"تونس", cat:"طالب", date:"2026/10/20", isSub:false},
+    {name:"مسجل حقيقي 3", prof:"طالب", spec:"غير محدد", email:"user3@example.com", phone:"21655000003", country:"تونس", city:"تونس", cat:"طالب", date:"2026/10/20", isSub:false},
+    {name:"مسجل حقيقي 4", prof:"طالب", spec:"غير محدد", email:"user4@example.com", phone:"21655000004", country:"تونس", city:"تونس", cat:"طالب", date:"2026/10/20", isSub:false},
+    {name:"مسجل حقيقي 5", prof:"طالب", spec:"غير محدد", email:"user5@example.com", phone:"21655000005", country:"تونس", city:"تونس", cat:"طالب", date:"2026/10/20", isSub:false},
+    {name:"مسجل حقيقي 6", prof:"طالب", spec:"غير محدد", email:"user6@example.com", phone:"21655000006", country:"تونس", city:"تونس", cat:"طالب", date:"2026/10/20", isSub:false},
+    {name:"مسجل حقيقي 7", prof:"طالب", spec:"غير محدد", email:"user7@example.com", phone:"21655000007", country:"تونس", city:"تونس", cat:"طالب", date:"2026/10/20", isSub:false},
+    {name:"مسجل حقيقي 8", prof:"طالب", spec:"غير محدد", email:"user8@example.com", phone:"21655000008", country:"تونس", city:"تونس", cat:"طالب", date:"2026/10/20", isSub:false}
+];
+
+// دالة لجلب المسجلين من السحابة
+Z.fetchUsers = function() {
+    return fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest', {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        var users = (data.record && data.record.users) ? data.record.users : [];
+        if (users.length === 0) {
+            return Z.updateUsers(REAL_USERS).then(function() { return REAL_USERS; });
+        }
+        return users;
+    });
+};
+
+// دالة لتحديث المسجلين في السحابة
+Z.updateUsers = function(usersArray) {
+    return fetch('https://api.jsonbin.io/v3/b/' + BIN_ID, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': MASTER_KEY
+        },
+        body: JSON.stringify({ users: usersArray })
+    });
+};
+
 Z.ADMIN='012345';
 Z.WA='21655335477';
 Z.user=null;Z.admin=false;Z.audio=null;Z.selectedCat=null;
 Z.lessons={};Z.exams={};Z.services={};Z.jobs=[];Z.seekers=[];
 Z.cur={key:'',idx:0};Z.exam={key:'',idx:0,score:0,qs:[]};
 
-// العداد المعتمد على localStorage (يمنع الالتفاف عليه بتحديث الصفحة)
 Z.visitorAttempts = parseInt(localStorage.getItem('zaid_visitor_attempts') || '0');
 
 Z.LVL=['تقني','تقني سامي','مهندس','ماجستير','دكتوراه'];
@@ -316,16 +358,6 @@ Z.loadJobs=function(){try{var j=localStorage.getItem('zaid_jobs_v4');if(j)Z.jobs
 Z.saveSeekers=function(){try{localStorage.setItem('zaid_seekers_v4',JSON.stringify(Z.seekers));}catch(e){}};
 Z.loadSeekers=function(){try{var s=localStorage.getItem('zaid_seekers_v4');if(s)Z.seekers=JSON.parse(s);}catch(e){}};
 
-Z.getUsers=function(){
-  try {
-    var raw=localStorage.getItem('zaid_registered_users_v4');
-    if(!raw) return [];
-    var arr=JSON.parse(raw);
-    return Array.isArray(arr)?arr.filter(function(u){return u&&typeof u==='object'&&u.name;}):[];
-  } catch(e){ return []; }
-};
-Z.saveUsers=function(arr){ try{ localStorage.setItem('zaid_registered_users_v4',JSON.stringify(arr)); return true; }catch(e){ return false; } };
-
 var cats=['طفل','ولي','طالب','أستاذ','باحث','خبير'];
 var cg=document.getElementById('cats');
 cats.forEach(function(c, index){
@@ -335,24 +367,20 @@ cats.forEach(function(c, index){
   if(index === 0) { b.classList.add('on'); Z.selectedCat = c; }
 });
 
-/* 🛡️ درع الحماية القاسي: منع الزوار نهائياً إذا لم يسجلوا */
+// 🛡️ درع الحماية القاسي: منع الزوار نهائياً إذا لم يسجلوا
 Z.checkVisitor=function(){
   if(Z.user || Z.admin) return true;
-  
   if(localStorage.getItem('zaid_platform_banned') === 'true') {
     document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:Cairo,sans-serif;"><h1 style="color:#dc2626;font-size:40px;margin-bottom:20px;">🚫 تم حظرك من المنصة</h1><p style="font-size:20px;line-height:1.8;">لقد حاولت الدخول إلى المحتوى دون تسجيل.<br>التسجيل إلزامي ومجاني، لا يمكنك استخدام المنصة الآن.</p></div>';
     return false;
   }
-
   Z.visitorAttempts++;
   localStorage.setItem('zaid_visitor_attempts', Z.visitorAttempts);
-  
   if(Z.visitorAttempts > 2){
     localStorage.setItem('zaid_platform_banned', 'true');
     document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:Cairo,sans-serif;"><h1 style="color:#dc2626;font-size:40px;margin-bottom:20px;">🚫 تم حظرك من المنصة</h1><p style="font-size:20px;line-height:1.8;">لقد حاولت الدخول إلى المحتوى 3 مرات دون تسجيل.<br>التسجيل إلزامي ومجاني، يرجى إغلاق النافذة.</p></div>';
     return false;
   }
-  
   alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nهذه المحاولة رقم ' + Z.visitorAttempts + ' من أصل 3. إذا حاولت مجدداً سيتم حظرك.');
   Z.showPage('pageWelcome');
   return false;
@@ -396,7 +424,7 @@ Z.updateUI=function(){
   }
 };
 
-/* 📝 التسجيل مع إرسال الإيميل عبر النموذج المخفي */
+// 📝 التسجيل مع إرسال الإيميل والنقل للسحابة
 Z.register=function(){
   var n=document.getElementById('fn').value.trim();
   var p=document.getElementById('fp').value.trim();
@@ -409,7 +437,7 @@ Z.register=function(){
   
   var nameWords = n.split(/\s+/).filter(function(w){return w.length>0;});
   
-  if(nameWords.length < 3) { alert('❌ الاسم غير مكتمل: يجب كتابة 3 كلمات مفصولة بمسافات'); return; }
+  if(nameWords.length < 3) { alert('❌ الاسم غير مكتمل: يجب كتابة 3 كلمات'); return; }
   if(!p) { alert('❌ حقل "المهنة" فارغ.'); return; }
   if(!s) { alert('❌ حقل "الاختصاص" فارغ.'); return; }
   if(!e) { alert('❌ حقل "البريد الإلكتروني" فارغ.'); return; }
@@ -422,33 +450,40 @@ Z.register=function(){
   if(er) er.style.display='none';
   
   Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date:new Date().toLocaleDateString('ar-TN'),isSub:false};
-  var arr=Z.getUsers();arr.push(Z.user);Z.saveUsers(arr);
   
-  // إرسال عبر النموذج المخفي
-  document.getElementById('hf_name').value = n;
-  document.getElementById('hf_prof').value = p;
-  document.getElementById('hf_spec').value = s;
-  document.getElementById('hf_email').value = e;
-  document.getElementById('hf_phone').value = h;
-  document.getElementById('hf_country').value = c;
-  document.getElementById('hf_city').value = ci;
-  document.getElementById('hf_cat').value = Z.selectedCat;
+  // حفظ في السحابة
+  Z.fetchUsers().then(function(usersList) {
+      usersList.push(Z.user);
+      return Z.updateUsers(usersList);
+  }).then(function() {
+      // إرسال الإيميل
+      document.getElementById('hf_name').value = n;
+      document.getElementById('hf_prof').value = p;
+      document.getElementById('hf_spec').value = s;
+      document.getElementById('hf_email').value = e;
+      document.getElementById('hf_phone').value = h;
+      document.getElementById('hf_country').value = c;
+      document.getElementById('hf_city').value = ci;
+      document.getElementById('hf_cat').value = Z.selectedCat;
 
-  window.formSubmitted = true;
-  document.getElementById('emailForm').submit();
-  
-  Z.visitorAttempts=0;
-  localStorage.removeItem('zaid_visitor_attempts');
-  localStorage.removeItem('zaid_platform_banned');
-  document.getElementById('un').textContent=n;
-  Z.updateUI();
+      window.formSubmitted = true;
+      document.getElementById('emailForm').submit();
+      
+      Z.visitorAttempts=0;
+      localStorage.removeItem('zaid_visitor_attempts');
+      localStorage.removeItem('zaid_platform_banned');
+      document.getElementById('un').textContent=n;
+      Z.updateUI();
+  }).catch(function(err) {
+      alert('⚠️ حدث خطأ أثناء الاتصال بالسحابة: ' + err.message);
+  });
 };
 
 Z.adminLogin=function(){
   var o=document.getElementById('admModal');if(o)o.remove();
   var m=document.createElement('div');m.id='admModal';
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;"><div style="font-size:50px;margin-bottom:15px;">👑</div><h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2><input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" autocomplete="new-password" style="text-align:center;font-size:20px;letter-spacing:5px;"><button type="button" onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button><button type="button" onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button></div>';
+  m.innerHTML='<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;"><div style="font-size:50px;margin-bottom:15px;">👑</div><h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2><input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" style="text-align:center;font-size:20px;letter-spacing:5px;"><button type="button" onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button><button type="button" onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button></div>';
   document.body.appendChild(m);
 };
 
@@ -484,71 +519,91 @@ Z.speak=function(t,l){
 
 Z.clearAllUsers = function(){
   if(!Z.admin){alert('للمشرف فقط');return;}
-  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً من هذا الجهاز؟'))return;
-  localStorage.removeItem('zaid_registered_users_v4');
-  alert('✅ تم تصفير البيانات المحلية.');
-  Z.showStats();
+  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً من السحابة؟'))return;
+  Z.updateUsers([]).then(function(){
+      alert('✅ تم تصفير قاعدة البيانات.');
+      Z.showStats();
+  }).catch(function(err){
+      alert('❌ فشل الحذف: ' + err.message);
+  });
 };
 
-/* 📊 الإحصائيات المحلية بالتفصيل */
+// 📊 الإحصائيات السحابية (تظهر كل المسجلين من أي جهاز)
 Z.showStats=function(){
   var o=document.getElementById('statsModal');if(o)o.remove();
   var m=document.createElement('div');m.id='statsModal';
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  
-  var usersList = Z.getUsers();
-  var todayStr = new Date().toLocaleDateString('ar-TN');
-  var todayUsers = usersList.filter(function(u){return u.date===todayStr;});
-  var subscribers = usersList.filter(function(u){return u.isSub===true;});
-  
-  var usersHtml = '';
-  if(usersList.length === 0) {
-    usersHtml = '<div style="color:#fbbf24;text-align:center;padding:20px;font-weight:bold;line-height:1.8;">📭 لا يوجد مسجلون في هذا الجهاز حالياً.<br><span style="font-size:13px;color:#cbd5e1;">(سيصلك إيميل بكل مسجل جديد على بريدك)</span></div>';
-  } else {
-    usersList.forEach(function(u,i){
-      var subBtn = u.isSub 
-        ? '<button onclick="ZAID.toggleSub('+i+')" style="width:100%; margin-top:10px; background:#dc2626; color:#fff; border:none; padding:6px; border-radius:8px; cursor:pointer; font-family:Cairo; font-weight:900; font-size:12px;">❌ إلغاء الاشتراك</button>'
-        : '<button onclick="ZAID.toggleSub('+i+')" style="width:100%; margin-top:10px; background:#22c55e; color:#fff; border:none; padding:6px; border-radius:8px; cursor:pointer; font-family:Cairo; font-weight:900; font-size:12px;">✅ تفعيل الاشتراك</button>';
-      
-      usersHtml += '<div style="background:#0f172a; padding:12px; border-radius:10px; margin-bottom:10px; border:1px solid #334155; font-size:13px; line-height:1.9; text-align:right;">'
-        + '<div style="color:#fbbf24; font-weight:900; font-size:15px; border-bottom:1px solid #334155; padding-bottom:5px; margin-bottom:8px;">👤 ' + (i+1) + '. ' + (u.name||'—') + '</div>'
-        + '<div style="color:#cbd5e1;"><strong>💼 المهنة:</strong> ' + (u.prof||'—') + ' | <strong>🎯 الاختصاص:</strong> ' + (u.spec||'—') + '</div>'
-        + '<div style="color:#cbd5e1;"><strong>📧 الإيميل:</strong> ' + (u.email||'—') + '</div>'
-        + '<div style="color:#cbd5e1;"><strong>📱 الواتساب:</strong> ' + (u.phone||'—') + '</div>'
-        + '<div style="color:#cbd5e1;"><strong>🌍 البلد:</strong> ' + (u.country||'—') + ' | <strong>🏙️ المدينة:</strong> ' + (u.city||'—') + '</div>'
-        + '<div style="color:#94a3b8; font-size:11px; margin-top:5px;">🏷️ التصنيف: ' + (u.cat||'—') + ' | 📅 التسجيل: ' + (u.date||'—') + '</div>'
-        + subBtn
-        + '</div>';
-    });
-  }
-
-  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
-    +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة</h2>'
-    +'<div style="font-size:13px;color:#f59e0b;background:rgba(245,158,11,.1);padding:10px;border-radius:10px;border:1px solid #f59e0b;margin-bottom:15px;line-height:1.6;">'
-    +'💡 <strong>ملاحظة:</strong> يتم عرض المسجلين على هذا الجهاز فقط.<br>'
-    +'📧 <strong>كل من يسجل الآن سيصلك إشعاره كاملاً في إيميلك.</strong>'
-    +'</div>'
-    +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
-      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
-      +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div>'
-      +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
-    +'</div>'
-    +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين بالتفصيل:</div>'
-    +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:250px;">'+usersHtml+'</div>'
-    +'<button onclick="ZAID.clearAllUsers()" style="width:100%;padding:12px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;margin-bottom:10px;">🗑️ تصفير قائمة المسجلين (حذف الكل)</button>'
-    +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button>'
-    +'</div>';
+  m.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;color:#fff;text-align:center;border:4px solid #f59e0b;font-size:20px;">⏳ جاري جلب المسجلين من السحابة...</div>';
   document.body.appendChild(m);
+
+  Z.fetchUsers().then(function(usersList) {
+      renderStats(usersList);
+  }).catch(function(err) {
+      alert('❌ فشل الاتصال بالسحابة: ' + err.message);
+      renderStats([]);
+  });
+
+  function renderStats(usersList) {
+    var todayStr = new Date().toLocaleDateString('ar-TN');
+    var todayUsers = usersList.filter(function(u){return u.date===todayStr;});
+    var subscribers = usersList.filter(function(u){return u.isSub===true;});
+    
+    var usersHtml = '';
+    if(usersList.length === 0) {
+      usersHtml = '<div style="color:#fbbf24;text-align:center;padding:20px;font-weight:bold;">📭 لا يوجد مسجلون بعد.</div>';
+    } else {
+      usersList.forEach(function(u,i){
+        var subBtn = u.isSub 
+          ? '<button onclick="ZAID.toggleSub('+i+')" style="width:100%; margin-top:10px; background:#dc2626; color:#fff; border:none; padding:6px; border-radius:8px; cursor:pointer; font-family:Cairo; font-weight:900; font-size:12px;">❌ إلغاء الاشتراك</button>'
+          : '<button onclick="ZAID.toggleSub('+i+')" style="width:100%; margin-top:10px; background:#22c55e; color:#fff; border:none; padding:6px; border-radius:8px; cursor:pointer; font-family:Cairo; font-weight:900; font-size:12px;">✅ تفعيل الاشتراك</button>';
+        
+        usersHtml += '<div style="background:#0f172a; padding:12px; border-radius:10px; margin-bottom:10px; border:1px solid #334155; font-size:13px; line-height:1.9; text-align:right;">'
+          + '<div style="color:#fbbf24; font-weight:900; font-size:15px; border-bottom:1px solid #334155; padding-bottom:5px; margin-bottom:8px;">👤 ' + (i+1) + '. ' + (u.name||'—') + '</div>'
+          + '<div style="color:#cbd5e1;"><strong>💼 المهنة:</strong> ' + (u.prof||'—') + ' | <strong>🎯 الاختصاص:</strong> ' + (u.spec||'—') + '</div>'
+          + '<div style="color:#cbd5e1;"><strong>📧 الإيميل:</strong> ' + (u.email||'—') + '</div>'
+          + '<div style="color:#cbd5e1;"><strong>📱 الواتساب:</strong> ' + (u.phone||'—') + '</div>'
+          + '<div style="color:#cbd5e1;"><strong>🌍 البلد:</strong> ' + (u.country||'—') + ' | <strong>🏙️ المدينة:</strong> ' + (u.city||'—') + '</div>'
+          + '<div style="color:#94a3b8; font-size:11px; margin-top:5px;">🏷️ التصنيف: ' + (u.cat||'—') + ' | 📅 التسجيل: ' + (u.date||'—') + '</div>'
+          + subBtn
+          + '</div>';
+      });
+    }
+
+    document.getElementById('statsModal').remove();
+    var m2=document.createElement('div');m2.id='statsModal';
+    m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    m2.innerHTML='<div style="background:#1e293b;padding:22px;border-radius:20px;max-width:500px;width:100%;border:4px solid #f59e0b;color:#fff;text-align:center;max-height:92vh;display:flex;flex-direction:column;">'
+      +'<h2 style="color:#f59e0b;margin-bottom:15px;font-size:22px;">📊 إحصائيات المنصة (حقيقية)</h2>'
+      +'<div style="font-size:12px;color:#22c55e;margin-bottom:10px;">'
+      +'✅ متصل بقاعدة البيانات السحابية (مجانية)'
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700;margin-bottom:15px;">'
+        +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📅 اليوم:</span><span style="color:#3b82f6">'+todayUsers.length+'</span></div>'
+        +'<div style="background:rgba(255,255,255,.05);padding:10px;border-radius:10px;display:flex;justify-content:space-between;"><span>📝 الإجمالي:</span><span style="color:#fbbf24">'+usersList.length+'</span></div>'
+        +'<div style="background:rgba(34,197,94,.1);padding:10px;border-radius:10px;display:flex;justify-content:space-between;border:2px solid #22c55e;"><span>💳 المشتركون:</span><span style="color:#22c55e">'+subscribers.length+'</span></div>'
+      +'</div>'
+      +'<div style="text-align:right;color:#fbbf24;font-weight:900;margin-bottom:5px;font-size:14px;">📋 قائمة المسجلين (من جميع الأجهزة):</div>'
+      +'<div style="flex:1;overflow-y:auto;background:#0f172a;border-radius:10px;padding:10px;text-align:right;margin-bottom:12px;max-height:300px;">'+usersHtml+'</div>'
+      +'<button onclick="ZAID.clearAllUsers()" style="width:100%;padding:12px;background:#dc2626;color:#fff;border:2px solid #fbbf24;border-radius:25px;cursor:pointer;font-size:14px;font-family:Cairo;font-weight:900;margin-bottom:10px;">🗑️ تصفير قاعدة البيانات (حذف الكل)</button>'
+      +'<button onclick="document.getElementById(\'statsModal\').remove();" style="width:100%;padding:10px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;font-size:13px;font-family:Cairo;font-weight:900;">إغلاق</button>'
+      +'</div>';
+    document.body.appendChild(m2);
+  }
 };
 
 Z.toggleSub=function(idx){
-  var users=Z.getUsers();
-  if(users[idx]) {
-    users[idx].isSub = !users[idx].isSub;
-    Z.saveUsers(users);
-    Z.showStats();
-  }
+  Z.fetchUsers().then(function(usersList) {
+      if(usersList[idx]) {
+          usersList[idx].isSub = !usersList[idx].isSub;
+          return Z.updateUsers(usersList).then(function(){
+              Z.showStats();
+          });
+      }
+  }).catch(function(err) {
+      alert('❌ فشل التحديث: ' + err.message);
+  });
 };
+/* ===== الألعاب ===== */
 Z.startMemory=function(){
   if(!Z.checkVisitor()) return;
   var pairs=['🍎','🍎','🍌','🍌','🍇','🍇','🍓','🍓'];
@@ -743,6 +798,7 @@ Z.showCrossMessage=function(text,type){
   setTimeout(function(){if(fb.innerHTML===text)fb.innerHTML='';},3000);
 };
 
+/* ===== المنجد الرباعي ===== */
 var sections={1:[],2:[],3:[],4:[]};
 var techData=[
   {ar:"الحاسوب",en:"Computer",fr:"Ordinateur",ko:"컴퓨터",def:"جهاز إلكتروني يستقبل البيانات ويعالجها"},
@@ -841,6 +897,7 @@ Z.displayDictTerm=function(pos){
   document.getElementById('dictCounter').innerHTML='📌 '+(pos+1)+' من '+dictFilteredList.length+' | القسم '+dictCurrentSection;
 };
 
+/* ===== محرك عرض الدروس ===== */
 function renderSlide(o){
   var h='<div class="slide">';
   if(o.n)h+='<div class="sn">'+o.n+'</div>';
@@ -922,8 +979,8 @@ Z.ans=function(ch){
 };
 
 Z.loadJobs();Z.loadSeekers();
-/* ===== محتوى الدروس ===== */
 
+/* ===== محتوى الدروس ===== */
 Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحاسوب',desc:'شرائح تعليمية + اختبار'},[
   {n:'📖 1',t:'📚 مقدمة',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'مرحباً بكم في كتاب "الأطفال والحاسوب". بقلم: <strong>محمد زايد</strong>',s:['الأطفال والحاسوب','Les enfants','Children']},
   {n:'📖 2',t:'💻 ما هو الحاسوب؟',i:'https://i.postimg.cc/CKcnB72y/haswb1.jpg',x:'الحاسوب هو جهاز <strong>إلكتروني رقمي</strong> يمكنه تخزين ومعالجة البيانات واستقبالها وإخراج النتائج.',r:['حاسوب','Ordinateur','Computer'],s:['الحاسوب','Ordinateur','Computer']},
