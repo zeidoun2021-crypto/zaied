@@ -1436,5 +1436,57 @@ window.addEventListener('load',function(){
 });
 })();
 </script>
+<style>
+/* تصميم احترافي يملأ الشاشة ويجعل النصوص واضحة */
+#main { padding: 10px 15px 70px 15px !important; }
+#pageHome { height: 100%; display: flex; flex-direction: column; }
+.htitle { font-size: 22px !important; padding: 10px !important; margin-bottom: 10px !important; }
+
+/* جعل شبكة البطاقات تملأ الشاشة (3 أعمدة × 2 صفوف) */
+.secs { 
+    flex: 1; 
+    display: grid !important; 
+    grid-template-columns: repeat(3, 1fr) !important; 
+    grid-template-rows: repeat(2, 1fr) !important; 
+    gap: 15px !important; 
+    min-height: 82vh; /* يملأ أغلب الشاشة */
+}
+
+.card { 
+    padding: 20px !important; 
+    border-radius: 15px !important; 
+    display: flex !important; 
+    flex-direction: column !important; 
+}
+
+.ci { font-size: 45px !important; margin-bottom: 10px !important; }
+.ct { font-size: 20px !important; margin-bottom: 15px !important; font-weight: 900 !important; }
+
+.card ul { 
+    display: flex !important; 
+    flex-direction: column !important; 
+    gap: 10px !important; 
+    flex: 1 !important; 
+}
+
+/* جعل الأزرار داخل البطاقة تتمدد لتأخذ كامل المساحة */
+.card li { 
+    font-size: 15px !important; 
+    padding: 15px !important; 
+    border-radius: 10px !important; 
+    flex: 1 !important; 
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: flex-start !important; 
+    font-weight: 700 !important;
+    margin-bottom: 5px !important;
+}
+
+/* في حالة الشاشات الصغيرة (الهواتف)، تصبح عموداً واحداً */
+@media(max-width: 900px) { 
+    .secs { grid-template-columns: 1fr !important; grid-template-rows: auto !important; } 
+    .card li { flex: none !important; } 
+}
+</style>
 </body>
 </html>
