@@ -159,8 +159,10 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <div id="top">
 <span id="ti" style="font-size:22px;">🎭</span>
 <span id="tt">مرحباً — أنت زائر</span>
+<span id="statusBadge" style="display:none;padding:4px 12px;border-radius:15px;font-size:12px;font-weight:900;"></span>
 <button id="br" onclick="ZAID.showPage('pageWelcome')" style="background:#fbbf24;color:#1e293b;">🔑 سجّل</button>
 <button id="bstats" onclick="ZAID.showStats()" style="display:none;background:#06b6d4;color:#fff;">📊 الإحصائيات</button>
+<button id="bs" onclick="ZAID.showSub()" style="display:none;background:#22c55e;color:#fff;">💳 اشترك</button>
 <button id="bo" onclick="ZAID.logout()" style="background:#dc2626;color:#fff;">🚪 خروج</button>
 </div>
 
@@ -195,12 +197,11 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <div style="text-align:center;font-size:35px;margin-bottom:5px;">👋</div>
     <h2>🔑 التسجيل المجاني</h2>
     
-    <!-- إضافة required لمنع المتصفح من إرسال النموذج إذا كان الحقل فارغاً -->
     <input class="inp" id="fn" placeholder="👤 الاسم الكامل (كلمتين على الأقل) *" required>
     <input class="inp" id="fp" placeholder="💼 المهنة *" required>
     <input class="inp" id="fs" placeholder="🎯 الاختصاص *" required>
     <input class="inp" id="fe" type="email" placeholder="📧 البريد الإلكتروني *" required>
-    <input class="inp" id="fh" type="tel" placeholder="📱 رقم الواتساب *" required>
+    <input class="inp" id="fh" type="tel" placeholder="📱 رقم الواتساب (8 أرقام على الأقل) *" required pattern="[0-9]{8,15}" title="يرجى إدخال أرقام فقط (8 إلى 15 رقماً)">
     <input class="inp" id="fc" placeholder="🌍 بلد الإقامة *" value="تونس" required>
     <input class="inp" id="fci" placeholder="🏙️ المدينة *" required>
     
@@ -246,6 +247,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 </ul></div>
 </div>
 <div class="hbtns">
+<button class="btn bg" onclick="ZAID.showSub()">💳 اشترك</button>
 <button class="btn bgr" onclick="ZAID.logout()">🚪 خروج</button>
 </div>
 </div>
@@ -260,7 +262,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 
 </div>
 
-<!-- شريط التنقل السفلي (مخفي افتراضياً بـ style) -->
+<!-- شريط التنقل السفلي (مخفي افتراضياً وسيظهر فقط بعد التسجيل) -->
 <div id="bottomNav" style="display:none;">
   <button id="btnNavHome" class="bn-home" onclick="ZAID.goHome()">🏠 الأقسام</button>
   <button id="btnNavReg" class="bn-reg" onclick="ZAID.logout()">🔑 العودة للتسجيل</button>
@@ -271,7 +273,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 'use strict';
 var Z=window.ZAID={};
 
-/* ✅ إعدادات Firebase الجديدة (zaied-v2) */
+/* ✅ Firebase — zaied-v2 */
 var firebaseConfig = {
   apiKey: "AIzaSyAoeT0z0Z3CGg43XV8PljirV6ZAClzzRAA",
   authDomain: "zaied-v2.firebaseapp.com",
@@ -290,6 +292,16 @@ try {
 } catch(e) { console.warn("Firebase offline:", e); }
 
 Z.ADMIN='012345';
+Z.WA='21655335477';
+
+/* ✅ ثوابت الاشتراك (جديدة) */
+Z.TRIAL_DAYS = 3;
+Z.SUB_DAYS = 365;
+Z.SUB_PRICE_TN = 30;
+Z.SUB_PRICE_USD = 20;
+Z.TRIAL_MS = Z.TRIAL_DAYS * 24*60*60*1000;
+Z.SUB_MS = Z.SUB_DAYS * 24*60*60*1000;
+
 Z.user=null; Z.admin=false; Z.audio=null; Z.selectedCat=null;
 Z.lessons={}; Z.exams={};
 Z.cur={key:'',idx:0}; Z.exam={key:'',idx:0,score:0,qs:[],answered:[]};
@@ -298,7 +310,55 @@ Z.visitorAttempts=0;
 Z.addLesson=function(k,m,s){Z.lessons[k]={meta:m,slides:s};};
 Z.addExam=function(k,q){Z.exams[k]=q;};
 
-/* التصنيفات في صفحة التسجيل */
+/* ========== دوال الاشتراك (جديدة) ========== */
+Z.getTrialEnd = function(u){ if(!u||!u.trialStart) return 0; return u.trialStart + Z.TRIAL_MS; };
+Z.isSubActive = function(u){ if(!u) return false; if(u.isSub===true){ if(u.subExpiry && u.subExpiry>0) return Date.now()<u.subExpiry; return true; } return false; };
+Z.canAccess = function(){ if(Z.admin) return true; var u=Z.user; if(!u) return false; if(Z.isSubActive(u)) return true; if(u.trialStart && Date.now()<Z.getTrialEnd(u)) return true; return false; };
+Z.getAccessStatus = function(){
+  if(Z.admin) return {ok:true, type:'admin'};
+  var u=Z.user; if(!u) return {ok:false, type:'visitor'};
+  if(Z.isSubActive(u)) return {ok:true, type:'sub', expiry:u.subExpiry};
+  var end=Z.getTrialEnd(u);
+  if(end>Date.now()){ var ms=end-Date.now(); var d=Math.floor(ms/86400000); var h=Math.floor((ms%86400000)/3600000); return {ok:true, type:'trial', days:d, hours:h, end:end}; }
+  return {ok:false, type:'expired', end:end};
+};
+Z.updateStatusBadge = function(){
+  var el=document.getElementById('statusBadge'); if(!el) return;
+  if(Z.admin||!Z.user){ el.style.display='none'; return; }
+  var s=Z.getAccessStatus(); el.style.display='inline-block';
+  if(s.type==='sub'){ el.innerHTML='✅ مشترك'; el.style.background='#22c55e'; el.style.color='#fff'; }
+  else if(s.type==='trial'){ el.innerHTML='⏱️ تجريبي: '+s.days+'ي '+s.hours+'س'; el.style.background='#f59e0b'; el.style.color='#1e293b'; }
+  else { el.innerHTML='🔒 الاشتراك منتهي'; el.style.background='#dc2626'; el.style.color='#fff'; }
+};
+Z.requireSub = function(){
+  var old=document.getElementById('subModal'); if(old) old.remove();
+  var m=document.createElement('div'); m.id='subModal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  var s=Z.getAccessStatus();
+  var title=s.type==='expired'?'⏰ انتهت المدة التجريبية':'🔒 الاشتراك مطلوب';
+  var msg=s.type==='expired'?'لقد انتهت مدتك التجريبية ('+Z.TRIAL_DAYS+' أيام). للاستفادة من كل المحتوى، يرجى الاشتراك.':'هذه الميزة تتطلب اشتراكاً نشطاً.';
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:480px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
+    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
+    +'<h2 style="color:#fbbf24;text-align:center;margin-bottom:10px;font-size:20px">'+title+'</h2>'
+    +'<p style="text-align:center;line-height:1.8;font-size:14px;color:#cbd5e1;margin-bottom:15px">'+msg+'</p>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e">'
+    +'<div style="color:#22c55e;font-weight:900;font-size:15px">🇹🇳 محلي (تونس)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_TN+' دينار تونسي</div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17) أو حوالة في دقيقة</div>'
+    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
+    +'</div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6">'
+    +'<div style="color:#3b82f6;font-weight:900;font-size:15px">🌍 دولي</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_USD+' دولار / '+Z.SUB_PRICE_USD+' يورو</div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر Western Union أو MoneyGram</div>'
+    +'</div>'
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
+    +'<button onclick="document.getElementById(\'subModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+
+/* التصنيفات */
 var cats=['طفل','ولي','طالب','أستاذ','باحث','خبير'];
 var cg=document.getElementById('cats');
 cats.forEach(function(c, index){
@@ -314,32 +374,32 @@ Z.exitPlatform=function(){
   document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;font-family:Cairo;"><h1 style="color:#22c55e;font-size:40px;">👋 تم الخروج بنجاح</h1><button onclick="location.reload()" style="margin-top:20px;padding:12px 30px;background:#3b82f6;color:#fff;border:none;border-radius:25px;cursor:pointer;font-weight:bold;font-size:16px;">الدخول مجدداً</button></div>'; 
 };
 
-/* منع الزوار من الدخول */
+/* منع الزوار + فحص الاشتراك */
 Z.checkVisitor=function(){ 
-  if(Z.user||Z.admin) return true; 
-  Z.visitorAttempts++; 
-  if(Z.visitorAttempts>1){ 
-    document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;font-family:Cairo;"><h1 style="color:#dc2626;">🚫 تم طردك</h1><p>التسجيل إلزامي للدخول إلى المحتوى.</p><button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#3b82f6;color:#fff;border:none;border-radius:10px;cursor:pointer;">تحديث الصفحة</button></div>'; 
+  if(!Z.user && !Z.admin){ 
+    Z.visitorAttempts++; 
+    if(Z.visitorAttempts>1){ 
+      document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;font-family:Cairo;"><h1 style="color:#dc2626;">🚫 تم طردك</h1><p>التسجيل إلزامي للدخول إلى المحتوى.</p><button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#3b82f6;color:#fff;border:none;border-radius:10px;cursor:pointer;">تحديث الصفحة</button></div>'; 
+      return false; 
+    } 
+    alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nلديك محاولة واحدة فقط.'); 
+    Z.showPage('pageWelcome'); 
     return false; 
-  } 
-  alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nلديك محاولة واحدة فقط.'); 
-  Z.showPage('pageWelcome'); 
-  return false; 
+  }
+  if(!Z.canAccess()){ Z.requireSub(); return false; }
+  return true;
 };
 
-/* التنقل بين الصفحات وإخفاء/إظهار شريط التنقل */
+/* التنقل */
 Z.showPage=function(id){ 
   if(id!=='pageWelcome'&&!Z.user&&!Z.admin){ Z.checkVisitor(); return; } 
   document.querySelectorAll('#main > div[id^="page"]').forEach(function(p){p.classList.add('hide');}); 
   document.getElementById(id).classList.remove('hide'); 
   window.scrollTo(0,0); 
-  
   var nav = document.getElementById('bottomNav');
-  if(id === 'pageWelcome') {
-    nav.style.display = 'none'; // إخفاء الشريط في صفحة التسجيل
-  } else {
-    nav.style.display = 'flex'; // إظهاره في الصفحات الداخلية
-  }
+  if(id === 'pageWelcome') { nav.style.display = 'none'; }
+  else { nav.style.display = 'flex'; }
+  Z.updateStatusBadge();
 };
 
 Z.goHome=function(){Z.stopSpeak();Z.showPage(Z.user||Z.admin?'pageHome':'pageWelcome');};
@@ -347,14 +407,15 @@ Z.goHome=function(){Z.stopSpeak();Z.showPage(Z.user||Z.admin?'pageHome':'pageWel
 /* تحديث الشريط العلوي */
 Z.updateUI=function(){
   var b=document.getElementById('top'),ic=document.getElementById('ti'),tx=document.getElementById('tt');
-  var br=document.getElementById('br'),bo=document.getElementById('bo'),bstat=document.getElementById('bstats');
+  var br=document.getElementById('br'),bo=document.getElementById('bo'),bstat=document.getElementById('bstats'),bs=document.getElementById('bs');
   var y=document.getElementById('yellow');
-  if(Z.admin){ b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف'; br.style.display='none';bo.style.display='inline-block';y.style.display='none'; if(bstat) bstat.style.display='inline-block'; }
-  else if(Z.user){ b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name; br.style.display='none';bo.style.display='inline-block';y.style.display='none'; if(bstat) bstat.style.display='none'; }
-  else { b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر'; br.style.display='inline-block';bo.style.display='inline-block';y.style.display='flex'; if(bstat) bstat.style.display='none'; }
+  if(Z.admin){ b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف'; br.style.display='none';bo.style.display='inline-block';y.style.display='none'; if(bstat) bstat.style.display='inline-block'; if(bs) bs.style.display='none'; }
+  else if(Z.user){ b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name; br.style.display='none';bo.style.display='inline-block';y.style.display='none'; if(bstat) bstat.style.display='none'; if(bs) bs.style.display='inline-block'; }
+  else { b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر'; br.style.display='inline-block';bo.style.display='inline-block';y.style.display='flex'; if(bstat) bstat.style.display='none'; if(bs) bs.style.display='none'; }
+  Z.updateStatusBadge();
 };
 
-/* نافذة دخول المشرف (بدلاً من prompt) */
+/* دخول المشرف */
 Z.adminLogin=function(){
   var old=document.getElementById('admModal');if(old)old.remove();
   var m=document.createElement('div');m.id='admModal';
@@ -369,14 +430,16 @@ Z.checkAdmin=function(){
   else{ alert('كلمة المرور خاطئة'); }
 };
 
+/* تسجيل الخروج (مع مسح localStorage) */
 Z.logout=function(){ 
   Z.user=null;Z.admin=false;Z.stopSpeak(); 
   Z.visitorAttempts=0; 
+  localStorage.removeItem('zaid_current_user');
   Z.updateUI();
   Z.showPage('pageWelcome'); 
 };
 
-/* النطق الصوتي */
+/* النطق */
 Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
 Z.speak=function(t,l){ 
   if(!t)return;Z.stopSpeak(); 
@@ -388,16 +451,23 @@ Z.speak=function(t,l){
   } 
 };
 
-/* الإحصائيات وزر التحميل Excel */
+/* الإحصائيات (مع أزرار التفعيل) */
 Z.showStats=function(){
   if(!Z.admin) return;
+  if(!db){ alert('Firebase غير متصل.'); return; }
   var m=document.createElement('div'); m.id='statsModal';
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:20px;border-radius:15px;color:#fff;width:100%;max-width:600px;text-align:center;"><h2>⏳ جاري التحميل...</h2></div>';
+  m.innerHTML='<div style="background:#1e293b;padding:20px;border-radius:15px;color:#fff;width:100%;max-width:600px;text-align:center;"><h2>⏳ جاري تحميل البيانات من Firebase...</h2></div>';
   document.body.appendChild(m);
   
-  function getLocal(){ return JSON.parse(localStorage.getItem('zaid_local_users') || '[]'); }
-  if(db){ db.collection("users").get().then(function(qs){ var users=[]; qs.forEach(function(doc){ var u=doc.data(); u._id=doc.id; users.push(u); }); renderStats(users); }).catch(function(err){ alert("⚠️ تعذر الاتصال بـ Firebase. سيتم عرض المسجلين محلياً.\n"+err.message); renderStats(getLocal()); }); } else { renderStats(getLocal()); }
+  db.collection("users").get().then(function(qs){ 
+    var users=[]; 
+    qs.forEach(function(doc){ var u=doc.data(); u._id=doc.id; users.push(u); }); 
+    renderStats(users); 
+  }).catch(function(err){ 
+    alert("⚠️ تعذر قراءة البيانات من Firebase:\n" + err.message);
+    document.getElementById('statsModal').remove();
+  });
 
   function renderStats(usersList){
     document.getElementById('statsModal').remove();
@@ -407,72 +477,177 @@ Z.showStats=function(){
       + '<h2 style="color:#fbbf24;margin-bottom:15px;text-align:center;">📊 المسجلون ('+usersList.length+')</h2>'
       + '<div style="overflow-y:auto;flex:1;background:#0f172a;padding:10px;border-radius:10px;text-align:right;">';
     if(usersList.length===0) html+='<div style="text-align:center;padding:20px;color:#94a3b8;">لا يوجد مسجلون بعد.</div>';
-    usersList.forEach(function(u,i){ html+='<div style="border-bottom:1px solid #334155;padding:10px;font-size:13px;line-height:1.7;"><strong style="color:#fbbf24;">'+(i+1)+'. '+(u.name||'—')+'</strong><br>📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')+'<br>💼 '+(u.prof||'—')+' | 🏙️ '+(u.city||'—')+'<br><span style="color:#94a3b8;font-size:11px;">📅 '+(u.date||'—')+'</span></div>'; });
+    usersList.forEach(function(u,i){ 
+      var subBadge = u.isSub ? '<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;">✅ مشترك</span>' : '<span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;">❌ غير مشترك</span>';
+      var trialInfo = '';
+      if(u.trialStart && !u.isSub) {
+        var end = u.trialStart + Z.TRIAL_MS;
+        var ms = end - Date.now();
+        if(ms > 0) { var d = Math.floor(ms/86400000); var h = Math.floor((ms%86400000)/3600000); trialInfo = '<div style="color:#f59e0b;font-size:11px;">⏱️ تجريبي: ' + d + 'ي ' + h + 'س</div>'; }
+        else { trialInfo = '<div style="color:#dc2626;font-size:11px;">⏰ انتهى التجريبي</div>'; }
+      }
+      html+='<div style="border-bottom:1px solid #334155;padding:10px;font-size:13px;line-height:1.7;">'
+        + '<strong style="color:#fbbf24;">'+(i+1)+'. '+(u.name||'—')+'</strong> '+subBadge
+        + '<br>📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')
+        + '<br>💼 '+(u.prof||'—')+' | 🏙️ '+(u.city||'—')
+        + trialInfo
+        + '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">'
+        + (u._id ? (u.isSub 
+            ? '<button onclick="ZAID.toggleSub(\''+u._id+'\', false)" style="padding:5px 12px;background:#dc2626;color:#fff;border:none;border-radius:12px;font-size:11px;cursor:pointer;font-family:Cairo;">❌ إلغاء الاشتراك</button>'
+            : '<button onclick="ZAID.toggleSub(\''+u._id+'\', true)" style="padding:5px 12px;background:#22c55e;color:#fff;border:none;border-radius:12px;font-size:11px;cursor:pointer;font-family:Cairo;">✅ فعّل الاشتراك</button>')
+          : '')
+        + '<span style="color:#94a3b8;font-size:11px;">📅 '+(u.date||'—')+'</span>'
+        + '</div></div>'; 
+    });
     html+='</div>';
     html+='<button onclick="ZAID.exportExcel()" style="margin-top:15px;padding:12px;background:#22c55e;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;font-size:16px;">📥 تحميل بيانات المسجلين (Excel)</button>';
-    html+='<button onclick="document.getElementById(\'statsModal\').remove()" style="margin-top:10px;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">إغلاق</button></div>';
+    html+='<button onclick="ZAID.clearAllUsers()" style="margin-top:10px;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">🗑️ حذف جميع المسجلين</button>';
+    html+='<button onclick="document.getElementById(\'statsModal\').remove()" style="margin-top:10px;padding:10px;background:#334155;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">إغلاق</button></div>';
     m2.innerHTML=html; document.body.appendChild(m2);
   }
 };
 
-Z.exportExcel=function(){
-  if(!Z.admin) return;
-  var users = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
-  if(db){ db.collection("users").get().then(function(qs){ if(qs.size > 0) { users = []; qs.forEach(function(doc){ users.push(doc.data()); }); } generateCSV(users); }).catch(function(){ generateCSV(users); }); } else { generateCSV(users); }
+/* تفعيل/إلغاء الاشتراك */
+Z.toggleSub = function(userId, activate) {
+  if(!Z.admin || !db) { alert('غير متاح'); return; }
+  var confirmMsg = activate ? 'تفعيل الاشتراك لمدة ' + Z.SUB_DAYS + ' يوم؟' : 'إلغاء الاشتراك؟';
+  if(!confirm(confirmMsg)) return;
+  var data = activate ? { isSub: true, subExpiry: Date.now() + Z.SUB_MS, subActivatedAt: Date.now() } : { isSub: false, subExpiry: 0 };
+  db.collection('users').doc(userId).update(data)
+    .then(function(){ alert(activate ? '✅ تم تفعيل الاشتراك' : '❌ تم إلغاء الاشتراك'); document.getElementById('statsModal').remove(); Z.showStats(); })
+    .catch(function(err){ alert('❌ خطأ: ' + err.message); });
 };
 
-function generateCSV(users){
-  if(users.length === 0) { alert('لا يوجد مسجلون لتحميلهم.'); return; }
-  var csv = "\uFEFF";
-  csv += "الاسم,الإيميل,الواتساب,المهنة,الاختصاص,البلد,المدينة,التصنيف,التاريخ\n";
-  users.forEach(function(u){ csv += '"'+(u.name||'')+'","'+(u.email||'')+'","'+(u.phone||'')+'","'+(u.prof||'')+'","'+(u.spec||'')+'","'+(u.country||'')+'","'+(u.city||'')+'","'+(u.cat||'')+'","'+(u.date||'')+'"\n'; });
-  var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'المسجلين_منصة_زايد.csv'; a.click();
-}
+/* تصدير Excel */
+Z.exportExcel=function(){
+  if(!Z.admin || !db) return;
+  db.collection("users").get().then(function(qs){ 
+    var users=[]; qs.forEach(function(doc){ users.push(doc.data()); });
+    if(users.length === 0) { alert('لا يوجد مسجلون.'); return; }
+    var csv = "\uFEFF";
+    csv += "الاسم,الإيميل,الواتساب,المهنة,الاختصاص,البلد,المدينة,التصنيف,التاريخ,مشترك؟,انتهاء الاشتراك\n";
+    users.forEach(function(u){ 
+      var sub = u.isSub ? 'نعم' : 'لا';
+      var exp = u.subExpiry ? new Date(u.subExpiry).toLocaleDateString('ar-TN') : '—';
+      csv += '"'+(u.name||'')+'","'+(u.email||'')+'","'+(u.phone||'')+'","'+(u.prof||'')+'","'+(u.spec||'')+'","'+(u.country||'')+'","'+(u.city||'')+'","'+(u.cat||'')+'","'+(u.date||'')+'","'+sub+'","'+exp+'"\n'; 
+    });
+    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'المسجلين_منصة_زايد.csv'; a.click();
+  }).catch(function(err){ alert('❌ خطأ: ' + err.message); });
+};
 
-/* عملية التسجيل الصارمة */
+/* حذف جميع المستخدمين */
+Z.clearAllUsers=function(){
+  if(!Z.admin || !db) return;
+  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً من Firebase؟ لا يمكن التراجع!')) return;
+  db.collection("users").get().then(function(qs){
+    var batch = db.batch();
+    qs.forEach(function(doc){ batch.delete(doc.ref); });
+    return batch.commit();
+  }).then(function(){
+    localStorage.removeItem('zaid_local_users');
+    alert('✅ تم حذف جميع المسجلين بنجاح.');
+    document.getElementById('statsModal').remove();
+  }).catch(function(err){ alert('❌ خطأ: ' + err.message); });
+};
+
+/* نافذة الاشتراك */
+Z.showSub=function(){
+  var s = Z.getAccessStatus();
+  if(s.type === 'sub' || s.type === 'admin') {
+    var expDate = s.expiry ? new Date(s.expiry).toLocaleDateString('ar-TN') : '—';
+    alert('✅ اشتراكك نشط.\nتاريخ الانتهاء: ' + expDate);
+    return;
+  }
+  var old=document.getElementById('sm');if(old)old.remove();
+  var m=document.createElement('div');m.id='sm';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  var remaining = '';
+  if(s.type === 'trial') remaining = '<p style="text-align:center;color:#f59e0b;font-size:13px;margin-bottom:10px;">⏱️ تبقى لك: ' + s.days + ' يوم و ' + s.hours + ' ساعة</p>';
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:480px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
+    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
+    +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
+    + remaining
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e">'
+    +'<div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_TN + ' دينار تونسي</div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17) أو حوالة في دقيقة</div>'
+    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
+    +'</div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6">'
+    +'<div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_USD + ' دولار / ' + Z.SUB_PRICE_USD + ' يورو</div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر Western Union أو MoneyGram</div>'
+    +'</div>'
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
+    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+
+/* رسالة واتساب مفصلة */
+Z.wa=function(){
+  var u=Z.user||{};
+  var amount = Z.SUB_PRICE_TN + ' د.ت (تونس) أو ' + Z.SUB_PRICE_USD + ' دولار (دولي)';
+  var msg = 'مرحباً، أريد الاشتراك في منصة زايد.\n\n'
+    + '📋 معلوماتي:\n'
+    + 'الاسم: ' + (u.name||'') + '\n'
+    + 'البريد: ' + (u.email||'') + '\n'
+    + 'الهاتف: ' + (u.phone||'') + '\n'
+    + 'التصنيف: ' + (u.cat||'') + '\n\n'
+    + '💰 تفاصيل الدفع:\n'
+    + 'المبلغ: ' + amount + '\n'
+    + 'طريقة الدفع: [اختر: دينار إلكتروني / ويسترن يونيون / حوالة في دقيقة]\n'
+    + 'رقم الحوالة/التحويل: [اكتب الرقم]\n'
+    + 'التاريخ: ' + new Date().toLocaleDateString('ar-TN') + '\n\n'
+    + '🔔 أرجو تأكيد الاشتراك بعد التحقق من الدفع.';
+  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
+};
+
+/* ========== التسجيل الحقيقي في Firebase فقط ========== */
 Z.register=function(){
   var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
   var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
   
-  // التحقق الصارم (يمنع الحفظ بدون واتساب أو بيانات ناقصة)
   if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل (كلمتين على الأقل)'); return; }
   if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول المطلوبة (*)'); return; }
-  if(!h || h.length < 8) { alert('❌ يرجى إدخال رقم واتساب صحيح (8 أرقام على الأقل)'); return; }
+  if(!/^[0-9]{8,15}$/.test(h)) { alert('❌ يرجى إدخال رقم واتساب صحيح (أرقام فقط، من 8 إلى 15 رقماً)'); return; }
   if(!Z.selectedCat) { alert('❌ يرجى اختيار التصنيف'); return; }
   
-  Z.user={name:n,prof:p,spec:s,email:e,phone:h,country:c,city:ci,cat:Z.selectedCat,date:new Date().toLocaleDateString('ar-TN'),isSub:false};
+  if(!db) { alert('❌ Firebase غير متصل! لا يمكن التسجيل الحقيقي.\n\nتأكد من اتصالك بالإنترنت وأعد تحميل الصفحة.'); return; }
   
-  // حفظ محلي احتياطي
-  var localUsers = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
-  localUsers.push(Z.user);
-  localStorage.setItem('zaid_local_users', JSON.stringify(localUsers));
-
-  // حفظ في Firebase وإرسال الإيميل
-  if(db){ 
-    db.collection("users").add(Z.user).then(function(){ 
-      console.log('✅ Firebase: OK'); 
-      sendEmail();
-      Z.visitorAttempts=0; 
-      document.getElementById('un').textContent=n; 
-      Z.updateUI(); Z.showPage('pageHome');
-      alert('✅ تم التسجيل بنجاح! مرحباً بك.');
-    }).catch(function(err){ 
-      alert('❌ خطأ في Firebase أثناء الحفظ:\n' + err.message + '\nتم الحفظ محلياً وعرضك في الإحصائيات.');
-      sendEmail(); 
-      Z.visitorAttempts=0; 
-      document.getElementById('un').textContent=n; 
-      Z.updateUI(); Z.showPage('pageHome');
-    }); 
-  } else {
-    alert('⚠️ تم الحفظ محلياً فقط (Firebase غير متصل).');
-    sendEmail();
-    Z.visitorAttempts=0; 
-    document.getElementById('un').textContent=n; 
+  var newUser = {
+    name:n, prof:p, spec:s, email:e, phone:h, country:c, city:ci,
+    cat:Z.selectedCat, date:new Date().toLocaleDateString('ar-TN'),
+    isSub:false, trialStart:Date.now(), subExpiry:0
+  };
+  
+  var btn = event && event.target ? event.target : null;
+  if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري التسجيل في Firebase...'; }
+  
+  db.collection("users").add(newUser).then(function(docRef){
+    newUser._id = docRef.id;
+    Z.user = newUser;
+    localStorage.setItem('zaid_current_user', JSON.stringify(Z.user));
+    try {
+      var localUsers = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
+      localUsers.push(Z.user);
+      localStorage.setItem('zaid_local_users', JSON.stringify(localUsers));
+    } catch(e) {}
+    console.log('✅ Firebase: OK, ID:', docRef.id);
+    sendEmail(newUser);
+    Z.visitorAttempts=0;
+    document.getElementById('un').textContent=n;
+    if(btn) { btn.disabled = false; btn.textContent = '🔑 ابدأ الآن مجاناً'; }
     Z.updateUI(); Z.showPage('pageHome');
-  }
-
-  function sendEmail(){
+    alert('✅ تم التسجيل بنجاح في Firebase!\n\n⏱️ لديك ' + Z.TRIAL_DAYS + ' أيام تجريبية.\n📧 تم إرسال إشعار للمشرف.');
+  }).catch(function(err){
+    console.error('❌ Firebase error:', err);
+    if(btn) { btn.disabled = false; btn.textContent = '🔑 ابدأ الآن مجاناً'; }
+    alert('❌ فشل التسجيل في Firebase:\n\n' + err.message + '\n\nلم يتم حفظ أي بيانات وهمية.');
+  });
+  
+  function sendEmail(u){
     try { 
       var form = document.createElement('form'); 
       form.method = 'POST'; 
@@ -483,15 +658,10 @@ Z.register=function(){
         _subject: '🎉 مسجل جديد - منصة زايد', 
         _captcha: 'false', 
         _template: 'table', 
-        'الاسم': n, 
-        'المهنة': p, 
-        'الاختصاص': s, 
-        'البريد': e, 
-        'الواتساب': h, 
-        'البلد': c, 
-        'المدينة': ci, 
-        'التصنيف': Z.selectedCat, 
-        'التاريخ': Z.user.date 
+        'الاسم': u.name, 'المهنة': u.prof, 'الاختصاص': u.spec, 'البريد': u.email,
+        'الواتساب': u.phone, 'البلد': u.country, 'المدينة': u.city,
+        'التصنيف': u.cat, 'التاريخ': u.date,
+        'نوع الاشتراك': 'تجريبي (3 أيام)'
       }; 
       for(var k in fields){ 
         var inp = document.createElement('input'); 
@@ -719,7 +889,7 @@ Z.saveSeeker=function(type){
   }).catch(function(err){ alert('❌ خطأ: '+err.message); }); } else { alert('⚠️ غير متصل.'); }
 };
 /* ==========================================
-   محتوى الدروس (تكنولوجيا، كتب، محاضرات، AI)
+   المحتوى الشامل (الدروس والاختبارات)
    ========================================== */
 Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحاسوب',desc:'شرائح تعليمية + اختبار'},[
   {n:'📖 1',t:'📚 مقدمة',i:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg',x:'مرحباً بكم في كتاب "الأطفال والحاسوب". بقلم: <strong>محمد زايد</strong>',s:['الأطفال والحاسوب','Les enfants','Children']},
@@ -734,12 +904,11 @@ Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحا�
 ]);
 
 Z.addLesson('ar1',{cat:'arabic',icon:'🌙',name:'المستوى 1: الحروف والحركات',desc:'7 شرائح + اختبار'},[
-  {n:'الدرس 1',t:'الأبجدية العربية',x:'تتكون الأبجدية العربية من <strong>28 حرفاً</strong>، وتُكتب من اليمين إلى اليسار.<br><br>أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي.',s:['الأبجدية العربية ثمانية وعشرون حرفا','L alphabet arabe','The Arabic alphabet']},
-  {n:'الدرس 2',t:'الحركات (التشكيل)',x:'الحركات تحدد نطق الحرف: <br><br><strong>الفتحة (ـَ):</strong> بَ<br><strong>الضمة (ـُ):</strong> بُ<br><strong>الكسرة (ـِ):</strong> بِ<br><strong>السكون (ـْ):</strong> بْ'},
-  {n:'الدرس 3',t:'التنوين',x:'<strong>فتحتين (ـً):</strong> كِتَابًا<br><strong>ضمتين (ـٌ):</strong> كِتَابٌ<br><strong>كسرتين (ـٍ):</strong> كِتَابٍ'},
-  {n:'الدرس 4',t:'المدود',x:'<strong>الألف:</strong> بَا<br><strong>الواو:</strong> بُو<br><strong>الياء:</strong> بِي'},
-  {n:'الدرس 5',t:'الشدة',x:'الشدة (ـّ) تعني أن الحرف مُضاعف.<br>مثال: <strong>مَدَّ</strong> أصلها مَدَدَ.'},
-  {n:'الدرس 6',t:'التاء المربوطة والمفتوحة',x:'<strong>التاء المفتوحة (ت):</strong> تُنطق تاءً دائماً، مثل: بِنْت.<br><strong>التاء المربوطة (ة):</strong> تُنطق هاءً عند الوقف، مثل: وَرْدَة.'},
+  {n:'الدرس 1',t:'الأبجدية العربية',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'تتكون الأبجدية العربية من <strong>28 حرفاً</strong>، وتُكتب من اليمين إلى اليسار.<br><br>أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي.',s:['الأبجدية العربية ثمانية وعشرون حرفا','L alphabet arabe','The Arabic alphabet']},
+  {n:'الدرس 2',t:'الحركات (التشكيل)',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الحركات تحدد نطق الحرف: <br><br><strong>الفتحة (ـَ):</strong> بَ<br><strong>الضمة (ـُ):</strong> بُ<br><strong>الكسرة (ـِ):</strong> بِ<br><strong>السكون (ـْ):</strong> بْ'},</n  {n:'الدرس 3',t:'التنوين',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'<strong>فتحتين (ـً):</strong> كِتَابًا<br><strong>ضمتين (ـٌ):</strong> كِتَابٌ<br><strong>كسرتين (ـٍ):</strong> كِتَابٍ'},
+  {n:'الدرس 4',t:'المدود',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'<strong>الألف:</strong> بَا<br><strong>الواو:</strong> بُو<br><strong>الياء:</strong> بِي'},
+  {n:'الدرس 5',t:'الشدة',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الشدة (ـّ) تعني أن الحرف مُضاعف.<br>مثال: <strong>مَدَّ</strong> أصلها مَدَدَ.'},
+  {n:'الدرس 6',t:'التاء المربوطة والمفتوحة',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'<strong>التاء المفتوحة (ت):</strong> تُنطق تاءً دائماً، مثل: بِنْت.<br><strong>التاء المربوطة (ة):</strong> تُنطق هاءً عند الوقف، مثل: وَرْدَة.'},
   {n:'الدرس 7',e:'arabic_exam'}
 ]);
 
@@ -837,53 +1006,53 @@ Z.addLesson('prim3',{cat:'primary',icon:'🎒',name:'السنة الثالثة �
   {n:'الرياضيات',t:'📐 محيط المستطيل',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Rectangle_Geometry.svg/200px-Rectangle_Geometry.svg.png',x:'محيط المستطيل هو مجموع أطوال أضلاعه الأربعة. <br> <strong>القانون: (الطول + العرض) × 2</strong>',s:['محيط المستطيل هو مجموع أطوال أضلاعه الأربعة','Le périmètre du rectangle est la somme de ses quatre côtés','The perimeter of a rectangle is the sum of its four sides'],v:'https://www.youtube.com/embed/IrJpRkqQ2tM'},
   {n:'اللغة العربية',t:'🌙 المبتدأ والخبر',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الجملة الاسمية تتكون من <strong>مبتدأ</strong> (اسم في بداية الجملة) و<strong>خبر</strong> (يتمم معنى المبتدأ).<br>مثال: الطقسُ جميلٌ.',s:['الجملة الاسمية تتكون من مبتدأ وخبر','La phrase nominale se compose d un sujet et d un attribut','The nominal sentence consists of a subject and a predicate'],v:'https://www.youtube.com/embed/3Z8g7W7zY2Y'},
   {n:'الإيقاظ العلمي',t:'💧 التبخر والغليان',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Water_cycle.png/300px-Water_cycle.png',x:'<strong>التبخر</strong> هو تحول الماء من الحالة السائلة إلى الحالة الغازية ببطء.<br><strong>الغليان</strong> هو تحول سريع يحدث عند درجة حرارة 100 درجة مئوية.',s:['التبخر هو تحول الماء من الحالة السائلة إلى الغازية','L évaporation est le passage de l état liquide à l état gazeux','Evaporation is the transition from liquid to gas'],v:'https://www.youtube.com/embed/al-do-HGuIk'},
-  {n:'الفرنسية',t:'🇫🇷 Les articles',x:'<strong>Les articles indéfinis:</strong> un, une, des.<br><strong>Les articles définis:</strong> le, la, les.<br>مثال: <em>Un</em> livre -> <em>Le</em> livre.',s:['أدوات التعريف والنكرة في اللغة الفرنسية','Les articles définis et indéfinis','Definite and indefinite articles in French'],v:'https://www.youtube.com/embed/1zS8mG_4XyY'},
+  {n:'الفرنسية',t:'🇫🇷 Les articles',i:'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=400&q=80',x:'<strong>Les articles indéfinis:</strong> un, une, des.<br><strong>Les articles définis:</strong> le, la, les.<br>مثال: <em>Un</em> livre -> <em>Le</em> livre.',s:['أدوات التعريف والنكرة في اللغة الفرنسية','Les articles définis et indéfinis','Definite and indefinite articles in French'],v:'https://www.youtube.com/embed/1zS8mG_4XyY'},
   {n:'الاختبار',e:'prim3_exam'}
 ]);
 
 Z.addLesson('prim4',{cat:'primary',icon:'📘',name:'السنة الرابعة ابتدائي',desc:'الرياضيات، العربية، الإيقاظ، الفرنسية'},[
   {n:'الرياضيات',t:'📐 مساحة المربع والمستطيل',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Area.svg/200px-Area.svg.png',x:'<strong>مساحة المربع = الضلع × الضلع</strong><br><strong>مساحة المستطيل = الطول × العرض</strong>',s:['مساحة المربع تساوي الضلع في الضلع','L aire du carré est côté fois côté','The area of a square is side times side'],v:'https://www.youtube.com/embed/xC-yX_zY2yY'},
-  {n:'اللغة العربية',t:'🌙 الجملة الفعلية',x:'الجملة الفعلية تبدأ بـ <strong>فعل</strong>، ويتكون معظمها من: فعل + فاعل + مفعول به.<br>مثال: كتبَ التلميذُ الدرسَ.',s:['الجملة الفعلية تبدأ بفعل وتتكون من فعل وفاعل ومفعول به','La phrase verbale commence par un verbe','The verbal sentence begins with a verb'],v:'https://www.youtube.com/embed/3Xy8zW7yY2Y'},
+  {n:'اللغة العربية',t:'🌙 الجملة الفعلية',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الجملة الفعلية تبدأ بـ <strong>فعل</strong>، ويتكون معظمها من: فعل + فاعل + مفعول به.<br>مثال: كتبَ التلميذُ الدرسَ.',s:['الجملة الفعلية تبدأ بفعل وتتكون من فعل وفاعل ومفعول به','La phrase verbale commence par un verbe','The verbal sentence begins with a verb'],v:'https://www.youtube.com/embed/3Xy8zW7yY2Y'},
   {n:'الإيقاظ العلمي',t:'🐾 التنقل عند الحيوان',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Animal_locomotion.jpg/300px-Animal_locomotion.jpg',x:'تتنقل الحيوانات بطرق مختلفة حسب بيئتها:<br>المشي (الأسد)، الزحف (الأفعى)، الطيران (النسر)، السباحة (السمكة).',s:['تتنقل الحيوانات بطرق مختلفة حسب بيئتها','Les animaux se déplacent de différentes manières selon leur environnement','Animals move in different ways depending on their environment'],v:'https://www.youtube.com/embed/y8W7zY2yY3Y'},
-  {n:'الفرنسية',t:'🇫🇷 Le présent',x:'زمن المضارع في الفرنسية (Le présent) يُستخدم للتعبير عن حدث يقع الآن.<br>مثال: Je <strong>parle</strong>, Tu <strong>parles</strong>, Il <strong>parle</strong>...',s:['زمن المضارع في اللغة الفرنسية','Le présent de l indicatif','The present indicative tense'],v:'https://www.youtube.com/embed/XyY2zW7yY3Y'},
+  {n:'الفرنسية',t:'🇫🇷 Le présent',i:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&q=80',x:'زمن المضارع في الفرنسية (Le présent) يُستخدم للتعبير عن حدث يقع الآن.<br>مثال: Je <strong>parle</strong>, Tu <strong>parles</strong>, Il <strong>parle</strong>...',s:['زمن المضارع في اللغة الفرنسية','Le présent de l indicatif','The present indicative tense'],v:'https://www.youtube.com/embed/XyY2zW7yY3Y'},
   {n:'الاختبار',e:'prim4_exam'}
 ]);
 
 Z.addLesson('prim5',{cat:'primary',icon:'📗',name:'السنة الخامسة ابتدائي',desc:'الرياضيات، العربية، الإيقاظ، الفرنسية'},[
-  {n:'الرياضيات',t:'📐 الأعداد العشرية',x:'العدد العشري يتكون من <strong>جزء صحيح</strong> و<strong>جزء عشري</strong> يفصل بينهما فاصلة.<br>مثال: 12,45.',s:['العدد العشري يتكون من جزء صحيح وجزء عشري','Un nombre décimal se compose d une partie entière et d une partie décimale','A decimal number consists of an integer part and a decimal part'],v:'https://www.youtube.com/embed/yY2zW7yY3Y4'},
-  {n:'اللغة العربية',t:'🌙 الفعل المعتل',x:'الفعل المعتل هو كل فعل يحتوي على حرف علة (ا، و، ي).<br>ينقسم إلى: <strong>مثال</strong> (وعد)، <strong>أجوف</strong> (قال)، <strong>ناقص</strong> (دعا).',s:['الفعل المعتل هو كل فعل يحتوي على حرف علة','Le verbe défectueux contient une lettre de faiblesse','The defective verb contains a weak letter'],v:'https://www.youtube.com/embed/Y2zW7yY3Y4Y'},
+  {n:'الرياضيات',t:'📐 الأعداد العشرية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Number_line.svg/640px-Number_line.svg.png',x:'العدد العشري يتكون من <strong>جزء صحيح</strong> و<strong>جزء عشري</strong> يفصل بينهما فاصلة.<br>مثال: 12,45.',s:['العدد العشري يتكون من جزء صحيح وجزء عشري','Un nombre décimal se compose d une partie entière et d une partie décimale','A decimal number consists of an integer part and a decimal part'],v:'https://www.youtube.com/embed/yY2zW7yY3Y4'},
+  {n:'اللغة العربية',t:'🌙 الفعل المعتل',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الفعل المعتل هو كل فعل يحتوي على حرف علة (ا، و، ي).<br>ينقسم إلى: <strong>مثال</strong> (وعد)، <strong>أجوف</strong> (قال)، <strong>ناقص</strong> (دعا).',s:['الفعل المعتل هو كل فعل يحتوي على حرف علة','Le verbe défectueux contient une lettre de faiblesse','The defective verb contains a weak letter'],v:'https://www.youtube.com/embed/Y2zW7yY3Y4Y'},
   {n:'الإيقاظ العلمي',t:'⚡ الدارة الكهربائية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Simple_circuit.svg/200px-Simple_circuit.svg.png',x:'الدارة الكهربائية البسيطة تتكون من: <strong>مولد</strong> (بطارية)، <strong>مصباح</strong>، <strong>أسلاك توصيل</strong>، و<strong>قاطعة</strong>.<br>لكي يضيء المصباح، يجب أن تكون الدارة <strong>مغلقة</strong>.',s:['الدارة الكهربائية البسيطة تتكون من مولد ومصباح وأسلاك وقاطعة','Un circuit électrique simple se compose d un générateur, d une lampe, de fils et d un interrupteur','A simple electrical circuit consists of a generator, a lamp, wires and a switch'],v:'https://www.youtube.com/embed/2zW7yY3Y4Y5'},
-  {n:'الفرنسية',t:'🇫🇷 Le futur simple',x:'زمن المستقبل البسيط (Le futur simple) يُستخدم للتعبير عن حدث سيقع في المستقبل.<br>مثال: Je <strong>parlerai</strong>, Tu <strong>parleras</strong>...',s:['زمن المستقبل البسيط في اللغة الفرنسية','Le futur simple','The simple future tense'],v:'https://www.youtube.com/embed/zW7yY3Y4Y5Y'},
+  {n:'الفرنسية',t:'🇫🇷 Le futur simple',i:'https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&w=400&q=80',x:'زمن المستقبل البسيط (Le futur simple) يُستخدم للتعبير عن حدث سيقع في المستقبل.<br>مثال: Je <strong>parlerai</strong>, Tu <strong>parleras</strong>...',s:['زمن المستقبل البسيط في اللغة الفرنسية','Le futur simple','The simple future tense'],v:'https://www.youtube.com/embed/zW7yY3Y4Y5Y'},
   {n:'الاختبار',e:'prim5_exam'}
 ]);
 
 Z.addLesson('prim6',{cat:'primary',icon:'📕',name:'السنة السادسة ابتدائي',desc:'الرياضيات، العربية، الإيقاظ، الفرنسية'},[
-  {n:'الرياضيات',t:'📐 التناسب والسلم',x:'التناسب هو تساوي نسبتين. <br>مثال: إذا كان 3 أقلام بـ 6 دنانير، فكم يكون 5 أقلام؟<br>نستخدم <strong>الضرب التبادلي</strong> أو الرجوع إلى الوحدة.',s:['التناسب هو تساوي نسبتين','La proportionnalité est l égalité de deux rapports','Proportionality is the equality of two ratios'],v:'https://www.youtube.com/embed/W7yY3Y4Y5Y6'},
-  {n:'اللغة العربية',t:'🌙 المفعول به',x:'المفعول به هو اسم منصوب يقع عليه فعل الفاعل.<br>مثال: قرأ التلميذُ <strong>الكتابَ</strong>.',s:['المفعول به هو اسم منصوب يقع عليه فعل الفاعل','L objet direct est un nom à l accusatif','The direct object is an accusative noun'],v:'https://www.youtube.com/embed/7yY3Y4Y5Y6Y'},
+  {n:'الرياضيات',t:'📐 التناسب والسلم',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Area.svg/200px-Area.svg.png',x:'التناسب هو تساوي نسبتين. <br>مثال: إذا كان 3 أقلام بـ 6 دنانير، فكم يكون 5 أقلام؟<br>نستخدم <strong>الضرب التبادلي</strong> أو الرجوع إلى الوحدة.',s:['التناسب هو تساوي نسبتين','La proportionnalité est l égalité de deux rapports','Proportionality is the equality of two ratios'],v:'https://www.youtube.com/embed/W7yY3Y4Y5Y6'},
+  {n:'اللغة العربية',t:'🌙 المفعول به',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'المفعول به هو اسم منصوب يقع عليه فعل الفاعل.<br>مثال: قرأ التلميذُ <strong>الكتابَ</strong>.',s:['المفعول به هو اسم منصوب يقع عليه فعل الفاعل','L objet direct est un nom à l accusatif','The direct object is an accusative noun'],v:'https://www.youtube.com/embed/7yY3Y4Y5Y6Y'},
   {n:'الإيقاظ العلمي',t:'💡 انتشار الضوء',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Light_dispersion_conceptual_waves350px.gif/350px-Light_dispersion_conceptual_waves350px.gif',x:'ينتشر الضوء في <strong>خطوط مستقيمة</strong> في وسط متجانس.<br>يمكن أن ينعكس أو ينكسر.',s:['ينتشر الضوء في خطوط مستقيمة في وسط متجانس','La lumière se propage en ligne droite dans un milieu homogène','Light travels in straight lines in a homogeneous medium'],v:'https://www.youtube.com/embed/yY3Y4Y5Y6Y7'},
-  {n:'الفرنسية',t:'🇫🇷 Le passé composé',x:'الماضي المركب (Le passé composé) يُستخدم للتعبير عن حدث وقع وانتهى في الماضي.<br>يتكون من فعل مساعد (avoir/être) + اسم المفعول.',s:['الماضي المركب يتكون من فعل مساعد واسم المفعول','Le passé composé se compose d un auxiliaire et d un participe passé','The past tense consists of an auxiliary verb and a past participle'],v:'https://www.youtube.com/embed/Y3Y4Y5Y6Y7Y'},
+  {n:'الفرنسية',t:'🇫🇷 Le passé composé',i:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=400&q=80',x:'الماضي المركب (Le passé composé) يُستخدم للتعبير عن حدث وقع وانتهى في الماضي.<br>يتكون من فعل مساعد (avoir/être) + اسم المفعول.',s:['الماضي المركب يتكون من فعل مساعد واسم المفعول','Le passé composé se compose d un auxiliaire et d un participe passé','The past tense consists of an auxiliary verb and a past participle'],v:'https://www.youtube.com/embed/Y3Y4Y5Y6Y7Y'},
   {n:'الاختبار',e:'prim6_exam'}
 ]);
 
-/* ===== دروس التكنولوجيا للمراحل (الاعدادي والثانوي والجامعي) ===== */
 Z.addLesson('mid_info',{cat:'middle',icon:'🌐',name:'الإعدادي: الشبكات والإنترنت',desc:'كيف تتصل الأجهزة؟'},[
   {n:'1/2',t:'ما هي الشبكة؟',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Network.jpg/640px-Network.jpg',x:'الشبكة هي ربط جهازين أو أكثر لتبادل البيانات (LAN, WAN).',s:['الشبكة هي ربط جهازين أو أكثر','Un réseau est une connexion','A network is a connection'],v:'https://www.youtube.com/embed/3QhU9dBtk3c'},
   {n:'2/2',t:'الإنترنت والبحث',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/640px-Google_%22G%22_Logo.svg.png',x:'الإنترنت هو شبكة الشبكات. يجب التأكد من أمان المواقع (HTTPS).',s:['الإنترنت هو شبكة عالمية','Internet est un réseau mondial','The internet is a global network'],v:'https://www.youtube.com/embed/1Z2bX5fY6e4'},
   {n:'الاختبار',e:'mid_info_exam'}
 ]);
+
 Z.addLesson('high_info',{cat:'high',icon:'💻',name:'الثانوي: الخوارزميات والبرمجة',desc:'التفكير المنطقي'},[
   {n:'1/2',t:'ما هي الخوارزمية؟',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Algorithm_Chart.png/640px-Algorithm_Chart.png',x:'الخوارزمية هي سلسلة خطوات منطقية لحل مشكلة.',s:['الخوارزمية هي سلسلة خطوات','Un algorithme est une suite logique','An algorithm is a logical sequence'],v:'https://www.youtube.com/embed/6qLxJ7hZ3Zk'},
   {n:'2/2',t:'لغة بايثون',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/640px-Python-logo-notext.svg.png',x:'بايثون لغة سهلة. نستخدم <strong>print()</strong> للطباعة.',s:['بايثون هي لغة برمجة','Python est un langage de programmation','Python is a programming language'],v:'https://www.youtube.com/embed/rfscVS0vtbw'},
   {n:'الاختبار',e:'high_info_exam'}
 ]);
+
 Z.addLesson('univ_info',{cat:'univ',icon:'🤖',name:'الجامعي: الذكاء الاصطناعي',desc:'مستقبل التكنولوجيا'},[
   {n:'1/2',t:'الذكاء الاصطناعي',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Robot_icon.svg/640px-Robot_icon.svg.png',x:'محاكاة الذكاء البشري (Machine Learning).',s:['الذكاء الاصطناعي يحاكي الذكاء البشري','L intelligence artificielle imite','AI mimics human intelligence'],v:'https://www.youtube.com/embed/ad79nYk2keg'},
   {n:'2/2',t:'علم البيانات',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Data_Science_Process.png/640px-Data_Science_Process.png',x:'استخراج المعرفة من البيانات الضخمة.',s:['علم البيانات يستخرج المعرفة','La science des données extrait','Data science extracts'],v:'https://www.youtube.com/embed/X3paOmcrTjQ'},
   {n:'الاختبار',e:'univ_info_exam'}
 ]);
-
 /* ==========================================
-   الاختبارات
+   الاختبارات القديمة (بدون تغيير)
    ========================================== */
 Z.addExam('book_exam',[
   {q:'الجزء المادي (الملموس) في الحاسوب يسمى؟',o:['المعدات (Hardware)','البرمجيات (Software)','الإنترنت (Internet)','نظام التشغيل (OS)'],a:'المعدات (Hardware)'},
@@ -937,9 +1106,58 @@ Z.addExam('prim6_exam',[
   {q:'كيف نقول "أنا تكلمت" بالماضي المركب الفرنسي؟',o:['Je parle','Je parlerai','J ai parlé'],a:'J ai parlé'}
 ]);
 
-Z.addExam('mid_info_exam',[{q:'ما هي الشبكة المحلية؟',o:['LAN','WAN','Internet','Server'],a:'LAN'},{q:'ما وظيفة الموجه (Router)؟',o:['توجيه البيانات','طباعة','عرض','تخزين'],a:'توجيه البيانات'},{q:'ماذا يعني HTTPS؟',o:['موقع آمن','موقع غير آمن','موقع سريع','موقع بطيء'],a:'موقع آمن'}]);
-Z.addExam('high_info_exam',[{q:'الخوارزمية هي...',o:['خطوات منطقية','لغة برمجة','جهاز','برنامج'],a:'خطوات منطقية'},{q:'دالة الطباعة في بايثون؟',o:['print()','input()','echo()','write()'],a:'print()'},{q:'ما هو المتغير؟',o:['مكان في الذاكرة','برنامج','جهاز','ملف'],a:'مكان في الذاكرة'}]);
-Z.addExam('univ_info_exam',[{q:'فرع من الذكاء الاصطناعي؟',o:['تعلم الآلة','Word','Excel','Windows'],a:'تعلم الآلة'},{q:'هدف علم البيانات؟',o:['استخراج المعرفة','تصميم ألعاب','صنع أجهزة','برمجة'],a:'استخراج المعرفة'},{q:'ماذا يحاكي الذكاء الاصطناعي؟',o:['الذكاء البشري','سرعة الإنترنت','ذاكرة الهاتف','الشاشة'],a:'الذكاء البشري'}]);
+Z.addExam('mid_info_exam',[
+  {q:'ما هي الشبكة المحلية؟',o:['LAN','WAN','Internet','Server'],a:'LAN'},
+  {q:'ما وظيفة الموجه (Router)؟',o:['توجيه البيانات','طباعة','عرض','تخزين'],a:'توجيه البيانات'},
+  {q:'ماذا يعني HTTPS؟',o:['موقع آمن','موقع غير آمن','موقع سريع','موقع بطيء'],a:'موقع آمن'}
+]);
+
+Z.addExam('high_info_exam',[
+  {q:'الخوارزمية هي...',o:['خطوات منطقية','لغة برمجة','جهاز','برنامج'],a:'خطوات منطقية'},
+  {q:'دالة الطباعة في بايثون؟',o:['print()','input()','echo()','write()'],a:'print()'},
+  {q:'ما هو المتغير؟',o:['مكان في الذاكرة','برنامج','جهاز','ملف'],a:'مكان في الذاكرة'}
+]);
+
+Z.addExam('univ_info_exam',[
+  {q:'فرع من الذكاء الاصطناعي؟',o:['تعلم الآلة','Word','Excel','Windows'],a:'تعلم الآلة'},
+  {q:'هدف علم البيانات؟',o:['استخراج المعرفة','تصميم ألعاب','صنع أجهزة','برمجة'],a:'استخراج المعرفة'},
+  {q:'ماذا يحاكي الذكاء الاصطناعي؟',o:['الذكاء البشري','سرعة الإنترنت','ذاكرة الهاتف','الشاشة'],a:'الذكاء البشري'}
+]);
+
+/* ==========================================
+   الاختبارات العربية الجديدة (3)
+   ========================================== */
+Z.addExam('ar_ai_exam',[
+  {q:'كم عدد المتكلمين باللغة العربية في العالم؟',o:['100 مليون','237 مليون','371.4 مليون','500 مليون'],a:'371.4 مليون'},
+  {q:'كم عدد الكلمات في اللغة العربية؟',o:['1 مليون','5 ملايين','12 مليون','50 مليون'],a:'12 مليون'},
+  {q:'ما هي اللسانيات الرقمية؟',o:['دراسة اللغة بالتكنولوجيا','دراسة الأدب','دراسة التاريخ','دراسة الجغرافيا'],a:'دراسة اللغة بالتكنولوجيا'},
+  {q:'ما هو AraBERT؟',o:['نموذج ذكاء اصطناعي للعربية','لعبة عربية','محرك بحث','تطبيق دردشة'],a:'نموذج ذكاء اصطناعي للعربية'},
+  {q:'ما هو Qutrub؟',o:['أداة تصريف الأفعال العربية','لعبة','محرك بحث','منصة تعليمية'],a:'أداة تصريف الأفعال العربية'},
+  {q:'أي مما يلي من تحديات معالجة العربية بالذكاء الاصطناعي؟',o:['قلة المتكلمين','تعدد اللهجات','سهولة القواعد','قلة المفردات'],a:'تعدد اللهجات'},
+  {q:'ما هو OCR؟',o:['التعرف البصري على الحروف','بروتوكول شبكات','لعبة','محرك بحث'],a:'التعرف البصري على الحروف'},
+  {q:'أي أداة تستخدم لتحليل المشاعر في العربية؟',o:['AraBERT','Google Maps','Photoshop','Excel'],a:'AraBERT'}
+]);
+
+Z.addExam('ar_computer_exam',[
+  {q:'ما هي المرتبة التي تحتلها العربية بين لغات الإنترنت؟',o:['الأولى','الثانية','الثالثة','الرابعة'],a:'الرابعة'},
+  {q:'كم عدد مستخدمي الإنترنت الناطقين بالعربية؟',o:['100 مليون','237.4 مليون','371 مليون','500 مليون'],a:'237.4 مليون'},
+  {q:'ما نسبة المحتوى العربي من محتوى الإنترنت؟',o:['أكثر من 10%','5%','أقل من 1%','20%'],a:'أقل من 1%'},
+  {q:'ما هو الاشتقاق في حوسبة اللغة؟',o:['البحث عن جذور الكلمات','الترجمة','النسخ','الحذف'],a:'البحث عن جذور الكلمات'},
+  {q:'أي مما يلي من آليات حوسبة اللغة؟',o:['التحليل الصرفي','الطباعة','النسخ','اللصق'],a:'التحليل الصرفي'},
+  {q:'من التطبيقات العملية لحوسبة العربية:',o:['التدقيق الإملائي','الطباعة','اللصق','الحذف'],a:'التدقيق الإملائي'},
+  {q:'أي مما يلي من عوامل تطوير حوسبة العربية؟',o:['قلة المتكلمين','الجيوسياسة والترابط اللغوي','سهولة القواعد','قلة الأمية'],a:'الجيوسياسة والترابط اللغوي'},
+  {q:'أي مشروع مقترح لحوسبة العربية؟',o:['القلم الإلكتروني العربي','محرك بحث إنجليزي','متجر إلكتروني','لعبة فيديو'],a:'القلم الإلكتروني العربي'}
+]);
+
+Z.addExam('ar_linguistics_exam',[
+  {q:'ما هي اللسانيات؟',o:['علم يدرس اللغة البشرية','علم الأحياء','علم الفلك','علم الطب'],a:'علم يدرس اللغة البشرية'},
+  {q:'ما هي اللسانيات الرقمية؟',o:['فرع يستخدم التكنولوجيا لدراسة اللغة','علم الرياضيات','علم الفيزياء','علم الكيمياء'],a:'فرع يستخدم التكنولوجيا لدراسة اللغة'},
+  {q:'ماذا يعني NLP؟',o:['معالجة اللغة الطبيعية','بروتوكول شبكات','نوع من الألعاب','لغة برمجة'],a:'معالجة اللغة الطبيعية'},
+  {q:'أي مما يلي من أدوات التعلم العميق في اللغة العربية؟',o:['BERT','Windows','Excel','Chrome'],a:'BERT'},
+  {q:'ما هو التحدي الأكبر في معالجة العربية رقمياً؟',o:['قلة المتكلمين','تعقيد النحو والصرف','سهولة القواعد','قلة الكلمات'],a:'تعقيد النحو والصرف'},
+  {q:'ما هو هدف اللسانيات الرقمية؟',o:['تطوير أنظمة تفهم اللغة','تعليم الطبخ','بيع المنتجات','تصميم الأزياء'],a:'تطوير أنظمة تفهم اللغة'}
+]);
+
 /* ==========================================
    محرك الدروس والاختبارات والشهادات والانتقال
    ========================================== */
@@ -1017,8 +1235,86 @@ function renderExam(){
 }
 Z.ans=function(ch){ var q=Z.exam.qs[Z.exam.idx]; if(ch===q.a){Z.exam.score++;alert('✅ صحيح!');} else{alert('❌ خطأ. الصحيح: '+q.a);} Z.exam.idx++; renderExam(); };
 
-/* تشغيل المنصة عند التحميل */
-window.addEventListener('load',function(){ Z.updateUI(); Z.showPage('pageWelcome'); });
+/* ==========================================
+   الحماية الكاملة: نسخ + لصق + قص + بحث + حذف + حفظ + طباعة + مصدر + F12 + تحديد + سحب
+   ========================================== */
+(function(){
+  function isProtected(){
+    if(typeof Z==='undefined') return true;
+    if(Z.admin) return false;
+    if(Z.user && Z.user.isSub) return false;
+    return true;
+  }
+  function showWarn(msg){
+    var old=document.getElementById('antiWarn'); if(old) old.remove();
+    var d=document.createElement('div'); d.id='antiWarn';
+    d.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#dc2626;color:#fff;padding:12px 25px;border-radius:25px;font-weight:900;z-index:99999;font-family:Cairo;box-shadow:0 5px 20px rgba(0,0,0,.4);font-size:14px;text-align:center;';
+    d.textContent=msg||'🔒 هذه العملية محظورة. اشترك للاستفادة الكاملة.';
+    document.body.appendChild(d);
+    setTimeout(function(){ if(d.parentNode) d.remove(); }, 2000);
+  }
+  document.addEventListener('copy', function(e){ if(isProtected()){ e.preventDefault(); showWarn('🔒 النسخ محظور. اشترك للاستفادة الكاملة.'); return false; } });
+  document.addEventListener('cut', function(e){ if(isProtected()){ e.preventDefault(); showWarn('🔒 القص محظور. اشترك للاستفادة الكاملة.'); return false; } });
+  document.addEventListener('paste', function(e){ if(isProtected()){ e.preventDefault(); showWarn('🔒 اللصق محظور. اشترك للاستفادة الكاملة.'); return false; } });
+  document.addEventListener('contextmenu', function(e){ if(isProtected()){ e.preventDefault(); return false; } });
+  document.addEventListener('dragstart', function(e){ if(isProtected()){ e.preventDefault(); return false; } });
+  document.addEventListener('keydown', function(e){
+    if(!isProtected()) return;
+    var k=(e.key||'').toLowerCase(); var ctrl=e.ctrlKey||e.metaKey;
+    if(ctrl && k==='c'){ e.preventDefault(); showWarn('🔒 النسخ محظور.'); return false; }
+    if(ctrl && k==='x'){ e.preventDefault(); showWarn('🔒 القص محظور.'); return false; }
+    if(ctrl && k==='v'){ e.preventDefault(); showWarn('🔒 اللصق محظور.'); return false; }
+    if(ctrl && k==='a'){ e.preventDefault(); return false; }
+    if(ctrl && k==='f'){ e.preventDefault(); showWarn('🔒 البحث محظور. اشترك للاستفادة الكاملة.'); return false; }
+    if(ctrl && k==='s'){ e.preventDefault(); showWarn('🔒 التحميل محظور.'); return false; }
+    if(ctrl && k==='u'){ e.preventDefault(); return false; }
+    if(ctrl && k==='p'){ e.preventDefault(); showWarn('🔒 الطباعة محظورة.'); return false; }
+    if(k==='delete'){ var tag=(e.target&&e.target.tagName||'').toLowerCase(); if(tag!=='input'&&tag!=='textarea'){ e.preventDefault(); return false; } }
+    if(k==='f12'){ e.preventDefault(); return false; }
+    if(ctrl && e.shiftKey && (k==='i'||k==='j'||k==='c')){ e.preventDefault(); return false; }
+  });
+  var style=document.createElement('style'); style.id='anti-copy-style'; document.head.appendChild(style);
+  Z.updateAntiCopyStyle=function(){
+    var el=document.getElementById('anti-copy-style'); if(!el) return;
+    if(!isProtected()){ el.textContent=''; }
+    else { el.textContent='body, div, p, span, h1, h2, h3, h4, li, td, th, section, article, img, iframe, a, .slide, .stxt, .st, .cert, .dict-box, .dict-def, .lcard, .card, .ct, .sn { user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; -webkit-touch-callout: none !important; } input, textarea, select, button { user-select: text !important; -webkit-user-select: text !important; }'; }
+  };
+  setTimeout(function(){ if(Z.updateAntiCopyStyle) Z.updateAntiCopyStyle(); }, 300);
+})();
+
+/* ==========================================
+   تشغيل المنصة عند التحميل (مع استرجاع المستخدم)
+   ========================================== */
+window.addEventListener('load',function(){
+  try {
+    var saved = localStorage.getItem('zaid_current_user');
+    if(saved) {
+      Z.user = JSON.parse(saved);
+      if(typeof Z.user.isSub === 'undefined') Z.user.isSub = false;
+      if(!Z.user.trialStart) Z.user.trialStart = Date.now();
+      if(typeof Z.user.subExpiry === 'undefined') Z.user.subExpiry = 0;
+    }
+  } catch(e) { console.warn('restore err', e); }
+  Z.updateUI();
+  Z.showPage(Z.user ? 'pageHome' : 'pageWelcome');
+  if(Z.user && Z.user.email && db) {
+    db.collection('users').where('email','==',Z.user.email).limit(1).get()
+      .then(function(qs){
+        if(qs.size>0){
+          var doc=qs.docs[0]; var data=doc.data();
+          Z.user.isSub=data.isSub===true;
+          Z.user.subExpiry=data.subExpiry||0;
+          Z.user.trialStart=data.trialStart||Z.user.trialStart;
+          Z.user._id=doc.id;
+          localStorage.setItem('zaid_current_user', JSON.stringify(Z.user));
+          Z.updateStatusBadge();
+          if(Z.updateAntiCopyStyle) Z.updateAntiCopyStyle();
+        }
+      })
+      .catch(function(){});
+  }
+});
+
 })();
 </script>
 </body>
