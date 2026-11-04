@@ -12,12 +12,12 @@
 html,body{height:100%;width:100%;overflow:hidden}
 body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;display:flex;flex-direction:column;height:100dvh;overflow-x:hidden}
 .hide{display:none!important}
-#top{background:linear-gradient(135deg,#64748b,#475569);padding:10px;text-align:center;font-size:14px;border-bottom:3px solid #fbbf24;flex-shrink:0;display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;z-index:100}
+#top{background:linear-gradient(135deg,#64748b,#475569);padding:10px;text-align:center;font-size:14px;border-bottom:3px solid #fbbf24;flex-shrink:0;display:none;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;z-index:100}
 #top.reg{background:linear-gradient(135deg,#3b82f6,#1e40af)}
 #top.adm{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
 #top button{padding:5px 15px;border-radius:15px;border:none;cursor:pointer;font-weight:900;font-size:13px;font-family:Cairo}
 #ti{font-size:22px!important}
-#yellow{position:relative;width:100%;background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b);height:40px;display:flex;align-items:center;overflow:hidden;border-bottom:3px solid #dc2626;flex-shrink:0;z-index:99}
+#yellow{position:relative;width:100%;background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b);height:40px;display:none;align-items:center;overflow:hidden;border-bottom:3px solid #dc2626;flex-shrink:0;z-index:99}
 .yw{flex:1;overflow:hidden;position:relative;height:100%}
 .yt{position:absolute;white-space:nowrap;font-size:13px;line-height:40px;animation:ys 20s linear infinite;font-weight:900;color:#7f1d1d}
 #yellow button{background:#22c55e;color:#fff;border:2px solid #fff;border-radius:20px;padding:3px 12px;font-weight:900;font-size:12px;cursor:pointer;margin:0 15px}
@@ -217,7 +217,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <div class="cats" id="cats"></div>
     
     <button class="sbt" onclick="ZAID.register()">🔑 ابدأ الآن مجاناً</button>
-    <button type="button" onclick="ZAID.logout()" style="display:block;width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;font-weight:900;">🚪 خروج / إلغاء</button>
     <div style="text-align:center;margin-top:10px;">
       <button type="button" onclick="ZAID.adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:13px;font-family:Cairo;padding:8px;display:inline-block;">👑 دخول المشرف</button>
     </div>
@@ -386,12 +385,7 @@ Z.exitPlatform=function(){
 /* منع الزوار + فحص الاشتراك */
 Z.checkVisitor=function(){ 
   if(!Z.user && !Z.admin){ 
-    Z.visitorAttempts++; 
-    if(Z.visitorAttempts>1){ 
-      document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;font-family:Cairo;"><h1 style="color:#dc2626;">🚫 تم طردك</h1><p>التسجيل إلزامي للدخول إلى المحتوى.</p><button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#3b82f6;color:#fff;border:none;border-radius:10px;cursor:pointer;">تحديث الصفحة</button></div>'; 
-      return false; 
-    } 
-    alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nلديك محاولة واحدة فقط.'); 
+    alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nلا يمكنك تصفح المنصة كزائر.'); 
     Z.showPage('pageWelcome'); 
     return false; 
   }
@@ -401,25 +395,41 @@ Z.checkVisitor=function(){
 
 /* التنقل */
 Z.showPage=function(id){ 
-  if(id!=='pageWelcome'&&!Z.user&&!Z.admin){ Z.checkVisitor(); return; } 
+  if(id!=='pageWelcome'&&!Z.user&&!Z.admin){ id='pageWelcome'; } 
   document.querySelectorAll('#main > div[id^="page"]').forEach(function(p){p.classList.add('hide');}); 
   document.getElementById(id).classList.remove('hide'); 
   window.scrollTo(0,0); 
   var nav = document.getElementById('bottomNav');
-  if(id === 'pageWelcome') { nav.style.display = 'none'; }
-  else { nav.style.display = 'flex'; }
+  var topBar = document.getElementById('top');
+  var yellowBar = document.getElementById('yellow');
+  
+  if(id === 'pageWelcome' || (!Z.user && !Z.admin)) {
+    nav.style.display = 'none';
+    topBar.style.display = 'none';
+    yellowBar.style.display = 'none';
+  } else {
+    nav.style.display = 'flex';
+    topBar.style.display = 'flex';
+    yellowBar.style.display = 'flex';
+  }
   Z.updateStatusBadge();
 };
 
-Z.goHome=function(){Z.stopSpeak();Z.showPage(Z.user||Z.admin?'pageHome':'pageWelcome');};
+Z.goHome=function(){
+  Z.stopSpeak();
+  if(!Z.user && !Z.admin){
+    Z.showPage('pageWelcome');
+  } else {
+    Z.showPage('pageHome');
+  }
+};
 
 Z.updateUI=function(){
   var b=document.getElementById('top'),ic=document.getElementById('ti'),tx=document.getElementById('tt');
   var br=document.getElementById('br'),bo=document.getElementById('bo'),bstat=document.getElementById('bstats'),bs=document.getElementById('bs');
-  var y=document.getElementById('yellow');
-  if(Z.admin){ b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف'; br.style.display='none';bo.style.display='inline-block';y.style.display='none'; if(bstat) bstat.style.display='inline-block'; if(bs) bs.style.display='none'; }
-  else if(Z.user){ b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name; br.style.display='none';bo.style.display='inline-block';y.style.display='none'; if(bstat) bstat.style.display='none'; if(bs) bs.style.display='inline-block'; }
-  else { b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر'; br.style.display='inline-block';bo.style.display='inline-block';y.style.display='flex'; if(bstat) bstat.style.display='none'; if(bs) bs.style.display='none'; }
+  if(Z.admin){ b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف'; br.style.display='none';bo.style.display='inline-block'; if(bstat) bstat.style.display='inline-block'; if(bs) bs.style.display='none'; }
+  else if(Z.user){ b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name; br.style.display='none';bo.style.display='inline-block'; if(bstat) bstat.style.display='none'; if(bs) bs.style.display='inline-block'; }
+  else { b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر'; br.style.display='inline-block';bo.style.display='inline-block'; if(bstat) bstat.style.display='none'; if(bs) bs.style.display='none'; }
   Z.updateStatusBadge();
 };
 
@@ -1118,34 +1128,41 @@ Z.addLesson('ar_linguistics',{cat:'arabic',icon:'📖',name:'اللسانيات 
 ]);
 
 /* ==========================================
-   إضافة المحتويات الجديدة (الورشة 3، كتاب الأطفال، الكتاب الشامل)
+   المحتوى الحرفي الكامل: الورشات (قسم AI)
    ========================================== */
-
-// 1. الورشة التدريبية 3 (قسم الذكاء الاصطناعي)
-Z.addLesson('ai_workshop3',{cat:'ai',icon:'🎓',name:'الورشة التطبيقية الشاملة (3)',desc:'دليل المعلم والأدوات',color:'j'},[
-  {n:'الورشة 3',t:'الذكاء الاصطناعي في خدمة التعليم',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">دليل المعلم الشامل لاستخدام أدوات الذكاء الاصطناعي\nتقديم: محمد زايد - خبير دولي في التكنولوجيات الحاسوبية.\n\n• صندوق الأدوات المجانية:\n1. أدوات معالجة اللغة العربية (TTSMaker, TTS.ai, SpeechGen, CapCut, Whisper).\n2. أدوات المعلم (MagicSchool AI, Canva, Quizizz, EdPuzzle, Diffit, Xmind, Koalendar, ClassDojo).\n3. أدوات الطالب (Notion AI, Immersive Reader, Speechify).\n\n• التطبيقات العملية:\n- TTSMaker: تحويل الدروس إلى مقاطع صوتية.\n- MagicSchool AI: إنشاء خطط دروس جاهزة في 5 دقائق.\n- Canva Education: تصميم الوسائل البصرية والملصقات.\n- Quizizz AI: تقييم تفاعلي وألعاب تعليمية.\n- EdPuzzle: تحويل أي فيديو يوتيوب إلى درس تفاعلي.\n- Diffit: تكييف النصوص لثلاثة مستويات قراءة.\n- Xmind AI: إنشاء خرائط ذهنية وتحويلها إلى عروض.\n- ClassDojo + Koalendar: إدارة الصف والمواعيد.\n\n• فوائد الذكاء الاصطناعي للمعلم:\nتوفير الوقت، إنتاج محتوى احترافي، تكييف المواد، تحليل أداء الطالب.\n\n• المخاطر وتجنبها:\nالهلوسة، التحيز، الخصوصية. يجب المراجعة البشرية الدقيقة، عدم الاعتماد الكامل، وحماية البيانات.</div>'}
+Z.addLesson('ws3_raw1',{cat:'ai',icon:'🎓',name:'الورشة 3: دليل المعلم (نص حرفي 1)',desc:'التعريف والأدوات',color:'j'},[
+  {n:'الورشة 3',t:'الذكاء الاصطناعي في خدمة التعليم',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 16px; line-height: 2; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">دليل المعلم الشامل لاستخدام أدوات الذكاء الاصطناعي\nتقديم وتنشيط: محمد زايد - خبير دولي في التكنولوجيات الحاسوبية - أستاذ جامعي - رئيس جمعية اللغة العربية الرقمية - تونس\n\n• المحتويات:\n1. التعريف بالذكاء الاصطناعي 2. تكنولوجيات الذكاء الاصطناعي في التعليم 3. الأدوات المختارة 4. تطبيقات المعلم (7 تطبيقات) 5. أدوات الطالب (3 أدوات) 6. فوائد AI للمعلم 7. مخاطر AI 8. كيفية تجنب المخاطر 9. ملخص سريع 10. شكر وتواصل.\n\n• تعريف الذكاء الاصطناعي:\nفرع من علوم الحاسوب يهدف إلى محاكاة القدرات الذهنية البشرية (التعلم، اتخاذ القرار، فهم اللغة، التعرف على الصور). يُستخدم كمساعد ذكي للمعلم لتوفير الوقت وتخصيص التعلم.\n\n• تقنيات AI في التعليم:\n1. معالجة اللغة الطبيعية (NLP): تصحيح المقالات، روبوتات دردشة، تلخيص الدروس.\n2. التعلم الآلي: تعلم تكيفي، التنبؤ بأداء الطالب.\n3. التوليد الإبداعي: خطط دروس، تمارين.\n4. تحليل الصوت والصورة.\n5. أنظمة التوصية.\n6. التحليلات التنبؤية.\n\n• صندوق الأدوات المجانية:\n1. أدوات معالجة اللغة العربية (TTSMaker, TTS.ai, SpeechGen, CapCut, Whisper).\n2. أدوات المعلم (MagicSchool AI, Canva, Quizizz, EdPuzzle, Diffit, Xmind, Koalendar, ClassDojo).\n3. أدوات الطالب (Notion AI, Immersive Reader, Speechify).</div>'}
 ]);
 
-// 2. كتاب الأطفال والحاسوب (قسم الكتب)
-Z.addLesson('bk_children_full',{cat:'books',icon:'👶',name:'الأطفال والحاسوب (النسخة الكاملة)',desc:'بقلم: محمد زايد - 3 أجزاء'},[
-  {n:'الجزء 1',t:'تعرف على صديقك الحاسوب',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">مرحباً يا أصدقائي! أنا الحاسوب.\nأتكون من جزئين أساسيين:\n- الجزء المادي (Hardware): العناصر الملموسة (حديد، بلاستيك).\n- الجزء المعنوي (Software): البرمجيات.\n\nتركيبتي الداخلية:\n- المعالج (Processeur): مثل الدماغ.\n- الذاكرة (Mémoire): مثل القلب.\n\nالذاكرة الحية (RAM): تحتفظ بالمعطيات مؤقتاً، تفقدها عند انقطاع التيار.\nالذاكرة الميتة (ROM): تحتفظ بالمعطيات عند انقطاع التيار، لا يمكن الكتابة فيها.\n\nالروابط (Bus): تنقل المعطيات والأوامر. (روابط معطيات، روابط عناوين).\n\nاللواحق:\n- الفأرة (Souris): للنقر والتخاطب مع النظام.\n- لوحة المفاتيح (Clavier): لإدخال الحروف.\n- القلم الضوئي (Crayon numérique): للرسم والكتابة.\n- الشاشة اللمسية (Écran tactile): للتفاعل باللمس.\n- الشاشة (Écran) والطابعة (Imprimante): لعرض وإخراج النتائج.\n- الميكروفون ومكبر الصوت: للتفاعل الصوتي.\n- الماسح (Scanner) والراسم (Plotter): لإدخال وإخراج الصور والخرائط.\n- المودم (Modem): للاتصال بالإنترنت.</div>'},
-  {n:'الجزء 2',t:'المساعد الذكي (الذكاء الاصطناعي)',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الأطفال: سمعنا عن الذكاء الاصطناعي، ما هو؟\nالحاسوب: هو برنامج يتعلم من أمثلة كثيرة، ثم يحاول مساعدتنا.\n\nالقواعد الذهبية:\n1. لا أشارك اسمي الكامل، عنواني، صورتي، أو رقم هاتفي.\n2. أستخدم الأدوات بإشراف معلم أو والد.\n3. لا أصدق كل شيء؛ أتحقق من المعلومات.\n4. أستخدم كلمات مهذبة.\n5. أذكر أن النص صنع بمساعدة AI.\n\nالمغامرات:\n- تحدث مع الروبوت (كتابة قصة).\n- ارسم بالفكرة (استخدام أدوات الرسم بالذكاء الاصطناعي).\n- درب روبوتاً (Teachable Machine لتمييز الأعلام).\n- اصنع كتاباً صغيراً.\n- حول الكتابة إلى صوت (Speechify).\n- حول الصوت إلى كتابة (Google Docs).\n- حول القصة إلى فيديو (CapCut).</div>'},
-  {n:'الجزء 3',t:'التمارين والألعاب',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">يحتوي الكتاب على 34 تمريناً ممتعاً (شهادة بطل الحاسوب).\n\nأمثلة على الأسئلة:\n1. ما هي مكونات الحاسوب؟\n2. ما الفرق بين الذاكرة الحية والميتة؟\n3. ما هي وظيفة المعالج؟\n4. صح أو خطأ: الذكاء الاصطناعي يفكر مثل الإنسان. (خطأ)\n5. صح أو خطأ: يمكننا مشاركة صورنا الشخصية مع الأدوات. (خطأ)\n6. اكتب طلباً لأداة محادثة لطلب قصة عن طفل يحمل علم تونس.\n7. ارسم علم تونس بيدك ثم قارنه بالرسم المولد بالذكاء الاصطناعي.\n\nالمجموع الكلي: 94 نقطة.</div>'}
+Z.addLesson('ws3_raw2',{cat:'ai',icon:'🎓',name:'الورشة 3: دليل المعلم (نص حرفي 2)',desc:'التطبيقات العملية',color:'j'},[
+  {n:'التطبيقات',t:'تطبيقات المعلم والطالب',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 16px; line-height: 2; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">• التطبيقات العملية:\n- TTSMaker: تحويل الدروس إلى مقاطع صوتية.\n- MagicSchool AI: إنشاء خطط دروس جاهزة في 5 دقائق.\n- Canva Education: تصميم الوسائل البصرية والملصقات.\n- Quizizz AI: تقييم تفاعلي وألعاب تعليمية.\n- EdPuzzle: تحويل أي فيديو يوتيوب إلى درس تفاعلي.\n- Diffit: تكييف النصوص لثلاثة مستويات قراءة.\n- Xmind AI: إنشاء خرائط ذهنية وتحويلها إلى عروض.\n- ClassDojo + Koalendar: إدارة الصف والمواعيد.\n\n• فوائد الذكاء الاصطناعي للمعلم:\nتوفير الوقت، إنتاج محتوى احترافي، تكييف المواد، تحليل أداء الطالب.\n\n• المخاطر وتجنبها:\nالهلوسة، التحيز، الخصوصية. يجب المراجعة البشرية الدقيقة، عدم الاعتماد الكامل، وحماية البيانات.</div>'}
 ]);
 
-// 3. الكتاب الشامل (قسم الكتب وقسم AI)
-var comprehensiveBookSlides = [
-  {n:'المقدمة',t:'المقدمة العامة',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">كتاب الذكاء الاصطناعي: الآليات والتطبيقات - من البحث العلمي إلى قاعة الدرس.\nتأليف: محمد بن عبدالله زايد.\n\nهذا الكتاب ليس مجرد كتاب تقني، بل هو رحلة متكاملة تبدأ من الأساسيات النظرية، مروراً بالتطبيقات اللغوية والعلمية والتعليمية، وصولاً إلى التحديات الأمنية والجرائم الإلكترونية.\n\nيتميز الكتاب بـ:\n1. الشمولية: يغطي جميع جوانب AI.\n2. التعددية اللغوية: معجم ثلاثي (عربي-فرنسي-إنجليزي).\n3. التطبيق العملي: 10 تمارين تطبيقية جاهزة.\n4. التركيز على اللغة العربية.\n5. الجمع بين الإيجابيات والسلبيات والأخلاقيات.</div>'},
-  {n:'الجزء 1',t:'الآليات والتطبيقات (النظري)',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الذكاء الاصطناعي (AI): منظومات حاسوبية قادرة على القيام بوظائف معقدة (تفكير، قرار، حل مسائل).\n\nأنواع AI:\n- الضيق (Narrow): مهام محددة.\n- العام (General): قدرات بشرية (نظري).\n- الفائق (Super): يتجاوز البشر (نظري).\n- التفاعلي، محدود الذاكرة، نظرية العقل، الواعي بنفسه.\n\nالذكاء البشري vs الاصطناعي:\nالبشر يتفوقون في: الابتكار، الحدس، الذكاء العاطفي، الأخلاق.\nالآلات تتفوق في: السرعة، البيانات الضخمة، العمل 24/7.\n\nتقنيات التعلم:\n- التعلم المراقب (بيانات موسومة).\n- التعلم غير المراقب (بيانات غير موسومة).\n- النصف مراقب.\n- التعلم المعزز (التجربة والخطأ والمكافآت).</div>'},
-  {n:'الجزء 2',t:'الذكاء الاصطناعي واللغة العربية',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">اللغة العربية: أوسع لغة في العالم (أكثر من 12 مليون كلمة).\n\nاللسانيات الرقمية: فرع يستخدم التكنولوجيا الرقمية لدراسة اللغة.\n\nمعالجة اللغة الطبيعية (NLP): تمكين الحواسيب من فهم اللغة.\nالتطبيقات:\n- الترجمة الآلية.\n- تصحيح الأخطاء الإملائية والنحوية.\n- تحويل النص إلى كلام والعكس.\n- تحليل المشاعر (Sentiment Analysis).\n\nالتحديات: التشكيل، تعدد اللهجات، تعقيد النحو والصرف.\n\nأدوات عربية:\n- AraBERT: نسخة مدربة على العربية.\n- قطرب: لتصريف الأفعال.</div>'},
-  {n:'الجزء 3',t:'AI في البحث العلمي',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">البيوتكنولوجيا: استخدام AI لتحليل كميات هائلة من البيانات الطبية الحيوية.\n\nالنتائج: تحسين الطب الشخصي، الأمن الغذائي، تطوير الأدوية، التنبؤ بالبنى البروتينية.\n\nمؤشر على الأهمية: ارتفع عدد المقالات البحثية التي تذكر AI من 1130 مقالاً في 2013 إلى 16000 مقال في 2024.\n\nالتحديات: أخطاء AI في البحث، غياب الشفافية، سرية البيانات، الانتحال.\n\nالحلول: تقييمات المخاطر، حماية البيانات، المراقبة الدائمة، إطار أخلاقي.</div>'},
-  {n:'الجزء 4',t:'الورشة التطبيقية وأدوات AI',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الأدوات المختارة:\n- MagicSchool AI: لتخطيط الدروس.\n- Canva Education: للتصميم.\n- Quizizz AI: للتقييم واللعب.\n- EdPuzzle: للفيديو التفاعلي.\n- Diffit: لتكييف النصوص.\n- Xmind AI: للخرائط الذهنية.\n- ClassDojo + Koalendar: لإدارة الصف.\n- Notion AI: لتنظيم الطالب.\n- Immersive Reader: لقراءة الطالب.\n- Speechify: لتحويل النص إلى صوت.\n\nالفوائد: توفير الوقت، تكييف المواد، زيادة التفاعل.\nالمخاطر: الهلوسة، التحيز، الخصوصية.\nتجنبها: المراجعة البشرية، حماية البيانات، الإفصاح.</div>'},
-  {n:'الجزء 5',t:'الجرائم الإلكترونية و AI',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الجرائم السيبرانية: أعمال إجرامية عبر الحاسوب أو الشبكة.\n\nالأنواع:\n- هجمات DDoS.\n- التصيد (Phishing).\n- البرمجيات الخبيثة (Botnets, Malware).\n\nهجمات AI المعادية:\n- التهرب (Evasion): تغيير المدخلات.\n- التسمم (Poisoning): إدخال بيانات خاطئة أثناء التدريب.\n- انتهاك الخصوصية.\n- التزييف العميق (Deepfake).</div>'},
-  {n:'الجزء 6',t:'السلامة والأمن السيبراني بالـ AI',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">الأمن السيبراني: حماية الأنظمة والشبكات والبيانات.\n\nالعناصر الأساسية:\n1. الهوية (Identification).\n2. التوثيق (Authentication): MFA.\n3. التكامل (Integrity): التجزئة.\n4. السرية (Confidentiality): التشفير.\n5. التوفر (Availability).\n6. عدم التنصل (Non-repudiation): التوقيعات الرقمية.\n\nدور AI في الحماية:\n- منظومات كشف الاختراق (IDS).\n- مصائد الجذب (Honeypots).\n- التشفير المتقدم.\n- كشف التهديدات والاستجابة لها فوراً.</div>'}
-];
+/* ==========================================
+   المحتوى الحرفي الكامل: كتاب الأطفال (قسم الكتب)
+   ========================================== */
+Z.addLesson('bk_child_raw1',{cat:'books',icon:'👶',name:'الأطفال والحاسوب (نص حرفي 1)',desc:'الجزء الأول'},[
+  {n:'الجزء 1',t:'تعرف على صديقك الحاسوب',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 16px; line-height: 2; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">مرحبًا يا أصدقائي! أنا الحاسوب.\nأتكوّن من جزئين أساسيين:\n- الجزء المادي (Hardware): مجموعة من العناصر المصنوعة من المعادن (كالحديد والفولاذ) والبلاستيك.\n- الجزء المعنوي (Software): البرمجيات.\n\nالأطفال: هل يمكن للجزئين أن ينفصلا؟\nالحاسوب: أبدًا! لا يمكن للجزء الأول أن يكون مشتغلًا إلا إذا تعامل مع الجزء الثاني.\n\nالأطفال: يقال عنك أنك ذكي وسريع في الرياضيات. هل هذا صحيح؟\nالحاسوب: أجل! لكن قبل أن أجيب دعونا نتحدث عن تركيبتي الداخلية.\n\nأنا أتكوّن من الداخل من:\n- المعالج (Processeur): وهو مثل الدماغ عند الإنسان.\n- الذاكرة (Mémoire): وهي مثل القلب.\nالمعالج يعالج المعلومات، والذاكرة تحفظها.\n\nالذاكرة الحية (RAM): تحتفظ بالمعطيات عند انقطاع التيار، ويمكن الكتابة فيها.\nالذاكرة الميتة (ROM): تحتفظ بالمعطيات عند انقطاع التيار، ولا يمكن الكتابة فيها.\n\nالروابط (Bus): وهي النواقل والقنوات التي تنقل المعطيات والأوامر بين الوحدة الرئيسية والذاكرات. وهي روابط من نوعين:\n- روابط المعطيات: تنقل الأوامر والمعطيات.\n- روابط العناوين: تنقل عناوين الأوامر والمعطيات الموجودة بالذاكرة الرئيسية.</div>'}
+]);
 
-Z.addLesson('bk_ai_comp_books',{cat:'books',icon:'📚',name:'الكتاب الشامل: الآليات والتطبيقات',desc:'بقلم: محمد زايد (قسم الكتب)',color:'p'}, comprehensiveBookSlides);
-Z.addLesson('bk_ai_comp_ai',{cat:'ai',icon:'🛠️',name:'الورشة التطبيقية (من الكتاب الشامل)',desc:'أدوات AI العملية والأمن',color:'j'}, comprehensiveBookSlides);
+Z.addLesson('bk_child_raw2',{cat:'books',icon:'👶',name:'الأطفال والحاسوب (نص حرفي 2)',desc:'الجزء الثاني'},[
+  {n:'الجزء 2',t:'اللواحق والمساعد الذكي',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 16px; line-height: 2; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">اللواحق: هي عناصر موصولة بالروابط، وتكون غالبًا على شكل بطاقات أو جذاذات إلكترونية. تختلف عن بعضها البعض لأن كل واحدة منها لإدخال نوع معين من المعطيات.\n\nمثال: لإدخال الصورة المتحركة يجب استعمال كاميرا فيديو رقمية أو الكاميسكوب الرقمي.\n\nالأطفال: إذا أردنا أن نتحدث معك يجب أن نستعمل إحدى الأدوات أو اللواحق كما تسميها.\nالحاسوب: أجل.\n\n- الفأرة (Souris): تيسّر التخاطب معنا، حيث على المستعمل أن ينقر على البرمجية أو صورة العنصر لتشغيله.\n- لوحة المفاتيح (Clavier): لإدخال الحروف.\n- القلم الضوئي (Crayon numérique): أداة تُستخدم لإدخال المعطيات بشكل يدوي، مثل الكتابة أو الرسم على الشاشة.\n- لوحة الرسم (Tablette graphique): لوحة مسطحة تُوصل بالحاسوب، وتُستخدم مع قلم خاص للرسم والتصميم.\n- الشاشة اللمسية (Écran tactile): عبارة عن غشاء حساس يُلصق في منطقة في لوحة المفاتيح أو على شاشة العرض، وتتم وظيفة لوحة المفاتيح وتعوّض الفأرة.\n\nالمساعد الذكي (الذكاء الاصطناعي):\nالأطفال: سمعنا أن هناك شيئًا جديدًا اسمه «الذكاء الاصطناعي». ما هو؟\nالحاسوب: هو برنامج يتعلم من أمثلة كثيرة، ثم يحاول مساعدتنا. ويسمى بالفرنسية Intelligence Artificielle وبالإنجليزية Artificial Intelligence.\n\nالقواعد الذهبية:\n1. لا أشارك اسمي الكامل، عنواني، صورتي، مدرستي، أو رقم هاتفي.\n2. أستخدم الأدوات بإشراف معلّم أو والد/والدة.\n3. لا أصدق كل شيء؛ أتحقق من المعلومات في كتاب أو أسأل الكبار.\n4. أستخدم كلمات مهذبة ومفيدة.\n5. أذكر أن النص أو الصورة صنعت بمساعدة الذكاء الاصطناعي.</div>'}
+]);
+
+/* ==========================================
+   المحتوى الحرفي الكامل: الكتاب الشامل 434 صفحة
+   ========================================== */
+Z.addLesson('bk_ai_comp_raw1',{cat:'books',icon:'📚',name:'الكتاب الشامل (نص حرفي 1)',desc:'المقدمة',color:'p'},[
+  {n:'المقدمة',t:'المقدمة العامة',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 16px; line-height: 2; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">في عالم يتسارع فيه التطور التكنولوجي بوتيرة غير مسبوقة، أصبح الذكاء الاصطناعي (Artificial Intelligence) محوراً رئيسياً في تشكيل ملامح القرن الحادي والعشرين. لم يعد هذا المجال حكراً على المختبرات البحثية أو الشركات التقنية العملاقة، بل أصبح جزءاً من حياتنا اليومية: في الهواتف الذكية، في محركات البحث، في التطبيقات الطبية، في أنظمة النقل، وفي قاعات الدرس.\n\nهذا الكتاب الذي بين يديك ليس مجرد كتاب تقني عن الذكاء الاصطناعي، بل هو رحلة متكاملة في عالم هذه التكنولوجيا الثورية، تبدأ من الأساسيات النظرية، مروراً بالتطبيقات اللغوية والعلمية والتعليمية، وصولاً إلى التحديات الأمنية والجرائم الإلكترونية. إنه كتاب يجمع بين العمق النظري والتطبيق العملي، وبين الشمولية والتخصص، ليكون مرجعاً لكل من يريد فهم هذا المجال الحيوي واستخدامه بفعالية ومسؤولية.\n\n1. الشمولية: يغطي الكتاب جميع جوانب الذكاء الاصطناعي، من التعريفات الأساسية إلى أحدث التطبيقات، ومن النظرية إلى التطبيق، ومن الفرص إلى التحديات.\n\n2. التعددية اللغوية: يحتوي الكتاب على معجم ثلاثي (عربي — فرنسي — إنجليزي) يضم أكثر من 150 مصطلحاً مع تفسير كل مفهوم، مما يجعله أداة مرجعية للباحثين والمهتمين.\n\n3. التطبيق العملي: يقدم الكتاب عشرة تمارين تطبيقية جاهزة للاستخدام في قاعة الدرس، مع خطوات مفصلة وروابط مباشرة للأدوات.\n\n4. التركيز على اللغة العربية: يخصص الكتاب جزءاً كاملاً لعلاقة الذكاء الاصطناعي باللغة العربية، وهي مسألة حيوية للحفاظ على الهوية اللغوية والثقافية في العصر الرقمي.\n\n5. الجمع بين الإيجابيات والسلبيات: لا يكتفي الكتاب بعرض فوائد الذكاء الاصطناعي، بل يناقش مخاطره وتحدياته، ويقدم حلولاً عملية لمواجهتها.\n\n6. الأخلاقيات والمسؤولية: يخصص الكتاب مساحات واسعة لمناقشة الأخلاقيات والقواعد المسؤولة لاستخدام الذكاء الاصطناعي، وهي قضية محورية في عصرنا.\n\nهذا الكتاب موجه إلى:\n- المعلمين والمكونين: الذين يريدون توظيف أدوات الذكاء الاصطناعي في ممارساتهم التربوية.\n- الباحثين وطلاب الدراسات العليا: الذين يريدون فهم دور الذكاء الاصطناعي في البحث العلمي.\n- المختصين في اللغة العربية: الذين يريدون مواكبة التحولات الرقمية في مجالهم.\n- المختصين في الأمن السيبراني: الذين يريدون فهم التهديدات الجديدة التي يفرضها الذكاء الاصطناعي.\n- صناع القرار: الذين يريدون فهم الفرص والمخاطر المرتبطة بهذه التكنولوجيا.\n- كل قارئ مهتم: يريد فهم هذه التكنولوجيا التي تغير العالم من حولنا.\n\nينقسم الكتاب إلى ستة أجزاء رئيسية:\nالجزء الأول: الآليات والتطبيقات (النظري)\nالجزء الثاني: الذكاء الاصطناعي واللغة العربية\nالجزء الثالث: الذكاء الاصطناعي في البحث العلمي\nالجزء الرابع: الورشة التطبيقية\nالجزء الخامس: الجريمة الإلكترونية والذكاء الاصطناعي\nالجزء السادس: السلامة والأمن السيبراني\n\nإن الذكاء الاصطناعي ليس مجرد تكنولوجيا، بل هو تحول حضاري يمس جميع جوانب حياتنا. ومن واجبنا، نحن العرب، أن نكون فاعلين في هذا التحول، لا متفرجين. أن نساهم في تطويره، لا أن نكتفي باستهلاكه. أن نستخدمه لخدمة لغتنا وثقافتنا ومجتمعاتنا، لا أن نتركه يخدم أغراضاً أخرى.\n\nهذا الكتاب هو مساهمة متواضعة في هذا الاتجاه. أسأل الله أن ينفع به، وأن يكون خطوة على طريق بناء معرفة عربية أصيلة في مجال الذكاء الاصطناعي.\nمحمد بن عبدالله زايد - تونس 2026</div>'}
+]);
+
+Z.addLesson('bk_ai_comp_raw2',{cat:'books',icon:'📚',name:'الكتاب الشامل (نص حرفي 2)',desc:'الفصل 1: التعريف',color:'p'},[
+  {n:'الفصل 1',t:'التعريف بمفهوم الذكاء الاصطناعي',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 16px; line-height: 2; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">ويتمثل الذكاء الاصطناعي اليوم في مجموعة واسعة من التكنولوجيات التي تثري عدة خدمات وأدوات يستخدمها الإنسان يوميا كالتطبيقات التي تقدم برامج تلفزية مثلا أو الدردشات الآلية التي تساعد المستخدم بصفة فورية.\n\nوتعرف تكنولوجيا الذكاء الاصطناعي بكونها نظرية وتطوير منظومات حاسوبية تستطيع القيام بمهام تستدعي عادة العقل البشري كالتعرف على الصوت واتخاذ القرارات والتعرف على النماذج.\n\nويعد الذكاء الاصطناعي مصطلح عام يشمل عددا من التكنولوجيات الأخرى كالتعلم الآلي والتعلم العميق والمعالجة الآلية للغة الطبيعية وغيرها من المهام التي لا يستطيع القيام بها إلا العقل البشري، وكما عرفه البعض الآخر من الخبراء والباحثين بكونها قدرة الحاسوب الرقمي أو روبوت متحكم فيه بواسطة حاسوب للقيام بمهام غالبا ما تكون تلك المهام مرتبطة بالعقل البشري كما أن المصطلح غالبا ما يستخدم لتحديد مفهوم مشروع لتطوير المنظومات المجهزة بمعالجات فكرية خاصة بالإنسان كقدرته على التفكير واكتشاف المعنى وعملية تعميم أو تعليم من تجربة سابقة.\n\nومنذ ظهور الحواسيب الرقمية، أظهرت الدراسات أن الحواسيب يمكنها أن تكون مرجعا للقيام بمهام غاية في التعقيد كاكتشاف أدلة لنظريات رياضية أو اللعب لعبة الشطرنج بكل كفاءة. ورغم التطورات المستمرة في مجال سرعة المعالجة الحاسوبية وطاقة الذاكرات لا توجد برمجية قادرة على محاكاة ليونة عقل الانسان في كل الجالات أو التي تتطلب دراية يومية، لكنه من جانب اخر وصلت عدة برمجيات إلى درجة فاعلية تعادل الخبراء البشر والمهنيين في عدة مهام إلى أن أصبح الذكاء الاصطناعي يصنف ضمن التطبيقات المتعددة والمختلفة كالتشخيص الطبي أو المحرّكات الحاسوبية للبحث أو التعرف الآلي على الأصوات والكلام والكتابة اليدوية والدردشات الالية إلى غير ذلك من التطبيقات التي تعد آليات وفروعا للذكاء الاصطناعي.\n\nأما تعريف كلمة الذكاء فهي تشير إلى السلوكيات البسيطة منها رغم ان سلوكيات بعض الحشرات المعقدة لم تصنف في خانة الذكاء. إذا ما هو الفرق بين الذكاء البشري والسلوك المعقد الآخر؟\n\nالذكاء البشري يتمثل في قدرة البشر على التفكير والتعلم والقدرة على اتخاذ القرارات التي تعتمد على المعلومة وفهمها وهذا يعني ان البشر قادرون على معالجة المعلومات.</div>'}
+]);
+
+Z.addLesson('bk_ai_comp_raw3',{cat:'books',icon:'📚',name:'الكتاب الشامل (نص حرفي 3)',desc:'الفصل 2: التصنيفات',color:'p'},[
+  {n:'الفصل 2',t:'تصنيفات الذكاء الاصطناعي',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 16px; line-height: 2; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">يعتمد تصنيف الذكاء الاصطناعي على عنصرين اثنين: عنصر القدرة والفاعلية وعنصر المهام حيث يتمثل العنصر الأول أساسا على الاهتمام على الذكاء ومدى تعقيد منظومة الذكاء الاصطناعي الذي يمكن ان يكون عليه بداية من الذكاء الاصطناعي الضيق المختص في تنفيذ مهمة واحدة ومحدودة وصولا إلى الذكاء الاصطناعي العام الذي يعكس القدرات المعرفية البشرية في مجال التعلم وتطبيق المعارف في مجموعة واسعة من المهام.\n\nأما في المستوى الأعلى نجد الذكاء الاصطناعي الفائق وهو مفهوم نظري يتخطى واجهة الذكاء البشري والذكاء الاصطناعي على كل الجهات بما في ذلك الابتكار والفهم الشعوري مما يجعل هذا التصنيف يرتكز على القدرة والفاعلية واتساع إمكانيات الذكاء الاصطناعي لحل كل المسائل.\n\nالذكاء الاصطناعي الضيق: إن الذكاء الاصطناعي الضعيف الموجود حاليا هو الذكاء الاصطناعي الضيق المعروف تحت اسم الذكاء الاصطناعي الضعيف والذي تم تصميمه لأداء مهمة معينة وخاصة بدقة كالتعرف الصوتي أو أنظمة الأرشاد أو التعرف على الصور ولا يستطيع القيام بعمليات خارج المهمة التي عين فيها.\n\nالذكاء الاصطناعي العام: أو الذكاء الاصطناعي القوي وهو مفهوم نظري يمثل تطورا مهما مقارنة بالذكاء الاصطناعي الضعيف. أما الذكاء الاصطناعي العام فهو عكس الذكاء الاصطناعي الضيق ويمكن له من تطبيق تدريباته السابقة للقيام بمهام جديدة في سياقات مختلفة دون تدخل البشري. وهذا النوع من الذكاء قدرات تضاهي القدرات المعرفية والإدراكية للبشر.\n\nالذكاء الاصطناعي الفائق: إن المفهوم النظري الأكثر تقدما وتطورا في موضوع الذكاء الاصطناعي هو الذكاء الاصطناعي الفائق الذي لا يقتصر على المعادلة بينه وبين الذكاء البشري بل يتجاوزه بكثير. فيمكن له الشعور بالإحساس ويحتاج لضروريات واعتقادات لاتخاذ القرارات الذي لا يستطيع إلا البشر إقرارها.</div>'}
+]);
 
 /* ==========================================
    الاختبارات (addExam)
