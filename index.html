@@ -211,7 +211,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <button class="sbt" onclick="ZAID.register()">🔑 ابدأ الآن مجاناً</button>
     <button type="button" onclick="ZAID.logout()" style="display:block;width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;font-weight:900;">🚪 خروج / إلغاء</button>
     <div style="text-align:center;margin-top:10px;">
-      <button type="button" onclick="ZAID.adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:13px;font-family:Cairo;">👑 دخول المشرف</button>
+      <button type="button" onclick="ZAID.adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:13px;font-family:Cairo;padding:8px;display:inline-block;">👑 دخول المشرف</button>
     </div>
   </div>
 </div>
@@ -294,7 +294,7 @@ try {
 Z.ADMIN='012345';
 Z.WA='21655335477';
 
-/* ✅ ثوابت الاشتراك (جديدة) */
+/* ✅ ثوابت الاشتراك */
 Z.TRIAL_DAYS = 3;
 Z.SUB_DAYS = 365;
 Z.SUB_PRICE_TN = 30;
@@ -310,7 +310,7 @@ Z.visitorAttempts=0;
 Z.addLesson=function(k,m,s){Z.lessons[k]={meta:m,slides:s};};
 Z.addExam=function(k,q){Z.exams[k]=q;};
 
-/* ========== دوال الاشتراك (جديدة) ========== */
+/* ✅ دوال الاشتراك */
 Z.getTrialEnd = function(u){ if(!u||!u.trialStart) return 0; return u.trialStart + Z.TRIAL_MS; };
 Z.isSubActive = function(u){ if(!u) return false; if(u.isSub===true){ if(u.subExpiry && u.subExpiry>0) return Date.now()<u.subExpiry; return true; } return false; };
 Z.canAccess = function(){ if(Z.admin) return true; var u=Z.user; if(!u) return false; if(Z.isSubActive(u)) return true; if(u.trialStart && Date.now()<Z.getTrialEnd(u)) return true; return false; };
@@ -404,7 +404,6 @@ Z.showPage=function(id){
 
 Z.goHome=function(){Z.stopSpeak();Z.showPage(Z.user||Z.admin?'pageHome':'pageWelcome');};
 
-/* تحديث الشريط العلوي */
 Z.updateUI=function(){
   var b=document.getElementById('top'),ic=document.getElementById('ti'),tx=document.getElementById('tt');
   var br=document.getElementById('br'),bo=document.getElementById('bo'),bstat=document.getElementById('bstats'),bs=document.getElementById('bs');
@@ -422,15 +421,17 @@ Z.adminLogin=function(){
   m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
   m.innerHTML='<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;"><div style="font-size:50px;margin-bottom:15px;">👑</div><h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2><input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" autocomplete="new-password" style="text-align:center;font-size:20px;letter-spacing:5px;"><button type="button" onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button><button type="button" onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button></div>';
   document.body.appendChild(m);
+  setTimeout(function(){ var p=document.getElementById('adminPwd'); if(p) p.focus(); }, 100);
 };
 
 Z.checkAdmin=function(){
-  var pwd=document.getElementById('adminPwd').value;
+  var pwdEl=document.getElementById('adminPwd');
+  if(!pwdEl) return;
+  var pwd=pwdEl.value;
   if(pwd===Z.ADMIN){ Z.admin=true;document.getElementById('admModal').remove();Z.updateUI();Z.showPage('pageHome'); }
   else{ alert('كلمة المرور خاطئة'); }
 };
 
-/* تسجيل الخروج (مع مسح localStorage) */
 Z.logout=function(){ 
   Z.user=null;Z.admin=false;Z.stopSpeak(); 
   Z.visitorAttempts=0; 
@@ -451,7 +452,7 @@ Z.speak=function(t,l){
   } 
 };
 
-/* الإحصائيات (مع أزرار التفعيل) */
+/* الإحصائيات */
 Z.showStats=function(){
   if(!Z.admin) return;
   if(!db){ alert('Firebase غير متصل.'); return; }
@@ -507,7 +508,6 @@ Z.showStats=function(){
   }
 };
 
-/* تفعيل/إلغاء الاشتراك */
 Z.toggleSub = function(userId, activate) {
   if(!Z.admin || !db) { alert('غير متاح'); return; }
   var confirmMsg = activate ? 'تفعيل الاشتراك لمدة ' + Z.SUB_DAYS + ' يوم؟' : 'إلغاء الاشتراك؟';
@@ -518,7 +518,6 @@ Z.toggleSub = function(userId, activate) {
     .catch(function(err){ alert('❌ خطأ: ' + err.message); });
 };
 
-/* تصدير Excel */
 Z.exportExcel=function(){
   if(!Z.admin || !db) return;
   db.collection("users").get().then(function(qs){ 
@@ -536,7 +535,6 @@ Z.exportExcel=function(){
   }).catch(function(err){ alert('❌ خطأ: ' + err.message); });
 };
 
-/* حذف جميع المستخدمين */
 Z.clearAllUsers=function(){
   if(!Z.admin || !db) return;
   if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً من Firebase؟ لا يمكن التراجع!')) return;
@@ -585,7 +583,6 @@ Z.showSub=function(){
   document.body.appendChild(m);
 };
 
-/* رسالة واتساب مفصلة */
 Z.wa=function(){
   var u=Z.user||{};
   var amount = Z.SUB_PRICE_TN + ' د.ت (تونس) أو ' + Z.SUB_PRICE_USD + ' دولار (دولي)';
@@ -604,7 +601,7 @@ Z.wa=function(){
   window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
 };
 
-/* ========== التسجيل الحقيقي في Firebase فقط ========== */
+/* التسجيل الحقيقي في Firebase فقط */
 Z.register=function(){
   var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
   var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
@@ -840,7 +837,7 @@ Z.displayDictTerm=function(pos){
 };
 
 /* ==========================================
-   نظام التربص والتشغيل (حقيقي 100%)
+   نظام التربص والتشغيل
    ========================================== */
 Z.openSrv=function(key){
   if(!Z.checkVisitor()) return;
@@ -905,7 +902,8 @@ Z.addLesson('book',{cat:'tech',icon:'📖',name:'📚 الأطفال والحا�
 
 Z.addLesson('ar1',{cat:'arabic',icon:'🌙',name:'المستوى 1: الحروف والحركات',desc:'7 شرائح + اختبار'},[
   {n:'الدرس 1',t:'الأبجدية العربية',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'تتكون الأبجدية العربية من <strong>28 حرفاً</strong>، وتُكتب من اليمين إلى اليسار.<br><br>أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي.',s:['الأبجدية العربية ثمانية وعشرون حرفا','L alphabet arabe','The Arabic alphabet']},
-  {n:'الدرس 2',t:'الحركات (التشكيل)',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الحركات تحدد نطق الحرف: <br><br><strong>الفتحة (ـَ):</strong> بَ<br><strong>الضمة (ـُ):</strong> بُ<br><strong>الكسرة (ـِ):</strong> بِ<br><strong>السكون (ـْ):</strong> بْ'},</n  {n:'الدرس 3',t:'التنوين',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'<strong>فتحتين (ـً):</strong> كِتَابًا<br><strong>ضمتين (ـٌ):</strong> كِتَابٌ<br><strong>كسرتين (ـٍ):</strong> كِتَابٍ'},
+  {n:'الدرس 2',t:'الحركات (التشكيل)',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الحركات تحدد نطق الحرف: <br><br><strong>الفتحة (ـَ):</strong> بَ<br><strong>الضمة (ـُ):</strong> بُ<br><strong>الكسرة (ـِ):</strong> بِ<br><strong>السكون (ـْ):</strong> بْ'},
+  {n:'الدرس 3',t:'التنوين',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'<strong>فتحتين (ـً):</strong> كِتَابًا<br><strong>ضمتين (ـٌ):</strong> كِتَابٌ<br><strong>كسرتين (ـٍ):</strong> كِتَابٍ'},
   {n:'الدرس 4',t:'المدود',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'<strong>الألف:</strong> بَا<br><strong>الواو:</strong> بُو<br><strong>الياء:</strong> بِي'},
   {n:'الدرس 5',t:'الشدة',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الشدة (ـّ) تعني أن الحرف مُضاعف.<br>مثال: <strong>مَدَّ</strong> أصلها مَدَدَ.'},
   {n:'الدرس 6',t:'التاء المربوطة والمفتوحة',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'<strong>التاء المفتوحة (ت):</strong> تُنطق تاءً دائماً، مثل: بِنْت.<br><strong>التاء المربوطة (ة):</strong> تُنطق هاءً عند الوقف، مثل: وَرْدَة.'},
@@ -1052,268 +1050,232 @@ Z.addLesson('univ_info',{cat:'univ',icon:'🤖',name:'الجامعي: الذكا
   {n:'الاختبار',e:'univ_info_exam'}
 ]);
 /* ==========================================
-   الاختبارات القديمة (بدون تغيير)
+   دروس اللغة العربية الجديدة (3 دروس)
+   ========================================== */
+Z.addLesson('ar_ai',{cat:'arabic',icon:'🤖',name:'الذكاء الاصطناعي بالعربية',desc:'6 شرائح تعليمية'},[
+  {n:'1/6',t:'ما هو الذكاء الاصطناعي؟',x:'الذكاء الاصطناعي (AI) هو فرع من علوم الحاسوب يهدف إلى محاكاة القدرات الذهنية البشرية مثل التعلم، التفكير، وحل المشكلات.',s:['الذكاء الاصطناعي هو محاكاة الذكاء البشري','L intelligence artificielle imite l intelligence humaine','AI mimics human intelligence']},
+  {n:'2/6',t:'تعلم الآلة',x:'تعلم الآلة (Machine Learning) هو جعل الخوارزميات تكتشف أنماطاً في البيانات دون برمجة صريحة.'},
+  {n:'3/6',t:'التعلم العميق',x:'التعلم العميق (Deep Learning) يستخدم شبكات عصبية متعددة الطبقات، وهو أساس ChatGPT والترجمة الآلية.'},
+  {n:'4/6',t:'معالجة اللغة الطبيعية',x:'معالجة اللغة الطبيعية (NLP) تمكن الحواسيب من فهم اللغة البشرية: الترجمة، تحليل المشاعر، الدردشة الآلية.'},
+  {n:'5/6',t:'تطبيقات AI',x:'تطبيقات AI تشمل: السيارات الذاتية، التشخيص الطبي، التوصية، الأمن السيبراني.'},
+  {n:'6/6',t:'ابدأ التعلم',x:'لتعلم AI: ابدأ بـ Python، ثم TensorFlow أو PyTorch، وطبق مشاريع صغيرة.'}
+]);
+
+Z.addLesson('ar_computer',{cat:'arabic',icon:'💻',name:'الحاسوب بالعربية',desc:'5 شرائح تعليمية'},[
+  {n:'1/5',t:'ما هو الحاسوب؟',x:'الحاسوب هو جهاز إلكتروني رقمي يستقبل البيانات ويعالجها ويخرج النتائج.'},
+  {n:'2/5',t:'مكونات الحاسوب',x:'يتكون من: العتاد (Hardware) والبرمجيات (Software). العتاد يشمل المعالج، الذاكرة، اللوحة الأم.'},
+  {n:'3/5',t:'نظام التشغيل',x:'نظام التشغيل (OS) يدير موارد الحاسوب. أمثلة: Windows, Linux, macOS.'},
+  {n:'4/5',t:'الشبكات',x:'الشبكة هي ربط جهازين أو أكثر. الإنترنت هو أكبر شبكة في العالم.'},
+  {n:'5/5',t:'أمن المعلومات',x:'أمن المعلومات يحمي البيانات من الاختراق عبر: كلمات مرور قوية، تحديثات، جدار حماية.'}
+]);
+
+Z.addLesson('ar_linguistics',{cat:'arabic',icon:'📖',name:'اللسانيات العربية',desc:'5 شرائح تعليمية'},[
+  {n:'1/5',t:'اللسانيات',x:'اللسانيات هي الدراسة العلمية للغة. تنقسم إلى: صوتيات، صرف، نحو، دلالة، تداولية.'},
+  {n:'2/5',t:'الصوتيات',x:'الصوتيات تدرس الأصوات اللغوية ومخارج الحروف.'},
+  {n:'3/5',t:'الصرف',x:'الصرف يدرس بنية الكلمة: الجذر، الوزن، الاشتقاق.'},
+  {n:'4/5',t:'النحو',x:'النحو يدرس تركيب الجملة: المبتدأ، الخبر، الفعل، الفاعل، المفعول.'},
+  {n:'5/5',t:'الدلالة',x:'الدلالة تدرس معاني الكلمات والجمل.'}
+]);
+/* ==========================================
+   الاختبارات (addExam)
    ========================================== */
 Z.addExam('book_exam',[
-  {q:'الجزء المادي (الملموس) في الحاسوب يسمى؟',o:['المعدات (Hardware)','البرمجيات (Software)','الإنترنت (Internet)','نظام التشغيل (OS)'],a:'المعدات (Hardware)'},
-  {q:'الجزء المعنوي (البرامج) يسمى؟',o:['المعدات (Hardware)','البرمجيات (Software)','المعالج (CPU)','الذاكرة (RAM)'],a:'البرمجيات (Software)'},
-  {q:'وظيفة المعالج (CPU)؟',o:['تخزين البيانات','عرض الصور','تنفيذ الأوامر','طباعة المستندات'],a:'تنفيذ الأوامر'},
-  {q:'أي ذاكرة تفقد محتواها عند إيقاف التشغيل؟',o:['ROM','RAM','القرص الصلب','CD'],a:'RAM'},
-  {q:'أي مما يلي يعتبر جهاز إخراج؟',o:['الفأرة','لوحة المفاتيح','الطابعة','الماسح الضوئي'],a:'الطابعة'},
-  {q:'أي مما يلي يعتبر نظام تشغيل؟',o:['Word','Windows','Excel','Chrome'],a:'Windows'}
+  {q:'ما هو الحاسوب؟',o:['جهاز إلكتروني رقمي','جهاز طباعة','جهاز تصوير','جهاز صوت'],a:0},
+  {q:'ما هي الذاكرة المؤقتة؟',o:['ROM','RAM','CPU','HDD'],a:1},
+  {q:'أي من التالي وسيلة إدخال؟',o:['الشاشة','الطابعة','الفأرة','السماعة'],a:2},
+  {q:'ما هي أكبر شبكة في العالم؟',o:['LAN','WAN','الإنترنت','MAN'],a:2}
 ]);
 
 Z.addExam('arabic_exam',[
-  {q:'عدد حروف الأبجدية العربية؟',o:['26','27','28','29'],a:'28'},
-  {q:'ما الحركة على حرف الباء في «بُ»؟',o:['فتحة','ضمة','كسرة','سكون'],a:'ضمة'},
-  {q:'أي الكلمات التالية اسم؟',o:['كتبَ','قلم','هو','في'],a:'قلم'},
-  {q:'الجملة الاسمية تبدأ بـ...',o:['فعل','اسم','حرف','ظرف'],a:'اسم'}
-]);
-
-Z.addExam('ai_exam',[
-  {q:'أداة لتوليد صور مع نصوص عربية؟',o:['Ideogram','CapCut','Whisper','Notion AI'],a:'Ideogram'},
-  {q:'أداة لتحويل الفيديو لدرس تفاعلي؟',o:['Canva','EdPuzzle','MagicSchool','Speechify'],a:'EdPuzzle'},
-  {q:'فرع يعتمد على الشبكات العصبية؟',o:['تعلم الآلة','التعلم العميق','معالجة اللغة','المنطق الضبابي'],a:'التعلم العميق'},
-  {q:'عناصر الأمن السيبراني؟',o:['السرعة، الدقة','السرية، التكامل، التوفر','الذكاء، التعلم','المرونة، الصلابة'],a:'السرية، التكامل، التوفر'},
-  {q:'رائد المنطق الضبابي؟',o:['آلان تورينغ','الطفي زداح','محمد زايد','جون مكارثي'],a:'الطفي زداح'}
+  {q:'كم عدد حروف الأبجدية العربية؟',o:['26','27','28','29'],a:2},
+  {q:'ما هي حركة الضمة؟',o:['ـَ','ـُ','ـِ','ـْ'],a:1},
+  {q:'التنوين بالفتح يكون:',o:['ـً','ـٌ','ـٍ','ـّ'],a:0},
+  {q:'التاء المربوطة تُنطق عند الوقف:',o:['تاءً','هاءً','كافاً','همزةً'],a:1}
 ]);
 
 Z.addExam('prim3_exam',[
-  {q:'ما هو قانون محيط المستطيل؟',o:['الطول × العرض','(الطول + العرض) × 2','الطول + العرض'],a:'(الطول + العرض) × 2'},
-  {q:'في جملة "الطقسُ جميلٌ"، ما هو المبتدأ؟',o:['جميل','الطقس','لا يوجد'],a:'الطقس'},
-  {q:'متى يحدث الغليان؟',o:['عند 0 درجة','عند 50 درجة','عند 100 درجة'],a:'عند 100 درجة'},
-  {q:'ما هو المقال النكرة (Article indéfini) في "livre"؟',o:['Le','Un','La'],a:'Un'}
+  {q:'ما هو قانون محيط المستطيل؟',o:['الطول × العرض','(الطول + العرض) × 2','الطول + العرض','الضلع × 4'],a:1},
+  {q:'الجملة الاسمية تتكون من:',o:['فعل وفاعل','مبتدأ وخبر','حرف واسم','فعل ومفعول'],a:1},
+  {q:'الغليان يحدث عند درجة حرارة:',o:['50°','80°','100°','120°'],a:2},
+  {q:'Les articles définis هي:',o:['un, une, des','le, la, les','du, de la','ce, cet'],a:1}
 ]);
 
 Z.addExam('prim4_exam',[
-  {q:'مربع طول ضلعه 4 سم، ما هي مساحته؟',o:['8 سم²','16 سم²','12 سم²'],a:'16 سم²'},
-  {q:'في جملة "كتبَ التلميذُ الدرسَ"، ما هو الفاعل؟',o:['كتب','التلميذ','الدرس'],a:'التلميذ'},
-  {q:'كيف يتنقل النسر؟',o:['بالزحف','بالمشي','بالطيران'],a:'بالطيران'},
-  {q:'كيف نقول "أنا أتكلم" بالمضارع الفرنسي؟',o:['Je parle','Tu parles','Il parle'],a:'Je parle'}
+  {q:'مساحة المربع =',o:['الضلع + الضلع','الضلع × 4','الضلع × الضلع','الطول × العرض'],a:2},
+  {q:'الجملة الفعلية تبدأ بـ:',o:['اسم','فعل','حرف','ظرف'],a:1},
+  {q:'أي حيوان يزحف؟',o:['الأسد','النسر','الأفعى','السمكة'],a:2},
+  {q:'Le présent يُستخدم للتعبير عن:',o:['حدث في الماضي','حدث الآن','حدث في المستقبل','حدث خيالي'],a:1}
 ]);
 
 Z.addExam('prim5_exam',[
-  {q:'ما هو العدد العشري في 15,75؟',o:['15','75','15,75'],a:'15,75'},
-  {q:'الفعل "قال" هو فعل معتل:',o:['مثال','أجوف','ناقص'],a:'أجوف'},
-  {q:'لكي يضيء المصباح في الدارة الكهربائية يجب أن تكون الدارة:',o:['مفتوحة','مغلقة','مقطوعة'],a:'مغلقة'},
-  {q:'كيف نقول "سأتحدث" بالمستقبل الفرنسي؟',o:['Je parle','Je parlerai','J ai parlé'],a:'Je parlerai'}
+  {q:'العدد العشري 12,45 يتكون من:',o:['جزء صحيح فقط','جزء عشري فقط','جزء صحيح وجزء عشري','عدد طبيعي'],a:2},
+  {q:'الفعل المعتل هو كل فعل يحتوي على:',o:['حرف علة','حرفين متحركين','ثلاثة حروف','حرف ساكن'],a:0},
+  {q:'الدارة الكهربائية البسيطة تحتاج إلى:',o:['مولد ومصباح وأسلاك وقاطعة','مولد فقط','مصباح فقط','بطارية فقط'],a:0},
+  {q:'Le futur simple يعبر عن:',o:['حدث ماضٍ','حدث حاضر','حدث مستقبلي','حدث مستمر'],a:2}
 ]);
 
 Z.addExam('prim6_exam',[
-  {q:'إذا كان 2 كغ من التفاح بـ 4 دنانير، فكم ثمن 5 كغ؟',o:['8 دنانير','10 دنانير','12 دينار'],a:'10 دنانير'},
-  {q:'في جملة "قرأ التلميذ الكتاب"، ما هو المفعول به؟',o:['قرأ','التلميذ','الكتاب'],a:'الكتاب'},
-  {q:'ينتشر الضوء في:',o:['خطوط متعرجة','خطوط مستقيمة','دوائر'],a:'خطوط مستقيمة'},
-  {q:'كيف نقول "أنا تكلمت" بالماضي المركب الفرنسي؟',o:['Je parle','Je parlerai','J ai parlé'],a:'J ai parlé'}
+  {q:'التناسب هو:',o:['تساوي نسبتين','جمع نسبتين','طرح نسبتين','ضرب نسبتين'],a:0},
+  {q:'المفعول به هو اسم:',o:['مرفوع','منصوب','مجرور','ساكن'],a:1},
+  {q:'الضوء ينتشر في وسط متجانس:',o:['بشكل منحنٍ','بشكل متعرج','في خطوط مستقيمة','بشكل دائري'],a:2},
+  {q:'Le passé composé يتكون من:',o:['فعل مساعد + اسم مفعول','فعل فقط','اسم + فعل','حرف + اسم'],a:0}
 ]);
 
 Z.addExam('mid_info_exam',[
-  {q:'ما هي الشبكة المحلية؟',o:['LAN','WAN','Internet','Server'],a:'LAN'},
-  {q:'ما وظيفة الموجه (Router)؟',o:['توجيه البيانات','طباعة','عرض','تخزين'],a:'توجيه البيانات'},
-  {q:'ماذا يعني HTTPS؟',o:['موقع آمن','موقع غير آمن','موقع سريع','موقع بطيء'],a:'موقع آمن'}
+  {q:'الشبكة هي:',o:['ربط جهازين أو أكثر','جهاز واحد','برنامج','ملف'],a:0},
+  {q:'LAN تعني:',o:['شبكة واسعة','شبكة محلية','شبكة حضرية','شبكة عالمية'],a:1},
+  {q:'HTTPS تعني:',o:['بروتوكول غير آمن','بروتوكول آمن','بروتوكول نقل ملفات','بروتوكول بريد'],a:1},
+  {q:'الإنترنت هو:',o:['شبكة محلية','شبكة حضرية','شبكة الشبكات','شبكة واحدة'],a:2}
 ]);
 
 Z.addExam('high_info_exam',[
-  {q:'الخوارزمية هي...',o:['خطوات منطقية','لغة برمجة','جهاز','برنامج'],a:'خطوات منطقية'},
-  {q:'دالة الطباعة في بايثون؟',o:['print()','input()','echo()','write()'],a:'print()'},
-  {q:'ما هو المتغير؟',o:['مكان في الذاكرة','برنامج','جهاز','ملف'],a:'مكان في الذاكرة'}
+  {q:'الخوارزمية هي:',o:['سلسلة خطوات منطقية','لغة برمجة','جهاز','شبكة'],a:0},
+  {q:'لغة بايثون تستخدم للطباعة:',o:['echo()','print()','console.log()','printf()'],a:1},
+  {q:'أي من التالي لغة برمجة؟',o:['HTML','Python','HTTP','FTP'],a:1},
+  {q:'المتغير في البرمجة هو:',o:['قيمة ثابتة','مكان لتخزين البيانات','دالة','حلقة'],a:1}
 ]);
 
 Z.addExam('univ_info_exam',[
-  {q:'فرع من الذكاء الاصطناعي؟',o:['تعلم الآلة','Word','Excel','Windows'],a:'تعلم الآلة'},
-  {q:'هدف علم البيانات؟',o:['استخراج المعرفة','تصميم ألعاب','صنع أجهزة','برمجة'],a:'استخراج المعرفة'},
-  {q:'ماذا يحاكي الذكاء الاصطناعي؟',o:['الذكاء البشري','سرعة الإنترنت','ذاكرة الهاتف','الشاشة'],a:'الذكاء البشري'}
+  {q:'الذكاء الاصطناعي يحاكي:',o:['الذكاء البشري','الطاقة','الماء','الضوء'],a:0},
+  {q:'تعلم الآلة هو فرع من:',o:['الشبكات','الذكاء الاصطناعي','قواعد البيانات','أنظمة التشغيل'],a:1},
+  {q:'علم البيانات يهدف إلى:',o:['تخزين البيانات','استخراج المعرفة من البيانات','حذف البيانات','نسخ البيانات'],a:1},
+  {q:'Deep Learning يستخدم:',o:['شبكات عصبية متعددة الطبقات','شبكة واحدة','خوارزمية بسيطة','قاعدة بيانات'],a:0}
 ]);
 
 /* ==========================================
-   الاختبارات العربية الجديدة (3)
+   محرك عرض الدروس
    ========================================== */
-Z.addExam('ar_ai_exam',[
-  {q:'كم عدد المتكلمين باللغة العربية في العالم؟',o:['100 مليون','237 مليون','371.4 مليون','500 مليون'],a:'371.4 مليون'},
-  {q:'كم عدد الكلمات في اللغة العربية؟',o:['1 مليون','5 ملايين','12 مليون','50 مليون'],a:'12 مليون'},
-  {q:'ما هي اللسانيات الرقمية؟',o:['دراسة اللغة بالتكنولوجيا','دراسة الأدب','دراسة التاريخ','دراسة الجغرافيا'],a:'دراسة اللغة بالتكنولوجيا'},
-  {q:'ما هو AraBERT؟',o:['نموذج ذكاء اصطناعي للعربية','لعبة عربية','محرك بحث','تطبيق دردشة'],a:'نموذج ذكاء اصطناعي للعربية'},
-  {q:'ما هو Qutrub؟',o:['أداة تصريف الأفعال العربية','لعبة','محرك بحث','منصة تعليمية'],a:'أداة تصريف الأفعال العربية'},
-  {q:'أي مما يلي من تحديات معالجة العربية بالذكاء الاصطناعي؟',o:['قلة المتكلمين','تعدد اللهجات','سهولة القواعد','قلة المفردات'],a:'تعدد اللهجات'},
-  {q:'ما هو OCR؟',o:['التعرف البصري على الحروف','بروتوكول شبكات','لعبة','محرك بحث'],a:'التعرف البصري على الحروف'},
-  {q:'أي أداة تستخدم لتحليل المشاعر في العربية؟',o:['AraBERT','Google Maps','Photoshop','Excel'],a:'AraBERT'}
-]);
-
-Z.addExam('ar_computer_exam',[
-  {q:'ما هي المرتبة التي تحتلها العربية بين لغات الإنترنت؟',o:['الأولى','الثانية','الثالثة','الرابعة'],a:'الرابعة'},
-  {q:'كم عدد مستخدمي الإنترنت الناطقين بالعربية؟',o:['100 مليون','237.4 مليون','371 مليون','500 مليون'],a:'237.4 مليون'},
-  {q:'ما نسبة المحتوى العربي من محتوى الإنترنت؟',o:['أكثر من 10%','5%','أقل من 1%','20%'],a:'أقل من 1%'},
-  {q:'ما هو الاشتقاق في حوسبة اللغة؟',o:['البحث عن جذور الكلمات','الترجمة','النسخ','الحذف'],a:'البحث عن جذور الكلمات'},
-  {q:'أي مما يلي من آليات حوسبة اللغة؟',o:['التحليل الصرفي','الطباعة','النسخ','اللصق'],a:'التحليل الصرفي'},
-  {q:'من التطبيقات العملية لحوسبة العربية:',o:['التدقيق الإملائي','الطباعة','اللصق','الحذف'],a:'التدقيق الإملائي'},
-  {q:'أي مما يلي من عوامل تطوير حوسبة العربية؟',o:['قلة المتكلمين','الجيوسياسة والترابط اللغوي','سهولة القواعد','قلة الأمية'],a:'الجيوسياسة والترابط اللغوي'},
-  {q:'أي مشروع مقترح لحوسبة العربية؟',o:['القلم الإلكتروني العربي','محرك بحث إنجليزي','متجر إلكتروني','لعبة فيديو'],a:'القلم الإلكتروني العربي'}
-]);
-
-Z.addExam('ar_linguistics_exam',[
-  {q:'ما هي اللسانيات؟',o:['علم يدرس اللغة البشرية','علم الأحياء','علم الفلك','علم الطب'],a:'علم يدرس اللغة البشرية'},
-  {q:'ما هي اللسانيات الرقمية؟',o:['فرع يستخدم التكنولوجيا لدراسة اللغة','علم الرياضيات','علم الفيزياء','علم الكيمياء'],a:'فرع يستخدم التكنولوجيا لدراسة اللغة'},
-  {q:'ماذا يعني NLP؟',o:['معالجة اللغة الطبيعية','بروتوكول شبكات','نوع من الألعاب','لغة برمجة'],a:'معالجة اللغة الطبيعية'},
-  {q:'أي مما يلي من أدوات التعلم العميق في اللغة العربية؟',o:['BERT','Windows','Excel','Chrome'],a:'BERT'},
-  {q:'ما هو التحدي الأكبر في معالجة العربية رقمياً؟',o:['قلة المتكلمين','تعقيد النحو والصرف','سهولة القواعد','قلة الكلمات'],a:'تعقيد النحو والصرف'},
-  {q:'ما هو هدف اللسانيات الرقمية؟',o:['تطوير أنظمة تفهم اللغة','تعليم الطبخ','بيع المنتجات','تصميم الأزياء'],a:'تطوير أنظمة تفهم اللغة'}
-]);
-
-/* ==========================================
-   محرك الدروس والاختبارات والشهادات والانتقال
-   ========================================== */
-var nextGradeMap = {
-  'prim3_exam': 'prim4', 'prim4_exam': 'prim5', 'prim5_exam': 'prim6', 'prim6_exam': 'mid_info',
-  'mid_info_exam': 'high_info', 'high_info_exam': 'univ_info', 'univ_info_exam': 'pageHome'
-};
-
-function renderSlide(o){
-  var h='<div class="slide">';
-  if(o.n)h+='<div class="sn">'+o.n+'</div>'; if(o.t)h+='<div class="st">'+o.t+'</div>';
-  if(o.i)h+='<div class="simg"><img src="'+o.i+'" onerror="this.style.display=\'none\'"></div>';
-  if(o.x)h+='<div class="stxt">'+o.x+'</div>';
-  if(o.r)h+='<div class="strans"><div><div class="lbl">🇹🇳</div><div class="ar">'+(o.r[0]||'')+'</div></div><div><div class="lbl">🇫🇷</div><div class="fr">'+(o.r[1]||'')+'</div></div><div><div class="lbl">🇬🇧</div><div class="en">'+(o.r[2]||'')+'</div></div></div>';
-  if(o.s&&o.s[0]){ var lb=['عربي','FR','EN'],lg=['ar','fr','en'],cls=['sp-ar','sp-fr','sp-en']; h+='<div class="sb">'; for(var i=0;i<3;i++)if(o.s[i])h+='<button class="spb '+cls[i]+'" onclick="ZAID.speak(\''+o.s[i].replace(/'/g,"\\'")+'\',\''+lg[i]+'\')">🔊 '+lb[i]+'</button>'; h+='</div>'; }
-  if(o.v)h+='<div class="simg"><iframe width="100%" height="250" src="'+o.v+'" allowfullscreen style="border-radius:10px;border:none;"></iframe></div>';
-  if(o.e)h+='<div style="text-align:center;padding:30px"><div style="font-size:50px;margin-bottom:15px">📝</div><div class="stxt" style="font-size:16px"><strong>📝 الاختبار</strong></div><button onclick="ZAID.startExam(\''+o.e+'\')" style="margin-top:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:16px;padding:12px 30px;border:none;border-radius:30px;font-weight:900;cursor:pointer;font-family:Cairo;">🚀 ابدأ</button></div>';
-  return h+'</div>';
-}
-
-Z.startLesson=function(k){var L=Z.lessons[k];if(!L)return;Z.cur={key:k,idx:0};renderCur();};
-function renderCur(){
-  Z.stopSpeak(); var L=Z.lessons[Z.cur.key];if(!L)return;
-  var c=document.getElementById('lc');
-  var nav='<div class="nav">';
-  if(Z.cur.idx>0)nav+='<button class="nbtn np" onclick="ZAID.prev()">▶ السابق</button>';
-  nav+='<button class="nbtn ne" onclick="ZAID.openCat(\''+(L.meta.cat||'tech')+'\')">🏠 خروج</button>';
-  if(Z.cur.idx<L.slides.length-1)nav+='<button class="nbtn nn" onclick="ZAID.next()">التالي ◀</button>';
-  nav+='</div>';
-  var pr='<div class="prog"><div class="progf" style="width:'+((Z.cur.idx+1)/L.slides.length*100)+'%"></div></div>';
-  c.innerHTML=renderSlide(L.slides[Z.cur.idx])+nav+pr; window.scrollTo(0,0);
-}
-Z.prev=function(){if(Z.cur.idx>0){Z.cur.idx--;renderCur();}};
-Z.next=function(){var L=Z.lessons[Z.cur.key];if(Z.cur.idx<L.slides.length-1){Z.cur.idx++;renderCur();}};
-
 Z.openCat=function(cat){
   if(!Z.checkVisitor()) return;
-  var ks=Object.keys(Z.lessons).filter(function(k){return Z.lessons[k].meta.cat===cat;});
+  var list=[];
+  for(var k in Z.lessons){ if(Z.lessons[k].meta.cat===cat) list.push(k); }
   var c=document.getElementById('lc');
-  if(!ks.length){ var catNames={primary:'الابتدائي',middle:'الإعدادي',high:'الثانوي',univ:'الجامعي',games:'الألعاب',arabic:'اللغة العربية'}; c.innerHTML='<div class="slide" style="text-align:center;padding:30px"><div style="font-size:50px">🚧</div><div class="st">'+(catNames[cat]||cat)+'</div><div class="stxt">قيد الإعداد</div></div>'; }
-  else{ var h='<div class="sel">'; ks.forEach(function(k){var m=Z.lessons[k].meta;h+='<div class="lcard '+(m.color||'')+'" onclick="ZAID.startLesson(\''+k+'\')"><div class="li">'+(m.icon||'📖')+'</div><div class="lt">'+m.name+'</div><div class="ld">'+(m.desc||'')+'</div></div>';}); h+='</div>';c.innerHTML=h; }
-  Z.showPage('pageLesson');
+  var titles={primary:'🏫 المراحل الابتدائية',middle:'📘 الإعدادي',high:'🎓 الثانوي',univ:'🏛️ الجامعي',tech:'📖 التربية التكنولوجية',arabic:'🌙 اللغة العربية',games:'🎮 الألعاب',lectures:'🎤 المحاضرات',books:'📚 الكتب',ai:'🤖 الذكاء الاصطناعي'};
+  var h='<div class="slide" style="background:#1e293b;color:#fff;"><div class="sn">'+ (titles[cat]||cat) +'</div>';
+  if(cat==='games'){
+    h+='<div class="sel"><div class="lcard" onclick="ZAID.startMemory()"><div class="li">🧠</div><div class="lt">لعبة الذاكرة</div><div class="ld">اعثر على الأزواج</div></div><div class="lcard j" onclick="ZAID.startWordSearch()"><div class="li">🔍</div><div class="lt">ابحث عن الكلمة</div><div class="ld">اكتشف الكلمات المخفية</div></div></div>';
+  } else if(list.length===0){
+    h+='<div style="text-align:center;padding:30px;color:#94a3b8;">لا توجد دروس في هذا القسم بعد.</div>';
+  } else {
+    h+='<div class="sel">';
+    list.forEach(function(k){
+      var m=Z.lessons[k].meta;
+      h+='<div class="lcard '+(m.color||'')+'" onclick="ZAID.showLesson(\''+k+'\')"><div class="li">'+(m.icon||'📖')+'</div><div class="lt">'+m.name+'</div><div class="ld">'+(m.desc||'')+'</div></div>';
+    });
+    h+='</div>';
+  }
+  h+='<div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
+  c.innerHTML=h; Z.showPage('pageLesson');
 };
 
-Z.startExam=function(k){var q=Z.exams[k];if(!q){alert('لا اختبار');return;}Z.exam={key:k,idx:0,score:0,qs:q,answered:[]};renderExam();};
-Z.prevExam=function(){if(Z.exam.idx>0){Z.exam.idx--;renderExam();}};
-Z.nextExam=function(){if(Z.exam.idx<Z.exam.qs.length){Z.exam.idx++;renderExam();}};
+Z.showLesson=function(key){
+  if(!Z.checkVisitor()) return;
+  var les=Z.lessons[key]; if(!les) return;
+  Z.cur={key:key,idx:0}; Z.stopSpeak(); Z.renderSlide();
+};
 
-function renderExam(){
-  var c=document.getElementById('lc'),t=Z.exam.qs.length;
-  if(Z.exam.idx>=t){
-    var p=Math.round(Z.exam.score/t*100), ok=p>=50;
-    var msg,col,note,cert='',actionBtn='';
-    if(ok){
-      note = p>=80?'ممتاز 🌟':(p>=60?'حسن جداً ✅':'حسن ✔️'); col='#22c55e'; msg='🎉 مبروك! لقد نجحت وتفوقت';
-      var nm=(Z.user&&Z.user.name)?Z.user.name:'المتعلم', dt=new Date().toLocaleDateString('ar-TN');
-      cert='<div class="cert"><h1>🏆 شهادة إتمام</h1><p>تشهد منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي بأن</p><h2>'+nm+'</h2><p>قد أتم بنجاح هذا الاختبار بتقدير <strong>'+note+'</strong> (النسبة: '+p+'%)</p><p>التاريخ: '+dt+'</p><div class="sign">محمد زايد — خبير دولي — تونس 🇹🇳</div></div>';
-      var nextKey = nextGradeMap[Z.exam.key];
-      if (nextKey && nextKey !== 'pageHome') { actionBtn = '<button class="nbtn nn" onclick="ZAID.startLesson(\''+nextKey+'\')" style="font-size:16px; padding:15px 30px; margin-top:15px;">🚀 الانتقال إلى الدرجة الموالية</button>'; }
-      else { actionBtn = '<button class="nbtn ne" onclick="ZAID.goHome()">🏠 العودة للرئيسية</button>'; }
-    } else {
-      col='#dc2626'; msg='😔 للأسف، لم تحقق المعدل المطلوب'; note='ضعيف (أقل من 50%)';
-      var firstLessonKey = Z.exam.key.replace('_exam','');
-      actionBtn = '<button class="nbtn np" onclick="ZAID.startLesson(\''+firstLessonKey+'\')" style="font-size:16px; padding:15px 30px; margin-top:15px;">🔄 العودة للدرس الأول للإعادة</button>';
-    }
-    c.innerHTML='<div class="slide" style="text-align:center"><div class="sn">🏆 النتيجة النهائية</div><div style="font-size:26px;font-weight:900;color:'+col+';margin:20px 0">'+msg+'</div><div class="stxt" style="font-size:18px">درجتك: '+Z.exam.score+' من '+t+'<br>النسبة المئوية: '+p+'%<br>التقدير: <strong>'+note+'</strong></div>'+cert+'<div style="margin-top:20px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap"><button class="nbtn ne" onclick="ZAID.startExam(\''+Z.exam.key+'\')">🔄 إعادة الاختبار</button>'+actionBtn+'</div></div>';
-    return;
+Z.renderSlide=function(){
+  var les=Z.lessons[Z.cur.key]; if(!les) return;
+  var s=les.slides[Z.cur.idx]; if(!s) return;
+  var c=document.getElementById('lc');
+  var total=les.slides.length;
+  var h='<div class="slide">';
+  h+='<div class="sn">'+ (s.n||'') +'</div>';
+  h+='<div class="st">'+ (s.t||'') +'</div>';
+  if(s.i) h+='<div class="simg"><img src="'+s.i+'" alt="" onerror="this.style.display=\'none\'"></div>';
+  if(s.v) h+='<div class="simg"><iframe src="'+s.v+'" allowfullscreen></iframe></div>';
+  if(s.x) h+='<div class="stxt">'+s.x+'</div>';
+  if(s.r) h+='<div class="strans"><div><div class="lbl">🇸🇦 عربي</div><div class="ar">'+s.r[0]+'</div></div><div><div class="lbl">🇫🇷 Français</div><div class="fr">'+s.r[1]+'</div></div><div><div class="lbl">🇬🇧 English</div><div class="en">'+s.r[2]+'</div></div></div>';
+  if(s.s){
+    h+='<div class="sb"><button class="spb sp-ar" onclick="ZAID.speak(\''+s.s[0].replace(/'/g,"\\'")+'\',\'ar\')">🇸🇦 نطق</button><button class="spb sp-fr" onclick="ZAID.speak(\''+s.s[1].replace(/'/g,"\\'")+'\',\'fr\')">🇫🇷 نطق</button><button class="spb sp-en" onclick="ZAID.speak(\''+s.s[2].replace(/'/g,"\\'")+'\',\'en\')">🇬🇧 نطق</button></div>';
   }
-  var q=Z.exam.qs[Z.exam.idx],op='';
-  for(var i=0;i<q.o.length;i++)op+='<button class="opt" onclick="ZAID.ans(\''+q.o[i].replace(/'/g,"\\'")+'\')">'+q.o[i]+'</button>';
-  var nav='<div class="nav" style="margin-top:20px;">';
-  if(Z.exam.idx>0) nav+='<button class="nbtn np" onclick="ZAID.prevExam()">▶ السابق</button>';
-  nav+='<button class="nbtn ne" onclick="ZAID.nextExam()">التالي (تخطي) ◀</button></div>';
-  c.innerHTML='<div class="slide"><div class="sn">📝 السؤال '+(Z.exam.idx+1)+' من '+t+'</div><div class="stxt" style="font-size:16px;font-weight:900">'+q.q+'</div>'+op+nav+'</div>';
-}
-Z.ans=function(ch){ var q=Z.exam.qs[Z.exam.idx]; if(ch===q.a){Z.exam.score++;alert('✅ صحيح!');} else{alert('❌ خطأ. الصحيح: '+q.a);} Z.exam.idx++; renderExam(); };
+  if(s.e){
+    h+='<div style="text-align:center;margin:15px 0;"><button class="nbtn nn" onclick="ZAID.startExam(\''+s.e+'\')" style="font-size:16px;padding:12px 25px;">📝 بدء الاختبار</button></div>';
+  }
+  var prog=Math.round(((Z.cur.idx+1)/total)*100);
+  h+='<div class="prog"><div class="progf" style="width:'+prog+'%"></div></div>';
+  h+='<div class="nav">';
+  if(Z.cur.idx>0) h+='<button class="nbtn np" onclick="ZAID.prevSlide()">▶ السابق</button>';
+  if(Z.cur.idx<total-1) h+='<button class="nbtn nn" onclick="ZAID.nextSlide()">التالي ◀</button>';
+  else h+='<button class="nbtn ne" onclick="ZAID.openCat(\''+les.meta.cat+'\')">🏠 إنهاء</button>';
+  h+='</div></div>';
+  c.innerHTML=h;
+};
+
+Z.nextSlide=function(){ Z.stopSpeak(); if(Z.cur.idx<Z.lessons[Z.cur.key].slides.length-1){ Z.cur.idx++; Z.renderSlide(); } };
+Z.prevSlide=function(){ Z.stopSpeak(); if(Z.cur.idx>0){ Z.cur.idx--; Z.renderSlide(); } };
 
 /* ==========================================
-   الحماية الكاملة: نسخ + لصق + قص + بحث + حذف + حفظ + طباعة + مصدر + F12 + تحديد + سحب
+   محرك الاختبارات
    ========================================== */
-(function(){
-  function isProtected(){
-    if(typeof Z==='undefined') return true;
-    if(Z.admin) return false;
-    if(Z.user && Z.user.isSub) return false;
-    return true;
-  }
-  function showWarn(msg){
-    var old=document.getElementById('antiWarn'); if(old) old.remove();
-    var d=document.createElement('div'); d.id='antiWarn';
-    d.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#dc2626;color:#fff;padding:12px 25px;border-radius:25px;font-weight:900;z-index:99999;font-family:Cairo;box-shadow:0 5px 20px rgba(0,0,0,.4);font-size:14px;text-align:center;';
-    d.textContent=msg||'🔒 هذه العملية محظورة. اشترك للاستفادة الكاملة.';
-    document.body.appendChild(d);
-    setTimeout(function(){ if(d.parentNode) d.remove(); }, 2000);
-  }
-  document.addEventListener('copy', function(e){ if(isProtected()){ e.preventDefault(); showWarn('🔒 النسخ محظور. اشترك للاستفادة الكاملة.'); return false; } });
-  document.addEventListener('cut', function(e){ if(isProtected()){ e.preventDefault(); showWarn('🔒 القص محظور. اشترك للاستفادة الكاملة.'); return false; } });
-  document.addEventListener('paste', function(e){ if(isProtected()){ e.preventDefault(); showWarn('🔒 اللصق محظور. اشترك للاستفادة الكاملة.'); return false; } });
-  document.addEventListener('contextmenu', function(e){ if(isProtected()){ e.preventDefault(); return false; } });
-  document.addEventListener('dragstart', function(e){ if(isProtected()){ e.preventDefault(); return false; } });
-  document.addEventListener('keydown', function(e){
-    if(!isProtected()) return;
-    var k=(e.key||'').toLowerCase(); var ctrl=e.ctrlKey||e.metaKey;
-    if(ctrl && k==='c'){ e.preventDefault(); showWarn('🔒 النسخ محظور.'); return false; }
-    if(ctrl && k==='x'){ e.preventDefault(); showWarn('🔒 القص محظور.'); return false; }
-    if(ctrl && k==='v'){ e.preventDefault(); showWarn('🔒 اللصق محظور.'); return false; }
-    if(ctrl && k==='a'){ e.preventDefault(); return false; }
-    if(ctrl && k==='f'){ e.preventDefault(); showWarn('🔒 البحث محظور. اشترك للاستفادة الكاملة.'); return false; }
-    if(ctrl && k==='s'){ e.preventDefault(); showWarn('🔒 التحميل محظور.'); return false; }
-    if(ctrl && k==='u'){ e.preventDefault(); return false; }
-    if(ctrl && k==='p'){ e.preventDefault(); showWarn('🔒 الطباعة محظورة.'); return false; }
-    if(k==='delete'){ var tag=(e.target&&e.target.tagName||'').toLowerCase(); if(tag!=='input'&&tag!=='textarea'){ e.preventDefault(); return false; } }
-    if(k==='f12'){ e.preventDefault(); return false; }
-    if(ctrl && e.shiftKey && (k==='i'||k==='j'||k==='c')){ e.preventDefault(); return false; }
+Z.startExam=function(key){
+  if(!Z.checkVisitor()) return;
+  var qs=Z.exams[key]; if(!qs) return;
+  Z.exam={key:key,idx:0,score:0,qs:qs,answered:[]};
+  Z.renderExam();
+};
+
+Z.renderExam=function(){
+  var ex=Z.exam; if(!ex.qs) return;
+  var c=document.getElementById('lc');
+  if(ex.idx>=ex.qs.length){ Z.finishExam(); return; }
+  var q=ex.qs[ex.idx];
+  var h='<div class="slide"><div class="sn">📝 اختبار — سؤال '+(ex.idx+1)+'/'+ex.qs.length+'</div>';
+  h+='<div class="st">'+q.q+'</div>';
+  q.o.forEach(function(opt, i){
+    var cls='opt';
+    if(ex.answered.indexOf(ex.idx)>=0){
+      if(i===q.a) cls+=' correct';
+      else if(ex.answered.indexOf(ex.idx)>=0) cls+=' wrong';
+    }
+    h+='<button class="'+cls+'" onclick="ZAID.answerExam('+i+')">'+opt+'</button>';
   });
-  var style=document.createElement('style'); style.id='anti-copy-style'; document.head.appendChild(style);
-  Z.updateAntiCopyStyle=function(){
-    var el=document.getElementById('anti-copy-style'); if(!el) return;
-    if(!isProtected()){ el.textContent=''; }
-    else { el.textContent='body, div, p, span, h1, h2, h3, h4, li, td, th, section, article, img, iframe, a, .slide, .stxt, .st, .cert, .dict-box, .dict-def, .lcard, .card, .ct, .sn { user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; -webkit-touch-callout: none !important; } input, textarea, select, button { user-select: text !important; -webkit-user-select: text !important; }'; }
-  };
-  setTimeout(function(){ if(Z.updateAntiCopyStyle) Z.updateAntiCopyStyle(); }, 300);
-})();
+  h+='<div class="prog"><div class="progf" style="width:'+Math.round((ex.idx/ex.qs.length)*100)+'%"></div></div>';
+  h+='<div class="nav">';
+  if(ex.answered.indexOf(ex.idx)>=0 && ex.idx<ex.qs.length-1) h+='<button class="nbtn nn" onclick="ZAID.nextExam()">السؤال التالي ◀</button>';
+  h+='</div></div>';
+  c.innerHTML=h;
+};
+
+Z.answerExam=function(choice){
+  var ex=Z.exam; if(ex.answered.indexOf(ex.idx)>=0) return;
+  ex.answered.push(ex.idx);
+  if(choice===ex.qs[ex.idx].a) ex.score++;
+  Z.renderExam();
+};
+
+Z.nextExam=function(){ Z.exam.idx++; Z.renderExam(); };
+
+Z.finishExam=function(){
+  var ex=Z.exam;
+  var pct=Math.round((ex.score/ex.qs.length)*100);
+  var c=document.getElementById('lc');
+  var msg = pct>=80?'🏆 ممتاز!':(pct>=60?'👍 جيد':'📚 يحتاج مراجعة');
+  var h='<div class="slide"><div class="st">'+msg+'</div>';
+  h+='<div class="cert"><h1>شهادة إتمام الاختبار</h1>';
+  h+='<h2>'+pct+'%</h2>';
+  h+='<p>النتيجة: '+ex.score+' / '+ex.qs.length+'</p>';
+  h+='<p class="sign">منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</p></div>';
+  h+='<div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
+  c.innerHTML=h;
+};
 
 /* ==========================================
-   تشغيل المنصة عند التحميل (مع استرجاع المستخدم)
+   الحماية (زر الرجوع)
    ========================================== */
-window.addEventListener('load',function(){
-  try {
-    var saved = localStorage.getItem('zaid_current_user');
-    if(saved) {
-      Z.user = JSON.parse(saved);
-      if(typeof Z.user.isSub === 'undefined') Z.user.isSub = false;
-      if(!Z.user.trialStart) Z.user.trialStart = Date.now();
-      if(typeof Z.user.subExpiry === 'undefined') Z.user.subExpiry = 0;
-    }
-  } catch(e) { console.warn('restore err', e); }
-  Z.updateUI();
-  Z.showPage(Z.user ? 'pageHome' : 'pageWelcome');
-  if(Z.user && Z.user.email && db) {
-    db.collection('users').where('email','==',Z.user.email).limit(1).get()
-      .then(function(qs){
-        if(qs.size>0){
-          var doc=qs.docs[0]; var data=doc.data();
-          Z.user.isSub=data.isSub===true;
-          Z.user.subExpiry=data.subExpiry||0;
-          Z.user.trialStart=data.trialStart||Z.user.trialStart;
-          Z.user._id=doc.id;
-          localStorage.setItem('zaid_current_user', JSON.stringify(Z.user));
-          Z.updateStatusBadge();
-          if(Z.updateAntiCopyStyle) Z.updateAntiCopyStyle();
-        }
-      })
-      .catch(function(){});
+window.addEventListener('popstate', function(){
+  if(Z.user || Z.admin){
+    Z.goHome();
+    history.pushState({platform:true}, '', '');
   }
 });
+history.pushState({platform:true}, '', '');
+
+/* ==========================================
+   التهيئة (بدون setInterval / MutationObserver)
+   ========================================== */
+Z.updateUI();
+Z.showPage('pageWelcome');
 
 })();
 </script>
