@@ -426,6 +426,234 @@ Z.speak=function(t,l){
     window.speechSynthesis.speak(s); 
   } 
 };
+/* الإحصائيات */
+Z.showStats=function(){
+  if(!Z.admin) return;
+  if(!db){ alert('Firebase غير متصل.'); return; }
+  var m=document.createElement('div'); m.id='statsModal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML='<div style="background:#1e293b;padding:20px;border-radius:15px;color:#fff;width:100%;max-width:600px;text-align:center;"><h2>⏳ جاري تحميل البيانات من Firebase...</h2></div>';
+  document.body.appendChild(m);
+  
+  db.collection("users").get().then(function(qs){ 
+    var users=[]; 
+    qs.forEach(function(doc){ var u=doc.data(); u._id=doc.id; users.push(u); }); 
+    renderStats(users); 
+  }).catch(function(err){ 
+    alert("⚠️ تعذر قراءة البيانات من Firebase:\n" + err.message);
+    document.getElementById('statsModal').remove();
+  });
+
+  function renderStats(usersList){
+    document.getElementById('statsModal').remove();
+    var m2=document.createElement('div'); m2.id='statsModal';
+    m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    var html='<div style="background:#1e293b;padding:20px;border-radius:15px;max-width:600px;width:100%;color:#fff;max-height:90vh;display:flex;flex-direction:column;">'
+      + '<h2 style="color:#fbbf24;margin-bottom:15px;text-align:center;">📊 المسجلون ('+usersList.length+')</h2>'
+      + '<div style="overflow-y:auto;flex:1;background:#0f172a;padding:10px;border-radius:10px;text-align:right;">';
+    if(usersList.length===0) html+='<div style="text-align:center;padding:20px;color:#94a3b8;">لا يوجد مسجلون بعد.</div>';
+    usersList.forEach(function(u,i){ 
+      var subBadge = u.isSub ? '<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;">✅ مشترك</span>' : '<span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;">❌ غير مشترك</span>';
+      var trialInfo = '';
+      if(u.trialStart && !u.isSub) {
+        var end = u.trialStart + Z.TRIAL_MS;
+        var ms = end - Date.now();
+        if(ms > 0) { var d = Math.floor(ms/86400000); var h = Math.floor((ms%86400000)/3600000); trialInfo = '<div style="color:#f59e0b;font-size:11px;">⏱️ تجريبي: ' + d + 'ي ' + h + 'س</div>'; }
+        else { trialInfo = '<div style="color:#dc2626;font-size:11px;">⏰ انتهى التجريبي</div>'; }
+      }
+      html+='<div style="border-bottom:1px solid #334155;padding:10px;font-size:13px;line-height:1.7;">'
+        + '<strong style="color:#fbbf24;">'+(i+1)+'. '+(u.name||'—')+'</strong> '+subBadge
+        + '<br>📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')
+        + '<br>💼 '+(u.prof||'—')+' | 🏙️ '+(u.city||'—')
+        + trialInfo
+        + '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">'
+        + (u._id ? (u.isSub 
+            ? '<button onclick="ZAID.toggleSub(\''+u._id+'\', false)" style="padding:5px 12px;background:#dc2626;color:#fff;border:none;border-radius:12px;font-size:11px;cursor:pointer;font-family:Cairo;">❌ إلغاء الاشتراك</button>'
+            : '<button onclick="ZAID.toggleSub(\''+u._id+'\', true)" style="padding:5px 12px;background:#22c55e;color:#fff;border:none;border-radius:12px;font-size:11px;cursor:pointer;font-family:Cairo;">✅ فعّل الاشتراك</button>')
+          : '')
+        + '<span style="color:#94a3b8;font-size:11px;">📅 '+(u.date||'—')+'</span>'
+        + '</div></div>'; 
+    });
+    html+='</div>';
+    html+='<button onclick="ZAID.exportExcel()" style="margin-top:15px;padding:12px;background:#22c55e;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;font-size:16px;">📥 تحميل بيانات المسجلين (Excel)</button>';
+    html+='<button onclick="ZAID.clearAllUsers()" style="margin-top:10px;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">🗑️ حذف جميع المسجلين</button>';
+    html+='<button onclick="document.getElementById(\'statsModal\').remove()" style="margin-top:10px;padding:10px;background:#334155;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">إغلاق</button></div>';
+    m2.innerHTML=html; document.body.appendChild(m2);
+  }
+};
+
+Z.toggleSub = function(userId, activate) {
+  if(!Z.admin || !db) { alert('غير متاح'); return; }
+  var confirmMsg = activate ? 'تفعيل الاشتراك لمدة ' + Z.SUB_DAYS + ' يوم؟' : 'إلغاء الاشتراك؟';
+  if(!confirm(confirmMsg)) return;
+  var data = activate ? { isSub: true, subExpiry: Date.now() + Z.SUB_MS, subActivatedAt: Date.now() } : { isSub: false, subExpiry: 0 };
+  db.collection('users').doc(userId).update(data)
+    .then(function(){ alert(activate ? '✅ تم تفعيل الاشتراك' : '❌ تم إلغاء الاشتراك'); document.getElementById('statsModal').remove(); Z.showStats(); })
+    .catch(function(err){ alert('❌ خطأ: ' + err.message); });
+};
+
+Z.exportExcel=function(){
+  if(!Z.admin || !db) return;
+  db.collection("users").get().then(function(qs){ 
+    var users=[]; qs.forEach(function(doc){ users.push(doc.data()); });
+    if(users.length === 0) { alert('لا يوجد مسجلون.'); return; }
+    var csv = "\uFEFF";
+    csv += "الاسم,الإيميل,الواتساب,المهنة,الاختصاص,البلد,المدينة,التصنيف,التاريخ,مشترك؟,انتهاء الاشتراك\n";
+    users.forEach(function(u){ 
+      var sub = u.isSub ? 'نعم' : 'لا';
+      var exp = u.subExpiry ? new Date(u.subExpiry).toLocaleDateString('ar-TN') : '—';
+      csv += '"'+(u.name||'')+'","'+(u.email||'')+'","'+(u.phone||'')+'","'+(u.prof||'')+'","'+(u.spec||'')+'","'+(u.country||'')+'","'+(u.city||'')+'","'+(u.cat||'')+'","'+(u.date||'')+'","'+sub+'","'+exp+'"\n'; 
+    });
+    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'المسجلين_منصة_زايد.csv'; a.click();
+  }).catch(function(err){ alert('❌ خطأ: ' + err.message); });
+};
+
+Z.clearAllUsers=function(){
+  if(!Z.admin || !db) return;
+  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً من Firebase؟ لا يمكن التراجع!')) return;
+  db.collection("users").get().then(function(qs){
+    var batch = db.batch();
+    qs.forEach(function(doc){ batch.delete(doc.ref); });
+    return batch.commit();
+  }).then(function(){
+    localStorage.removeItem('zaid_local_users');
+    alert('✅ تم حذف جميع المسجلين بنجاح.');
+    document.getElementById('statsModal').remove();
+  }).catch(function(err){ alert('❌ خطأ: ' + err.message); });
+};
+
+/* نافذة الاشتراك */
+Z.showSub=function(){
+  var s = Z.getAccessStatus();
+  if(s.type === 'sub' || s.type === 'admin') {
+    var expDate = s.expiry ? new Date(s.expiry).toLocaleDateString('ar-TN') : '—';
+    alert('✅ اشتراكك نشط.\nتاريخ الانتهاء: ' + expDate);
+    return;
+  }
+  var old=document.getElementById('sm');if(old)old.remove();
+  var m=document.createElement('div');m.id='sm';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
+  var remaining = '';
+  if(s.type === 'trial') remaining = '<p style="text-align:center;color:#f59e0b;font-size:13px;margin-bottom:10px;">⏱️ تبقى لك: ' + s.days + ' يوم و ' + s.hours + ' ساعة</p>';
+  
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:500px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box;max-height:90vh;overflow-y:auto;">'
+    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
+    +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
+    + remaining
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e">'
+    +'<div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس - أفراد)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_TN + ' دينار تونسي</div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div>'
+    +'</div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6">'
+    +'<div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي (أفراد)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_USD + ' دولار / ' + Z.SUB_PRICE_EUR + ' يورو</div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر Western Union أو MoneyGram</div>'
+    +'</div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #8b5cf6">'
+    +'<div style="color:#8b5cf6;font-weight:900;font-size:16px">🏢 للمؤسسات (نشر العروض)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.CORP_PRICE_TN + ' د.ت / ' + Z.CORP_PRICE_INT + ' دولار / ' + Z.CORP_PRICE_INT + ' يورو</div>'
+    +'<div style="font-size:12px;color:#94a3b8">اشتراك سنوي للمؤسسات التي تريد نشر عروض شغل وتربص</div>'
+    +'</div>'
+    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
+    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+
+Z.wa=function(){
+  var u=Z.user||{};
+  var amount = Z.SUB_PRICE_TN + ' د.ت (تونس) أو ' + Z.SUB_PRICE_USD + ' دولار (دولي) | المؤسسات: ' + Z.CORP_PRICE_TN + ' د.ت أو ' + Z.CORP_PRICE_INT + ' دولار/يورو';
+  var msg = 'مرحباً، أريد الاشتراك في منصة زايد.\n\n'
+    + '📋 معلوماتي:\n'
+    + 'الاسم: ' + (u.name||'') + '\n'
+    + 'البريد: ' + (u.email||'') + '\n'
+    + 'الهاتف: ' + (u.phone||'') + '\n'
+    + 'التصنيف: ' + (u.cat||'') + '\n\n'
+    + '💰 تفاصيل الدفع:\n'
+    + 'المبلغ: ' + amount + '\n'
+    + 'طريقة الدفع: [اختر: دينار إلكتروني / ويسترن يونيون / حوالة في دقيقة]\n'
+    + 'نوع الاشتراك: [فردي / مؤسسة]\n'
+    + 'رقم الحوالة/التحويل: [اكتب الرقم]\n'
+    + 'التاريخ: ' + new Date().toLocaleDateString('ar-TN') + '\n\n'
+    + '🔔 أرجو تأكيد الاشتراك بعد التحقق من الدفع.';
+  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
+};
+
+/* التسجيل الحقيقي في Firebase فقط (تم إصلاح مشكلة الزر) */
+Z.register=function(){
+  var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
+  var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
+  
+  if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل (كلمتين على الأقل)'); return; }
+  if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول المطلوبة (*)'); return; }
+  if(!/^[0-9]{8,15}$/.test(h)) { alert('❌ يرجى إدخال رقم واتساب صحيح (أرقام فقط، من 8 إلى 15 رقماً)'); return; }
+  if(!Z.selectedCat) { alert('❌ يرجى اختيار التصنيف'); return; }
+  
+  if(!db) { alert('❌ Firebase غير متصل! لا يمكن التسجيل الحقيقي.\n\nتأكد من اتصالك بالإنترنت وأعد تحميل الصفحة.'); return; }
+  
+  var newUser = {
+    name:n, prof:p, spec:s, email:e, phone:h, country:c, city:ci,
+    cat:Z.selectedCat, date:new Date().toLocaleDateString('ar-TN'),
+    isSub:false, trialStart:Date.now(), subExpiry:0
+  };
+  
+  var btn = document.getElementById('btnReg');
+  if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري التسجيل في Firebase...'; }
+  
+  db.collection("users").add(newUser).then(function(docRef){
+    newUser._id = docRef.id;
+    Z.user = newUser;
+    localStorage.setItem('zaid_current_user', JSON.stringify(Z.user));
+    try {
+      var localUsers = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
+      localUsers.push(Z.user);
+      localStorage.setItem('zaid_local_users', JSON.stringify(localUsers));
+    } catch(e) {}
+    console.log('✅ Firebase: OK, ID:', docRef.id);
+    sendEmail(newUser);
+    Z.visitorAttempts=0;
+    document.getElementById('un').textContent=n;
+    if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
+    Z.updateUI(); Z.showPage('pageHome');
+    alert('✅ تم التسجيل بنجاح في Firebase!\n\n⏱️ لديك ' + Z.TRIAL_DAYS + ' أيام تجريبية.\n📧 تم إرسال إشعار للمشرف.');
+  }).catch(function(err){
+    console.error('❌ Firebase error:', err);
+    if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
+    alert('❌ فشل التسجيل في Firebase:\n\n' + err.message + '\n\nلم يتم حفظ أي بيانات وهمية.');
+  });
+  
+  function sendEmail(u){
+    try { 
+      var form = document.createElement('form'); 
+      form.method = 'POST'; 
+      form.action = 'https://formsubmit.co/zeidoun2021@gmail.com'; 
+      form.target = 'hidden_email_iframe'; 
+      form.style.display = 'none'; 
+      var fields = { 
+        _subject: '🎉 مسجل جديد - منصة زايد', 
+        _captcha: 'false', 
+        _template: 'table', 
+        'الاسم': u.name, 'المهنة': u.prof, 'الاختصاص': u.spec, 'البريد': u.email,
+        'الواتساب': u.phone, 'البلد': u.country, 'المدينة': u.city,
+        'التصنيف': u.cat, 'التاريخ': u.date,
+        'نوع الاشتراك': 'تجريبي (3 أيام)'
+      }; 
+      for(var k in fields){ 
+        var inp = document.createElement('input'); 
+        inp.type = 'hidden'; 
+        inp.name = k; 
+        inp.value = fields[k]; 
+        form.appendChild(inp); 
+      } 
+      document.body.appendChild(form); 
+      form.submit(); 
+      document.body.removeChild(form); 
+    } catch(err) { console.error('Email Error:', err); }
+  }
+};
 /* ============================================================
    الجزء 5: الألعاب + المنجد + التربص/الشغل + ألبوم الصور
    ============================================================ */
