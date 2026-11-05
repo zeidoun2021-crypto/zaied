@@ -33,7 +33,17 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .tvt span:last-child{font-size:22px;font-weight:900;color:#dc2626}
 .tvs{width:34px;height:12px;background:#dc2626;margin:0 auto;border-radius:0 0 4px 4px}
 .tvb2{width:80px;height:6px;background:#dc2626;margin:0 auto;border-radius:4px}
-.wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:15px;text-align:center;border:3px solid #fbbf24;font-size:16px;line-height:1.6;font-weight:900;width:100%;box-shadow:0 4px 10px rgba(0,0,0,.3);overflow:hidden;position:relative;flex-shrink:0}
+
+/* تنسيق صندوق الترحيب */
+.wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:15px;text-align:center;border:3px solid #fbbf24;font-size:16px;line-height:1.6;font-weight:900;width:100%;box-shadow:0 4px 10px rgba(0,0,0,.3);flex-shrink:0}
+
+/* تنسيق الشريط المتحرك (Ticker) */
+.ticker-container { width: 100%; background: #f8fafc; border-radius: 10px; padding: 10px 0; margin-top: 15px; border: 3px solid #15803d; overflow: hidden; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+.ticker { display: inline-block; white-space: nowrap; animation: tickerAnim 25s linear infinite; font-weight: 900; font-size: 16px; color: #0f172a; }
+.ticker span { margin: 0 15px; color: #15803d; font-weight: 900; }
+.ticker span::before { content: "⭐ "; color: #dc2626; }
+@keyframes tickerAnim { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
 #gw{background:#fff;border:3px solid #dc2626;border-radius:15px;padding:20px;width:100%;color:#0f172a;box-shadow:0 8px 25px rgba(0,0,0,.5)}
 #gw h2{color:#dc2626;text-align:center;font-size:20px;margin-bottom:15px;font-weight:900}
 .inp{display:block;width:100%;padding:10px 15px;margin-bottom:10px;border:2px solid #cbd5e1;border-radius:20px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:600;box-sizing:border-box;height:42px;font-family:Cairo}
@@ -190,12 +200,27 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     </div>
   </div>
   
-  <!-- كلمة الترحيب الثابتة مع إضافة "عرف بنفسك" -->
+  <!-- كلمة الترحيب الثابتة -->
   <div class="wctxt" style="padding:20px; text-align:center;">
     <div style="white-space:normal; line-height:1.8; font-size:16px; font-weight:900;">
       مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وتبحثا علميا
       <br><br>
       <span style="color:#fff; font-size:18px; background:rgba(0,0,0,0.2); padding:5px 15px; border-radius:10px; display:inline-block; box-shadow:0 2px 5px rgba(0,0,0,0.2);">✍️ عرف بنفسك كي نسمح لك بالدخول</span>
+    </div>
+  </div>
+
+  <!-- الشريط المتحرك الجديد (Ticker) -->
+  <div class="ticker-container">
+    <div class="ticker">
+      <span>تكوين ابتدائي</span>
+      <span>اعدادي</span>
+      <span>جامعي</span>
+      <span>اختبارات في التكنولوجيات واللغة العربية</span>
+      <span>محاضرات وكتب علمية</span>
+      <span>عروض مشاريع تخرج وتاطير</span>
+      <span>مساعدة في ايجاد تربصات ومواطن شغل</span>
+      <span>منجد ثلاثي اللغات</span>
+      <span>العاب فكرية</span>
     </div>
   </div>
   
@@ -214,8 +239,8 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <div style="text-align:center;font-size:13px;font-weight:900;color:#dc2626;margin-bottom:5px;">⬇️ يرجى اختيار التصنيف المناسب ⬇️</div>
     <div class="cats" id="cats"></div>
     
-    <!-- زر الدخول باللون الأخضر الغامق الجذاب -->
-    <button class="sbt" style="background:linear-gradient(135deg,#15803d,#166534); border-color:#fbbf24; font-size:20px; padding:15px; margin-top:20px; box-shadow:0 4px 10px rgba(21,128,61,0.4);" onclick="ZAID.register()">🚪 دخول</button>
+    <!-- زر الدخول باللون الأخضر الغامق الجذاب (تمت إضافة id لحل مشكلة التسجيل) -->
+    <button id="btnReg" class="sbt" style="background:linear-gradient(135deg,#15803d,#166534); border-color:#fbbf24; font-size:20px; padding:15px; margin-top:20px; box-shadow:0 4px 10px rgba(21,128,61,0.4);" onclick="ZAID.register()">🚪 دخول</button>
     
     <div style="text-align:center;margin-top:15px;">
       <button type="button" onclick="ZAID.adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:13px;font-family:Cairo;padding:8px;display:inline-block;">👑 دخول المشرف</button>
@@ -302,11 +327,14 @@ try {
 Z.ADMIN='012345';
 Z.WA='21655335477';
 
-/* ✅ ثوابت الاشتراك */
+/* ✅ ثوابت الاشتراك (أفراد ومؤسسات) */
 Z.TRIAL_DAYS = 3;
 Z.SUB_DAYS = 365;
 Z.SUB_PRICE_TN = 30;
 Z.SUB_PRICE_USD = 20;
+Z.SUB_PRICE_EUR = 20;
+Z.CORP_PRICE_TN = 50;
+Z.CORP_PRICE_INT = 50;
 Z.TRIAL_MS = Z.TRIAL_DAYS * 24*60*60*1000;
 Z.SUB_MS = Z.SUB_DAYS * 24*60*60*1000;
 
@@ -345,21 +373,30 @@ Z.requireSub = function(){
   var s=Z.getAccessStatus();
   var title=s.type==='expired'?'⏰ انتهت المدة التجريبية':'🔒 الاشتراك مطلوب';
   var msg=s.type==='expired'?'لقد انتهت مدتك التجريبية ('+Z.TRIAL_DAYS+' أيام). للاستفادة من كل المحتوى، يرجى الاشتراك.':'هذه الميزة تتطلب اشتراكاً نشطاً.';
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:480px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:500px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box;max-height:90vh;overflow-y:auto;">'
     +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
     +'<h2 style="color:#fbbf24;text-align:center;margin-bottom:10px;font-size:20px">'+title+'</h2>'
     +'<p style="text-align:center;line-height:1.8;font-size:14px;color:#cbd5e1;margin-bottom:15px">'+msg+'</p>'
+    
     +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e">'
-    +'<div style="color:#22c55e;font-weight:900;font-size:15px">🇹🇳 محلي (تونس)</div>'
+    +'<div style="color:#22c55e;font-weight:900;font-size:15px">🇹🇳 محلي (تونس - أفراد)</div>'
     +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_TN+' دينار تونسي</div>'
-    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17) أو حوالة في دقيقة</div>'
-    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17) أو حوالة</div>'
     +'</div>'
+
     +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6">'
-    +'<div style="color:#3b82f6;font-weight:900;font-size:15px">🌍 دولي</div>'
-    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_USD+' دولار / '+Z.SUB_PRICE_USD+' يورو</div>'
+    +'<div style="color:#3b82f6;font-weight:900;font-size:15px">🌍 دولي (أفراد)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_USD+' دولار / '+Z.SUB_PRICE_EUR+' يورو</div>'
     +'<div style="font-size:12px;color:#94a3b8">عبر Western Union أو MoneyGram</div>'
     +'</div>'
+
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #8b5cf6">'
+    +'<div style="color:#8b5cf6;font-weight:900;font-size:15px">🏢 للمؤسسات (نشر العروض)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.CORP_PRICE_TN+' د.ت / '+Z.CORP_PRICE_INT+' دولار / '+Z.CORP_PRICE_INT+' يورو</div>'
+    +'<div style="font-size:12px;color:#94a3b8">اشتراك سنوي للمؤسسات التي تريد نشر عروض شغل وتربص</div>'
+    +'</div>'
+
+    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
     +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
     +'<button onclick="document.getElementById(\'subModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button>'
     +'</div>';
@@ -578,25 +615,35 @@ Z.showSub=function(){
   }
   var old=document.getElementById('sm');if(old)old.remove();
   var m=document.createElement('div');m.id='sm';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
   var remaining = '';
   if(s.type === 'trial') remaining = '<p style="text-align:center;color:#f59e0b;font-size:13px;margin-bottom:10px;">⏱️ تبقى لك: ' + s.days + ' يوم و ' + s.hours + ' ساعة</p>';
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:480px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box">'
+  
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:500px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box;max-height:90vh;overflow-y:auto;">'
     +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
     +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
     + remaining
+    
     +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e">'
-    +'<div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس)</div>'
+    +'<div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس - أفراد)</div>'
     +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_TN + ' دينار تونسي</div>'
-    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17) أو حوالة في دقيقة</div>'
-    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div>'
     +'</div>'
+
     +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6">'
-    +'<div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي</div>'
-    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_USD + ' دولار / ' + Z.SUB_PRICE_USD + ' يورو</div>'
+    +'<div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي (أفراد)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_USD + ' دولار / ' + Z.SUB_PRICE_EUR + ' يورو</div>'
     +'<div style="font-size:12px;color:#94a3b8">عبر Western Union أو MoneyGram</div>'
     +'</div>'
-    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:5px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
+
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #8b5cf6">'
+    +'<div style="color:#8b5cf6;font-weight:900;font-size:16px">🏢 للمؤسسات (نشر العروض)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.CORP_PRICE_TN + ' د.ت / ' + Z.CORP_PRICE_INT + ' دولار / ' + Z.CORP_PRICE_INT + ' يورو</div>'
+    +'<div style="font-size:12px;color:#94a3b8">اشتراك سنوي للمؤسسات التي تريد نشر عروض شغل وتربص</div>'
+    +'</div>'
+
+    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
     +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button>'
     +'</div>';
   document.body.appendChild(m);
@@ -604,7 +651,7 @@ Z.showSub=function(){
 
 Z.wa=function(){
   var u=Z.user||{};
-  var amount = Z.SUB_PRICE_TN + ' د.ت (تونس) أو ' + Z.SUB_PRICE_USD + ' دولار (دولي)';
+  var amount = Z.SUB_PRICE_TN + ' د.ت (تونس) أو ' + Z.SUB_PRICE_USD + ' دولار (دولي) | المؤسسات: ' + Z.CORP_PRICE_TN + ' د.ت أو ' + Z.CORP_PRICE_INT + ' دولار/يورو';
   var msg = 'مرحباً، أريد الاشتراك في منصة زايد.\n\n'
     + '📋 معلوماتي:\n'
     + 'الاسم: ' + (u.name||'') + '\n'
@@ -614,13 +661,14 @@ Z.wa=function(){
     + '💰 تفاصيل الدفع:\n'
     + 'المبلغ: ' + amount + '\n'
     + 'طريقة الدفع: [اختر: دينار إلكتروني / ويسترن يونيون / حوالة في دقيقة]\n'
+    + 'نوع الاشتراك: [فردي / مؤسسة]\n'
     + 'رقم الحوالة/التحويل: [اكتب الرقم]\n'
     + 'التاريخ: ' + new Date().toLocaleDateString('ar-TN') + '\n\n'
     + '🔔 أرجو تأكيد الاشتراك بعد التحقق من الدفع.';
   window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
 };
 
-/* التسجيل الحقيقي في Firebase فقط */
+/* التسجيل الحقيقي في Firebase فقط (تم إصلاح مشكلة الزر) */
 Z.register=function(){
   var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
   var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
@@ -638,7 +686,7 @@ Z.register=function(){
     isSub:false, trialStart:Date.now(), subExpiry:0
   };
   
-  var btn = event && event.target ? event.target : null;
+  var btn = document.getElementById('btnReg');
   if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري التسجيل في Firebase...'; }
   
   db.collection("users").add(newUser).then(function(docRef){
@@ -856,21 +904,109 @@ Z.displayDictTerm=function(pos){
 };
 
 /* ==========================================
-   نظام التربص والتشغيل
+   نظام التربص والتشغيل (Job Board)
    ========================================== */
 Z.openSrv=function(key){
   if(!Z.checkVisitor()) return;
+  if(key === 'job' || key === 'internship') {
+    Z.showJobBoard(key);
+    return;
+  }
+};
+
+Z.showJobBoard = function(type) {
   var c=document.getElementById('lc');
-  var titles = {'internship':'📄 طلب تربص', 'job':'💼 طلب شغل', 'consult':'💡 استشارات', 'grad':'🎯 مشاريع تخرج'};
-  c.innerHTML='<div class="slide" style="text-align:center;padding:30px;">'
-    +'<div style="font-size:50px;margin-bottom:10px;">'+ (key==='internship'?'📄':key==='job'?'💼':'🏫') +'</div>'
-    +'<div class="st">'+ (titles[key]||'خدمة جامعية') +'</div>'
-    +'<div class="stxt">للاستفادة من هذه الخدمة (البحث عن تربص أو فرص عمل في المجال الرقمي)، يرجى تقديم طلبك بالضغط على الزر أدناه.</div>'
-    +'<div style="margin-top:20px;">'
-    +'<button onclick="ZAID.showSeekerForm(\''+key+'\')" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:15px 30px;border:none;border-radius:30px;font-weight:900;font-size:16px;cursor:pointer;font-family:Cairo;">📝 تقديم طلب</button>'
-    +'<button class="nbtn ne" onclick="ZAID.goHome()" style="margin-right:15px;">🏠 الرئيسية</button>'
-    +'</div></div>';
+  var title = type==='job' ? '💼 عروض الشغل' : '📄 عروض التربص';
+  
+  c.innerHTML = '<div class="slide" style="background:#1e293b;color:#fff;">'
+    + '<div class="sn" style="background:#22c55e; color:#fff;">' + title + '</div>'
+    + '<div class="st" style="color:#fbbf24;">أحدث العروض المتاحة</div>'
+    + '<div id="jobList" style="margin:20px 0; text-align:center;"><h3>⏳ جاري تحميل العروض...</h3></div>'
+    + '<div style="text-align:center; margin-top:30px; border-top:2px dashed #475569; padding-top:20px;">'
+    + '<p style="color:#94a3b8; font-size:14px; margin-bottom:10px;">هل أنت مؤسسة وتريد نشر عرض؟</p>'
+    + '<button onclick="ZAID.postJobForm(\''+type+'\')" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9); color:#fff; padding:12px 25px; border:none; border-radius:25px; font-weight:900; font-family:Cairo; cursor:pointer; font-size:15px;">➕ نشر عرض جديد (للمؤسسات)</button>'
+    + '<p style="color:#fbbf24; font-size:12px; margin-top:10px;">(اشتراك المؤسسات: 50 د.ت / 50 دولار / 50 يورو سنوياً)</p>'
+    + '</div>'
+    + '<div class="nav" style="margin-top:20px;"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div>'
+    + '</div>';
+  
   Z.showPage('pageLesson');
+
+  if(!db) {
+    document.getElementById('jobList').innerHTML = '<div class="stxt" style="color:#dc2626;">تعذر الاتصال بقاعدة البيانات.</div>';
+    return;
+  }
+
+  db.collection('jobs').where('type', '==', type).get().then(function(qs) {
+    var html = '';
+    if(qs.empty) {
+      html = '<div class="stxt" style="text-align:center; color:#78350f;">لا توجد عروض حالياً. كن أول من ينشر!</div>';
+    } else {
+      qs.forEach(function(doc) {
+        var j = doc.data();
+        html += '<div style="background:#0f172a; border:2px solid #3b82f6; border-radius:12px; padding:15px; margin-bottom:15px; text-align:right;">'
+          + '<h4 style="color:#22c55e; font-size:18px; margin-bottom:5px;">' + j.title + '</h4>'
+          + '<div style="color:#cbd5e1; font-size:13px; margin-bottom:10px;"><strong>🏢 المؤسسة:</strong> ' + j.company + '</div>'
+          + '<div style="color:#94a3b8; font-size:14px; line-height:1.6; margin-bottom:10px;">' + j.desc + '</div>'
+          + '<div style="font-size:12px; color:#fbbf24;">📅 نُشر في: ' + j.date + '</div>'
+          + '</div>';
+      });
+    }
+    document.getElementById('jobList').innerHTML = html;
+  }).catch(function(err) {
+    document.getElementById('jobList').innerHTML = '<div class="stxt" style="color:#dc2626;">خطأ في التحميل: ' + err.message + '</div>';
+  });
+};
+
+Z.postJobForm = function(type) {
+  var old=document.getElementById('sf');if(old)old.remove();
+  var m=document.createElement('div');m.id='sf';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
+  var title = type==='job' ? '💼 نشر عرض شغل' : '📄 نشر عرض تربص';
+  
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:500px;width:100%;border:4px solid #8b5cf6;color:#fff;box-sizing:border-box;max-height:95vh;overflow-y:auto">'
+    +'<h2 style="color:#8b5cf6;text-align:center;margin-bottom:15px;font-size:20px">'+title+'</h2>'
+    +'<p style="text-align:center; font-size:12px; color:#fbbf24; margin-bottom:15px;">اشتراك المؤسسات الإجباري: 50 د.ت / 50$ / 50€</p>'
+    +'<input class="inp" id="jobCompany" placeholder="اسم المؤسسة / الشركة *">'
+    +'<input class="inp" id="jobTitle" placeholder="عنوان الوظيفة / التربص *">'
+    +'<input class="inp" id="jobEmail" type="email" placeholder="البريد الإلكتروني للتواصل *">'
+    +'<textarea class="inp" id="jobDesc" placeholder="وصف مختصر للوظيفة والشروط *" style="height:100px;resize:none;"></textarea>'
+    +'<button class="sbt" onclick="ZAID.saveJob(\''+type+'\')" style="background:#8b5cf6;border-color:#fff;margin-top:15px;">🚀 نشر العرض</button>'
+    +'<button onclick="document.getElementById(\'sf\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إلغاء</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
+
+Z.saveJob = function(type) {
+  var company=document.getElementById('jobCompany').value.trim();
+  var title=document.getElementById('jobTitle').value.trim();
+  var email=document.getElementById('jobEmail').value.trim();
+  var desc=document.getElementById('jobDesc').value.trim();
+  
+  if(!company || !title || !email || !desc) { alert('يرجى ملء جميع الحقول'); return; }
+  if(!db) { alert('قاعدة البيانات غير متصلة'); return; }
+
+  var job = { company: company, title: title, email: email, desc: desc, type: type, date: new Date().toLocaleDateString('ar-TN') };
+  
+  var btn = event ? event.target : null;
+  if(btn) { btn.disabled = true; btn.textContent = 'جاري النشر...'; }
+
+  db.collection('jobs').add(job).then(function() {
+    // إرسال إشعار بالإيميل للمشرف
+    try {
+      var form = document.createElement('form'); form.method = 'POST'; form.action = 'https://formsubmit.co/zeidoun2021@gmail.com'; form.target = 'hidden_email_iframe'; form.style.display = 'none';
+      var fields = { _subject: '💼 عرض جديد: ' + title, _captcha: 'false', _template: 'table', 'المؤسسة': company, 'العنوان': title, 'البريد': email, 'الوصف': desc, 'النوع': type, 'التاريخ': job.date };
+      for(var k in fields){ var inp = document.createElement('input'); inp.type = 'hidden'; inp.name = k; inp.value = fields[k]; form.appendChild(inp); }
+      document.body.appendChild(form); form.submit(); document.body.removeChild(form);
+    } catch(err) {}
+    
+    alert('✅ تم نشر العرض بنجاح!');
+    document.getElementById('sf').remove();
+    Z.showJobBoard(type); // تحديث القائمة
+  }).catch(function(err) {
+    alert('❌ خطأ أثناء النشر: ' + err.message);
+    if(btn) { btn.disabled = false; btn.textContent = '🚀 نشر العرض'; }
+  });
 };
 
 Z.showSeekerForm=function(type){
@@ -1094,7 +1230,7 @@ Z.addLesson('univ_info',{cat:'univ',icon:'🤖',name:'الجامعي: الذكا
   {n:'الاختبار',e:'univ_info_exam'}
 ]);
 /* ==========================================
-   دروس اللغة العربية الجديدة (الجزء 6)
+   دروس اللغة العربية الجديدة
    ========================================== */
 Z.addLesson('ar_ai',{cat:'arabic',icon:'🤖',name:'الذكاء الاصطناعي بالعربية',desc:'6 شرائح تعليمية'},[
   {n:'1/6',t:'ما هو الذكاء الاصطناعي؟',x:'الذكاء الاصطناعي (AI) هو فرع من علوم الحاسوب يهدف إلى محاكاة القدرات الذهنية البشرية مثل التعلم، التفكير، وحل المشكلات.',s:['الذكاء الاصطناعي هو محاكاة الذكاء البشري','L intelligence artificielle imite l intelligence humaine','AI mimics human intelligence']},
@@ -1159,7 +1295,7 @@ Z.addLesson('bk_ai_comp_raw3',{cat:'books',icon:'📚',name:'الكتاب الش
 ]);
 
 /* ==========================================
-   الاختبارات (addExam) - جميع الاختبارات القديمة والجديدة
+   الاختبارات (addExam) - جميع الاختبارات
    ========================================== */
 Z.addExam('book_exam',[
   {q:'ما هو الحاسوب؟',o:['جهاز إلكتروني رقمي','جهاز طباعة','جهاز تصوير','جهاز صوت'],a:0},
@@ -1338,7 +1474,14 @@ Z.finishExam=function(){
     h+='<p class="sign">منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</p></div>';
     h+='<div class="nav">';
     h+='<button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button>';
-    h+='<button class="nbtn nn" onclick="ZAID.openCat(\'primary\')">الارتقاء للدرس التالي ◀</button>';
+    
+    // تحديد القسم للارتقاء إليه بأمان
+    var cat = 'primary';
+    var lesKey = ex.key.replace('_exam','');
+    if(Z.lessons[lesKey] && Z.lessons[lesKey].meta && Z.lessons[lesKey].meta.cat) {
+        cat = Z.lessons[lesKey].meta.cat;
+    }
+    h+='<button class="nbtn nn" onclick="ZAID.openCat(\''+cat+'\')">الارتقاء للدرس التالي ◀</button>';
     h+='</div>';
   } else {
     // حالة الرسوب
