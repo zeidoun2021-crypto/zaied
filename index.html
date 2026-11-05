@@ -385,7 +385,7 @@ Z.exitPlatform=function(){
 /* منع الزوار + فحص الاشتراك */
 Z.checkVisitor=function(){ 
   if(!Z.user && !Z.admin){ 
-    alert('⚠️ الدخول للمحتوى يتطلب التسجيل!\nلا يمكنك تصفح المنصة كزائر.'); 
+    alert('⚠️ الدخول للمحتوى يتطلب التسجيل إجبارياً!\nلا يمكنك تصفح المنصة كزائر.'); 
     Z.showPage('pageWelcome'); 
     return false; 
   }
@@ -1050,36 +1050,32 @@ Z.addLesson('ai_book_part6',{cat:'ai',icon:'🛡️',name:'الكتاب الشا
   {n:'الذكاء الاصطناعي والأمن',t:'AI في الحماية',x:'<div style="white-space: pre-wrap; text-align: justify; font-size: 15px; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1;">AI في الأمن السيبراني: الكشف الآلي عن التهديدات، تحليل البيانات الضخمة، التعلم من الهجمات السابقة.\nالطرق التقليدية: تعتمد على التوقيعات (تفشل مع التهديدات الجديدة).\nطرق AI: تستخدم التعلم العميق والآلي (تكتشف التهديدات المعروفة وغير المعروفة). إيجابيات: فعالية، دقة، كشف سريع. تحديات: التحيز، الاستخدام الضار من القراصنة.</div>'}
 ]);
 
-Z.addLesson('prim3',{cat:'primary',icon:'🎒',name:'السنة الثالثة ابتدائي',desc:'الرياضيات، العربية، الإيقاظ، الفرنسية'},[
-  {n:'الرياضيات',t:'📐 محيط المستطيل',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Rectangle_Geometry.svg/200px-Rectangle_Geometry.svg.png',x:'محيط المستطيل هو مجموع أطوال أضلاعه الأربعة. <br> <strong>القانون: (الطول + العرض) × 2</strong>',s:['محيط المستطيل هو مجموع أطوال أضلاعه الأربعة','Le périmètre du rectangle est la somme de ses quatre côtés','The perimeter of a rectangle is the sum of its four sides'],v:'https://www.youtube.com/embed/IrJpRkqQ2tM'},
-  {n:'اللغة العربية',t:'🌙 المبتدأ والخبر',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الجملة الاسمية تتكون من <strong>مبتدأ</strong> (اسم في بداية الجملة) و<strong>خبر</strong> (يتمم معنى المبتدأ).<br>مثال: الطقسُ جميلٌ.',s:['الجملة الاسمية تتكون من مبتدأ وخبر','La phrase nominale se compose d un sujet et d un attribut','The nominal sentence consists of a subject and a predicate'],v:'https://www.youtube.com/embed/3Z8g7W7zY2Y'},
-  {n:'الإيقاظ العلمي',t:'💧 التبخر والغليان',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Water_cycle.png/300px-Water_cycle.png',x:'<strong>التبخر</strong> هو تحول الماء من الحالة السائلة إلى الحالة الغازية ببطء.<br><strong>الغليان</strong> هو تحول سريع يحدث عند درجة حرارة 100 درجة مئوية.',s:['التبخر هو تحول الماء من الحالة السائلة إلى الغازية','L évaporation est le passage de l état liquide à l état gazeux','Evaporation is the transition from liquid to gas'],v:'https://www.youtube.com/embed/al-do-HGuIk'},
-  {n:'الفرنسية',t:'🇫🇷 Les articles',i:'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=400&q=80',x:'<strong>Les articles indéfinis:</strong> un, une, des.<br><strong>Les articles définis:</strong> le, la, les.<br>مثال: <em>Un</em> livre -> <em>Le</em> livre.',s:['أدوات التعريف والنكرة في اللغة الفرنسية','Les articles définis et indéfinis','Definite and indefinite articles in French'],v:'https://www.youtube.com/embed/1zS8mG_4XyY'},
-  {n:'الاختبار',e:'prim3_exam'}
+/* ==========================================
+   المرحلة الابتدائية: التكنولوجيا والذكاء الاصطناعي فقط
+   ========================================== */
+Z.addLesson('prim3',{cat:'primary',icon:'🎒',name:'السنة الثالثة: صديقي الحاسوب',desc:'مكونات الحاسوب - 3 لغات + اختبار'},[
+  {n:'الدرس 1',t:'ما هو الحاسوب؟',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Personal_computer%2C_exploded_4.svg/640px-Personal_computer%2C_exploded_4.svg.png',x:'الحاسوب هو جهاز إلكتروني ذكي يستقبل البيانات، ويعالجها، ويخرجها لنا في شكل معلومات مفيدة.',r:['الحاسوب صديقنا الذكي','L ordinateur est notre ami','The computer is our smart friend'],s:['الحاسوب هو جهاز إلكتروني ذكي','L ordinateur est un appareil électronique intelligent','A computer is a smart electronic device']},
+  {n:'الدرس 2',t:'الجزء المادي والمعنوي',i:'https://i.postimg.cc/Hk9XKgqm/whdt-mrkzyt.jpg',x:'يتكون الحاسوب من <strong>العتاد (Hardware)</strong> الذي نراه ونلمسه (مثل الشاشة والفأرة)، و<strong>البرمجيات (Software)</strong> التي لا نلمسها (مثل الألعاب ونظام التشغيل).',r:['العتاد والبرمجيات','Matériel et Logiciel','Hardware and Software']},
+  {n:'الدرس 3',t:'الفأرة ولوحة المفاتيح',i:'https://i.postimg.cc/sDQv7rjc/souris.jpg',x:'نستخدم <strong>الفأرة</strong> للنقر والتحكم، و<strong>لوحة المفاتيح</strong> لكتابة الحروف والأرقام.',r:['أدوات الإدخال','Les périphériques d entrée','Input devices'],v:'https://www.youtube.com/embed/4Z8g7W7zY2Y'},
+  {n:'الاختبار النهائي',e:'prim3_exam'}
 ]);
 
-Z.addLesson('prim4',{cat:'primary',icon:'📘',name:'السنة الرابعة ابتدائي',desc:'الرياضيات، العربية، الإيقاظ، الفرنسية'},[
-  {n:'الرياضيات',t:'📐 مساحة المربع والمستطيل',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Area.svg/200px-Area.svg.png',x:'<strong>مساحة المربع = الضلع × الضلع</strong><br><strong>مساحة المستطيل = الطول × العرض</strong>',s:['مساحة المربع تساوي الضلع في الضلع','L aire du carré est côté fois côté','The area of a square is side times side'],v:'https://www.youtube.com/embed/xC-yX_zY2yY'},
-  {n:'اللغة العربية',t:'🌙 الجملة الفعلية',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الجملة الفعلية تبدأ بـ <strong>فعل</strong>، ويتكون معظمها من: فعل + فاعل + مفعول به.<br>مثال: كتبَ التلميذُ الدرسَ.',s:['الجملة الفعلية تبدأ بفعل وتتكون من فعل وفاعل ومفعول به','La phrase verbale commence par un verbe','The verbal sentence begins with a verb'],v:'https://www.youtube.com/embed/3Xy8zW7yY2Y'},
-  {n:'الإيقاظ العلمي',t:'🐾 التنقل عند الحيوان',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Animal_locomotion.jpg/300px-Animal_locomotion.jpg',x:'تتنقل الحيوانات بطرق مختلفة حسب بيئتها:<br>المشي (الأسد)، الزحف (الأفعى)، الطيران (النسر)، السباحة (السمكة).',s:['تتنقل الحيوانات بطرق مختلفة حسب بيئتها','Les animaux se déplacent de différentes manières selon leur environnement','Animals move in different ways depending on their environment'],v:'https://www.youtube.com/embed/y8W7zY2yY3Y'},
-  {n:'الفرنسية',t:'🇫🇷 Le présent',i:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&q=80',x:'زمن المضارع في الفرنسية (Le présent) يُستخدم للتعبير عن حدث يقع الآن.<br>مثال: Je <strong>parle</strong>, Tu <strong>parles</strong>, Il <strong>parle</strong>...',s:['زمن المضارع في اللغة الفرنسية','Le présent de l indicatif','The present indicative tense'],v:'https://www.youtube.com/embed/XyY2zW7yY3Y'},
-  {n:'الاختبار',e:'prim4_exam'}
+Z.addLesson('prim4',{cat:'primary',icon:'📘',name:'السنة الرابعة: الذاكرة والشبكات',desc:'الذاكرة والإنترنت - 3 لغات + اختبار'},[
+  {n:'الدرس 1',t:'الذاكرة الحية والميتة',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/RAM_Module.jpg/640px-RAM_Module.jpg',x:'<strong>الذاكرة الحية (RAM):</strong> تفقد معلوماتها عند إطفاء الحاسوب. <strong>الذاكرة الميتة (ROM):</strong> تحتفظ بالمعلومات دائماً.',r:['أنواع الذاكرة','Types de mémoire','Types of memory']},
+  {n:'الدرس 2',t:'ما هي الشبكة والإنترنت؟',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Network.jpg/640px-Network.jpg',x:'<strong>الشبكة</strong> هي ربط جهازين أو أكثر. <strong>الإنترنت</strong> هو أكبر شبكة في العالم تربط الملايين.',r:['الإنترنت والشبكات','Internet et réseaux','Internet and networks'],v:'https://www.youtube.com/embed/3QhU9dBtk3c'},
+  {n:'الاختبار النهائي',e:'prim4_exam'}
 ]);
 
-Z.addLesson('prim5',{cat:'primary',icon:'📗',name:'السنة الخامسة ابتدائي',desc:'الرياضيات، العربية، الإيقاظ، الفرنسية'},[
-  {n:'الرياضيات',t:'📐 الأعداد العشرية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Number_line.svg/640px-Number_line.svg.png',x:'العدد العشري يتكون من <strong>جزء صحيح</strong> و<strong>جزء عشري</strong> يفصل بينهما فاصلة.<br>مثال: 12,45.',s:['العدد العشري يتكون من جزء صحيح وجزء عشري','Un nombre décimal se compose d une partie entière et d une partie décimale','A decimal number consists of an integer part and a decimal part'],v:'https://www.youtube.com/embed/yY2zW7yY3Y4'},
-  {n:'اللغة العربية',t:'🌙 الفعل المعتل',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'الفعل المعتل هو كل فعل يحتوي على حرف علة (ا، و، ي).<br>ينقسم إلى: <strong>مثال</strong> (وعد)، <strong>أجوف</strong> (قال)، <strong>ناقص</strong> (دعا).',s:['الفعل المعتل هو كل فعل يحتوي على حرف علة','Le verbe défectueux contient une lettre de faiblesse','The defective verb contains a weak letter'],v:'https://www.youtube.com/embed/Y2zW7yY3Y4Y'},
-  {n:'الإيقاظ العلمي',t:'⚡ الدارة الكهربائية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Simple_circuit.svg/200px-Simple_circuit.svg.png',x:'الدارة الكهربائية البسيطة تتكون من: <strong>مولد</strong> (بطارية)، <strong>مصباح</strong>، <strong>أسلاك توصيل</strong>، و<strong>قاطعة</strong>.<br>لكي يضيء المصباح، يجب أن تكون الدارة <strong>مغلقة</strong>.',s:['الدارة الكهربائية البسيطة تتكون من مولد ومصباح وأسلاك وقاطعة','Un circuit électrique simple se compose d un générateur, d une lampe, de fils et d un interrupteur','A simple electrical circuit consists of a generator, a lamp, wires and a switch'],v:'https://www.youtube.com/embed/2zW7yY3Y4Y5'},
-  {n:'الفرنسية',t:'🇫🇷 Le futur simple',i:'https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&w=400&q=80',x:'زمن المستقبل البسيط (Le futur simple) يُستخدم للتعبير عن حدث سيقع في المستقبل.<br>مثال: Je <strong>parlerai</strong>, Tu <strong>parleras</strong>...',s:['زمن المستقبل البسيط في اللغة الفرنسية','Le futur simple','The simple future tense'],v:'https://www.youtube.com/embed/zW7yY3Y4Y5Y'},
-  {n:'الاختبار',e:'prim5_exam'}
+Z.addLesson('prim5',{cat:'primary',icon:'📗',name:'السنة الخامسة: أدوات الذكاء الاصطناعي',desc:'الروبوتات و AI - 3 لغات + اختبار'},[
+  {n:'الدرس 1',t:'ما هو الذكاء الاصطناعي؟',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Robot_icon.svg/640px-Robot_icon.svg.png',x:'<strong>الذكاء الاصطناعي (AI)</strong> هو برنامج يجعل الحاسوب يفكر ويتعلم مثل الإنسان لمساعدتنا في المهام.',r:['الذكاء الاصطناعي للأطفال','L intelligence artificielle pour les enfants','AI for kids']},
+  {n:'الدرس 2',t:'الروبوتات (Robots)',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Robot_icon.svg/640px-Robot_icon.svg.png',x:'الروبوت هو آلة يمكنها تنفيذ أوامرنا. بعض الروبوتات تستخدم الذكاء الاصطناعي لترى وتسمع.',r:['الروبوتات','Les robots','Robots']},
+  {n:'الاختبار النهائي',e:'prim5_exam'}
 ]);
 
-Z.addLesson('prim6',{cat:'primary',icon:'📕',name:'السنة السادسة ابتدائي',desc:'الرياضيات، العربية، الإيقاظ، الفرنسية'},[
-  {n:'الرياضيات',t:'📐 التناسب والسلم',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Area.svg/200px-Area.svg.png',x:'التناسب هو تساوي نسبتين. <br>مثال: إذا كان 3 أقلام بـ 6 دنانير، فكم يكون 5 أقلام؟<br>نستخدم <strong>الضرب التبادلي</strong> أو الرجوع إلى الوحدة.',s:['التناسب هو تساوي نسبتين','La proportionnalité est l égalité de deux rapports','Proportionality is the equality of two ratios'],v:'https://www.youtube.com/embed/W7yY3Y4Y5Y6'},
-  {n:'اللغة العربية',t:'🌙 المفعول به',i:'https://images.unsplash.com/photo-1584285404198-2b9d9e3111e8?auto=format&fit=crop&w=400&q=80',x:'المفعول به هو اسم منصوب يقع عليه فعل الفاعل.<br>مثال: قرأ التلميذُ <strong>الكتابَ</strong>.',s:['المفعول به هو اسم منصوب يقع عليه فعل الفاعل','L objet direct est un nom à l accusatif','The direct object is an accusative noun'],v:'https://www.youtube.com/embed/7yY3Y4Y5Y6Y'},
-  {n:'الإيقاظ العلمي',t:'💡 انتشار الضوء',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Light_dispersion_conceptual_waves350px.gif/350px-Light_dispersion_conceptual_waves350px.gif',x:'ينتشر الضوء في <strong>خطوط مستقيمة</strong> في وسط متجانس.<br>يمكن أن ينعكس أو ينكسر.',s:['ينتشر الضوء في خطوط مستقيمة في وسط متجانس','La lumière se propage en ligne droite dans un milieu homogène','Light travels in straight lines in a homogeneous medium'],v:'https://www.youtube.com/embed/yY3Y4Y5Y6Y7'},
-  {n:'الفرنسية',t:'🇫🇷 Le passé composé',i:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=400&q=80',x:'الماضي المركب (Le passé composé) يُستخدم للتعبير عن حدث وقع وانتهى في الماضي.<br>يتكون من فعل مساعد (avoir/être) + اسم المفعول.',s:['الماضي المركب يتكون من فعل مساعد واسم المفعول','Le passé composé se compose d un auxiliaire et d un participe passé','The past tense consists of an auxiliary verb and a past participle'],v:'https://www.youtube.com/embed/Y3Y4Y5Y6Y7Y'},
-  {n:'الاختبار',e:'prim6_exam'}
+Z.addLesson('prim6',{cat:'primary',icon:'📕',name:'السنة السادسة: الأمن الرقمي',desc:'حماية الحاسوب - 3 لغات + اختبار'},[
+  {n:'الدرس 1',t:'كلمات المرور القوية',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cyber_security.jpg/640px-Cyber_security.jpg',x:'لحماية حساباتنا، يجب استخدام <strong>كلمات مرور قوية</strong> (حروف كبيرة، صغيرة، أرقام، ورموز) ولا نشاركها مع أحد.',r:['الأمن الرقمي','Sécurité numérique','Digital security']},
+  {n:'الدرس 2',t:'الفيروسات والبرمجيات الخبيثة',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cyber_security.jpg/640px-Cyber_security.jpg',x:'<strong>الفيروسات</strong> هي برامج ضارة تبطئ الحاسوب. يجب ألا نفتح روابط أو ملفات غريبة.',r:['البرمجيات الخبيثة','Les logiciels malveillants','Malware']},
+  {n:'الاختبار النهائي',e:'prim6_exam'}
 ]);
 
 Z.addLesson('mid_info',{cat:'middle',icon:'🌐',name:'الإعدادي: الشبكات والإنترنت',desc:'كيف تتصل الأجهزة؟'},[
@@ -1165,7 +1161,7 @@ Z.addLesson('bk_ai_comp_raw3',{cat:'books',icon:'📚',name:'الكتاب الش
 ]);
 
 /* ==========================================
-   الاختبارات (addExam)
+   الاختبارات (addExam) - جميع الاختبارات القديمة والجديدة
    ========================================== */
 Z.addExam('book_exam',[
   {q:'ما هو الحاسوب؟',o:['جهاز إلكتروني رقمي','جهاز طباعة','جهاز تصوير','جهاز صوت'],a:0},
@@ -1181,32 +1177,26 @@ Z.addExam('arabic_exam',[
   {q:'التاء المربوطة تُنطق عند الوقف:',o:['تاءً','هاءً','كافاً','همزةً'],a:1}
 ]);
 
+/* اختبارات المرحلة الابتدائية الجديدة (تكنولوجيا فقط) */
 Z.addExam('prim3_exam',[
-  {q:'ما هو قانون محيط المستطيل؟',o:['الطول × العرض','(الطول + العرض) × 2','الطول + العرض','الضلع × 4'],a:1},
-  {q:'الجملة الاسمية تتكون من:',o:['فعل وفاعل','مبتدأ وخبر','حرف واسم','فعل ومفعول'],a:1},
-  {q:'الغليان يحدث عند درجة حرارة:',o:['50°','80°','100°','120°'],a:2},
-  {q:'Les articles définis هي:',o:['un, une, des','le, la, les','du, de la','ce, cet'],a:1}
+  {q:'ما هو الحاسوب؟',o:['جهاز إلكتروني ذكي','جهاز طباعة','جهاز صوت','لعبة'],a:0},
+  {q:'الفأرة ولوحة المفاتيح هي أدوات...',o:['إخراج','إدخال','تخزين','شبكة'],a:1},
+  {q:'البرمجيات هي الجزء الذي...',o:['نلمسه','لا نلمسه','نراه','نطبعه'],a:1}
 ]);
 
 Z.addExam('prim4_exam',[
-  {q:'مساحة المربع =',o:['الضلع + الضلع','الضلع × 4','الضلع × الضلع','الطول × العرض'],a:2},
-  {q:'الجملة الفعلية تبدأ بـ:',o:['اسم','فعل','حرف','ظرف'],a:1},
-  {q:'أي حيوان يزحف؟',o:['الأسد','النسر','الأفعى','السمكة'],a:2},
-  {q:'Le présent يُستخدم للتعبير عن:',o:['حدث في الماضي','حدث الآن','حدث في المستقبل','حدث خيالي'],a:1}
+  {q:'أي ذاكرة تفقد معلوماتها عند إطفاء الحاسوب؟',o:['الذاكرة الميتة ROM','الذاكرة الحية RAM','القرص الصلب','الشاشة'],a:1},
+  {q:'ما هو الإنترنت؟',o:['شبكة محلية','أكبر شبكة في العالم','جهاز حاسوب','لعبة'],a:1}
 ]);
 
 Z.addExam('prim5_exam',[
-  {q:'العدد العشري 12,45 يتكون من:',o:['جزء صحيح فقط','جزء عشري فقط','جزء صحيح وجزء عشري','عدد طبيعي'],a:2},
-  {q:'الفعل المعتل هو كل فعل يحتوي على:',o:['حرف علة','حرفين متحركين','ثلاثة حروف','حرف ساكن'],a:0},
-  {q:'الدارة الكهربائية البسيطة تحتاج إلى:',o:['مولد ومصباح وأسلاك وقاطعة','مولد فقط','مصباح فقط','بطارية فقط'],a:0},
-  {q:'Le futur simple يعبر عن:',o:['حدث ماضٍ','حدث حاضر','حدث مستقبلي','حدث مستمر'],a:2}
+  {q:'ما هو الذكاء الاصطناعي؟',o:['برنامج يجعل الحاسوب يفكر ويتعلم','لعبة فيديو','جهاز طباعة','شاشة'],a:0},
+  {q:'الروبوت هو...',o:['إنسان','آلة تنفذ الأوامر','شبكة','برنامج'],a:1}
 ]);
 
 Z.addExam('prim6_exam',[
-  {q:'التناسب هو:',o:['تساوي نسبتين','جمع نسبتين','طرح نسبتين','ضرب نسبتين'],a:0},
-  {q:'المفعول به هو اسم:',o:['مرفوع','منصوب','مجرور','ساكن'],a:1},
-  {q:'الضوء ينتشر في وسط متجانس:',o:['بشكل منحنٍ','بشكل متعرج','في خطوط مستقيمة','بشكل دائري'],a:2},
-  {q:'Le passé composé يتكون من:',o:['فعل مساعد + اسم مفعول','فعل فقط','اسم + فعل','حرف + اسم'],a:0}
+  {q:'ما هي كلمة المرور القوية؟',o:['123456','اسمي','Aa@12345!','كلمة سر'],a:2},
+  {q:'ماذا نفعل عند استلام رابط غريب؟',o:['نفتحه فوراً','لا نفتحه ونحذفه','نشاركه','نطبعه'],a:1}
 ]);
 
 Z.addExam('mid_info_exam',[
@@ -1337,13 +1327,32 @@ Z.finishExam=function(){
   var ex=Z.exam;
   var pct=Math.round((ex.score/ex.qs.length)*100);
   var c=document.getElementById('lc');
-  var msg = pct>=80?'🏆 ممتاز!':(pct>=60?'👍 جيد':'📚 يحتاج مراجعة');
-  var h='<div class="slide"><div class="st">'+msg+'</div>';
-  h+='<div class="cert"><h1>شهادة إتمام الاختبار</h1>';
-  h+='<h2>'+pct+'%</h2>';
-  h+='<p>النتيجة: '+ex.score+' / '+ex.qs.length+'</p>';
-  h+='<p class="sign">منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</p></div>';
-  h+='<div class="nav"><button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button></div></div>';
+  
+  var h='<div class="slide">';
+  
+  if(pct >= 50){
+    // حالة النجاح
+    var msg = pct>=80?'🏆 ممتاز!':(pct>=65?'👍 حسن جداً':'👌 حسن');
+    h+='<div class="st" style="color:#22c55e; font-size:30px;">'+msg+'</div>';
+    h+='<div class="cert"><h1>شهادة إتمام الاختبار</h1>';
+    h+='<h2>'+pct+'%</h2>';
+    h+='<p>لقد نجحت بنتيجة: '+ex.score+' / '+ex.qs.length+'</p>';
+    h+='<p class="sign">منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي</p></div>';
+    h+='<div class="nav">';
+    h+='<button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button>';
+    h+='<button class="nbtn nn" onclick="ZAID.openCat(\'primary\')">الارتقاء للدرس التالي ◀</button>';
+    h+='</div>';
+  } else {
+    // حالة الرسوب
+    h+='<div class="st" style="color:#dc2626; font-size:30px;">📚 يحتاج مراجعة</div>';
+    h+='<div class="stxt" style="text-align:center;font-size:18px;">للأسف، لم تتحصل على المعدل (50%). يرجى العودة إلى الدرس ومراجعته جيداً قبل المحاولة مرة أخرى.</div>';
+    h+='<div class="nav">';
+    h+='<button class="nbtn ne" onclick="ZAID.goHome()">🏠 الرئيسية</button>';
+    h+='<button class="nbtn np" onclick="ZAID.showLesson(\''+ex.key.replace('_exam','')+'\')">🔙 العودة إلى الدرس</button>';
+    h+='</div>';
+  }
+  
+  h+='</div>';
   c.innerHTML=h;
 };
 
