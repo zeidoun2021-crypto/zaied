@@ -17,10 +17,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 #top.adm{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
 #top button{padding:5px 15px;border-radius:15px;border:none;cursor:pointer;font-weight:900;font-size:13px;font-family:Cairo}
 #ti{font-size:22px!important}
-#yellow{position:relative;width:100%;background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b);height:40px;display:none;align-items:center;overflow:hidden;border-bottom:3px solid #dc2626;flex-shrink:0;z-index:99}
-.yw{flex:1;overflow:hidden;position:relative;height:100%}
-.yt{position:absolute;white-space:nowrap;font-size:13px;line-height:40px;animation:ys 20s linear infinite;font-weight:900;color:#7f1d1d}
-#yellow button{background:#22c55e;color:#fff;border:2px solid #fff;border-radius:20px;padding:3px 12px;font-weight:900;font-size:12px;cursor:pointer;margin:0 15px}
 #main{flex:1;overflow-y:auto;overflow-x:hidden;padding:15px 20px 100px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:0;width:100%}
 #main::-webkit-scrollbar{width:6px}
 #main::-webkit-scrollbar-track{background:#1e293b}
@@ -38,7 +34,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .tvs{width:34px;height:12px;background:#dc2626;margin:0 auto;border-radius:0 0 4px 4px}
 .tvb2{width:80px;height:6px;background:#dc2626;margin:0 auto;border-radius:4px}
 .wctxt{background:linear-gradient(135deg,#dc2626,#991b1b);padding:15px;border-radius:15px;text-align:center;border:3px solid #fbbf24;font-size:16px;line-height:1.6;font-weight:900;width:100%;box-shadow:0 4px 10px rgba(0,0,0,.3);overflow:hidden;position:relative;flex-shrink:0}
-.wctxt-inner{display:inline-block;white-space:nowrap;padding-left:100%;animation:redMarquee 15s linear infinite}
 #gw{background:#fff;border:3px solid #dc2626;border-radius:15px;padding:20px;width:100%;color:#0f172a;box-shadow:0 8px 25px rgba(0,0,0,.5)}
 #gw h2{color:#dc2626;text-align:center;font-size:20px;margin-bottom:15px;font-weight:900}
 .inp{display:block;width:100%;padding:10px 15px;margin-bottom:10px;border:2px solid #cbd5e1;border-radius:20px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:600;box-sizing:border-box;height:42px;font-family:Cairo}
@@ -174,10 +169,8 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <button id="bo" onclick="ZAID.logout()" style="background:#dc2626;color:#fff;">🚪 خروج</button>
 </div>
 
-<div id="yellow">
-<div class="yw"><div class="yt">🔒 التسجيل مجاني • سجّل الآن واستمتع بكل المحتوى • منصة زايد</div></div>
-<button onclick="ZAID.showPage('pageWelcome')">🔑 سجّل</button>
-</div>
+<!-- تم إخفاء شريط الإلزام الأصفر تماماً -->
+<div id="yellow" style="display:none !important;"></div>
 
 <iframe name="hidden_email_iframe" style="display:none;"></iframe>
 
@@ -197,13 +190,18 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     </div>
   </div>
   
-  <div class="wctxt">
-    <div class="wctxt-inner">مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وتبحثا علميا</div>
+  <!-- كلمة الترحيب الثابتة مع إضافة "عرف بنفسك" -->
+  <div class="wctxt" style="padding:20px; text-align:center;">
+    <div style="white-space:normal; line-height:1.8; font-size:16px; font-weight:900;">
+      مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وتبحثا علميا
+      <br><br>
+      <span style="color:#fff; font-size:18px; background:rgba(0,0,0,0.2); padding:5px 15px; border-radius:10px; display:inline-block; box-shadow:0 2px 5px rgba(0,0,0,0.2);">✍️ عرف بنفسك كي نسمح لك بالدخول</span>
+    </div>
   </div>
   
   <div id="gw">
     <div style="text-align:center;font-size:35px;margin-bottom:5px;">👋</div>
-    <h2>🔑 التسجيل المجاني</h2>
+    <h2>🔑 استمارة التسجيل</h2>
     
     <input class="inp" id="fn" placeholder="👤 الاسم الكامل (كلمتين على الأقل) *" required>
     <input class="inp" id="fp" placeholder="💼 المهنة *" required>
@@ -216,8 +214,10 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <div style="text-align:center;font-size:13px;font-weight:900;color:#dc2626;margin-bottom:5px;">⬇️ يرجى اختيار التصنيف المناسب ⬇️</div>
     <div class="cats" id="cats"></div>
     
-    <button class="sbt" onclick="ZAID.register()">🔑 ابدأ الآن مجاناً</button>
-    <div style="text-align:center;margin-top:10px;">
+    <!-- زر الدخول باللون الأخضر الغامق الجذاب -->
+    <button class="sbt" style="background:linear-gradient(135deg,#15803d,#166534); border-color:#fbbf24; font-size:20px; padding:15px; margin-top:20px; box-shadow:0 4px 10px rgba(21,128,61,0.4);" onclick="ZAID.register()">🚪 دخول</button>
+    
+    <div style="text-align:center;margin-top:15px;">
       <button type="button" onclick="ZAID.adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:13px;font-family:Cairo;padding:8px;display:inline-block;">👑 دخول المشرف</button>
     </div>
   </div>
@@ -654,12 +654,12 @@ Z.register=function(){
     sendEmail(newUser);
     Z.visitorAttempts=0;
     document.getElementById('un').textContent=n;
-    if(btn) { btn.disabled = false; btn.textContent = '🔑 ابدأ الآن مجاناً'; }
+    if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
     Z.updateUI(); Z.showPage('pageHome');
     alert('✅ تم التسجيل بنجاح في Firebase!\n\n⏱️ لديك ' + Z.TRIAL_DAYS + ' أيام تجريبية.\n📧 تم إرسال إشعار للمشرف.');
   }).catch(function(err){
     console.error('❌ Firebase error:', err);
-    if(btn) { btn.disabled = false; btn.textContent = '🔑 ابدأ الآن مجاناً'; }
+    if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
     alert('❌ فشل التسجيل في Firebase:\n\n' + err.message + '\n\nلم يتم حفظ أي بيانات وهمية.');
   });
   
@@ -906,14 +906,12 @@ Z.saveSeeker=function(type){
 };
 
 /* ==========================================
-   ألبوم الصور والورشات (الجديد)
+   ألبوم الصور والورشات
    ========================================== */
 Z.showAlbum=function(){
   if(!Z.checkVisitor()) return;
   var c=document.getElementById('lc');
   
-  // هنا يمكنك تغيير الروابط بصورك الخاصة. 
-  // يمكنك وضع مسار الصورة المحلي مثل 'images/photo1.jpg' (بشرط إنشاء مجلد images بجانب index.html)
   var albumImages = [
     {src:'https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg', title:'كتاب الأطفال والحاسوب'},
     {src:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cyber_security.jpg/640px-Cyber_security.jpg', title:'AI والجرائم الإلكترونية'},
@@ -1051,7 +1049,7 @@ Z.addLesson('ai_book_part6',{cat:'ai',icon:'🛡️',name:'الكتاب الشا
 ]);
 
 /* ==========================================
-   المرحلة الابتدائية: التكنولوجيا والذكاء الاصطناعي فقط
+   المرحلة الابتدائية: التكنولوجيا والذكاء الاصطناعي فقط (تم التعديل)
    ========================================== */
 Z.addLesson('prim3',{cat:'primary',icon:'🎒',name:'السنة الثالثة: صديقي الحاسوب',desc:'مكونات الحاسوب - 3 لغات + اختبار'},[
   {n:'الدرس 1',t:'ما هو الحاسوب؟',i:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Personal_computer%2C_exploded_4.svg/640px-Personal_computer%2C_exploded_4.svg.png',x:'الحاسوب هو جهاز إلكتروني ذكي يستقبل البيانات، ويعالجها، ويخرجها لنا في شكل معلومات مفيدة.',r:['الحاسوب صديقنا الذكي','L ordinateur est notre ami','The computer is our smart friend'],s:['الحاسوب هو جهاز إلكتروني ذكي','L ordinateur est un appareil électronique intelligent','A computer is a smart electronic device']},
