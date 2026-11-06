@@ -182,7 +182,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .btn-download-video { background: #22c55e; }
 .video-status { margin-top: 15px; padding: 12px; border-radius: 10px; background: #1e293b; color: #fbbf24; font-weight: bold; font-size: 15px; }
 
-/* تصميم محتوى glossary24 (كتاب الأطفال، الألعاب، العربية، المنجد) */
+/* تصميم محتوى glossary24 */
 .glossary-wrapper { font-family: 'Cairo', sans-serif; color: #1e293b; width: 100%; text-align: right; }
 .glossary-wrapper .slide-card { background: linear-gradient(135deg, #fff9e6, #fff2cc); border-radius: 30px; padding: 25px; margin: 20px 0; border-right: 8px solid #ff9800; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 .glossary-wrapper .dialogue { margin: 15px 0; line-height: 1.9; font-size: 17px; }
@@ -300,7 +300,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     </ul>
   </div>
 
-  <!-- 2. المراحل التعليمية (كتاب الأطفال سيظهر داخل المرحلة الابتدائية) -->
+  <!-- 2. المراحل التعليمية -->
   <div class="card c-stage">
     <div class="ci">🏫</div>
     <div class="ct">المراحل التعليمية</div>
@@ -383,7 +383,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 </div>
 </div>
 
-<!-- صفحة الدروس (تم إزالة زر العودة الثابت لمنع التكرار) -->
+<!-- صفحة الدروس (بدون زر عودة ثابت لمنع التكرار) -->
 <div id="pageLesson" class="hide">
 <div id="lesson">
 <div id="lc"></div>
@@ -514,39 +514,6 @@ Z.updateStatusBadge = function(){
   if(s.type==='sub'){ el.innerHTML='✅ مشترك'; el.style.background='#22c55e'; el.style.color='#fff'; }
   else if(s.type==='trial'){ el.innerHTML='⏱️ تجريبي: '+s.days+'ي '+s.hours+'س'; el.style.background='#f59e0b'; el.style.color='#1e293b'; }
   else { el.innerHTML='🔒 الاشتراك منتهي'; el.style.background='#dc2626'; el.style.color='#fff'; }
-};
-
-Z.requireSub = function(){
-  var old=document.getElementById('subModal'); if(old) old.remove();
-  var m=document.createElement('div'); m.id='subModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  var s=Z.getAccessStatus();
-  var title=s.type==='expired'?'⏰ انتهت المدة التجريبية':'🔒 الاشتراك مطلوب';
-  var msg=s.type==='expired'?'لقد انتهت مدتك التجريبية ('+Z.TRIAL_DAYS+' أيام). للاستفادة من كل المحتوى، يرجى الاشتراك.':'هذه الميزة تتطلب اشتراكاً نشطاً.';
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:500px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box;max-height:90vh;overflow-y:auto;">'
-    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
-    +'<h2 style="color:#fbbf24;text-align:center;margin-bottom:10px;font-size:20px">'+title+'</h2>'
-    +'<p style="text-align:center;line-height:1.8;font-size:14px;color:#cbd5e1;margin-bottom:15px">'+msg+'</p>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e">'
-    +'<div style="color:#22c55e;font-weight:900;font-size:15px">🇹🇳 محلي (تونس - أفراد)</div>'
-    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_TN+' دينار تونسي</div>'
-    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17) أو حوالة</div>'
-    +'</div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6">'
-    +'<div style="color:#3b82f6;font-weight:900;font-size:15px">🌍 دولي (أفراد)</div>'
-    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_USD+' دولار / '+Z.SUB_PRICE_EUR+' يورو</div>'
-    +'<div style="font-size:12px;color:#94a3b8">عبر Western Union أو MoneyGram</div>'
-    +'</div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #8b5cf6">'
-    +'<div style="color:#8b5cf6;font-weight:900;font-size:15px">🏢 للمؤسسات (نشر العروض)</div>'
-    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.CORP_PRICE_TN+' د.ت / '+Z.CORP_PRICE_INT+' دولار / '+Z.CORP_PRICE_INT+' يورو</div>'
-    +'<div style="font-size:12px;color:#94a3b8">اشتراك سنوي للمؤسسات التي تريد نشر عروض شغل وتربص</div>'
-    +'</div>'
-    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
-    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
-    +'<button onclick="document.getElementById(\'subModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button>'
-    +'</div>';
-  document.body.appendChild(m);
 };
 
 /* التصنيفات */
@@ -680,238 +647,7 @@ Z.speak=function(t,l){
     }
   }
 };
-/* ============================================================
-   الجزء 4: الإحصائيات + إدارة المسجلين + الاشتراكات + التسجيل
-   ============================================================ */
 
-/* الإحصائيات */
-Z.showStats=function(){
-  if(!Z.admin) return;
-  if(!db){ alert('Firebase غير متصل.'); return; }
-  var m=document.createElement('div'); m.id='statsModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:20px;border-radius:15px;color:#fff;width:100%;max-width:600px;text-align:center;"><h2>⏳ جاري تحميل البيانات من Firebase...</h2></div>';
-  document.body.appendChild(m);
-  
-  db.collection("users").get().then(function(qs){ 
-    var users=[]; 
-    qs.forEach(function(doc){ var u=doc.data(); u._id=doc.id; users.push(u); }); 
-    renderStats(users); 
-  }).catch(function(err){ 
-    alert("⚠️ تعذر قراءة البيانات من Firebase:\n" + err.message);
-    document.getElementById('statsModal').remove();
-  });
-
-  function renderStats(usersList){
-    document.getElementById('statsModal').remove();
-    var m2=document.createElement('div'); m2.id='statsModal';
-    m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    var html='<div style="background:#1e293b;padding:20px;border-radius:15px;max-width:600px;width:100%;color:#fff;max-height:90vh;display:flex;flex-direction:column;">'
-      + '<h2 style="color:#fbbf24;margin-bottom:15px;text-align:center;">📊 المسجلون ('+usersList.length+')</h2>'
-      + '<div style="overflow-y:auto;flex:1;background:#0f172a;padding:10px;border-radius:10px;text-align:right;">';
-    if(usersList.length===0) html+='<div style="text-align:center;padding:20px;color:#94a3b8;">لا يوجد مسجلون بعد.</div>';
-    usersList.forEach(function(u,i){ 
-      var subBadge = u.isSub ? '<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;">✅ مشترك</span>' : '<span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;">❌ غير مشترك</span>';
-      var trialInfo = '';
-      if(u.trialStart && !u.isSub) {
-        var end = u.trialStart + Z.TRIAL_MS;
-        var ms = end - Date.now();
-        if(ms > 0) { var d = Math.floor(ms/86400000); var h = Math.floor((ms%86400000)/3600000); trialInfo = '<div style="color:#f59e0b;font-size:11px;">⏱️ تجريبي: ' + d + 'ي ' + h + 'س</div>'; }
-        else { trialInfo = '<div style="color:#dc2626;font-size:11px;">⏰ انتهى التجريبي</div>'; }
-      }
-      html+='<div style="border-bottom:1px solid #334155;padding:10px;font-size:13px;line-height:1.7;">'
-        + '<strong style="color:#fbbf24;">'+(i+1)+'. '+(u.name||'—')+'</strong> '+subBadge
-        + '<br>📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')
-        + '<br>💼 '+(u.prof||'—')+' | 🏙️ '+(u.city||'—')
-        + trialInfo
-        + '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">'
-        + (u._id ? (u.isSub 
-            ? '<button onclick="ZAID.toggleSub(\''+u._id+'\', false)" style="padding:5px 12px;background:#dc2626;color:#fff;border:none;border-radius:12px;font-size:11px;cursor:pointer;font-family:Cairo;">❌ إلغاء الاشتراك</button>'
-            : '<button onclick="ZAID.toggleSub(\''+u._id+'\', true)" style="padding:5px 12px;background:#22c55e;color:#fff;border:none;border-radius:12px;font-size:11px;cursor:pointer;font-family:Cairo;">✅ فعّل الاشتراك</button>')
-          : '')
-        + '<span style="color:#94a3b8;font-size:11px;">📅 '+(u.date||'—')+'</span>'
-        + '</div></div>'; 
-    });
-    html+='</div>';
-    html+='<button onclick="ZAID.exportExcel()" style="margin-top:15px;padding:12px;background:#22c55e;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;font-size:16px;">📥 تحميل بيانات المسجلين (Excel)</button>';
-    html+='<button onclick="ZAID.clearAllUsers()" style="margin-top:10px;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">🗑️ حذف جميع المسجلين</button>';
-    html+='<button onclick="document.getElementById(\'statsModal\').remove()" style="margin-top:10px;padding:10px;background:#334155;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">إغلاق</button></div>';
-    m2.innerHTML=html; document.body.appendChild(m2);
-  }
-};
-
-Z.toggleSub = function(userId, activate) {
-  if(!Z.admin || !db) { alert('غير متاح'); return; }
-  var confirmMsg = activate ? 'تفعيل الاشتراك لمدة ' + Z.SUB_DAYS + ' يوم؟' : 'إلغاء الاشتراك؟';
-  if(!confirm(confirmMsg)) return;
-  var data = activate ? { isSub: true, subExpiry: Date.now() + Z.SUB_MS, subActivatedAt: Date.now() } : { isSub: false, subExpiry: 0 };
-  db.collection('users').doc(userId).update(data)
-    .then(function(){ alert(activate ? '✅ تم تفعيل الاشتراك' : '❌ تم إلغاء الاشتراك'); document.getElementById('statsModal').remove(); Z.showStats(); })
-    .catch(function(err){ alert('❌ خطأ: ' + err.message); });
-};
-
-Z.exportExcel=function(){
-  if(!Z.admin || !db) return;
-  db.collection("users").get().then(function(qs){ 
-    var users=[]; qs.forEach(function(doc){ users.push(doc.data()); });
-    if(users.length === 0) { alert('لا يوجد مسجلون.'); return; }
-    var csv = "\uFEFF";
-    csv += "الاسم,الإيميل,الواتساب,المهنة,الاختصاص,البلد,المدينة,التصنيف,التاريخ,مشترك؟,انتهاء الاشتراك\n";
-    users.forEach(function(u){ 
-      var sub = u.isSub ? 'نعم' : 'لا';
-      var exp = u.subExpiry ? new Date(u.subExpiry).toLocaleDateString('ar-TN') : '—';
-      csv += '"'+(u.name||'')+'","'+(u.email||'')+'","'+(u.phone||'')+'","'+(u.prof||'')+'","'+(u.spec||'')+'","'+(u.country||'')+'","'+(u.city||'')+'","'+(u.cat||'')+'","'+(u.date||'')+'","'+sub+'","'+exp+'"\n'; 
-    });
-    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'المسجلين_منصة_زايد.csv'; a.click();
-  }).catch(function(err){ alert('❌ خطأ: ' + err.message); });
-};
-
-Z.clearAllUsers=function(){
-  if(!Z.admin || !db) return;
-  if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً من Firebase؟ لا يمكن التراجع!')) return;
-  db.collection("users").get().then(function(qs){
-    var batch = db.batch();
-    qs.forEach(function(doc){ batch.delete(doc.ref); });
-    return batch.commit();
-  }).then(function(){
-    localStorage.removeItem('zaid_local_users');
-    alert('✅ تم حذف جميع المسجلين بنجاح.');
-    document.getElementById('statsModal').remove();
-  }).catch(function(err){ alert('❌ خطأ: ' + err.message); });
-};
-
-/* نافذة الاشتراك */
-Z.showSub=function(){
-  var s = Z.getAccessStatus();
-  if(s.type === 'sub' || s.type === 'admin') {
-    var expDate = s.expiry ? new Date(s.expiry).toLocaleDateString('ar-TN') : '—';
-    alert('✅ اشتراكك نشط.\nتاريخ الانتهاء: ' + expDate);
-    return;
-  }
-  var old=document.getElementById('sm');if(old)old.remove();
-  var m=document.createElement('div');m.id='sm';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
-  var remaining = '';
-  if(s.type === 'trial') remaining = '<p style="text-align:center;color:#f59e0b;font-size:13px;margin-bottom:10px;">⏱️ تبقى لك: ' + s.days + ' يوم و ' + s.hours + ' ساعة</p>';
-  
-  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:30px;max-width:500px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box;max-height:90vh;overflow-y:auto;">'
-    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
-    +'<h2 style="color:#fbbf24;text-align:center;margin:15px 0;font-size:22px">الاشتراك السنوي</h2>'
-    + remaining
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e">'
-    +'<div style="color:#22c55e;font-weight:900;font-size:16px">🇹🇳 محلي (تونس - أفراد)</div>'
-    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_TN + ' دينار تونسي</div>'
-    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17)</div>'
-    +'</div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6">'
-    +'<div style="color:#3b82f6;font-weight:900;font-size:16px">🌍 دولي (أفراد)</div>'
-    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.SUB_PRICE_USD + ' دولار / ' + Z.SUB_PRICE_EUR + ' يورو</div>'
-    +'<div style="font-size:12px;color:#94a3b8">عبر Western Union أو MoneyGram</div>'
-    +'</div>'
-    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #8b5cf6">'
-    +'<div style="color:#8b5cf6;font-weight:900;font-size:16px">🏢 للمؤسسات (نشر العروض)</div>'
-    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">' + Z.CORP_PRICE_TN + ' د.ت / ' + Z.CORP_PRICE_INT + ' دولار / ' + Z.CORP_PRICE_INT + ' يورو</div>'
-    +'<div style="font-size:12px;color:#94a3b8">اشتراك سنوي للمؤسسات التي تريد نشر عروض شغل وتربص</div>'
-    +'</div>'
-    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
-    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
-    +'<button onclick="document.getElementById(\'sm\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button>'
-    +'</div>';
-  document.body.appendChild(m);
-};
-
-Z.wa=function(){
-  var u=Z.user||{};
-  var amount = Z.SUB_PRICE_TN + ' د.ت (تونس) أو ' + Z.SUB_PRICE_USD + ' دولار (دولي) | المؤسسات: ' + Z.CORP_PRICE_TN + ' د.ت أو ' + Z.CORP_PRICE_INT + ' دولار/يورو';
-  var msg = 'مرحباً، أريد الاشتراك في منصة زايد.\n\n'
-    + '📋 معلوماتي:\n'
-    + 'الاسم: ' + (u.name||'') + '\n'
-    + 'البريد: ' + (u.email||'') + '\n'
-    + 'الهاتف: ' + (u.phone||'') + '\n'
-    + 'التصنيف: ' + (u.cat||'') + '\n\n'
-    + '💰 تفاصيل الدفع:\n'
-    + 'المبلغ: ' + amount + '\n'
-    + 'طريقة الدفع: [اختر: دينار إلكتروني / ويسترن يونيون / حوالة في دقيقة]\n'
-    + 'نوع الاشتراك: [فردي / مؤسسة]\n'
-    + 'رقم الحوالة/التحويل: [اكتب الرقم]\n'
-    + 'التاريخ: ' + new Date().toLocaleDateString('ar-TN') + '\n\n'
-    + '🔔 أرجو تأكيد الاشتراك بعد التحقق من الدفع.';
-  window.open('https://wa.me/'+Z.WA+'?text='+encodeURIComponent(msg),'_blank');
-};
-
-/* التسجيل الحقيقي في Firebase */
-Z.register=function(){
-  var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
-  var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
-  
-  if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل (كلمتين على الأقل)'); return; }
-  if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول المطلوبة (*)'); return; }
-  if(!/^[0-9]{8,15}$/.test(h)) { alert('❌ يرجى إدخال رقم واتساب صحيح (أرقام فقط، من 8 إلى 15 رقماً)'); return; }
-  if(!Z.selectedCat) { alert('❌ يرجى اختيار التصنيف'); return; }
-  
-  if(!db) { alert('❌ Firebase غير متصل! لا يمكن التسجيل الحقيقي.\n\nتأكد من اتصالك بالإنترنت وأعد تحميل الصفحة.'); return; }
-  
-  var newUser = {
-    name:n, prof:p, spec:s, email:e, phone:h, country:c, city:ci,
-    cat:Z.selectedCat, date:new Date().toLocaleDateString('ar-TN'),
-    isSub:false, trialStart:Date.now(), subExpiry:0
-  };
-  
-  var btn = document.getElementById('btnReg');
-  if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري التسجيل في Firebase...'; }
-  
-  db.collection("users").add(newUser).then(function(docRef){
-    newUser._id = docRef.id;
-    Z.user = newUser;
-    localStorage.setItem('zaid_current_user', JSON.stringify(Z.user));
-    try {
-      var localUsers = JSON.parse(localStorage.getItem('zaid_local_users') || '[]');
-      localUsers.push(Z.user);
-      localStorage.setItem('zaid_local_users', JSON.stringify(localUsers));
-    } catch(e) {}
-    console.log('✅ Firebase: OK, ID:', docRef.id);
-    sendEmail(newUser);
-    Z.visitorAttempts=0;
-    document.getElementById('un').textContent=n;
-    if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
-    Z.updateUI(); Z.showPage('pageHome');
-    alert('✅ تم التسجيل بنجاح في Firebase!\n\n⏱️ لديك ' + Z.TRIAL_DAYS + ' أيام تجريبية.\n📧 تم إرسال إشعار للمشرف.');
-  }).catch(function(err){
-    console.error('❌ Firebase error:', err);
-    if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
-    alert('❌ فشل التسجيل في Firebase:\n\n' + err.message + '\n\nلم يتم حفظ أي بيانات وهمية.');
-  });
-  
-  function sendEmail(u){
-    try { 
-      var form = document.createElement('form'); 
-      form.method = 'POST'; 
-      form.action = 'https://formsubmit.co/zeidoun2021@gmail.com'; 
-      form.target = 'hidden_email_iframe'; 
-      form.style.display = 'none'; 
-      var fields = { 
-        _subject: '🎉 مسجل جديد - منصة زايد', 
-        _captcha: 'false', 
-        _template: 'table', 
-        'الاسم': u.name, 'المهنة': u.prof, 'الاختصاص': u.spec, 'البريد': u.email,
-        'الواتساب': u.phone, 'البلد': u.country, 'المدينة': u.city,
-        'التصنيف': u.cat, 'التاريخ': u.date,
-        'نوع الاشتراك': 'تجريبي (3 أيام)'
-      }; 
-      for(var k in fields){ 
-        var inp = document.createElement('input'); 
-        inp.type = 'hidden'; 
-        inp.name = k; 
-        inp.value = fields[k]; 
-        form.appendChild(inp); 
-      } 
-      document.body.appendChild(form); 
-      form.submit(); 
-      document.body.removeChild(form); 
-    } catch(err) { console.error('Email Error:', err); }
-  }
-};
 /* ============================================================
    الجزء 4: الإحصائيات + إدارة المسجلين + الاشتراكات + التسجيل
    ============================================================ */
@@ -1541,7 +1277,7 @@ Z.renderSlide = function(){
     +   '<div class="sn">الشريحة ' + (idx+1) + ' من ' + slides.length + '</div>'
     +   '<div class="st">' + (slide.title || lesson.meta.title) + '</div>';
 
-  // إذا كانت الشريحة تحتوي على كود HTML مخصص
+  // إذا كانت الشريحة تحتوي على كود HTML مخصص (مثل قصة الأطفال)
   if(slide.html) {
     html += '<div class="glossary-wrapper">' + slide.html + '</div>';
   } else {
@@ -1593,11 +1329,11 @@ Z.renderSlide = function(){
 
 Z.nextSlide = function(){
   var lesson = Z.lessons[Z.cur.key];
-  if(Z.cur.idx < lesson.slides.length - 1) { Z.cur.idx++; Z.renderSlide(); }
+  if(Z.cur.idx < lesson.slides.length - 1) { Z.cur.idx++; Z.renderSlide(); window.scrollTo(0,0); }
 };
 
 Z.prevSlide = function(){
-  if(Z.cur.idx > 0) { Z.cur.idx--; Z.renderSlide(); }
+  if(Z.cur.idx > 0) { Z.cur.idx--; Z.renderSlide(); window.scrollTo(0,0); }
 };
 
 /* -----------------------------------------
@@ -1826,184 +1562,6 @@ Z.showAISection = function(){
   if(count === 0) html += '<p style="text-align:center;color:#94a3b8;grid-column:1/-1;">لا توجد دروس متاحة حالياً.</p>';
   
   html += '</div>';
-  lc.innerHTML = html;
-};
-/* ============================================================
-   الجزء 7: كتاب الأطفال والحاسوب (17 شريحة) + الاختبار + الشهادة
-   ============================================================ */
-
-/* -----------------------------------------
-   1) إضافة درس الأطفال والحاسوب (القصة الكاملة)
-   ----------------------------------------- */
-Z.addLesson('kids_computer', 
-  { cat:'tech', stage:'primary', title:'الأطفال والحاسوب', desc:'القصة الكاملة والتمارين - البرنامج الرسمي', icon:'📚' },
-  [
-    { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 1</div><div class="image-box"><img src="https://i.postimg.cc/FHPdYxrn/alhaswb-walatfal.jpg"></div><div style="font-size:28px; font-weight:bold; margin:20px 0">📚 الأطفال والحاسوب</div><div style="font-size:18px">•  بقلم: محمد زايد خبير دولي في التقنيات الحديثة /  •  أستاذ جامعي</div><div class="translation-box"><span class="translation-ar">🖥️ حاسوب</span> | <span class="translation-fr">ordinateur</span> | <span class="translation-en">Computer</span></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 2</div><div class="image-box"><img src="https://i.postimg.cc/CKcnB72y/haswb1.jpg"></div><div class="dialogue"><div class="children">🧒 الأطفال -  هيا بنا نتعرف على الحاسوب لنلعب معه.</div><div class="children">🧒 الأطفال -  ما اسمك أيها الصديق ؟</div><div class="computer">💻 الحاسوب :  لي اسمان الكمبيوتر أو الحاسوب</div><div class="children">🧒 الأطفال:  هل يمكن أن تصف لنا نفسك ؟</div><div class="computer">💻 الحاسوب: انني أتكون من جزئين أساسيين: أ -  جزء مادي وهو مجموعة من العناصر المصنوعة من المعادن وهو الجزء الذي يعبر عنه بالفرنسية (Matériel) أو بالانقليزية (Hardware). ب -  جزء معنوي ويتكون من البرمجيات وهو ما يسمى بالفرنسية (Logiciel) أو بالانقليزية (Software).</div><div class="children">🧒 الأطفال :  هل يمكن للجزئين أن ينفصلا عن بعضهما؟</div><div class="computer">💻 الحاسوب:  لا أبدا.لا يمكن للجزء الأول أن يكون مشتغلا إلا إذا تعامل مع الجزء الثاني الذي لا قيمة له إذا كان منفردا عن الجزء الأول.</div></div><div class="translation-box"><span class="translation-ar">🔧 جزء مادي</span> | <span class="translation-fr">Matériel</span> | <span class="translation-en">Hardware</span><br><span class="translation-ar">📀 جزء معنوي</span> | <span class="translation-fr">Logiciel</span> | <span class="translation-en">Software</span></div><div><button class="btn-speak" onclick="ZAID.speak('جزء مادي', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Matériel', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Hardware', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 3-4</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/ycZZ66y5/ram-cpu.jpg" alt="المعالج والذاكرة"><button class="btn-speak" onclick="ZAID.speak('صورة المعالج والذاكرة', 'ar')">🔊 وصف الصورة</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال : يقال عنك أنك ذكي وسريع في الرياضيات . هل هذا صحيح وكيف ذلك ؟</div><div class="computer">💻 الحاسوب : قبل أن أجيبكما عن سؤالكما لابد لي أن أواصل حديثي عن تركيبتي الداخلية ثم الخارجية.</div><div class="children">🧒 الأطفال : هل هذا له علاقة بسؤالنا؟</div><div class="computer">💻 الحاسوب : أجل</div><div class="children">🧒 الأطفال : كيف ذلك؟</div><div class="computer">💻 الحاسوب : انني أتكون من الداخل من عناصر أساسية مصنوعة من معادن كما ذكرت والعناصر هي: «المعالج» والذاكرة وهو ما يناسب عند الانسان بالقلب والدماغ حيث العنصر الأول يقوم بمعالجة المعلومات التي يدخلها لي الانسان لتستقر في الذاكرة الرئيسية التي أستعملها كفضاء لاشتغالي.</div></div><div class="translation-box"><span class="translation-ar">🧠 معالج</span> | <span class="translation-fr">Processeur</span> | <span class="translation-en">Processor</span><br><span class="translation-ar">💾 ذاكرة</span> | <span class="translation-fr">mémoire</span> | <span class="translation-en">memory</span></div><div><button class="btn-speak" onclick="ZAID.speak('معالج', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Processeur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Processor', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 5-6</div><div class="image-box"><img src="https://iili.io/C9xVKYv.jpg"></div><div class="dialogue"><div class="children">🧒 الأطفال: جوابك غامض جدا . هل لك أن تشرح لنا أكثر ؟</div><div class="computer">💻 الحاسوب: انني أتكون من أربعة أجزاء : الوحدة المركزية ، الذاكرات ، الروابط واللواحق.</div><div class="children">🧒 الأطفال: ما هي الوحدة المركزية ؟</div><div class="computer">💻 الحاسوب: الوحدة المركزية هي قلبي النابض وعقلي المفكر وهي تشتمل على وحدة الأوامر ووحدة معالجة المعطيات الحرفية والرقمية والمنطقية والتي تمثل العقل المفكر حيث أقوم بإنجاز الأوامر والعمليات الحسابية والعمليات المنطقية وأستعمل الذاكرة الرئيسية للقيام بذلك وتسمى بالذاكرة الحية.</div></div><div class="translation-box"><span class="translation-ar">⚙️ وحدة مركزية</span> | <span class="translation-fr">Unité Centrale</span> | <span class="translation-en">CPU</span></div><div><button class="btn-speak" onclick="ZAID.speak('وحدة مركزية', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Unité Centrale', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('CPU', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 7-8</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/V0XXHmHX/1.jpg" alt="RAM"><button class="btn-speak" onclick="ZAID.speak('صورة ذاكرة RAM', 'ar')">🔊 وصف RAM</button><img src="https://i.ibb.co/twfWWJ42/image.jpg" alt="ROM"><button class="btn-speak" onclick="ZAID.speak('صورة ذاكرة ROM', 'ar')">🔊 وصف ROM</button><img src="https://i.ibb.co/gFDFKsd5/image.png" alt="الذاكرة"><button class="btn-speak" onclick="ZAID.speak('صورة الذاكرة', 'ar')">🔊 وصف الذاكرة</button></div></div><div class="dialogue"><div class="computer">💻 الحاسوب: ذاكرة تدعى بالميتة أستعملها لتخزين البرمجيات التي أحتاجها عند بداية اشتغالي . والفرق بين الذاكرة الرئيسية أو الذاكرة الحية والذاكرة الميتة هي أن الأولى لا تحتفظ بالمعطيات عند انقطاع التيار الكهربائي عني أما الذاكرة الميتة فهي لا تضيع المعطيات عند انقطاع التيار الكهربائي عني ومن سلبيات هذه الأخيرة أنه لا يمكن الكتابة فيها.</div><div class="children">🧒 الأطفال: وماذا أيضا ؟</div><div class="computer">💻 الحاسوب: الروابط وهي النواقل والقنوات التي تنقل المعطيات والأوامر بين الوحدة الرئيسية والذاكرات وهي روابط من نوعين: روابط للمعطيات وهي تنقل الأوامر والمعطيات وكل ما تنقله الوحدات: الأوامر ووحدة المعالجة. وروابط العناوين وهي تنقل عناوين الأوامر والمعطيات الموجودة بالذاكرة الرئيسية.</div></div><div class="translation-box"><span class="translation-ar">💾 RAM (ذاكرة حية)</span> | <span class="translation-fr">mémoire vive</span> | <span class="translation-en">Random Access Memory</span><br><span class="translation-ar">💾 ROM (ذاكرة ميتة)</span> | <span class="translation-fr">mémoire morte</span> | <span class="translation-en">Read Only Memory</span><br><span class="translation-ar">🔌 روابط (نواقل)</span> | <span class="translation-fr">Bus</span> | <span class="translation-en">Bus</span></div><div><button class="btn-speak" onclick="ZAID.speak('RAM', 'en')">🔊 RAM</button> <button class="btn-speak" onclick="ZAID.speak('ROM', 'en')">🔊 ROM</button> <button class="btn-speak" onclick="ZAID.speak('روابط', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Bus', 'fr')">🔊 Bus</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Bus', 'en')">🔊 Bus</button></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 9-10</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/CpTk8dfg/camera-numerique.jpg" alt="كاميرا"><button class="btn-speak" onclick="ZAID.speak('صورة كاميرا رقمية', 'ar')">🔊 وصف الكاميرا</button><img src="https://i.ibb.co/3mcN7f3K/camescope.jpg" alt="كاميسكوب"><button class="btn-speak" onclick="ZAID.speak('صورة الكاميسكوب', 'ar')">🔊 وصف الكاميسكوب</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك عناصر أخرى ؟</div><div class="computer">💻 الحاسوب: نعم وهي المتممة للعناصر السابقة ذكرها ألا وهي الوسائط.</div><div class="children">🧒 الأطفال: وما هي هذه الوسائط ؟ وما هي مهمتها ؟</div><div class="computer">💻 الحاسوب: هي عناصر موصولة بالروابط وتكون غالبا على شكل بطاقات أو جذاذات الكترونية تختلف عن بعضها البعض لأن كل واحدة منها لإدخال الصورة المتحركة يجب استعمال كاميرا فيديو رقمية أو الكاميسكوب الرقمي.</div></div><div class="translation-box"><span class="translation-ar">📷 كاميرا رقمية</span> | <span class="translation-fr">Caméra numérique</span> | <span class="translation-en">Digital camera</span><br><span class="translation-ar">🎥 كاميسكوب</span> | <span class="translation-fr">Caméscope</span> | <span class="translation-en">Camcorder</span></div><div><button class="btn-speak" onclick="ZAID.speak('كاميرا', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Caméra numérique', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Digital camera', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 11-12</div><div class="image-box"><img src="https://i.postimg.cc/7ZkXt82w/fart.jpg" alt="فأرة"><button class="btn-speak" onclick="ZAID.speak('صورة الفأرة', 'ar')">🔊 وصف الفأرة</button></div><div class="dialogue"><div class="children">🧒 الأطفال: اذا أردنا أن نتحدث معك فيجب أن نستعمل احدى الأدوات أو اللواحق كما تسميها . الفأرة ؟ نظر أنها صالحة الدخال المعطيات أيضا ؟</div><div class="computer">💻 الحاسوب : هي أداة قد ألحقت بنا نحن معشر الحواسيب مؤخرا عندما أدخلت برمجية "ويندوز" في نظام تشغيلنا وهي تيسّر التخاطب معنا حيث على المستعمل أن ينقر على البرمجية أو صورة العنصر لتشغيله.</div></div><div class="translation-box"><span class="translation-ar">🖱️ فأرة</span> = <span class="translation-fr">souris</span> = <span class="translation-en">mouse</span></div><div><button class="btn-speak" onclick="ZAID.speak('فأرة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('souris', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('mouse', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 13-14</div><div class="image-box"><div class="image-row"><img src="https://iili.io/C9xPrUx.jpg" alt="لوحة مفاتيح"><button class="btn-speak" onclick="ZAID.speak('صورة لوحة المفاتيح', 'ar')">🔊 وصف لوحة المفاتيح</button><img src="https://i.ibb.co/YFy4WZqQ/image.jpg" alt="قلم ضوئي"><button class="btn-speak" onclick="ZAID.speak('صورة القلم الضوئي', 'ar')">🔊 وصف القلم الضوئي</button><img src="https://i.ibb.co/XZWmFZSL/image.jpg" alt="شاشة لمسية"><button class="btn-speak" onclick="ZAID.speak('صورة الشاشة اللمسية', 'ar')">🔊 وصف الشاشة اللمسية</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك ملحقات أخرى للتقاطب ؟</div><div class="computer">💻 الحاسوب: أجل هناك ملحقات أخرى كلوحة المفاتيح لإدخال الحروف وملحقات خاصة كالقلم الضوئي الذي يستعمل في ادخال المعطيات في شكل شفرات عمودية ولوحة الرسم التي تساعد على الرسم والشاشة اللمسية وهي عبارة عن غشاء حساس يلصق في منطقة في لوحة المفاتيح أو على شاشة العرض وهي تتم وظيفة لوحة المفاتيح وتعوض الفأرة.</div></div><div class="translation-box"><span class="translation-ar">⌨️ لوحة مفاتيح</span> = <span class="translation-fr">clavier</span> = <span class="translation-en">keyboard</span><br><span class="translation-ar">✏️ قلم ضوئي</span> = <span class="translation-fr">crayon optique</span> = <span class="translation-en">digital pen</span><br><span class="translation-ar">👆 شاشة لمسية</span> = <span class="translation-fr">écran tactile</span> = <span class="translation-en">touch screen</span></div><div><button class="btn-speak" onclick="ZAID.speak('لوحة مفاتيح', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('clavier', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('keyboard', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 15-20</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/wT3wRQdz/monitor.jpg" alt="شاشة"><button class="btn-speak" onclick="ZAID.speak('صورة الشاشة', 'ar')">🔊 وصف الشاشة</button><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة"><button class="btn-speak" onclick="ZAID.speak('صورة الطابعة', 'ar')">🔊 وصف الطابعة</button><img src="https://i.postimg.cc/cHXcrrD2/microphone-and-speakers.jpg" alt="ميكروفون"><button class="btn-speak" onclick="ZAID.speak('صورة الميكروفون', 'ar')">🔊 وصف الميكروفون</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: ولكن لم توضح كيفية تخاطبك مع الانسان ؟ هل لك أن توضح لنا دور كل ملحق ؟</div><div class="computer">💻 الحاسوب: نعم. لنبدأ بالشاشة فهي وسيلة تخاطب بيني وبين الانسان منذ بداية المعلوماتية. فيدخل الانسان المعطيات وأنا أعالجها وأعرض نتائجها على الشاشة ليستغلها. وكان غالب المعطيات من النوع المكتوب لأن جودة الشاشات في البداية لم تكن كافية للعرض بالألوان والصور ،أما اليوم فقد تطورت الشاشات الى أن أصبحت على مختلف الهيئات والأحجام.</div></div><div class="translation-box"><span class="translation-ar">🖥️ شاشة</span> = <span class="translation-fr">Ecran</span> = <span class="translation-en">Screen</span><br><span class="translation-ar">🖨️ طابعة</span> = <span class="translation-fr">Imprimante</span> = <span class="translation-en">Printer</span><br><span class="translation-ar">🎤 ميكروفون</span> = <span class="translation-fr">microphone</span> = <span class="translation-en">microphone</span></div><div><button class="btn-speak" onclick="ZAID.speak('شاشة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Ecran', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Screen', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 21-24</div><div class="image-box"><img src="https://iili.io/C9xDdb4.jpg" alt="أحجام الشاشات"><button class="btn-speak" onclick="ZAID.speak('صورة أحجام الشاشات', 'ar')">🔊 وصف أحجام الشاشات</button></div><div class="dialogue"><div class="computer">💻 الحاسوب: تختلف أحجام الشاشات باختلاف التطبيقات والبرمجيات .فبالنسبة لحجم 15 بوصة فهي تستعمل في التطبيقات وأنظمة التشغيل العادية والجارية .أما حجم 17 بوصة و21 بوصة فهي تستعمل في تطبيقات تحتاج لدقة في العرض ومنها التطبيقات التي تتناول الرسوم والصور ومن التطبيقات نذكر النشر الالكتروني الذي ينتج الجرائد والمجلات.</div><div class="children">🧒 الأطفال: هل يمكن أن نلعب معك بشاشة 15 بوصة.</div><div class="computer">💻 الحاسوب: أجل لأن تقنية الشاشات اليوم تستجيب الى مختلف المعطيات المعالجة أي الصورة والصوت والنص وهو جيل من الحواسيب المسمى بمتعدد الوسائط أو "الملتيميديا".</div></div><div class="translation-box"><span class="translation-ar">📺 مختلف احجام شاشات الحاسوب</span><br><span class="translation-fr">Différents tailles d'écrans pour pc</span><br><span class="translation-en">Different sizes of pc screens</span></div><div><button class="btn-speak" onclick="ZAID.speak('أحجام شاشات الحاسوب', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Différentes tailles d\'écrans', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Different screen sizes', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 25-29</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة"><button class="btn-speak" onclick="ZAID.speak('صورة طابعة إبرية', 'ar')">🔊 وصف طابعة إبرية</button><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة نفاثة"><button class="btn-speak" onclick="ZAID.speak('صورة طابعة نفاثة', 'ar')">🔊 وصف طابعة نفاثة</button><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة ليزرية"><button class="btn-speak" onclick="ZAID.speak('صورة طابعة ليزرية', 'ar')">🔊 وصف طابعة ليزرية</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: ما هي قنوات الاخراج ؟</div><div class="computer">💻 الحاسوب: هناك الطابعة التي غالبا ما تلازمنا لأنها تعيننا في مد الانسان بالمعلومات والمعطيات التي تنتج عن معالجتنا لها وتلحق بي عبر وصلة وتنشر المعطيات على الورق.</div><div class="children">🧒 الأطفال: كيف تشتغل ؟</div><div class="computer">💻 الحاسوب: لشرح كيفية اشتغالها لابد من توضيح أنواعها فهي على ثلاثة أنواع: الطابعات الإبرية، الطابعات ذات النسخ الحبري أو النفاثة للحبر، والطابعات الليزرية.</div></div><div class="translation-box"><span class="translation-ar">🖨️ طابعة إبرية</span> | <span class="translation-fr">Imprimante à aiguilles</span> | <span class="translation-en">Dot matrix printer</span><br><span class="translation-ar">🖨️ طابعة نفاثة للحبر</span> | <span class="translation-fr">Imprimante à jet d'encre</span> | <span class="translation-en">Ink jet printer</span><br><span class="translation-ar">🖨️ طابعة ليزرية</span> | <span class="translation-fr">Imprimante Laser</span> | <span class="translation-en">Laser printer</span></div><div><button class="btn-speak" onclick="ZAID.speak('طابعة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('imprimante', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('printer', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 30-34</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/CxTbMGhR/scanner.jpg" alt="ماسح"><button class="btn-speak" onclick="ZAID.speak('صورة الماسح', 'ar')">🔊 وصف الماسح</button><img src="https://i.postimg.cc/DzDvFgFf/rasm.jpg" alt="راسم"><button class="btn-speak" onclick="ZAID.speak('صورة الراسم', 'ar')">🔊 وصف الراسم</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك طريقة أخرى لإخراج الصور والبيانات الرسومية ؟</div><div class="computer">💻 الحاسوب: أجل ، هناك الماسح لإخراج الصور والراسم الذي يستعمل لطبع الخرائط أو البيانات الرسومية وغالبا ما يستعمله المهندس المعماري أو المؤسسات الخاصة بالهندسة المعمارية.</div></div><div class="translation-box"><span class="translation-ar">📠 ماسح</span> | <span class="translation-fr">scanner</span> | <span class="translation-en">scanner</span><br><span class="translation-ar">📐 راسم</span> | <span class="translation-fr">traceur</span> | <span class="translation-en">plotter</span></div><div><button class="btn-speak" onclick="ZAID.speak('ماسح', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('scanner', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('scanner', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 35-37</div><div class="image-box"><img src="https://i.postimg.cc/R0wsVCxv/modem.jpg" alt="مودم"><button class="btn-speak" onclick="ZAID.speak('صورة المودم', 'ar')">🔊 وصف المودم</button></div><div class="dialogue"><div class="children">🧒 الأطفال: هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟</div><div class="computer">💻 الحاسوب: أجل انه يمكن لي أن أتخاطب مع حاسوب أو أكثر سواء كانوا يتواجدون معي في نفس الفضاء أو بعيدا عني. يجب أن يتصل بي جهاز آخر يدعى "موديم" كما يمكن أن يندرج بداخلي كالجذاذات الوسائطية وهذا الجهاز يقوم بوظيفة الاتصال ويدعى "موديم" كذلك.ويكون الاتصال عبر شبكة الهاتف أو شبكات أخرى كما يمكن لي أن أتخاطب مع حاسوب آخر عبر وصلة تلحق بفتحة لالخراج عند الحاسوب الآخر. وفي صورة تخاطبي مع مجموعة من الحواسيب وفي نفس الفضاء فهناك وسائل أخرى تضاف الى هيكلي المادي والمعنوي لأتمكن من التخاطب معهم.</div></div><div class="translation-box"><span class="translation-ar">📡 مودم</span> = <span class="translation-fr">modem</span> = <span class="translation-en">modem</span></div><div><button class="btn-speak" onclick="ZAID.speak('مودم', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('modem', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('modem', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 38-40</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/FbLdWngL/image.jpg" alt="قرص صلب"><button class="btn-speak" onclick="ZAID.speak('صورة القرص الصلب', 'ar')">🔊 وصف القرص الصلب</button><img src="https://i.ibb.co/DfRFF75T/image.jpg" alt="نظام تشغيل"><button class="btn-speak" onclick="ZAID.speak('صورة نظام التشغيل', 'ar')">🔊 وصف نظام التشغيل</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: كيف يمكن أن نلعب معك ؟</div><div class="computer">💻 الحاسوب: لم أنته بعد من سرد بقية العناصر التي يجب أن أتسلح بها كي أتمكن من اللعب معكم. لم يبق لي إلا الجانب المعنوي وهو ما يسمى بالبرمجيات. وتنقسم الى قسمين أساسيين: قسم إجباري وقسم اختياري. القسم الإجباري والأساسي وهو ما يسمى بنظام التشغيل ولابد أن يوضع في داخلي ويحمل في الذاكرة الرئيسية والذاكرة الميتة كي أتمكن من الاشتغال. ومن برمجيات التشغيل المعروفة: نظام "ويندوز Windows" و "يونيكس Unix". القسم الثاني وهو الاختياري هي البرمجيات التطبيقية التي تختلف حسب المجالات والاستعمالات فمنها البرمجيات المكتبية وبرمجيات التصرف وبرمجيات إنتاج البرمجيات وبرمجيات الألعاب وغير ذلك.</div><div class="children">🧒 الأطفال: إذا للعب معك، ماذا يجب أن نفعل؟</div><div class="computer">💻 الحاسوب: عليكم أن تخزنوا برمجية اللعبة على القرص الصلب. وسيقوم نظام التشغيل بمساعدتكم على ذلك. غالبا ما تكون برمجيات اللعب على أقراص ليزرية لأنها تستوجب مساحة كبيرة للتخزين، تضعون القرص في وحدة القراءة ثم تنقرون عليها فينشر نظام التشغيل محتوى القرص.</div><div class="children">🧒 الأطفال: ثم ماذا بعد ذلك؟</div><div class="computer">💻 الحاسوب: تنقرون عليها فيقوم نظام التشغيل بتركيز برمجية اللعبة على القرص الصلب، وذلك بنقل كل البرمجيات الإضافية لتشغيل برمجية اللعبة.</div><div class="children">🧒 الأطفال: ثم ماذا؟</div><div class="computer">💻 الحاسوب: عليكم بالنقر على اسم البرمجية التي تريدون استعمالها، وهكذا يمكن لكم الشروع في اللعب.</div><div class="children">🧒 الأطفال: حسنا وعند الانتهاء ماذا نفعل؟</div><div class="computer">💻 الحاسوب: في غالب الأحيان، ترشدكم برمجية اللعبة على كيفية إنهاء اللعبة بعبارة "خروج" (Quit).</div></div><div class="translation-box"><span class="translation-ar">💿 قرص صلب</span> | <span class="translation-fr">disque dur</span> | <span class="translation-en">hard disk</span><br><span class="translation-ar">💿 نظام تشغيل</span> | <span class="translation-fr">système d'exploitation</span> | <span class="translation-en">operating system</span><br><span class="translation-ar">🎮 لعبة</span> | <span class="translation-fr">jeu</span> | <span class="translation-en">game</span></div><div><button class="btn-speak" onclick="ZAID.speak('قرص صلب', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('disque dur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('hard disk', 'en')">🔊 English</button></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 41-43</div><div class="note" style="font-size:18px;">🎬 انتهى الدرس - إليكم مراجعته عبر فيديو 1 و 2</div><div class="image-box"><iframe width="100%" height="250" src="https://www.youtube.com/embed/3QCgr6IpuvA" allowfullscreen></iframe></div><div class="image-box"><iframe width="100%" height="250" src="https://www.youtube.com/embed/HB4I2CgkcCo" allowfullscreen></iframe></div></div>` },
-    
-    { html: `<div class="slide-card"><div class="note">📖 صفحة 44-50</div><div class="image-box"><div style="font-size:64px;">📝 ✏️ 📚 ⭐</div></div><div class="note" style="font-size:24px; font-weight:bold;">📝 التمارين: 25 سؤالاً - 4 نقاط لكل سؤال - المجموع: 100 نقطة</div><div style="background:#c8e6c9; padding:15px; border-radius:20px; margin:15px 0; text-align:center;">🧠 أجب على الأسئلة الـ25 لتحصل على الشهادة!<br>🌟 حاول أن تحصل على 50/100 فأكثر 🌟</div><div style="text-align:center;"><button id="startExamBtn" style="background:#22c55e; font-size:18px; padding:12px 30px; border:none; border-radius:40px; color:white; font-weight:bold; cursor:pointer;" onclick="ZAID.startPrimaryExam()">🚀 ابدأ الاختبار النهائي (25 سؤالاً) 🚀</button></div></div>` }
-  ]
-);
-
-/* -----------------------------------------
-   2) اختبار المرحلة الابتدائية (25 سؤالاً)
-   ----------------------------------------- */
-Z.startPrimaryExam = function() {
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  
-  var exercisesList = [
-    "تمرين 1 (4 نقاط)\n1) ماهي مكونات الحاسوب؟\n2) ما هي المواد التي صنعت منها أجزاء الحاسوب؟",
-    "تمرين 2 (4 نقاط)\n1) ماهي تركيبة الحاسوب الداخلية؟\n2) ما هي وظيفة كل جزء داخلي في الحاسوب؟",
-    "تمرين 3 (4 نقاط)\n1) ما هي الذاكرة الرئيسية؟\n2) ما دور الذاكرة الرئيسية ؟",
-    "تمرين 4 (4 نقاط)\n1) ماهي أنواع الذاكرات عند الحاسوب؟\n2) ما هو الفرق بينها؟",
-    "تمرين 5 (4 نقاط)\n1) ما هي الروابط في الحاسوب؟\n2) كيف نسمي الروابط أيضا وما دورها؟",
-    "تمرين 6 (4 نقاط)\n1) ما هي اللواحق؟\n2) ما هي مهمة كل لاحق ؟",
-    "تمرين 7 (4 نقاط)\n1) ماهي اللواحق التي تمكننا التفاعل مع الحاسوب؟\n2) كيف نستخدم الفارة؟",
-    "تمرين 8 (4 نقاط)\n1) ماهي اللواحق الأخرى ؟\n2) ما دور لوحة المفاتيح？",
-    "تمرين 9 (4 نقاط)\n1) ما هو القلم الالكتروني؟ ما هو اسمه الثاني？\n2) متى نستخدم القلم الضوئي؟",
-    "تمرين 10 (4 نقاط)\n1) متى نستخدم اللوحة الرسومية؟\n2) كيف شكلها؟",
-    "تمرين 11 (4 نقاط)\n1) ما هي الشاشة اللمسية؟\n2) كيف تشتغل ومتى نستخدمها ؟\n3) اين نجدها؟",
-    "تمرين 12 (4 نقاط)\n1) ماهو دور الشاشات في الحاسوب؟\n2) هل هناك نوع واحد وماهي؟",
-    "تمرين 13 (4 نقاط)\n1) ما دور الطابعة ؟ وما هي أنواعها？\n2) متى نستخدم الطابعة؟",
-    "تمرين 14 (4 نقاط)\n1) كيف نكلم الحاسوب؟\n2) كيف نسمع ما يقول الحاسوب عندما يجيب؟",
-    "تمرين 15 (4 نقاط)\n1) ما هي العلاقة بين شاشة التلفزة والحاسوب؟\n2) متى نحتاج لشاشة التلفزة عندما نتعامل مع الحاسوب؟",
-    "تمرين 16 (4 نقاط)\n1) ماهي مختلف ملحقات الحاسوب؟\n2) ما دور كل واحد منها？",
-    "تمرين 17 (4 نقاط)\n1) الطابعات هي لواحق اخراج ؟ كيف؟\n2) ما هي أنواع المعلومات التي تخرجها الطابعات؟",
-    "تمرين 18 (4 نقاط)\n1) ما هو الماسح\n2) متى نستخدم الماسح？",
-    "تمرين 19 (4 نقاط)\n1) ما هو الراسم？\n2) متى نستخدم الراسم؟ ما هي وظيفته？",
-    "تمرين 20 (4 نقاط)\n1) هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟ كيف؟\n2) ما هو الجهاز الذي يمكنه من ذلك؟",
-    "تمرين 21 (4 نقاط)\n1) كيف يستطيع الحاسوب التحاور مع الانسان؟\n2) ما هي العناصر الضرورية التي تمكنه من ذلك؟",
-    "تمرين 22 (4 نقاط)\n1) ما دور الأقراص الليزرية؟\n2) ماذا تحتوي تلك الأقراص؟",
-    "تمرين 23 (4 نقاط)\n1) ماهو المكون داخل الحاسوب يشغله\n2) كيف نغذي الحاسوب بالطاقة كي يبقى مشتغلا",
-    "تمرين 24 (4 نقاط)\n1) ماهي التعليمة لرفع برمجية الى الحاسوب\n2) ماهي التعليمة لتثبيت برمجية على الحاسوب",
-    "تمرين 25 (4 نقاط)\n1) ماهي المراحل التي تتبعها لتلعب مع الحاسوب\n2) ماهو الملحق الذي يمكنك من التمكن في اللعبة"
-  ];
-  
-  var html = '<button class="back" onclick="ZAID.openLesson(\'kids_computer\')">🔙 العودة إلى الدرس</button>'
-    + '<div class="htitle" style="margin-bottom:15px;">📝 اختبار المرحلة الابتدائية (25 سؤالاً)</div>'
-    + '<div class="glossary-wrapper">';
-    
-  for(var i = 0; i < exercisesList.length; i++) {
-    html += '<div class="exercise-card" style="background:#f8fafc; padding:15px; border-radius:20px; margin-bottom:15px; border-right:4px solid #facc15;">'
-      + '<p style="font-weight:bold; color:#1e293b; white-space:pre-line;">' + exercisesList[i] + '</p>'
-      + '<textarea id="primary_ans_' + i + '" rows="3" style="width:100%; padding:10px; border-radius:15px; border:1px solid #ccc; margin-top:10px;" placeholder="اكتب إجابتك هنا..."></textarea>'
-      + '</div>';
-  }
-  
-  html += '</div>'
-    + '<div style="text-align:center; margin-top:20px;">'
-    + '<button class="btn" style="background:#22c55e; padding:15px 40px; font-size:18px; border-radius:50px;" onclick="ZAID.submitPrimaryExam()">✅ إنهاء الاختبار والتصحيح</button>'
-    + '</div>';
-    
-  lc.innerHTML = html;
-};
-
-/* -----------------------------------------
-   3) تصحيح اختبار المرحلة الابتدائية
-   ----------------------------------------- */
-Z.submitPrimaryExam = function() {
-  var score = 0;
-  var details = '';
-  
-  for(var i = 0; i < 25; i++) {
-    var answer = document.getElementById('primary_ans_' + i)?.value || '';
-    var trimmed = answer.trim();
-    
-    if(trimmed.length > 40) {
-      score += 4;
-      details += '<div class="feedback-correct" style="background:#166534; color:white; padding:10px; border-radius:15px; margin:5px 0;">✅ تمرين ' + (i+1) + ': إجابة ممتازة (+4 نقاط)</div>';
-    } else if(trimmed.length > 25) {
-      score += 3;
-      details += '<div class="feedback-correct" style="background:#166534; color:white; padding:10px; border-radius:15px; margin:5px 0;">✅ تمرين ' + (i+1) + ': إجابة جيدة (+3 نقاط)</div>';
-    } else if(trimmed.length > 15) {
-      score += 2;
-      details += '<div class="feedback-correct" style="background:#166534; color:white; padding:10px; border-radius:15px; margin:5px 0;">✅ تمرين ' + (i+1) + ': إجابة مقبولة (+2 نقاط)</div>';
-    } else if(trimmed.length > 5) {
-      score += 1;
-      details += '<div class="feedback-correct" style="background:#166534; color:white; padding:10px; border-radius:15px; margin:5px 0;">✅ تمرين ' + (i+1) + ': إجابة ناقصة (+1 نقطة)</div>';
-    } else {
-      details += '<div class="feedback-wrong" style="background:#991b1b; color:white; padding:10px; border-radius:15px; margin:5px 0;">❌ تمرين ' + (i+1) + ': إجابة غير كافية (0 نقطة)</div>';
-    }
-  }
-  
-  var passed = score >= 50;
-  var lc = document.getElementById('lc');
-  
-  var html = '<button class="back" onclick="ZAID.goHome()">🔙 العودة للرئيسية</button>'
-    + '<div class="glossary-wrapper" style="text-align:center;">'
-    + '<div class="' + (passed ? 'score-high' : 'score-low') + '" style="font-size:48px; font-weight:bold; color:' + (passed ? '#16a34a' : '#dc2626') + ';">' + score + '/100</div>'
-    + '<div style="background:#1e293b; color:white; padding:15px; border-radius:20px; margin:15px 0;">'
-    + '<h3>' + (passed ? '🎉 مبروك! لقد نجحت' : '❌ للأسف، لم تنجح') + '</h3>'
-    + '<p>' + (passed ? 'يمكنك الآن استلام شهادتك' : 'حاول مرة أخرى بعد مراجعة الدروس') + '</p>'
-    + '</div>'
-    + '<div style="max-height:300px; overflow-y:auto; background:#0f172a; padding:15px; border-radius:20px; text-align:right;">'
-    + '<h3 style="color:#facc15; margin-bottom:10px;">📋 تفاصيل التصحيح:</h3>'
-    + details
-    + '</div>'
-    + '<div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">'
-    + '<button class="btn" style="background:#3b82f6; padding:12px 25px;" onclick="ZAID.startPrimaryExam()">🔄 إعادة</button>'
-    + '<button class="btn" style="background:#22c55e; padding:12px 25px;" onclick="ZAID.showPrimaryCert(' + score + ')">🎓 استلام الشهادة</button>'
-    + '<button class="btn" style="background:#334155; padding:12px 25px;" onclick="ZAID.goHome()">🏠 الرئيسية</button>'
-    + '</div></div>';
-    
-  lc.innerHTML = html;
-};
-
-/* -----------------------------------------
-   4) شهادة المرحلة الابتدائية
-   ----------------------------------------- */
-Z.showPrimaryCert = function(score) {
-  var name = Z.user ? Z.user.name : 'الطالب';
-  var date = new Date().toLocaleDateString('ar-TN');
-  var lc = document.getElementById('lc');
-  
-  var html = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>'
-    + '<div class="cert" style="background:linear-gradient(135deg,#fff8e7,#fff0d0); border:15px double #d4af37; border-radius:20px; padding:30px 25px; margin:20px 0; text-align:center; color:#1e293b;">'
-    + '<div style="width:80px; height:80px; border-radius:50%; border:3px solid #d4af37; margin:0 auto 15px; overflow:hidden; background:white;"><img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" style="width:100%; height:100%; object-fit:cover;"></div>'
-    + '<h1 style="font-size:28px; font-weight:bold; color:#8B4513;">شهادة إتمام دورة</h1>'
-    + '<div style="font-size:18px; color:#666;">منصة محمد زايد للتكنولوجيات الحاسوبية - تونس</div>'
-    + '<div style="font-size:24px; font-weight:bold; background:linear-gradient(135deg,#facc15,#ffd700); display:inline-block; padding:8px 30px; border-radius:50px; margin:15px 0;">' + name + '</div>'
-    + '<div style="font-size:18px; margin:15px 0;">قد أتم بنجاح دورة <strong>📚 الأطفال والحاسوب</strong></div>'
-    + '<div style="font-size:16px;">النتيجة النهائية: <strong>' + score + '/100</strong></div>'
-    + '<div style="font-size:14px; margin:10px 0;">التاريخ: ' + date + '</div>'
-    + '<div style="margin-top:30px; padding-top:20px; border-top:1px dashed #d4af37;">'
-    + '<div style="width:200px; height:1px; background:#d4af37; margin:5px auto;"></div>'
-    + '<div style="font-size:16px; font-weight:bold;">محمد زايد</div>'
-    + '<div style="font-size:12px;">أستاذ تعليم عالي وخبير دولي في التكنولوجيات الحاسوبية<br>مؤسس منصة محمد زايد - تونس</div>'
-    + '</div></div>'
-    + '<div style="text-align:center; margin-top:20px;">'
-    + '<button class="btn" style="background:#3b82f6; padding:12px 30px; margin:5px;" onclick="window.print()">🖨️ طباعة الشهادة</button>'
-    + '<button class="btn" style="background:#334155; padding:12px 30px; margin:5px;" onclick="ZAID.goHome()">🏠 الرئيسية</button>'
-    + '</div>';
-    
   lc.innerHTML = html;
 };
 /* ============================================================
@@ -3393,7 +2951,7 @@ Z.addExam('tech_primary_4', [
 ]);
 
 /* -----------------------------------------
-   2) دروس إضافية للغة العربية (للناطقين بها)
+   2) دروس إضافية للغة العربية
    ----------------------------------------- */
 Z.addLesson('arabic_2', 
   { cat:'arabic', title:'القراءة والكتابة', desc:'المستوى الثاني', icon:'📖' },
@@ -3424,7 +2982,7 @@ Z.addExam('univ_ai_2', [
 
 /* -----------------------------------------
    4) تطبيقات الذكاء الاصطناعي في الرياضيات والعلوم
-   (مدمجة في قسم AI بدلاً من أن تكون مواد مستقلة)
+   (مدمجة في قسم AI)
    ----------------------------------------- */
 Z.addLesson('ai_math', 
   { cat:'ai', title:'تطبيقات AI في الرياضيات', desc:'كيف يحل الذكاء الاصطناعي المعادلات', icon:'🔢' },
@@ -3451,7 +3009,7 @@ Z.addExam('ai_science', [
 ]);
 
 /* -----------------------------------------
-   5) أكواد مساعدة
+   5) أكواد مساعدة لربط الأقسام الديناميكية
    ----------------------------------------- */
 
 /* دالة فتح صفحة الكتب الديناميكية */
