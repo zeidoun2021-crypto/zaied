@@ -3127,5 +3127,71 @@ Z.showBook = function() {
   }
 })();
 </script>
+<!-- الكود المصحح لربط لوحة التحكم بـ Firebase -->
+<script>
+(function() {
+  if (window.ZAID) {
+    ZAID.loadAdminPanel = function() {
+      let statsEl = document.getElementById('adminStats');
+      let listEl = document.getElementById('adminUsersList');
+      
+      if(statsEl) statsEl.innerHTML = '<div style="color:#fbbf24; text-align:center; padding:20px;">⏳ جاري تحميل بيانات المسجلين من Firebase...</div>';
+      if(listEl) listEl.innerHTML = '';
+
+      // الاتصال المباشر بقاعدة البيانات
+      if (typeof firebase === 'undefined') {
+        if(statsEl) statsEl.innerHTML = '<div style="color:#dc2626; text-align:center;">❌ مكتبة Firebase غير محملة في الصفحة</div>';
+        return;
+      }
+      
+      var firestoreDB = firebase.firestore();
+
+      // جلب البيانات الحقيقية من Firebase Firestore
+      firestoreDB.collection("users").get().then(function(qs) {
+        let usersList = [];
+        qs.forEach(function(doc) { 
+          let u = doc.data(); 
+          u._id = doc.id; 
+          usersList.push(u); 
+        });
+
+        // تحديث العدد
+        if(statsEl) {
+          statsEl.innerHTML = '<div style="background:#0f172a; border-radius:15px; padding:20px; margin-bottom:15px; text-align:center;"><h3 style="color:#fbbf24;">👥 عدد المسجلين الحقيقيين: ' + usersList.length + '</h3></div>';
+        }
+
+        // بناء الجدول
+        let html = '<table style="width:100%; color:white; border-collapse:collapse; text-align:center;">'
+          + '<tr style="background:#334155;"><th style="padding:10px; border:1px solid #475569;">الاسم</th><th style="padding:10px; border:1px solid #475569;">البريد</th><th style="padding:10px; border:1px solid #475569;">الواتساب</th><th style="padding:10px; border:1px solid #475569;">الفئة</th><th style="padding:10px; border:1px solid #475569;">التاريخ</th></tr>';
+        
+        if(usersList.length === 0) {
+          html += '<tr><td colspan="5" style="padding:20px; color:#94a3b8;">لا يوجد مسجلون حتى الآن. انشر الرابط ليرى العالم منصتك!</td></tr>';
+        } else {
+          usersList.forEach(u => {
+            html += '<tr>'
+              + '<td style="padding:8px; border:1px solid #475569;">' + (u.name || '—') + '</td>'
+              + '<td style="padding:8px; border:1px solid #475569;">' + (u.email || '—') + '</td>'
+              + '<td style="padding:8px; border:1px solid #475569; color:#22c55e; font-weight:bold;">' + (u.phone || '—') + '</td>'
+              + '<td style="padding:8px; border:1px solid #475569;">' + (u.cat || '—') + '</td>'
+              + '<td style="padding:8px; border:1px solid #475569;">' + (u.date || '—') + '</td>'
+              + '</tr>';
+          });
+        }
+        html += '</table>';
+        
+        if(listEl) listEl.innerHTML = html;
+
+      }).catch(function(err) {
+        if(statsEl) statsEl.innerHTML = '<div style="color:#dc2626; text-align:center;">❌ خطأ في جلب البيانات: ' + err.message + '</div>';
+      });
+    };
+    
+    // إعادة تحميل اللوحة إذا كانت مفتوحة حالياً
+    if(document.getElementById('adminUsersList')) {
+        ZAID.loadAdminPanel();
+    }
+  }
+})();
+</script>
 </body>
 </html>
