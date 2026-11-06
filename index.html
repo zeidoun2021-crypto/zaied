@@ -408,6 +408,38 @@ Z.updateStatusBadge = function(){
   else if(s.type==='trial'){ el.innerHTML='⏱️ تجريبي: '+s.days+'ي '+s.hours+'س'; el.style.background='#f59e0b'; el.style.color='#1e293b'; }
   else { el.innerHTML='🔒 الاشتراك منتهي'; el.style.background='#dc2626'; el.style.color='#fff'; }
 };
+Z.requireSub = function(){
+  var old=document.getElementById('subModal'); if(old) old.remove();
+  var m=document.createElement('div'); m.id='subModal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  var s=Z.getAccessStatus();
+  var title=s.type==='expired'?'⏰ انتهت المدة التجريبية':'🔒 الاشتراك مطلوب';
+  var msg=s.type==='expired'?'لقد انتهت مدتك التجريبية ('+Z.TRIAL_DAYS+' أيام). للاستفادة من كل المحتوى، يرجى الاشتراك.':'هذه الميزة تتطلب اشتراكاً نشطاً.';
+  m.innerHTML='<div style="background:#1e293b;border-radius:15px;padding:25px;max-width:500px;width:100%;border:4px solid #fbbf24;color:#fff;box-sizing:border-box;max-height:90vh;overflow-y:auto;">'
+    +'<div style="text-align:center;font-size:50px;margin-bottom:10px">💳</div>'
+    +'<h2 style="color:#fbbf24;text-align:center;margin-bottom:10px;font-size:20px">'+title+'</h2>'
+    +'<p style="text-align:center;line-height:1.8;font-size:14px;color:#cbd5e1;margin-bottom:15px">'+msg+'</p>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #22c55e">'
+    +'<div style="color:#22c55e;font-weight:900;font-size:15px">🇹🇳 محلي (تونس - أفراد)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_TN+' دينار تونسي</div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر الدينار الإلكتروني (e-Dinar / D17) أو حوالة</div>'
+    +'</div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #3b82f6">'
+    +'<div style="color:#3b82f6;font-weight:900;font-size:15px">🌍 دولي (أفراد)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.SUB_PRICE_USD+' دولار / '+Z.SUB_PRICE_EUR+' يورو</div>'
+    +'<div style="font-size:12px;color:#94a3b8">عبر Western Union أو MoneyGram</div>'
+    +'</div>'
+    +'<div style="background:#0f172a;border-radius:12px;padding:15px;margin:10px 0;border:2px solid #8b5cf6">'
+    +'<div style="color:#8b5cf6;font-weight:900;font-size:15px">🏢 للمؤسسات (نشر العروض)</div>'
+    +'<div style="font-size:20px;font-weight:900;margin:5px 0;color:#fbbf24">'+Z.CORP_PRICE_TN+' د.ت / '+Z.CORP_PRICE_INT+' دولار / '+Z.CORP_PRICE_INT+' يورو</div>'
+    +'<div style="font-size:12px;color:#94a3b8">اشتراك سنوي للمؤسسات التي تريد نشر عروض شغل وتربص</div>'
+    +'</div>'
+    +'<div style="font-size:11px;color:#fbbf24;margin-top:8px;text-align:center;">📱 e-Dinar: <strong>5359401737010807</strong></div>'
+    +'<button onclick="ZAID.wa()" style="width:100%;padding:15px;background:#22c55e;color:#fff;border:none;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;font-family:Cairo">📱 أرسل إشعار الدفع عبر واتساب</button>'
+    +'<button onclick="document.getElementById(\'subModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo">إغلاق</button>'
+    +'</div>';
+  document.body.appendChild(m);
+};
 
 /* التصنيفات */
 var cats=['طفل','ولي','طالب','أستاذ','باحث','خبير'];
@@ -790,7 +822,6 @@ Z.register=function(){
     } catch(err) { console.error('Email Error:', err); }
   }
 };
-
 /* ============================================================
    الجزء 5: توجيه الأقسام + الألعاب المتقدمة + المنجد + التربص + الألبوم
    ============================================================ */
@@ -1155,7 +1186,6 @@ Z.showAlbum = function(){
     lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div style="text-align:center;color:#dc2626;padding:20px;font-size:18px;">❌ حدث خطأ في تحميل الصور. تأكد من اتصالك بالإنترنت.</div>';
   });
 };
-
 /* ============================================================
    الجزء 6: محرك الدروس والاختبارات + أقسام التعليم
    ============================================================ */
@@ -1475,7 +1505,7 @@ Z.showAISection = function(){
   lc.innerHTML = html;
 };
 /* ============================================================
-   الجزء 7: كتاب الأطفال والحاسوب (17 شريحة) + الاختبار + الشهادة
+   الجزء 7: كتاب الأطفال والحاسوب (15 شريحة) + الاختبار + الشهادة
    ============================================================ */
 
 /* -----------------------------------------
@@ -2558,7 +2588,6 @@ Z.buyBook = function(bookName, price) {
 Z.registerLecture = function(lectureName, price) {
   alert(`✅ تسجيل في محاضرة: ${lectureName}\nالسعر: ${price} د.ت\nرقم الدينار الإلكتروني: 5359401737010807`);
 };
-
 /* ============================================================
    الجزء 10: إدارة المستخدمين + لوحة تحكم المشرف الديناميكية
    ============================================================ */
@@ -2798,7 +2827,6 @@ Z.showStats = function() {
   if(!Z.admin) return;
   Z.showAdminPanel();
 };
-
 /* ============================================================
    الجزء 11: الدروس الإضافية + تطبيقات AI في الرياضيات والعلوم
    ============================================================ */
@@ -3197,14 +3225,14 @@ Z.showBook = function() {
     padding-bottom: 250px !important;
   }
 </style>
-<!-- كود التجاوز النهائي لتصحيح مفتاح API وتشغيل التسجيل -->
+<!-- السكريبت النهائي والموحد (بدون تراكم) -->
 <script>
 (function() {
     if (!window.ZAID) return;
 
-    // 1. المفتاح الصحيح الجديد
-    var correctConfig = {
-        apiKey: "AIzaSyAoeT0zOZ3CGg43XV8PljirV5ZACLzzRAA", // المفتاح الصحيح
+    // 1. التهيئة باستخدام المفتاح الأساسي
+    var firebaseConfig = {
+        apiKey: "AIzaSyAoeT0z0Z3CGg43XV8PljirV6ZAClzzRAA", 
         authDomain: "zaied-v2.firebaseapp.com",
         projectId: "zaied-v2",
         storageBucket: "zaied-v2.firebasestorage.app",
@@ -3212,30 +3240,21 @@ Z.showBook = function() {
         appId: "1:370541125225:web:8314e299d3e83514354cf8"
     };
 
-    // 2. إنشاء نسخة جديدة من Firebase بالمفتاح الصحيح
-    var secondaryApp = null;
-    var correctAuth = null;
-    var correctDb = null;
-    
-    try {
-        if (typeof firebase !== 'undefined') {
-            secondaryApp = firebase.initializeApp(correctConfig, "correctConfigApp");
-            correctAuth = firebase.auth(secondaryApp);
-            correctDb = firebase.firestore(secondaryApp);
-        }
-    } catch(e) { console.warn("Secondary Firebase error:", e); }
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    var auth = firebase.auth();
+    var db = firebase.firestore();
 
-    // 3. استبدال دالة التسجيل بالكامل لتستخدم المفتاح الصحيح
+    // 2. دالة التسجيل الفعلي
     ZAID.register = function() {
         var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
         var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
         
-        if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل (كلمتين على الأقل)'); return; }
-        if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول المطلوبة (*)'); return; }
-        if(!/^[0-9]{8,15}$/.test(h)) { alert('❌ يرجى إدخال رقم واتساب صحيح (أرقام فقط، من 8 إلى 15 رقماً)'); return; }
+        if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل'); return; }
+        if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول'); return; }
+        if(!/^[0-9]{8,15}$/.test(h)) { alert('❌ رقم واتساب غير صحيح'); return; }
         if(!ZAID.selectedCat) { alert('❌ يرجى اختيار التصنيف'); return; }
-        
-        if(!correctAuth || !correctDb) { alert('❌ Firebase غير متصل! يرجى تحديث الصفحة.'); return; }
         
         var newUser = {
             name:n, prof:p, spec:s, email:e, phone:h, country:c, city:ci,
@@ -3246,38 +3265,23 @@ Z.showBook = function() {
         var btn = document.getElementById('btnReg');
         if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري التسجيل...'; }
         
-        // توليد كلمة مرور مخفية
         var hiddenPassword = "Tmp#" + Math.random().toString(36).slice(-8) + "A1";
         
-        correctAuth.createUserWithEmailAndPassword(e, hiddenPassword)
+        auth.createUserWithEmailAndPassword(e, hiddenPassword)
         .then(function(userCredential) {
             var user = userCredential.user;
             newUser._id = user.uid;
-            return correctDb.collection("users").doc(user.uid).set(newUser);
+            return db.collection("users").doc(user.uid).set(newUser);
         })
         .then(function(){
             ZAID.user = newUser;
             localStorage.setItem('zaid_current_user', JSON.stringify(ZAID.user));
             
-            // إرسال الإيميل
+            // إيميل الإشعار
             try { 
-              var form = document.createElement('form'); 
-              form.method = 'POST'; 
-              form.action = 'https://formsubmit.co/zeidoun2021@gmail.com'; 
-              form.target = 'hidden_email_iframe'; 
-              form.style.display = 'none'; 
-              var fields = { 
-                _subject: '🎉 مسجل جديد - منصة زايد', 
-                _captcha: 'false', 
-                _template: 'table', 
-                'الاسم': newUser.name, 'المهنة': newUser.prof, 'الاختصاص': newUser.spec, 'البريد': newUser.email,
-                'الواتساب': newUser.phone, 'البلد': newUser.country, 'المدينة': newUser.city,
-                'التصنيف': newUser.cat, 'التاريخ': newUser.date,
-                'نوع الاشتراك': 'تجريبي (3 أيام)'
-              }; 
-              for(var k in fields){ 
-                var inp = document.createElement('input'); inp.type = 'hidden'; inp.name = k; inp.value = fields[k]; form.appendChild(inp); 
-              } 
+              var form = document.createElement('form'); form.method = 'POST'; form.action = 'https://formsubmit.co/zeidoun2021@gmail.com'; form.target = 'hidden_email_iframe'; form.style.display = 'none'; 
+              var fields = { _subject: '🎉 مسجل جديد - منصة زايد', _captcha: 'false', _template: 'table', 'الاسم': newUser.name, 'البريد': newUser.email, 'الواتساب': newUser.phone, 'التصنيف': newUser.cat };
+              for(var k in fields){ var inp = document.createElement('input'); inp.type = 'hidden'; inp.name = k; inp.value = fields[k]; form.appendChild(inp); } 
               document.body.appendChild(form); form.submit(); document.body.removeChild(form); 
             } catch(err) {}
             
@@ -3287,11 +3291,39 @@ Z.showBook = function() {
             alert('✅ تم التسجيل بنجاح!\n\n⏱️ لديك 3 أيام تجريبية.');
         }).catch(function(err){
             if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
-            let errMsg = err.message;
-            if (err.code === 'auth/email-already-in-use') errMsg = 'هذا البريد مسجل بالفعل.';
-            alert('❌ فشل التسجيل:\n\n' + errMsg);
+            alert('❌ فشل التسجيل:\n\n' + (err.code === 'auth/email-already-in-use' ? 'هذا البريد مسجل بالفعل.' : err.message));
         });
     };
+
+    // 3. دالة لوحة التحكم (تجلب المسجلين)
+    ZAID.loadAdminPanel = function() {
+        let statsEl = document.getElementById('adminStats');
+        let listEl = document.getElementById('adminUsersList');
+        if(statsEl) statsEl.innerHTML = '<div style="color:#fbbf24; text-align:center;">⏳ جاري تحميل البيانات...</div>';
+        
+        db.collection("users").get().then(function(qs) {
+            let usersList = [];
+            qs.forEach(doc => { let u = doc.data(); usersList.push(u); });
+            if(statsEl) statsEl.innerHTML = '<div style="background:#0f172a; padding:20px; text-align:center;"><h3 style="color:#fbbf24;">👥 عدد المسجلين: ' + usersList.length + '</h3></div>';
+            
+            let html = '<table style="width:100%; color:white; border-collapse:collapse; text-align:center;"><tr style="background:#334155;"><th>الاسم</th><th>البريد</th><th>الواتساب</th><th>الفئة</th><th>التاريخ</th></tr>';
+            if(usersList.length === 0) html += '<tr><td colspan="5" style="padding:20px;">لا يوجد مسجلون.</td></tr>';
+            else usersList.forEach(u => {
+                html += '<tr><td>' + (u.name || '—') + '</td><td>' + (u.email || '—') + '</td><td style="color:#22c55e;">' + (u.phone || '—') + '</td><td>' + (u.cat || '—') + '</td><td>' + (u.date || '—') + '</td></tr>';
+            });
+            html += '</table>';
+            if(listEl) listEl.innerHTML = html;
+        }).catch(err => {
+            if(statsEl) statsEl.innerHTML = '<div style="color:#dc2626;">❌ خطأ: ' + err.message + '</div>';
+        });
+    };
+    
+    // مسح الجلسة الإجبارية عند كل تحديث (الزامية التسجيل)
+    localStorage.removeItem('zaid_current_user');
+    ZAID.user = null;
+    ZAID.admin = false;
+    ZAID.showPage('pageWelcome');
+
 })();
 </script>
 </body>
