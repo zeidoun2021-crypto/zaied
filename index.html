@@ -3191,5 +3191,108 @@ Z.showBook = function() {
   }
 })();
 </script>
+<!-- إصلاح مشكلة اختفاء زر الخروج خلف شريط التنقل السفلي -->
+<style>
+  #main {
+    padding-bottom: 250px !important;
+  }
+</style>
+<!-- كود التجاوز النهائي لتصحيح مفتاح API وتشغيل التسجيل -->
+<script>
+(function() {
+    if (!window.ZAID) return;
+
+    // 1. المفتاح الصحيح الجديد
+    var correctConfig = {
+        apiKey: "AIzaSyAoeT0zOZ3CGg43XV8PljirV5ZACLzzRAA", // المفتاح الصحيح
+        authDomain: "zaied-v2.firebaseapp.com",
+        projectId: "zaied-v2",
+        storageBucket: "zaied-v2.firebasestorage.app",
+        messagingSenderId: "370541125225",
+        appId: "1:370541125225:web:8314e299d3e83514354cf8"
+    };
+
+    // 2. إنشاء نسخة جديدة من Firebase بالمفتاح الصحيح
+    var secondaryApp = null;
+    var correctAuth = null;
+    var correctDb = null;
+    
+    try {
+        if (typeof firebase !== 'undefined') {
+            secondaryApp = firebase.initializeApp(correctConfig, "correctConfigApp");
+            correctAuth = firebase.auth(secondaryApp);
+            correctDb = firebase.firestore(secondaryApp);
+        }
+    } catch(e) { console.warn("Secondary Firebase error:", e); }
+
+    // 3. استبدال دالة التسجيل بالكامل لتستخدم المفتاح الصحيح
+    ZAID.register = function() {
+        var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
+        var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
+        
+        if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل (كلمتين على الأقل)'); return; }
+        if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول المطلوبة (*)'); return; }
+        if(!/^[0-9]{8,15}$/.test(h)) { alert('❌ يرجى إدخال رقم واتساب صحيح (أرقام فقط، من 8 إلى 15 رقماً)'); return; }
+        if(!ZAID.selectedCat) { alert('❌ يرجى اختيار التصنيف'); return; }
+        
+        if(!correctAuth || !correctDb) { alert('❌ Firebase غير متصل! يرجى تحديث الصفحة.'); return; }
+        
+        var newUser = {
+            name:n, prof:p, spec:s, email:e, phone:h, country:c, city:ci,
+            cat:ZAID.selectedCat, date:new Date().toLocaleDateString('ar-TN'),
+            isSub:false, trialStart:Date.now(), subExpiry:0
+        };
+        
+        var btn = document.getElementById('btnReg');
+        if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري التسجيل...'; }
+        
+        // توليد كلمة مرور مخفية
+        var hiddenPassword = "Tmp#" + Math.random().toString(36).slice(-8) + "A1";
+        
+        correctAuth.createUserWithEmailAndPassword(e, hiddenPassword)
+        .then(function(userCredential) {
+            var user = userCredential.user;
+            newUser._id = user.uid;
+            return correctDb.collection("users").doc(user.uid).set(newUser);
+        })
+        .then(function(){
+            ZAID.user = newUser;
+            localStorage.setItem('zaid_current_user', JSON.stringify(ZAID.user));
+            
+            // إرسال الإيميل
+            try { 
+              var form = document.createElement('form'); 
+              form.method = 'POST'; 
+              form.action = 'https://formsubmit.co/zeidoun2021@gmail.com'; 
+              form.target = 'hidden_email_iframe'; 
+              form.style.display = 'none'; 
+              var fields = { 
+                _subject: '🎉 مسجل جديد - منصة زايد', 
+                _captcha: 'false', 
+                _template: 'table', 
+                'الاسم': newUser.name, 'المهنة': newUser.prof, 'الاختصاص': newUser.spec, 'البريد': newUser.email,
+                'الواتساب': newUser.phone, 'البلد': newUser.country, 'المدينة': newUser.city,
+                'التصنيف': newUser.cat, 'التاريخ': newUser.date,
+                'نوع الاشتراك': 'تجريبي (3 أيام)'
+              }; 
+              for(var k in fields){ 
+                var inp = document.createElement('input'); inp.type = 'hidden'; inp.name = k; inp.value = fields[k]; form.appendChild(inp); 
+              } 
+              document.body.appendChild(form); form.submit(); document.body.removeChild(form); 
+            } catch(err) {}
+            
+            document.getElementById('un').textContent=n;
+            if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
+            ZAID.updateUI(); ZAID.showPage('pageHome');
+            alert('✅ تم التسجيل بنجاح!\n\n⏱️ لديك 3 أيام تجريبية.');
+        }).catch(function(err){
+            if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
+            let errMsg = err.message;
+            if (err.code === 'auth/email-already-in-use') errMsg = 'هذا البريد مسجل بالفعل.';
+            alert('❌ فشل التسجيل:\n\n' + errMsg);
+        });
+    };
+})();
+</script>
 </body>
 </html>
