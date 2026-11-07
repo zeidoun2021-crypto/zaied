@@ -3486,8 +3486,57 @@ window.addEventListener('load', function() {
                 alert('❌ فشل التسجيل: ' + err.message);
             });
         };
+<script>
+window.addEventListener('load', function() {
+    // إعداد الاتصال الصحيح
+    var correctConfig = {
+        apiKey: "AIzaSyAoeT0zOZ3CGg43XV8PljirV5ZACLzzRAA",
+        authDomain: "zaied-v2.firebaseapp.com",
+        projectId: "zaied-v2",
+        storageBucket: "zaied-v2.firebasestorage.app",
+        messagingSenderId: "370541125225",
+        appId: "1:370541125225:web:8314e299d3e83514354cf8"
+    };
+    
+    var secApp;
+    try { secApp = firebase.initializeApp(correctConfig, "CorrectApp"); } catch(e) { secApp = firebase.app("CorrectApp"); }
+    var cAuth = firebase.auth(secApp);
+    var cDb = firebase.firestore(secApp);
 
-        // إصلاح لوحة التحكم
+    if (window.ZAID) {
+        // 1. إصلاح التسجيل
+        window.ZAID.register = function() {
+            var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
+            var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
+            
+            if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل'); return; }
+            if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول'); return; }
+            if(!/^[0-9]{8,15}$/.test(h)) { alert('❌ رقم واتساب غير صحيح'); return; }
+            if(!window.ZAID.selectedCat) { alert('❌ يرجى اختيار التصنيف'); return; }
+            
+            var newUser = { name:n, prof:p, spec:s, email:e, phone:h, country:c, city:ci, cat:window.ZAID.selectedCat, date:new Date().toLocaleDateString('ar-TN'), isSub:false, trialStart:Date.now(), subExpiry:0 };
+            var btn = document.getElementById('btnReg');
+            if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري التسجيل...'; }
+            
+            var hiddenPassword = "Tmp#" + Math.random().toString(36).slice(-8) + "A1";
+            
+            cAuth.createUserWithEmailAndPassword(e, hiddenPassword).then(function(userCredential) {
+                newUser._id = userCredential.user.uid;
+                return cDb.collection("users").doc(newUser._id).set(newUser);
+            }).then(function(){
+                window.ZAID.user = newUser;
+                localStorage.setItem('zaid_current_user', JSON.stringify(newUser));
+                document.getElementById('un').textContent=n;
+                if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
+                window.ZAID.updateUI(); window.ZAID.showPage('pageHome');
+                alert('✅ تم التسجيل بنجاح!');
+            }).catch(function(err){
+                if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
+                alert('❌ فشل التسجيل: ' + err.message);
+            });
+        };
+
+        // 2. إصلاح لوحة التحكم (الجدول والأرقام)
         window.ZAID.loadAdminPanel = function() {
             var statsEl = document.getElementById('adminStats');
             var listEl = document.getElementById('adminUsersList');
@@ -3497,20 +3546,20 @@ window.addEventListener('load', function() {
                 var usersList = [];
                 qs.forEach(function(doc) { usersList.push(doc.data()); });
                 
-                if(statsEl) statsEl.innerHTML = '<div style="color:#fbbf24; text-align:center; padding:10px; font-size:18px; background:#0f172a; border-radius:10px; margin-bottom:10px;">👥 عدد المسجلين: ' + usersList.length + '</div>';
+                if(statsEl) statsEl.innerHTML = '<div style="color:#fbbf24; text-align:center; padding:15px; font-size:20px; background:#0f172a; border-radius:10px; margin-bottom:15px;">👥 عدد المسجلين: ' + usersList.length + '</div>';
                 
-                var html = '<table style="width:100%; color:white; text-align:center; border-collapse:collapse;"><tr style="background:#334155;"><th style="padding:10px;">الاسم</th><th style="padding:10px;">البريد</th><th style="padding:10px;">الواتساب</th><th style="padding:10px;">الفئة</th></tr>';
+                var html = '<table style="width:100%; color:white; text-align:center; border-collapse:collapse;"><tr style="background:#334155;"><th style="padding:10px; border:1px solid #475569;">الاسم</th><th style="padding:10px; border:1px solid #475569;">البريد</th><th style="padding:10px; border:1px solid #475569;">الواتساب</th><th style="padding:10px; border:1px solid #475569;">الفئة</th><th style="padding:10px; border:1px solid #475569;">التاريخ</th></tr>';
                 if(usersList.length === 0) {
-                     html += '<tr><td colspan="4" style="padding:20px; color:#94a3b8;">لا يوجد مسجلون بعد.</td></tr>';
+                     html += '<tr><td colspan="5" style="padding:20px; color:#94a3b8;">لا يوجد مسجلون بعد.</td></tr>';
                 } else {
                     usersList.forEach(function(u) {
-                        html += '<tr><td style="padding:8px; border:1px solid #475569;">' + (u.name||'—') + '</td><td style="padding:8px; border:1px solid #475569;">' + (u.email||'—') + '</td><td style="padding:8px; border:1px solid #475569; color:#22c55e; font-weight:bold;">' + (u.phone||'—') + '</td><td style="padding:8px; border:1px solid #475569;">' + (u.cat||'—') + '</td></tr>';
+                        html += '<tr><td style="padding:8px; border:1px solid #475569;">' + (u.name||'—') + '</td><td style="padding:8px; border:1px solid #475569;">' + (u.email||'—') + '</td><td style="padding:8px; border:1px solid #475569; color:#22c55e; font-weight:bold;">' + (u.phone||'—') + '</td><td style="padding:8px; border:1px solid #475569;">' + (u.cat||'—') + '</td><td style="padding:8px; border:1px solid #475569;">' + (u.date||'—') + '</td></tr>';
                     });
                 }
                 html += '</table>';
                 if(listEl) listEl.innerHTML = html;
             }).catch(function(err) {
-                if(listEl) listEl.innerHTML = '<div style="color:red; padding:20px;">خطأ: ' + err.message + '</div>';
+                if(listEl) listEl.innerHTML = '<div style="color:red; padding:20px; text-align:center; background:#330000; border-radius:10px;">❌ خطأ في الاتصال بقاعدة البيانات:<br>' + err.message + '</div>';
             });
         };
     }
