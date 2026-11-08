@@ -392,73 +392,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     </div>
   </div>
 </div>
-<body>
-<div id="top">
-<span id="ti" style="font-size:22px;">🎭</span>
-<span id="tt">مرحباً — أنت زائر</span>
-<span id="statusBadge" style="display:none;padding:4px 12px;border-radius:15px;font-size:12px;font-weight:900;"></span>
-<button id="br" onclick="ZAID.showPage('pageWelcome')" style="background:#fbbf24;color:#1e293b;">🔑 سجّل</button>
-<button id="bstats" onclick="ZAID.showStats()" style="display:none;background:#06b6d4;color:#fff;">📊 الإحصائيات</button>
-<button id="bs" onclick="ZAID.showSub()" style="display:none;background:#22c55e;color:#fff;">💳 اشترك</button>
-<button id="bo" onclick="ZAID.logout()" style="background:#dc2626;color:#fff;">🚪 خروج</button>
-</div>
-
-<div id="yellow" style="display:none !important;"></div>
-<iframe name="hidden_email_iframe" style="display:none;"></iframe>
-
-<div id="main">
-
-<!-- صفحة الترحيب والتسجيل -->
-<div id="pageWelcome">
-  <div class="logo">
-    <div class="ring"></div>
-    <div class="flags"><svg viewBox="0 0 185 185"><defs><g id="tn"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="#fff" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="#fff"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="#fff"/></g></defs><use href="#tn" x="92" y="12"/><use href="#tn" x="160" y="54"/><use href="#tn" x="160" y="132"/><use href="#tn" x="92" y="174"/><use href="#tn" x="24" y="132"/><use href="#tn" x="24" y="54"/></svg></div>
-    <div class="tv">
-      <div class="tvb">
-        <img src="https://i.postimg.cc/MHGWk2FL/5120251.jpg" onerror="this.style.display='none';">
-        <div class="tvt"><span>منصة</span><span>زايد</span></div>
-      </div>
-      <div class="tvs"></div><div class="tvb2"></div>
-    </div>
-  </div>
-  
-  <div class="wctxt" style="padding:20px; text-align:center;">
-    <div style="white-space:normal; line-height:1.8; font-size:16px; font-weight:900;">
-      مرحباً بكم في منصة زايد للتكنولوجيات الحاسوبية والذكاء الاصطناعي تكوينا وبحثا علميا
-      <br><br>
-      <span style="color:#fff; font-size:18px; background:rgba(0,0,0,0.2); padding:5px 15px; border-radius:10px; display:inline-block; box-shadow:0 2px 5px rgba(0,0,0,0.2);">✍️ عرف بنفسك كي نسمح لك بالدخول</span>
-    </div>
-  </div>
-
-  <div class="ticker-container">
-    <div class="ticker">
-      <span>تكوين ابتدائي</span><span>اعدادي</span><span>جامعي</span><span>اختبارات في التكنولوجيات واللغة العربية</span><span>محاضرات وكتب علمية</span><span>عروض مشاريع تخرج وتاطير</span><span>مساعدة في ايجاد تربصات ومواطن شغل</span><span>منجد ثلاثي اللغات</span><span>العاب فكرية</span><span>بث مباشر للاجتماعات</span>
-    </div>
-  </div>
-  
-  <div id="gw">
-    <div style="text-align:center;font-size:35px;margin-bottom:5px;">👋</div>
-    <h2>🔑 استمارة التسجيل</h2>
-    <input class="inp" id="fn" placeholder="👤 الاسم الكامل (كلمتين على الأقل) *" required>
-    <input class="inp" id="fp" placeholder="💼 المهنة *" required>
-    <input class="inp" id="fs" placeholder="🎯 الاختصاص *" required>
-    <input class="inp" id="fe" type="email" placeholder="📧 البريد الإلكتروني *" required>
-    
-    <input class="inp" id="fh" type="tel" placeholder="📱 رقم الواتساب (8 أرقام على الأقل) *" required pattern="[0-9]{8,15}" title="يرجى إدخال أرقام فقط (8 إلى 15 رقماً)">
-    <input class="inp" id="fc" placeholder="🌍 بلد الإقامة *" value="تونس" required>
-    <input class="inp" id="fci" placeholder="🏙️ المدينة *" required>
-    
-    <div style="text-align:center;font-size:13px;font-weight:900;color:#dc2626;margin-bottom:5px;">⬇️ يرجى اختيار التصنيف المناسب ⬇️</div>
-    <div class="cats" id="cats"></div>
-    
-    <button id="btnReg" class="sbt" style="background:linear-gradient(135deg,#15803d,#166534); border-color:#fbbf24; font-size:20px; padding:15px; margin-top:20px; box-shadow:0 4px 10px rgba(21,128,61,0.4);" onclick="ZAID.register()">🚪 دخول</button>
-    <button type="button" onclick="ZAID.exitPlatform()" style="display:block; width:100%; padding:12px; background:#dc2626; color:#fff; border:none; border-radius:25px; cursor:pointer; margin-top:10px; font-size:14px; font-family:Cairo; font-weight:900; box-shadow:0 4px 10px rgba(220,38,38,0.3);">🚪 مغادرة المنصة</button>
-
-    <div style="text-align:center;margin-top:15px;">
-      <button type="button" onclick="ZAID.adminLogin()" style="background:none;border:none;color:#8b5cf6;font-weight:bold;cursor:pointer;text-decoration:underline;font-size:13px;font-family:Cairo;padding:8px;display:inline-block;">👑 دخول المشرف</button>
-    </div>
-  </div>
-</div>
 <!-- الصفحة الرئيسية (الأقسام) -->
 <div id="pageHome" class="hide">
 <div class="htitle">🌟 مرحباً <span id="un"></span> 🌟</div>
@@ -1863,9 +1796,21 @@ Z.showStats = function() {
   Z.showAdminPanel();
 };
 /* ============================================================
-   الجزء 13: محتوى الألعاب الفكرية الجديد (من plateforme94+jeux)
-   البحث عن الكلمات + الكلمات المتقاطعة التكنولوجية
+   الجزء 13: محتوى plateforme94+jeux — منقول حرفياً
    ============================================================ */
+
+// ===== محرك النطق (من plateforme94 حرفياً) =====
+let currentAudio = null;
+function speak(text, lang) {
+    if (!text || text.trim() === "") return;
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+    let code = (lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar'));
+    const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${code}&client=tw-ob&ttsspeed=0.9`);
+    currentAudio = audio;
+    audio.onerror = () => { if(window.speechSynthesis) { window.speechSynthesis.cancel(); let u=new SpeechSynthesisUtterance(text); u.lang=code==='fr'?'fr-FR':(code==='en'?'en-US':'ar'); u.rate=0.9; window.speechSynthesis.speak(u); } };
+    audio.play().catch(() => { if(window.speechSynthesis) { let u=new SpeechSynthesisUtterance(text); u.lang=code==='fr'?'fr-FR':(code==='en'?'en-US':'ar'); window.speechSynthesis.speak(u); } });
+}
+window.speak = speak;
 
 // ===== بيانات لعبة البحث عن الكلمات =====
 const GAME_WORDS = {
@@ -2014,7 +1959,7 @@ function showGameMessage(text, type) {
     setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
 }
 
-// ===== بيانات الكلمات المتقاطعة التكنولوجية =====
+// ===== بيانات الكلمات المتقاطعة =====
 const crosswordQuestions = [
     { q: "ما هي الشبكة العالمية التي تربط ملايين الأجهزة؟", correct: "الإنترنت", options: ["الإنترنت", "المتصفح", "الخادم", "الشبكة"] },
     { q: "ما هو البرنامج المستخدم لعرض صفحات الويب؟", correct: "المتصفح", options: ["المتصفح", "نظام التشغيل", "البريد", "المعالج"] },
@@ -2095,9 +2040,9 @@ function showCrossMessage(text, type) {
     setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
 }
 
-// ===== بيانات كتاب الأطفال والحاسوب =====
+// ===== كتاب الأطفال (4 شرائح حرفياً من plateforme94) =====
 const bookSlides = [
-    `<div class="slide-card"><h2>📚 صفحة 1: مقدمة</h2><p>مرحباً بكم في كتاب "الأطفال والحاسوب"</p><div class="image-box">🖥️ 📚 ⭐</div><div><button class="btn-speak" onclick="speak('مرحباً بكم في كتاب الأطفال والحاسوب', 'ar')">🔊 استماع</button></div></div>`,
+    `<div class="slide-card"><h2>📚 صفحة 1: مقدمة</h2><p>مرحباً بكم في كتاب "الأطفال والحاسوب"</p><div class="image-box" style="text-align:center;">🖥️ 📚 ⭐</div><div><button class="btn-speak" onclick="speak('مرحباً بكم في كتاب الأطفال والحاسوب', 'ar')">🔊 استماع</button></div></div>`,
     `<div class="slide-card"><h2>💻 ما هو الحاسوب؟</h2><p>الحاسوب هو جهاز إلكتروني يمكنه تخزين ومعالجة البيانات.</p><div class="translation-box"><span class="translation-ar">حاسوب</span> | <span class="translation-fr">ordinateur</span> | <span class="translation-en">computer</span></div><div><button class="btn-speak" onclick="speak('حاسوب', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('ordinateur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('computer', 'en')">🔊 English</button></div></div>`,
     `<div class="slide-card"><h2>🧠 مكونات الحاسوب</h2><p>يتكون الحاسوب من جزئين: المادي (Hardware) والبرمجي (Software)</p><div><button class="btn-speak" onclick="speak('مكونات الحاسوب', 'ar')">🔊 استماع</button></div></div>`,
     `<div class="slide-card"><h2>🎮 ختاماً</h2><p>استمتع بتعلم التكنولوجيا! يمكنك الآن الانتقال إلى الألعاب الفكرية.</p><div><button class="btn-speak" onclick="speak('استمتع بتعلم التكنولوجيا', 'ar')">🔊 استماع</button></div></div>`
@@ -2113,73 +2058,63 @@ function renderSlide() {
 function nextSlide() { if(currentSlide < bookSlides.length-1) { currentSlide++; renderSlide(); } else alert("📚 نهاية الكتاب!"); }
 function prevSlide() { if(currentSlide > 0) { currentSlide--; renderSlide(); } else alert("📖 هذه هي الصفحة الأولى"); }
 
-// ===== الدوال التي تعرض واجهات الألعاب والكتاب =====
+// ===== عرض صفحة الألعاب الكاملة (البحث + الكلمات المتقاطعة) =====
 Z.showGamesFull = function(){
   if(!Z.checkVisitor()) return;
   Z.showPage('pageGames');
-  let lc = document.getElementById('lcGames');
+  var lc = document.getElementById('lcGames');
   lc.innerHTML = `
     <div class="htitle" style="margin-bottom:15px;">🎮 الألعاب الفكرية</div>
-    
-    <div class="tabs-app" style="display:flex; gap:10px; margin-bottom:20px; justify-content:center; flex-wrap:wrap;">
-      <button class="tab-btn-app active" id="tabSearchGame" onclick="ZAID.switchGameTab('search')" style="background:linear-gradient(135deg,#7e22ce,#6b21a8); color:white; padding:10px 25px; border-radius:40px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🔍 البحث عن الكلمات</button>
-      <button class="tab-btn-app" id="tabCrossGame" onclick="ZAID.switchGameTab('cross')" style="background:rgba(255,255,255,0.15); color:white; padding:10px 25px; border-radius:40px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🔐 الكلمات المتقاطعة التكنولوجية</button>
+    <div style="display:flex; gap:10px; margin-bottom:20px; justify-content:center; flex-wrap:wrap;">
+      <button id="tabSearchGame" onclick="ZAID.switchGameTab('search')" style="background:linear-gradient(135deg,#7e22ce,#6b21a8); color:white; padding:10px 25px; border-radius:40px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🔍 البحث عن الكلمات</button>
+      <button id="tabCrossGame" onclick="ZAID.switchGameTab('cross')" style="background:rgba(255,255,255,0.15); color:white; padding:10px 25px; border-radius:40px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🔐 الكلمات المتقاطعة</button>
     </div>
 
     <div id="searchGamePanel" style="display:block;">
-      <div class="welcome-box" style="background:linear-gradient(135deg,#7e22ce,#6b21a8); padding:15px; border-radius:20px; text-align:center; margin-bottom:15px;">
-        <h2 style="color:#facc15;">🎮 ابحث عن الكلمة</h2>
+      <div style="background:linear-gradient(135deg,#7e22ce,#6b21a8); padding:15px; border-radius:20px; text-align:center; margin-bottom:15px;">
+        <h2 style="color:#facc15;">🎮 ألعاب فكرية - ابحث عن الكلمة 🎮</h2>
         <p style="color:#fff;">✨ اضغط على الحروف المتجاورة (يمين، يسار، أعلى، أسفل، مائل) لتكوين الكلمة ✨</p>
       </div>
-      
-      <div class="stats-panel" style="background:#1e293b; padding:12px 20px; border-radius:50px; margin-bottom:15px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+      <div style="background:#1e293b; padding:12px 20px; border-radius:50px; margin-bottom:15px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
         <div style="color:white;">✅ تم العثور: <span id="gameFoundCount">0/0</span></div>
         <div style="color:white;">⭐ النقاط: <span id="gameScore">0</span></div>
         <div style="color:white;">🔄 المحاولات: <span id="gameAttempts">0</span></div>
         <button id="gameNewBtn" style="background:#facc15; color:#1e293b; padding:8px 20px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🎲 لعبة جديدة</button>
       </div>
-
       <div style="background:#2c3e66; border-radius:30px; padding:15px; margin:15px 0; border:2px solid #facc15;">
         <div style="color:#facc15; text-align:center; font-size:18px; font-weight:bold; margin-bottom:10px;">📖 الكلمات المطلوبة (اضغط للاستماع للنطق)</div>
         <div id="gameWordsList" class="game-words-list"></div>
       </div>
-
       <div id="gameGrid" class="game-grid"></div>
-
-      <div class="game-controls">
+      <div class="game-controls" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;">
         <button id="gameCheckBtn" style="background:#22c55e; color:white; padding:12px 25px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">✅ تحقق</button>
         <button id="gameClearBtn" style="background:#f97316; color:white; padding:12px 25px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🗑️ مسح</button>
         <button id="gameHintBtn" style="background:#3b82f6; color:white; padding:12px 25px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">💡 تلميحة</button>
       </div>
-
       <div id="gameFeedback" class="feedback"></div>
       <div class="progress-container" style="margin-top:15px;"><div class="progress-fill" id="gameProgressFill"></div></div>
     </div>
 
     <div id="crossGamePanel" style="display:none;">
-      <div class="welcome-box" style="background:linear-gradient(135deg,#1e40af,#1e3a8a); padding:15px; border-radius:20px; text-align:center; margin-bottom:15px;">
-        <h2 style="color:#facc15;">🔐 الكلمات المتقاطعة التكنولوجية</h2>
+      <div style="background:linear-gradient(135deg,#1e40af,#1e3a8a); padding:15px; border-radius:20px; text-align:center; margin-bottom:15px;">
+        <h2 style="color:#facc15;">🔐 الكلمات المتقاطعة التكنولوجية 🔐</h2>
         <p style="color:#fff;">✨ اختر الإجابة الصحيحة من القائمة ✨</p>
       </div>
-      
-      <div class="stats-panel" style="background:#1e293b; padding:12px 20px; border-radius:50px; margin-bottom:15px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+      <div style="background:#1e293b; padding:12px 20px; border-radius:50px; margin-bottom:15px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
         <div style="color:white;">✅ تم الحل: <span id="crossCorrectCount">0/0</span></div>
         <div style="color:white;">⭐ النقاط: <span id="crossScore">0</span></div>
         <div style="color:white;">🔄 المحاولات: <span id="crossAttempts">0</span></div>
         <button id="crossNewBtn" style="background:#facc15; color:#1e293b; padding:8px 20px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🎲 أحجية جديدة</button>
       </div>
-
       <div style="background:#f0f2f5; border-radius:30px; padding:25px; margin:20px 0; color:#1e293b;">
         <div id="crossQuestion" style="font-size:22px; font-weight:bold; text-align:center; margin-bottom:20px; color:#1e40af;"></div>
         <div id="crossOptions" class="game-words-list" style="justify-content:center;"></div>
         <div id="crossFeedback" class="feedback"></div>
       </div>
-
       <div class="progress-container" style="margin-top:15px;"><div class="progress-fill" id="crossProgressFill"></div></div>
     </div>
   `;
 
-  // ربط الأحداث
   document.getElementById('gameCheckBtn').onclick = checkGameWord;
   document.getElementById('gameClearBtn').onclick = () => { gameSelectedCells = []; renderGame(); };
   document.getElementById('gameHintBtn').onclick = () => {
@@ -2197,7 +2132,7 @@ Z.showGamesFull = function(){
   };
   document.getElementById('gameNewBtn').onclick = () => initGame();
   document.getElementById('crossNewBtn').onclick = () => resetCrossword();
-  
+
   initGame();
   resetCrossword();
 };
@@ -2219,23 +2154,24 @@ Z.switchGameTab = function(tab) {
   }
 };
 
-// استبدال showGames الأصلي بالنسخة الكاملة
-Z.showGames = Z.showGamesFull;
-
-// ===== إضافة كتاب الأطفال إلى صفحة الابتدائي =====
-Z.showChildrenBook = function(advanced) {
+// ===== عرض صفحة كتاب الأطفال =====
+Z.showChildrenBook = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   let lc = document.getElementById('lc');
   lc.innerHTML = `
-    <button class="back" onclick="ZAID.showPrimaryApp()">🔙 العودة</button>
-    <div class="htitle" style="margin-bottom:15px;">📚 الأطفال والحاسوب - ${advanced ? 'الدروس الداعمة' : 'الدرس التجريبي'}</div>
-    <div id="bookContent" style="background:#1e293b; border-radius:30px; padding:25px; margin:20px 0;"></div>
-    <div class="nav-buttons" style="display:flex; gap:15px; justify-content:center; margin:20px 0;">
-      <button class="nav-btn prev" id="prevBtn">▶ السابق</button>
-      <button class="nav-btn next" id="nextBtn">التالي ◀</button>
+    <div style="max-width:800px; margin:0 auto;">
+      <button class="back" onclick="ZAID.showPrimaryApp()">🔙 العودة</button>
+      <div id="bookContent"></div>
+      <div class="nav-buttons" style="display:flex; gap:15px; justify-content:center; margin:20px 0;">
+        <button class="nav-btn prev" id="prevBtn">▶ السابق</button>
+        <button class="nav-btn next" id="nextBtn">التالي ◀</button>
+      </div>
+      <div class="progress-container"><div class="progress-fill" id="progressFill"></div></div>
+      <div style="text-align:center; margin-top:15px;">
+        <button class="btn" style="background:#334155; color:white; padding:12px 25px; border-radius:20px; border:none; cursor:pointer; font-family:Cairo; font-weight:bold;" onclick="ZAID.goHome()">🔙 العودة إلى المحاور</button>
+      </div>
     </div>
-    <div class="progress-container"><div class="progress-fill" id="progressFill"></div></div>
   `;
   currentSlide = 0;
   renderSlide();
@@ -2243,7 +2179,7 @@ Z.showChildrenBook = function(advanced) {
   document.getElementById('nextBtn').onclick = nextSlide;
 };
 
-// استبدال showPrimaryApp الأصلي بالنسخة التي تحتوي على الكتاب
+// ===== عرض صفحة الابتدائي =====
 Z.showPrimaryApp = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
@@ -2251,16 +2187,22 @@ Z.showPrimaryApp = function() {
   lc.innerHTML = `
     <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
     <div style="max-width:550px; margin:0 auto; background:#1e293b; border-radius:40px; padding:25px; text-align:center; box-shadow:0 25px 45px rgba(0,0,0,0.4);">
-        <div style="position:relative; width:120px; height:120px; margin:0 auto;"><img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" style="width:120px; height:120px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;" alt="logo"></div>
-        <div style="background:#0f172a; padding:10px; border-radius:50px; margin:15px 0; border:2px solid #facc15;"><marquee style="color:#facc15; font-weight:bold; direction:rtl;">🌟🌟🌟 منصة محمد زايد - الأطفال والحاسوب 🌟🌟🌟</marquee></div>
+        <div style="position:relative; width:120px; height:120px; margin:0 auto;">
+          <img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" style="width:120px; height:120px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;" alt="logo">
+        </div>
+        <div style="background:#0f172a; padding:10px; border-radius:50px; margin:15px 0; border:2px solid #facc15;">
+          <marquee style="color:#facc15; font-weight:bold; direction:rtl;">🌟🌟🌟 منصة محمد زايد - الأطفال والحاسوب 🌟🌟🌟</marquee>
+        </div>
         <div style="color:#DAA520; font-size:24px; font-weight:bold; margin:10px 0;">📚 الأطفال والحاسوب</div>
-        <div style="color:#cbd5e1;">قصة تفاعلية لتعلم أساسيات الكمبيوتر</div>
-        <button onclick="ZAID.showChildrenBook(false)" style="width:100%; padding:14px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:16px; background:#DAA520; color:#1e293b; font-family:Cairo;">🎁 درس تجريبي (4 شرائح)</button>
-        <button onclick="ZAID.showChildrenBook(true)" style="width:100%; padding:14px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:16px; background:#228B22; color:white; font-family:Cairo;">💰 دروس داعمة (قريباً + تمارين)</button>
-        <button style="margin-top:20px; width:100%; padding:12px; background:#334155; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:bold; font-family:Cairo;" onclick="ZAID.goHome()">🔙 العودة للرئيسية</button>
+        <div style="color:#cbd5e1; margin-bottom:15px;">قصة تفاعلية لتعلم أساسيات الكمبيوتر</div>
+        <button onclick="ZAID.showChildrenBook()" style="width:100%; padding:16px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:18px; background:#DAA520; color:#1e293b; font-family:Cairo;">📚 كتاب الأطفال والحاسوب</button>
+        <button style="margin-top:15px; width:100%; padding:12px; background:#334155; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:bold; font-family:Cairo;" onclick="ZAID.goHome()">🔙 العودة للرئيسية</button>
     </div>
   `;
 };
+
+// ربط دالة الألعاب
+Z.showGames = Z.showGamesFull;
 /* ============================================================
    تشغيل التطبيق وإغلاق الملف
    ============================================================ */
