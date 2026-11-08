@@ -11,7 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-/* ================== التنسيقات الأساسية للمنصة ================== */
+/* ================== التنسيقات الأساسية ================== */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Cairo,sans-serif}
 html,body{height:100%;width:100%;overflow:hidden}
 body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;display:flex;flex-direction:column;height:100dvh;overflow-x:hidden}
@@ -25,6 +25,8 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 #main::-webkit-scrollbar{width:6px}
 #main::-webkit-scrollbar-track{background:#1e293b}
 #main::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}
+
+/* ================== شاشة الترحيب والتسجيل ================== */
 #pageWelcome{width:100%;max-width:600px;display:flex;flex-direction:column;align-items:center;gap:15px;margin:0 auto;padding:0}
 .logo{position:relative;width:240px;height:240px;margin:0 auto;flex-shrink:0}
 .ring{position:absolute;width:240px;height:240px;border-radius:50%;border:5px solid #dc2626;background:rgba(255,255,255,.98);box-shadow:0 0 30px #dc2626;animation:pl 3s infinite}
@@ -43,6 +45,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .ticker span { margin: 0 15px; color: #15803d; font-weight: 900; }
 .ticker span::before { content: "⭐ "; color: #dc2626; }
 @keyframes tickerAnim { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
 #gw{background:#fff;border:3px solid #dc2626;border-radius:15px;padding:20px;width:100%;color:#0f172a;box-shadow:0 8px 25px rgba(0,0,0,.5)}
 #gw h2{color:#dc2626;text-align:center;font-size:20px;margin-bottom:15px;font-weight:900}
 .inp{display:block;width:100%;padding:10px 15px;margin-bottom:10px;border:2px solid #cbd5e1;border-radius:20px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:600;box-sizing:border-box;height:42px;font-family:Cairo}
@@ -51,6 +54,8 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .cats{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:10px 0}
 .cat{background:#fee2e2;color:#991b1b;padding:6px 14px;border-radius:15px;font-weight:900;cursor:pointer;font-size:13px;border:2px solid transparent}
 .cat.on{background:#dc2626;color:#fff;border-color:#fbbf24}
+
+/* ================== الصفحة الرئيسية (الأقسام) ================== */
 #pageHome{width:100%;max-width:1200px;display:flex;flex-direction:column;gap:15px;margin:0 auto;padding:0}
 .htitle{background:linear-gradient(135deg,#dc2626,#991b1b);padding:12px;border-radius:12px;text-align:center;border:3px solid #fbbf24;font-size:20px;font-weight:900}
 .secs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;width:100%}
@@ -71,14 +76,18 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .ci{font-size:40px;text-align:center;margin-bottom:10px}
 .ct{font-size:15px;font-weight:900;color:#fbbf24;text-align:center;margin-bottom:15px}
 .card ul{list-style:none;flex:1}
-.card li{background:rgba(255,255,255,.1);padding:10px 12px;border-radius:10px;margin-bottom:8px;font-size:13px;font-weight:700;cursor:pointer}
+.card li{background:rgba(255,255,255,.1);padding:10px 12px;border-radius:10px;margin-bottom:8px;font-size:13px;font-weight:700;cursor:pointer;transition:0.2s;}
 .card li:hover{background:rgba(251,191,36,.3)}
 .hbtns{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-top:15px}
-.btn{padding:10px 20px;border:none;border-radius:20px;font-family:Cairo;font-size:14px;font-weight:900;cursor:pointer;color:#fff}
+.btn{padding:10px 20px;border:none;border-radius:20px;font-family:Cairo;font-size:14px;font-weight:900;cursor:pointer;color:#fff;transition:0.2s;}
+.btn:hover{opacity:0.9;transform:scale(1.02);}
 .bg{background:#22c55e}.bgr{background:#334155}
+/* ================== تنسيقات صفحة الدروس والمحتوى الداخلي ================== */
 #lesson{max-width:1200px;width:100%;margin:0 auto;padding:0 4px}
-.back{background:#334155;color:#fff;padding:8px 20px;border-radius:20px;border:none;cursor:pointer;font-weight:900;margin-bottom:15px;font-size:13px;font-family:Cairo}
-.lcard{background:linear-gradient(135deg,#16a34a,#14532d);border:3px solid #fbbf24;border-radius:15px;padding:20px;text-align:center;cursor:pointer;margin-bottom:15px;position:relative;}
+.back{background:#334155;color:#fff;padding:8px 20px;border-radius:20px;border:none;cursor:pointer;font-weight:900;margin-bottom:15px;font-size:13px;font-family:Cairo;transition:0.2s;}
+.back:hover{background:#475569;}
+.lcard{background:linear-gradient(135deg,#16a34a,#14532d);border:3px solid #fbbf24;border-radius:15px;padding:20px;text-align:center;cursor:pointer;margin-bottom:15px;position:relative;transition:0.3s;}
+.lcard:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(0,0,0,0.3);}
 .lcard.r{background:linear-gradient(135deg,#dc2626,#991b1b)}
 .lcard.p{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
 .lcard.j{background:linear-gradient(135deg,#0e7490,#155e75);border-color:#06b6d4}
@@ -86,7 +95,8 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .lt{font-size:18px;font-weight:900;color:#fbbf24;margin-bottom:6px}
 .ld{font-size:13px;color:#cbd5e1}
 .sel{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:20px;margin:20px 0}
-/* ================== استكمال تنسيقات المنصة القديمة ================== */
+
+/* تنسيقات الشرائح العامة (الكتب والدروس) */
 .slide{background:#f8fafc;border-radius:15px;padding:20px;margin:10px 0;color:#1e293b;box-shadow:0 4px 10px rgba(0,0,0,.2)}
 .sn{display:inline-block;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fbbf24;padding:4px 12px;border-radius:10px;font-size:13px;font-weight:bold;margin-bottom:10px}
 .st{font-size:22px;font-weight:900;color:#dc2626;text-align:center;margin-bottom:15px}
@@ -103,18 +113,20 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .dc{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border-right:4px solid #3b82f6;padding:8px 12px;border-radius:10px;margin:10px 0;font-size:14px;font-weight:600}
 .dm{background:linear-gradient(135deg,#fce7f3,#fbcfe8);color:#9f1239;border-right:4px solid #e91e63;padding:8px 12px;border-radius:10px;margin:10px 0;font-size:14px;font-weight:600}
 .sb{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:15px 0}
-.spb{padding:6px 15px;border:none;border-radius:20px;cursor:pointer;font-family:Cairo;font-size:13px;font-weight:900;color:#fff}
+.spb{padding:6px 15px;border:none;border-radius:20px;cursor:pointer;font-family:Cairo;font-size:13px;font-weight:900;color:#fff;transition:0.2s;}
+.spb:hover{opacity:0.85;transform:scale(1.05);}
 .sp-ar{background:linear-gradient(135deg,#dc2626,#991b1b)}
 .sp-fr{background:linear-gradient(135deg,#1e88e5,#0d47a1)}
 .sp-en{background:linear-gradient(135deg,#16a34a,#15803d)}
 .nav{display:flex;gap:10px;margin:20px auto;justify-content:center;flex-wrap:wrap}
-.nbtn{padding:10px 20px;border:none;border-radius:25px;font-family:Cairo;font-weight:900;font-size:14px;cursor:pointer;color:#fff}
+.nbtn{padding:10px 20px;border:none;border-radius:25px;font-family:Cairo;font-weight:900;font-size:14px;cursor:pointer;color:#fff;transition:0.2s;}
+.nbtn:hover{transform:scale(1.05);}
 .np{background:linear-gradient(135deg,#3b82f6,#1e40af)}
 .nn{background:linear-gradient(135deg,#22c55e,#16a34a)}
 .ne{background:linear-gradient(135deg,#f59e0b,#b45309)}
 .prog{background:#334155;height:8px;border-radius:8px;overflow:hidden;margin:10px auto;max-width:100%}
 .progf{background:linear-gradient(90deg,#fbbf24,#22c55e);height:100%;width:0;transition:.3s}
-.opt{display:block;width:100%;padding:12px;margin:10px 0;border:3px solid #475569;border-radius:12px;background:#f1f5f9;color:#1e293b;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo;text-align:right}
+.opt{display:block;width:100%;padding:12px;margin:10px 0;border:3px solid #475569;border-radius:12px;background:#f1f5f9;color:#1e293b;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo;text-align:right;transition:0.2s;}
 .opt:hover{background:#e2e8f0;border-color:#dc2626}
 .cert{background:linear-gradient(135deg,#fffef5,#fef3c7);border:6px double #dc2626;border-radius:15px;padding:30px;text-align:center;color:#0f172a;margin:20px 0}
 .cert h1{color:#dc2626;font-size:28px;margin-bottom:15px}
@@ -130,31 +142,28 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .mem .mc{background:#334155;padding:20px;border-radius:12px;text-align:center;font-size:30px;cursor:pointer;color:transparent;user-select:none}
 .mem .mc.on{background:#22c55e;color:#fff}
 .mem .mc.done{background:#fbbf24;color:#fff;cursor:default}
-.game-grid{display:grid;gap:5px;justify-content:center;margin:20px 0}
-.game-cell{width:45px;height:45px;background:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;cursor:pointer;border-radius:10px;color:#1e293b}
-.game-cell.selected{background:#ffd700}
-.game-cell.found{background:#4caf50;color:white}
-.game-words-list{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:15px 0}
-.game-word-item{background:white;padding:8px 15px;border-radius:50px;cursor:pointer;font-weight:bold;color:#1e293b;font-size:14px}
-.game-word-item.found{background:#4caf50;color:white;text-decoration:line-through}
-.feedback{padding:10px;border-radius:50px;margin:15px 0;text-align:center;font-weight:bold;font-size:14px}
-.feedback.success{background:#d4edda;color:#155724}
-.feedback.error{background:#f8d7da;color:#721c24}
-.feedback.warning{background:#fff3cd;color:#856404}
+
+/* ================== تنسيقات المنجد التفاعلي ================== */
 .dict-box{background:#1e293b;padding:20px;border-radius:15px;border:2px solid #eab308;width:100%;max-width:800px;margin:0 auto}
 .dict-select{width:100%;padding:10px;border-radius:10px;margin-bottom:15px;background:#0f172a;color:#fff;border:1px solid #eab308;font-family:Cairo}
 .dict-term{font-size:24px;font-weight:bold;color:#eab308;text-align:center;margin-bottom:10px}
 .dict-def{background:#0f172a;padding:15px;border-radius:10px;color:#cbd5e1;line-height:1.6;margin-bottom:15px}
 .dict-trans{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:15px}
 .dict-btn{padding:8px 15px;border-radius:20px;border:none;cursor:pointer;font-weight:bold;color:white}
+
+/* ================== شريط التنقل السفلي ================== */
 #bottomNav{position:fixed;bottom:0;left:0;width:100%;background:#1e293b;border-top:3px solid #fbbf24;display:none;justify-content:center;gap:10px;padding:10px;z-index:9998;box-shadow:0 -5px 15px rgba(0,0,0,.5);flex-shrink:0}
 #bottomNav button{padding:8px 15px;border-radius:20px;border:none;font-family:Cairo;font-size:13px;font-weight:900;cursor:pointer;color:#fff}
 .bn-home{background:#3b82f6}.bn-reg{background:#22c55e}.bn-exit{background:#dc2626}
+
+/* ================== تنسيقات الألبوم ================== */
 .album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
 .album-item { border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); position: relative; cursor: pointer; transition: transform 0.3s; }
 .album-item:hover { transform: scale(1.05); }
 .album-item img { width: 100%; height: 150px; object-fit: cover; display: block; }
 .album-item .caption { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(15,23,42,0.8); color: #fff; text-align: center; padding: 5px; font-size: 12px; font-weight: bold; }
+
+/* ================== تنسيقات البث المباشر ================== */
 .live-info-bar { background: #1e293b; border: 2px solid #fbbf24; border-radius: 15px; padding: 15px; margin: 10px 0; width:100%; }
 .live-link-box { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
 .live-link-box label { color: #fbbf24; font-weight: bold; font-size:14px; }
@@ -165,6 +174,8 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .live-tips b { color: #fbbf24; }
 #jitsiContainer { width: 100%; height: 600px; border-radius: 15px; overflow: hidden; background: #000; margin-top:15px; }
 @media (max-width: 700px) { #jitsiContainer { height: 400px; } }
+
+/* ================== تنسيقات تسجيل الفيديو ================== */
 .recording-area { background: #0f172a; border-radius: 20px; padding: 20px; margin: 20px auto; text-align: center; max-width: 800px; border: 2px solid #fbbf24; width:100%; }
 .recording-area video { width: 100%; border-radius: 15px; margin: 10px 0; background: #000; border: 2px solid #334155; }
 .recording-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
@@ -173,40 +184,8 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .recording-buttons button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 .btn-camera-on { background: #3b82f6; }.btn-camera-off { background: #dc2626; }.btn-record-start { background: #ef4444; }.btn-record-stop { background: #334155; }.btn-download-video { background: #22c55e; }
 .video-status { margin-top: 15px; padding: 12px; border-radius: 10px; background: #1e293b; color: #fbbf24; font-weight: bold; font-size: 15px; }
-.glossary-wrapper { font-family: 'Cairo', sans-serif; color: #1e293b; width: 100%; text-align: right; }
-.glossary-wrapper .slide-card { background: linear-gradient(135deg, #fff9e6, #fff2cc); border-radius: 30px; padding: 25px; margin: 20px 0; border-right: 8px solid #ff9800; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-.glossary-wrapper .dialogue { margin: 15px 0; line-height: 1.9; font-size: 17px; }
-.glossary-wrapper .children { color: #2196f3; font-weight: bold; font-size: 18px; background: #e3f2fd; padding: 12px 18px; border-radius: 25px; margin: 10px 0; display: block; }
-.glossary-wrapper .computer { color: #e91e63; font-weight: bold; font-size: 18px; background: #fce4ec; padding: 12px 18px; border-radius: 25px; margin: 10px 0; display: block; }
-.glossary-wrapper .note { background: #fff3cd; padding: 12px; border-radius: 20px; margin: 10px 0; text-align: center; font-size: 15px; border-right: 4px solid #ffc107; }
-.glossary-wrapper .translation-box { background: #e8eaf6; padding: 12px; border-radius: 20px; margin: 10px 0; text-align: center; font-size: 14px; border-right: 4px solid #3f51b5; }
-.glossary-wrapper .translation-ar { color: #d32f2f; font-weight: bold; }
-.glossary-wrapper .translation-fr { color: #1e88e5; font-weight: bold; }
-.glossary-wrapper .translation-en { color: #43a047; font-weight: bold; }
-.glossary-wrapper .image-box { text-align: center; margin: 15px 0; padding: 15px; background: #e0f7fa; border-radius: 25px; }
-.glossary-wrapper .image-box img { max-width: 100%; max-height: 150px; border-radius: 15px; margin: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-.glossary-wrapper .image-row { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; align-items: center; }
-.glossary-wrapper .exercise-box { background: #e8f5e9; padding: 15px; border-radius: 20px; margin: 15px 0; border-right: 5px solid #4caf50; }
-.glossary-wrapper .exercise-box textarea { background: white; border: 2px solid #c8e6c9; border-radius: 15px; padding: 10px; width: 100%; margin-top: 10px; color: #1e293b; }
-.glossary-wrapper .progress-container { background: #e5e7eb; border-radius: 30px; height: 10px; margin: 20px auto; max-width: 600px; }
-.glossary-wrapper .progress-fill { background: linear-gradient(90deg, #facc15, #ff8c00); width: 0%; height: 100%; border-radius: 30px; transition: width 0.3s; }
-.glossary-wrapper .certificate { background: linear-gradient(135deg, #fff9e6, #ffe6b3); border: 8px double #f59e0b; padding: 25px; text-align: center; border-radius: 20px; margin: 20px 0; }
-.glossary-wrapper .certificate h1 { color: #b8860b; }
-.glossary-wrapper .signature { margin-top: 20px; padding-top: 10px; border-top: 1px dashed #b8860b; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-.glossary-wrapper .score-high { font-size: 42px; font-weight: bold; color: #16a34a; text-align: center; }
-.glossary-wrapper .score-low { font-size: 42px; font-weight: bold; color: #dc2626; text-align: center; }
-.glossary-wrapper .result-options { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
-.glossary-wrapper .btn-speak { background: #d32f2f; color: white; padding: 6px 10px; border: none; border-radius: 20px; cursor: pointer; margin: 2px; font-size: 11px; font-weight: bold; transition: 0.2s; }
-.glossary-wrapper .btn-speak-fr { background: #1e88e5; }
-.glossary-wrapper .btn-speak-en { background: #43a047; }
-.glossary-wrapper .btn-speak:hover { opacity: 0.85; transform: scale(1.02); }
-.crossword-layout { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-top:20px; }
-.crossword-grid { display: grid; grid-template-columns: repeat(8, 40px); gap: 5px; background: #fff8f0; padding: 20px; border-radius: 30px; border: 2px solid #ffcf9a; }
-.crossword-cell { width: 40px; height: 40px; background: white; border: 2px solid #ffb347; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-.crossword-cell input { width: 100%; height: 100%; text-align: center; font-size: 1.2rem; font-weight: bold; border: none; background: transparent; border-radius: 10px; color:#0f172a; }
-.crossword-clues { background: white; border-radius: 30px; padding: 20px; min-width: 270px; border: 2px solid #ffcf9a; color:#0f172a; }
 
-/* ================== تنسيقات المحتوى الجديد المرفوع (Middle Tech) ================== */
+/* ================== تنسيقات المحتوى الجديد (Middle Tech) ================== */
 .lesson-text { background: #f8fafc; padding: 20px; border-radius: 28px; line-height: 1.7; font-size: 1.05rem; margin: 15px 0; box-shadow: inset 0 1px 3px #0001, 0 2px 4px #fff8; color: #1e2a3e; text-align:right; }
 .image-gallery { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 25px 0; }
 .card-img { background: white; border-radius: 24px; padding: 15px; text-align: center; width: 220px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
@@ -225,88 +204,23 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .score-tech { font-size: 3rem; font-weight: bold; background: gold; display: inline-block; padding: 10px 25px; border-radius: 60px; color: #1e293b; margin: 15px 0; }
 .advice-tech { font-size: 1.2rem; background: #334155; padding: 15px; border-radius: 40px; margin-top: 15px; }
 
-/* ================== تنسيقات المحتوى الجديد المرفوع (Arabic App) ================== */
-.main-header-app { text-align: center; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 50px; margin-bottom: 20px; }
-.main-header-app h1 { font-size: 1.5rem; background: linear-gradient(135deg, #f9d423, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.stats-panel-app { background: rgba(30,60,114,0.9); border-radius: 50px; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-.stat-item-app { background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 40px; color: white; }
-.level-badge-app { background: linear-gradient(135deg, #f39c12, #e67e22); color: #1e2a3a; padding: 5px 15px; border-radius: 40px; font-weight: bold; }
-.score-badge-app { background: #2ecc71; padding: 5px 15px; border-radius: 40px; font-weight: bold; color: white; }
-.reset-btn-app { background: #e74c3c; border: none; padding: 5px 15px; border-radius: 40px; color: white; cursor: pointer; width: auto; }
-.level-selector-app { background: rgba(0,0,0,0.3); border-radius: 50px; padding: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-.level-selector-app button { background: rgba(255,255,255,0.15); border: none; padding: 8px 18px; border-radius: 40px; color: white; cursor: pointer; transition: 0.3s; font-size: 0.85rem; width: auto; }
-.level-selector-app button.active { background: #f39c12; color: #1e2a3a; }
-.tabs-app { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
-.tab-btn-app { background: rgba(255,255,255,0.1); border: none; padding: 8px 25px; border-radius: 40px; color: white; cursor: pointer; width: auto; }
-.tab-btn-app.active { background: linear-gradient(135deg, #f39c12, #e67e22); }
-.tab-content-app { display: none; background: rgba(255,255,255,0.08); border-radius: 40px; padding: 25px; }
-.tab-content-app.active-tab { display: block; animation: fadeIn 0.4s; }
-.letters-grid-app { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
-.letter-card-app { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 15px; border-right: 4px solid #f39c12; }
-.letter-card-app.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.15); }
-.big-letter-app { font-size: 2.5rem; font-weight: bold; color: #f9d423; text-align: center; }
-.section-app { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 10px; margin: 8px 0; }
-.section-title-app { font-weight: bold; margin-bottom: 8px; color: #f9d423; font-size: 0.85rem; }
-.btn-group-app { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; justify-content: center; }
-.btn-app { border: none; padding: 5px 12px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.8rem; width: auto; }
-.btn-teacher-app { background: #3498db; color: white; }
-.btn-record-app { background: #e74c3c; color: white; }
-.btn-stop-app { background: #95a5a6; color: white; }
-.btn-play-app { background: #2ecc71; color: white; }
-.btn-check-app { background: #f39c12; color: #1e2a3a; }
-.btn-primary-app { background: linear-gradient(135deg, #f39c12, #e67e22); padding: 10px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; width: auto;}
-.writing-input-app { width: 100%; padding: 8px; border-radius: 20px; border: none; text-align: center; margin-top: 8px; }
-.status-app { margin-top: 6px; padding: 5px; border-radius: 10px; font-size: 0.7rem; text-align: center; }
-.status-recording-app { background: #e74c3c; animation: pulse 0.5s infinite; }
-.status-success-app { background: #2ecc71; }
-.status-fail-app { background: #e74c3c; }
-.lessons-grid-app { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-.lesson-card-app { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 15px; border-right: 4px solid #f39c12; }
-.lesson-card-app.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.15); }
-.lesson-title-app { color: #f9d423; font-weight: bold; margin-bottom: 8px; }
-.exercise-item-app { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 10px; margin-top: 8px; }
-.certificate-container-app { background: #1a3a2a; border-radius: 40px; padding: 25px; text-align: center; margin-top: 20px; }
-.certificate-app { background: linear-gradient(135deg, #fff, #fef9e6); color: #1e2a3a; padding: 25px; border-radius: 20px; display: none; border: 5px double #b8860b; }
-.certificate-app.show { display: block; }
-.signature-line-app { margin-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; }
-
-/* ================== تنسيقات المحتوى الجديد المرفوع (Primary App) ================== */
-.screen { max-width: 550px; width: 100%; background: #1e293b; border-radius: 40px; padding: 25px; text-align: center; box-shadow: 0 25px 45px rgba(0,0,0,0.4); margin: 0 auto; }
-.slide-image { width: 100%; border-radius: 15px; margin: 10px 0; border: 2px solid #DAA520; }
-.nav-buttons { display: flex; justify-content: space-between; margin: 15px 0; direction: ltr; }
-.nav-prev { background: #DAA520; color: #1e293b; padding: 10px 25px; border: none; border-radius: 30px; cursor: pointer; width: auto;}
-.nav-next { background: #228B22; color: white; padding: 10px 25px; border: none; border-radius: 30px; cursor: pointer; width: auto;}
-.counter-box-primary { background: #0f172a; padding: 10px; border-radius: 20px; margin: 10px 0; border: 1px solid #DAA520; color: #DAA520; text-align: center; }
-.progress-bar-primary { background: #334155; border-radius: 15px; height: 10px; margin: 10px 0; }
-.progress-fill-primary { background: #228B22; width: 0%; height: 100%; border-radius: 15px; }
-.quiz-question-primary { background: #0f172a; padding: 20px; border-radius: 15px; margin: 15px 0; text-align: right; }
-.exercise-card-primary { background: #0f172a; padding: 15px; border-radius: 15px; margin: 15px 0; text-align: right; border: 1px solid #DAA520; }
-.exercise-card-primary p { color: #cbd5e1; margin: 5px 0; }
-.exercise-card-primary textarea { width: 100%; padding: 10px; border-radius: 10px; background: #1e293b; color: white; border: 1px solid #DAA520; margin-top: 5px; }
-.logo-area { position: relative; width: 120px; height: 120px; margin: 0 auto; }
-.round-logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #FFD700; object-fit: cover; }
-.marquee-box { background: #0f172a; padding: 10px; border-radius: 50px; margin: 15px 0; border: 2px solid #facc15; }
-.exercise-title { color: #DAA520; font-size: 18px; font-weight: bold; margin: 15px 0 5px 0; }
-
-@keyframes ys{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
-@keyframes pl{50%{box-shadow:0 0 45px #ef4444}}
-@keyframes rt{100%{transform:rotate(360deg)}}
-@keyframes blinkImg{0%,70%{opacity:1}85%,100%{opacity:0}}
-@keyframes blinkTxt{0%,70%{opacity:0}85%,100%{opacity:1}}
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-/* ================== تنسيقات إضافية للألعاب من plateforme94+jeux ================== */
+/* ================== تنسيقات الألعاب (plateforme94) ================== */
 .game-grid { display: grid; gap: 8px; justify-content: center; margin: 20px 0; }
 .game-cell { width: 60px; height: 60px; background: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; cursor: pointer; border-radius: 15px; transition: 0.1s; color:#1e293b; }
 .game-cell.selected { background: #ffd700; transform: scale(0.95); }
 .game-cell.found { background: #4caf50; color: white; }
+.game-word-item { background: white; padding: 8px 15px; border-radius: 50px; cursor: pointer; font-weight: bold; color:#1e293b; font-size:14px; transition:0.2s; display:inline-block; margin:5px;}
+.game-word-item.found { background: #4caf50; color: white; text-decoration: line-through; }
 .game-word-item small { font-size: 10px; opacity: 0.7; margin-right: 4px; }
 .game-controls { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+.feedback { padding: 12px; border-radius: 50px; margin: 15px 0; text-align: center; font-weight: bold; font-size: 14px; }
+.feedback.success { background: #d4edda; color: #155724; }
+.feedback.error { background: #f8d7da; color: #721c24; }
+.feedback.warning { background: #fff3cd; color: #856404; }
 @media (max-width: 700px) { .game-cell { width: 45px; height: 45px; font-size: 18px; } }
 
-/* ================== تنسيقات إضافية للكتاب من plateforme94+jeux ================== */
-.slide-card { background: linear-gradient(135deg, #fff9e6, #fff2cc); border-radius: 30px; padding: 25px; margin: 20px 0; border-right: 8px solid #ff9800; color:#1e293b; }
+/* ================== تنسيقات كتاب الأطفال ================== */
+.slide-card { background: linear-gradient(135deg, #fff9e6, #fff2cc); border-radius: 30px; padding: 25px; margin: 20px 0; border-right: 8px solid #ff9800; color:#1e293b; box-shadow:0 10px 20px rgba(0,0,0,0.1); }
 .slide-card h2 { color:#d97706; margin-bottom:12px; }
 .slide-card p { color:#1e293b; font-size:16px; line-height:1.8; }
 .progress-container { background: #e5e7eb; border-radius: 30px; height: 10px; margin: 20px auto; max-width: 600px; }
@@ -323,6 +237,71 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 .translation-fr { color: #1e88e5; font-weight: bold; }
 .translation-en { color: #43a047; font-weight: bold; }
 .image-box { text-align: center; margin: 15px 0; padding: 15px; background: #e0f7fa; border-radius: 25px; font-size:40px; }
+
+/* ================== تنسيقات لوحة تحكم المشرف ================== */
+.admin-upload-area { background: #0f172a; border-radius: 20px; padding: 20px; margin: 20px 0; border: 2px dashed #facc15; }
+.upload-list { max-height: 400px; overflow-y: auto; margin-top: 15px; }
+.upload-item { background: #1e293b; padding: 15px; border-radius: 15px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.upload-info { flex: 1; }
+.upload-title { color: #f9d423; font-weight: bold; }
+.progress-bar { width: 100%; height: 20px; background: #334155; border-radius: 10px; overflow: hidden; margin: 15px 0; }
+.progress-fill-bar { width: 0%; height: 100%; background: #22c55e; transition: width 0.3s; }
+.tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.tab-btn-admin { background: #334155; color: white; padding: 10px 25px; border: none; border-radius: 40px; cursor: pointer; font-size: 14px; transition:0.2s; }
+.tab-btn-admin.active { background: #facc15; color: #1e293b; }
+.tab-content-admin { display: none; }
+.tab-content-admin.active { display: block; }
+
+/* ================== تنسيقات قسم اللغة العربية ================== */
+.arabic-section { background: linear-gradient(145deg, #0f2b3d 0%, #1a4a6f 100%); border-radius: 48px; padding: 25px; margin-top: 30px; border: 2px solid #facc15; }
+.stats-panel { background: rgba(30,60,114,0.9); border-radius: 50px; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.stat-item { background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 40px; color: white; }
+.level-badge { background: linear-gradient(135deg, #f39c12, #e67e22); color: #1e2a3a; padding: 5px 15px; border-radius: 40px; font-weight: bold; }
+.score-badge { background: #2ecc71; padding: 5px 15px; border-radius: 40px; font-weight: bold; }
+.reset-btn { background: #e74c3c; border: none; padding: 5px 15px; border-radius: 40px; color: white; cursor: pointer; }
+.level-selector { background: rgba(0,0,0,0.3); border-radius: 50px; padding: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.level-selector button { background: rgba(255,255,255,0.15); border: none; padding: 8px 18px; border-radius: 40px; color: white; cursor: pointer; transition: 0.3s; font-size: 0.85rem; }
+.level-selector button.active { background: #f39c12; color: #1e2a3a; }
+.tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+.tab-btn { background: rgba(255,255,255,0.1); border: none; padding: 8px 25px; border-radius: 40px; color: white; cursor: pointer; }
+.tab-btn.active { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.tab-content { display: none; background: rgba(255,255,255,0.08); border-radius: 40px; padding: 25px; }
+.tab-content.active-tab { display: block; animation: fadeIn 0.4s; }
+.letters-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 20px; }
+.letter-card { background: rgba(0,0,0,0.6); border-radius: 20px; padding: 15px; border-right: 4px solid #f39c12; }
+.letter-card.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.2); }
+.big-letter { font-size: 2.5rem; font-weight: bold; color: #f9d423; text-align: center; }
+.section { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 10px; margin: 8px 0; }
+.section-title { font-weight: bold; margin-bottom: 8px; color: #f9d423; font-size: 0.9rem; }
+.btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; justify-content: center; }
+.writing-input { width: 100%; padding: 10px; border-radius: 25px; border: none; text-align: center; margin-top: 8px; font-size: 16px; }
+.status { margin-top: 6px; padding: 5px; border-radius: 10px; font-size: 0.75rem; text-align: center; background: rgba(0,0,0,0.7); color: #facc15; font-weight: bold; }
+.status-success { background: #2ecc71; color: white; }
+.status-fail { background: #e74c3c; color: white; }
+.status-recording { background: #e74c3c; animation: pulse 0.5s infinite; color: white; }
+.lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+.lesson-card { background: rgba(0,0,0,0.6); border-radius: 20px; padding: 15px; border-right: 4px solid #f39c12; }
+.lesson-card.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.2); }
+.lesson-title { color: #f9d423; font-weight: bold; margin-bottom: 8px; }
+.exercise-item { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 10px; margin-top: 8px; }
+.certificate-container { background: #1a3a2a; border-radius: 40px; padding: 25px; text-align: center; margin-top: 20px; }
+.certificate-card { background: linear-gradient(135deg, #fff, #fef9e6); color: #1e2a3a; padding: 25px; border-radius: 20px; display: none; border: 5px double #b8860b; }
+.certificate-card.show { display: block; }
+.signature-line { margin-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; }
+.empty-message { color: #94a3b8; text-align: center; padding: 20px; }
+
+/* ================== تنسيقات إضافية للألعاب ================== */
+.tabs-app { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+.tab-btn-app { background: rgba(255,255,255,0.15); border: none; padding: 10px 25px; border-radius: 40px; color: white; cursor: pointer; font-weight: bold; font-family:Cairo; transition:0.3s; }
+.tab-btn-app:hover { background: rgba(255,255,255,0.3); }
+
+@keyframes ys{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+@keyframes pl{50%{box-shadow:0 0 45px #ef4444}}
+@keyframes rt{100%{transform:rotate(360deg)}}
+@keyframes blinkImg{0%,70%{opacity:1}85%,100%{opacity:0}}
+@keyframes blinkTxt{0%,70%{opacity:0}85%,100%{opacity:1}}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 </style>
 </head>
 <body>
@@ -345,13 +324,32 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 <div id="pageWelcome">
   <div class="logo">
     <div class="ring"></div>
-    <div class="flags"><svg viewBox="0 0 185 185"><defs><g id="tn"><circle cx="0" cy="0" r="11" fill="#dc2626"/><circle cx="0" cy="0" r="8.5" fill="none" stroke="#fff" stroke-width="1"/><circle cx="3" cy="0" r="6" fill="#fff"/><circle cx="6" cy="0" r="5" fill="#dc2626"/><polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="#fff"/></g></defs><use href="#tn" x="92" y="12"/><use href="#tn" x="160" y="54"/><use href="#tn" x="160" y="132"/><use href="#tn" x="92" y="174"/><use href="#tn" x="24" y="132"/><use href="#tn" x="24" y="54"/></svg></div>
+    <div class="flags">
+      <svg viewBox="0 0 185 185">
+        <defs>
+          <g id="tn">
+            <circle cx="0" cy="0" r="11" fill="#dc2626"/>
+            <circle cx="0" cy="0" r="8.5" fill="none" stroke="#fff" stroke-width="1"/>
+            <circle cx="3" cy="0" r="6" fill="#fff"/>
+            <circle cx="6" cy="0" r="5" fill="#dc2626"/>
+            <polygon points="7.5,-3.5 8.5,-0.8 11,-0.8 9,0.8 9.8,3.5 7.5,1.8 5.2,3.5 6,0.8 4,-0.8 6.5,-0.8" fill="#fff"/>
+          </g>
+        </defs>
+        <use href="#tn" x="92" y="12"/>
+        <use href="#tn" x="160" y="54"/>
+        <use href="#tn" x="160" y="132"/>
+        <use href="#tn" x="92" y="174"/>
+        <use href="#tn" x="24" y="132"/>
+        <use href="#tn" x="24" y="54"/>
+      </svg>
+    </div>
     <div class="tv">
       <div class="tvb">
         <img src="https://i.postimg.cc/MHGWk2FL/5120251.jpg" onerror="this.style.display='none';">
         <div class="tvt"><span>منصة</span><span>زايد</span></div>
       </div>
-      <div class="tvs"></div><div class="tvb2"></div>
+      <div class="tvs"></div>
+      <div class="tvb2"></div>
     </div>
   </div>
   
@@ -431,10 +429,10 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
   <!-- 4. البحث العلمي -->
   <div class="card c-res">
     <div class="ci">🔬</div>
-    <div class="ct">البحث العلمي</div>
+    <div class="ct">البحث العلمي والمحاضرات</div>
     <ul>
-      <li onclick="ZAID.openCat('lectures')">🎤 المحاضرات</li>
-      <li onclick="ZAID.openCat('books')">📚 الكتب</li>
+      <li onclick="ZAID.openCat('lectures')">🎤 المحاضرات والندوات</li>
+      <li onclick="ZAID.openCat('books')">📚 الكتب والمراجع</li>
     </ul>
   </div>
 
@@ -542,7 +540,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
   </div>
 </div>
 
-</div>
+</div> <!-- نهاية #main -->
 
 <!-- شريط التنقل السفلي -->
 <div id="bottomNav" style="display:none;">
@@ -550,10 +548,13 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
   <button id="btnNavReg" class="bn-reg" onclick="ZAID.logout()">🔑 العودة للتسجيل</button>
   <button id="btnNavExit" class="bn-exit" onclick="ZAID.exitPlatform()">🚪 مغادرة المنصة</button>
 </div>
+
 <script>
 (function(){
 'use strict';
-var Z=window.ZAID={};
+var Z = window.ZAID = {};
+
+// ================== إعدادات Firebase ==================
 var firebaseConfig = {
   apiKey: "AIzaSyAoeT0z0Z3CGg43XV8PljirV6ZAClzzRAA",
   authDomain: "zaied-v2.firebaseapp.com",
@@ -573,132 +574,193 @@ try {
   } 
 } catch(e) { console.warn("Firebase offline:", e); }
 
-Z.ADMIN='012345';
-Z.WA='21655335477';
+// ================== المتغيرات الأساسية ==================
+Z.ADMIN = '012345';
+Z.WA = '21655335477';
 Z.TRIAL_DAYS = 3;
 Z.SUB_DAYS = 365;
-Z.TRIAL_MS = Z.TRIAL_DAYS * 24*60*60*1000;
-Z.SUB_MS = Z.SUB_DAYS * 24*60*60*1000;
+Z.TRIAL_MS = Z.TRIAL_DAYS * 24 * 60 * 60 * 1000;
+Z.SUB_MS = Z.SUB_DAYS * 24 * 60 * 60 * 1000;
 
-Z.user=null; 
-Z.admin=false; 
-Z.audio=null; 
-Z.selectedCat=null; 
-Z.lessons={};
+Z.user = null; 
+Z.admin = false; 
+Z.audio = null; 
+Z.selectedCat = null; 
+Z.lessons = {};
 
-Z.addLesson=function(k,m,s){Z.lessons[k]={meta:m,slides:s};};
+Z.addLesson = function(k, m, s) { Z.lessons[k] = { meta: m, slides: s }; };
 
-Z.getTrialEnd = function(u){ if(!u||!u.trialStart) return 0; return u.trialStart + Z.TRIAL_MS; };
-Z.isSubActive = function(u){ if(!u) return false; if(u.isSub===true){ if(u.subExpiry && u.subExpiry>0) return Date.now()<u.subExpiry; return true; } return false; };
-Z.canAccess = function(){ if(Z.admin) return true; var u=Z.user; if(!u) return false; if(Z.isSubActive(u)) return true; if(u.trialStart && Date.now()<Z.getTrialEnd(u)) return true; return false; };
+// ================== دوال التحقق من الاشتراك ==================
+Z.getTrialEnd = function(u) { if(!u || !u.trialStart) return 0; return u.trialStart + Z.TRIAL_MS; };
+Z.isSubActive = function(u) { if(!u) return false; if(u.isSub === true){ if(u.subExpiry && u.subExpiry > 0) return Date.now() < u.subExpiry; return true; } return false; };
+Z.canAccess = function() { if(Z.admin) return true; var u = Z.user; if(!u) return false; if(Z.isSubActive(u)) return true; if(u.trialStart && Date.now() < Z.getTrialEnd(u)) return true; return false; };
 
-Z.updateStatusBadge = function(){
-  var el=document.getElementById('statusBadge'); if(!el) return;
-  if(Z.admin||!Z.user){ el.style.display='none'; return; }
-  var u=Z.user;
-  if(Z.isSubActive(u)){ el.innerHTML='✅ مشترك'; el.style.background='#22c55e'; el.style.color='#fff'; el.style.display='inline-block'; }
-  else if(u.trialStart && Date.now()<Z.getTrialEnd(u)){ 
-    var ms = Z.getTrialEnd(u) - Date.now(); var d = Math.floor(ms/86400000); var h = Math.floor((ms%86400000)/3600000);
-    el.innerHTML='⏱️ تجريبي: '+d+'ي '+h+'س'; el.style.background='#f59e0b'; el.style.color='#1e293b'; el.style.display='inline-block'; 
+Z.updateStatusBadge = function() {
+  var el = document.getElementById('statusBadge'); if(!el) return;
+  if(Z.admin || !Z.user) { el.style.display = 'none'; return; }
+  var u = Z.user;
+  if(Z.isSubActive(u)) { 
+    el.innerHTML = '✅ مشترك'; el.style.background = '#22c55e'; el.style.color = '#fff'; el.style.display = 'inline-block'; 
+  } else if(u.trialStart && Date.now() < Z.getTrialEnd(u)) { 
+    var ms = Z.getTrialEnd(u) - Date.now(); 
+    var d = Math.floor(ms / 86400000); 
+    var h = Math.floor((ms % 86400000) / 3600000);
+    el.innerHTML = '⏱️ تجريبي: ' + d + 'ي ' + h + 'س'; el.style.background = '#f59e0b'; el.style.color = '#1e293b'; el.style.display = 'inline-block'; 
+  } else { 
+    el.innerHTML = '🔒 الاشتراك منتهي'; el.style.background = '#dc2626'; el.style.color = '#fff'; el.style.display = 'inline-block'; 
   }
-  else { el.innerHTML='🔒 الاشتراك منتهي'; el.style.background='#dc2626'; el.style.color='#fff'; el.style.display='inline-block'; }
 };
 
-var cats=['طفل','ولي','طالب','أستاذ','باحث','خبير'];
-var cg=document.getElementById('cats');
+// ================== تهيئة التصنيفات في التسجيل ==================
+var cats = ['طفل', 'ولي', 'طالب', 'أستاذ', 'باحث', 'خبير'];
+var cg = document.getElementById('cats');
 if(cg) {
   cats.forEach(function(c, index){
-    var b=document.createElement('div');b.className='cat';b.textContent=c;
-    b.onclick=function(){document.querySelectorAll('.cat').forEach(function(x){x.classList.remove('on');});b.classList.add('on');Z.selectedCat=c;};
+    var b = document.createElement('div');
+    b.className = 'cat'; b.textContent = c;
+    b.onclick = function(){ 
+      document.querySelectorAll('.cat').forEach(function(x){ x.classList.remove('on'); }); 
+      b.classList.add('on'); 
+      Z.selectedCat = c; 
+    };
     cg.appendChild(b);
     if(index === 0) { b.classList.add('on'); Z.selectedCat = c; }
   });
 }
-Z.exitPlatform=function(){ if(!confirm('هل تريد المغادرة نهائياً من المنصة؟')) return; document.body.innerHTML='<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;font-family:Cairo;"><h1 style="color:#22c55e;font-size:40px;">👋 تم الخروج بنجاح</h1><button onclick="location.reload()" style="margin-top:20px;padding:12px 30px;background:#3b82f6;color:#fff;border:none;border-radius:25px;cursor:pointer;font-weight:bold;font-family:Cairo;">الدخول مجدداً</button></div>'; };
 
-Z.checkVisitor=function(){ 
-  if(!Z.user && !Z.admin){ alert('⚠️ الدخول للمحتوى يتطلب التسجيل إجبارياً!'); Z.showPage('pageWelcome'); return false; } 
-  if(!Z.canAccess()){ Z.requireSub(); return false; } 
+// ================== التنقل بين الصفحات ==================
+Z.exitPlatform = function() { 
+  if(!confirm('هل تريد المغادرة نهائياً من المنصة؟')) return; 
+  document.body.innerHTML = '<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;font-family:Cairo;"><h1 style="color:#22c55e;font-size:40px;">👋 تم الخروج بنجاح</h1><button onclick="location.reload()" style="margin-top:20px;padding:12px 30px;background:#3b82f6;color:#fff;border:none;border-radius:25px;cursor:pointer;font-weight:bold;font-family:Cairo;">الدخول مجدداً</button></div>'; 
+};
+
+Z.checkVisitor = function() { 
+  if(!Z.user && !Z.admin) { alert('⚠️ الدخول للمحتوى يتطلب التسجيل إجبارياً!'); Z.showPage('pageWelcome'); return false; } 
+  if(!Z.canAccess()) { Z.requireSub(); return false; } 
   return true; 
 };
 
-Z.showPage=function(id){ 
-  if(id!=='pageWelcome'&&!Z.user&&!Z.admin){ id='pageWelcome'; } 
-  document.querySelectorAll('#main > div[id^="page"]').forEach(function(p){p.classList.add('hide');}); 
-  var target = document.getElementById(id); if(target) target.classList.remove('hide'); window.scrollTo(0,0); 
+Z.requireSub = function() {
+  if(confirm('⚠️ انتهت فترة التجربة أو الاشتراك. هل تريد الاشتراك الآن؟')) {
+    Z.showSub();
+  }
+};
+
+Z.showPage = function(id) { 
+  if(id !== 'pageWelcome' && !Z.user && !Z.admin) { id = 'pageWelcome'; } 
+  document.querySelectorAll('#main > div[id^="page"]').forEach(function(p){ p.classList.add('hide'); }); 
+  var target = document.getElementById(id); if(target) target.classList.remove('hide'); 
+  window.scrollTo(0, 0); 
   var nav = document.getElementById('bottomNav'), topBar = document.getElementById('top');
-  if(id === 'pageWelcome' || (!Z.user && !Z.admin)) { if(nav) nav.style.display = 'none'; if(topBar) topBar.style.display = 'none'; } 
-  else { if(nav) nav.style.display = 'flex'; if(topBar) topBar.style.display = 'flex'; }
+  if(id === 'pageWelcome' || (!Z.user && !Z.admin)) { 
+    if(nav) nav.style.display = 'none'; 
+    if(topBar) topBar.style.display = 'none'; 
+  } else { 
+    if(nav) nav.style.display = 'flex'; 
+    if(topBar) topBar.style.display = 'flex'; 
+  }
   Z.updateStatusBadge();
 };
 
-Z.goHome=function(){ Z.stopSpeak(); if(!Z.user && !Z.admin){ Z.showPage('pageWelcome'); } else { Z.showPage('pageHome'); } };
-
-Z.updateUI=function(){
-  var b=document.getElementById('top'),ic=document.getElementById('ti'),tx=document.getElementById('tt');
-  var br=document.getElementById('br'),bo=document.getElementById('bo'),bstat=document.getElementById('bstats'),bs=document.getElementById('bs');
-  if(Z.admin){ b.className='adm';ic.textContent='👑';tx.textContent='مرحباً — المشرف'; br.style.display='none';bo.style.display='inline-block'; if(bstat) bstat.style.display='inline-block'; if(bs) bs.style.display='none'; }
-  else if(Z.user){ b.className='reg';ic.textContent='✅';tx.textContent='مرحباً '+Z.user.name; br.style.display='none';bo.style.display='inline-block'; if(bstat) bstat.style.display='none'; if(bs) bs.style.display='inline-block'; }
-  else { b.className='';ic.textContent='🎭';tx.textContent='مرحباً — أنت زائر'; br.style.display='inline-block';bo.style.display='inline-block'; if(bstat) bstat.style.display='none'; if(bs) bs.style.display='none'; }
-  Z.updateStatusBadge();
-};
-
-Z.adminLogin=function(){
-  var old=document.getElementById('admModal');if(old)old.remove();
-  var m=document.createElement('div');m.id='admModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;"><div style="font-size:50px;margin-bottom:15px;">👑</div><h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2><input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" autocomplete="new-password" style="text-align:center;font-size:20px;letter-spacing:5px;"><button type="button" onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button><button type="button" onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button></div>';
-  document.body.appendChild(m);
-  setTimeout(function(){ var p=document.getElementById('adminPwd'); if(p) p.focus(); }, 100);
-};
-
-Z.checkAdmin=function(){
-  var pwdEl=document.getElementById('adminPwd');
-  if(!pwdEl) return;
-  var pwd=pwdEl.value;
-  if(pwd===Z.ADMIN){ Z.admin=true;document.getElementById('admModal').remove();Z.updateUI();Z.showAdminPanel(); }
-  else{ alert('كلمة المرور خاطئة'); }
-};
-
-Z.logout=function(){ Z.user=null;Z.admin=false;Z.stopSpeak(); localStorage.removeItem('zaid_current_user'); Z.updateUI(); Z.showPage('pageWelcome'); };
-
-Z.stopSpeak=function(){if(Z.audio){try{Z.audio.pause();}catch(e){}Z.audio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();};
-
-Z.speak=function(t,l){ 
-  if(!t || t.trim()==='')return;
+Z.goHome = function() { 
   Z.stopSpeak(); 
-  var code = (l==='ar'?'ar':(l==='fr'?'fr':'en'));
+  if(!Z.user && !Z.admin) { Z.showPage('pageWelcome'); } 
+  else { Z.showPage('pageHome'); } 
+};
+
+Z.updateUI = function() {
+  var b = document.getElementById('top'), ic = document.getElementById('ti'), tx = document.getElementById('tt');
+  var br = document.getElementById('br'), bo = document.getElementById('bo'), bstat = document.getElementById('bstats'), bs = document.getElementById('bs');
+  if(Z.admin) { 
+    b.className = 'adm'; ic.textContent = '👑'; tx.textContent = 'مرحباً — المشرف'; 
+    br.style.display = 'none'; bo.style.display = 'inline-block'; 
+    if(bstat) bstat.style.display = 'inline-block'; if(bs) bs.style.display = 'none'; 
+  } else if(Z.user) { 
+    b.className = 'reg'; ic.textContent = '✅'; tx.textContent = 'مرحباً ' + Z.user.name; 
+    br.style.display = 'none'; bo.style.display = 'inline-block'; 
+    if(bstat) bstat.style.display = 'none'; if(bs) bs.style.display = 'inline-block'; 
+  } else { 
+    b.className = ''; ic.textContent = '🎭'; tx.textContent = 'مرحباً — أنت زائر'; 
+    br.style.display = 'inline-block'; bo.style.display = 'inline-block'; 
+    if(bstat) bstat.style.display = 'none'; if(bs) bs.style.display = 'none'; 
+  }
+  Z.updateStatusBadge();
+};
+
+// ================== المشرف ==================
+Z.adminLogin = function() {
+  var old = document.getElementById('admModal'); if(old) old.remove();
+  var m = document.createElement('div'); m.id = 'admModal';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML = '<div style="background:#fff;padding:30px;border-radius:20px;max-width:400px;width:100%;text-align:center;border:4px solid #8b5cf6;"><div style="font-size:50px;margin-bottom:15px;">👑</div><h2 style="color:#8b5cf6;margin-bottom:20px;">دخول المشرف</h2><input type="password" id="adminPwd" class="inp" placeholder="أدخل كلمة المرور" autocomplete="new-password" style="text-align:center;font-size:20px;letter-spacing:5px;"><button type="button" onclick="ZAID.checkAdmin()" class="sbt" style="background:#8b5cf6;border-color:#8b5cf6;margin-top:10px;">دخول</button><button type="button" onclick="document.getElementById(\'admModal\').remove()" style="width:100%;padding:12px;background:#334155;color:#fff;border:none;border-radius:25px;cursor:pointer;margin-top:10px;font-size:14px;font-family:Cairo;">إلغاء</button></div>';
+  document.body.appendChild(m);
+  setTimeout(function(){ var p = document.getElementById('adminPwd'); if(p) p.focus(); }, 100);
+};
+
+Z.checkAdmin = function() {
+  var pwdEl = document.getElementById('adminPwd');
+  if(!pwdEl) return;
+  var pwd = pwdEl.value;
+  if(pwd === Z.ADMIN) { 
+    Z.admin = true; 
+    document.getElementById('admModal').remove(); 
+    Z.updateUI(); 
+    Z.showAdminPanel(); 
+  } else { 
+    alert('كلمة المرور خاطئة'); 
+  }
+};
+
+Z.logout = function() { 
+  Z.user = null; Z.admin = false; Z.stopSpeak(); 
+  localStorage.removeItem('zaid_current_user'); 
+  Z.updateUI(); Z.showPage('pageWelcome'); 
+};
+
+// ================== محرك النطق ==================
+Z.stopSpeak = function() {
+  if(Z.audio) { try { Z.audio.pause(); } catch(e) {} Z.audio = null; }
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+};
+
+Z.speak = function(t, l) { 
+  if(!t || t.trim() === '') return;
+  Z.stopSpeak(); 
+  var code = (l === 'ar' ? 'ar' : (l === 'fr' ? 'fr' : 'en'));
   try {
-    var audio = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURIComponent(t)+'&tl='+code+'&client=tw-ob&ttsspeed=0.9');
+    var audio = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&q=' + encodeURIComponent(t) + '&tl=' + code + '&client=tw-ob&ttsspeed=0.9');
     Z.audio = audio;
     audio.onerror = function() {
-      if('speechSynthesis' in window){ 
-        var s=new SpeechSynthesisUtterance(t); 
-        s.lang = l==='ar'?'ar-SA': l==='fr'?'fr-FR':'en-US'; 
-        s.rate=0.9; 
+      if('speechSynthesis' in window) { 
+        var s = new SpeechSynthesisUtterance(t); 
+        s.lang = l === 'ar' ? 'ar-SA' : (l === 'fr' ? 'fr-FR' : 'en-US'); 
+        s.rate = 0.9; 
         window.speechSynthesis.speak(s); 
       }
     };
     audio.play().catch(function(){
-      if('speechSynthesis' in window){ 
-        var s=new SpeechSynthesisUtterance(t); 
-        s.lang = l==='ar'?'ar-SA': l==='fr'?'fr-FR':'en-US'; 
-        s.rate=0.9; 
+      if('speechSynthesis' in window) { 
+        var s = new SpeechSynthesisUtterance(t); 
+        s.lang = l === 'ar' ? 'ar-SA' : (l === 'fr' ? 'fr-FR' : 'en-US'); 
+        s.rate = 0.9; 
         window.speechSynthesis.speak(s); 
       }
     });
   } catch(e) {
-    if('speechSynthesis' in window){ 
-      var s=new SpeechSynthesisUtterance(t); 
-      s.lang = l==='ar'?'ar-SA': l==='fr'?'fr-FR':'en-US'; 
-      s.rate=0.9; 
+    if('speechSynthesis' in window) { 
+      var s = new SpeechSynthesisUtterance(t); 
+      s.lang = l === 'ar' ? 'ar-SA' : (l === 'fr' ? 'fr-FR' : 'en-US'); 
+      s.rate = 0.9; 
       window.speechSynthesis.speak(s); 
     }
   }
 };
-Z.register=function(){
-  var n=document.getElementById('fn').value.trim(), p=document.getElementById('fp').value.trim(), s=document.getElementById('fs').value.trim();
-  var e=document.getElementById('fe').value.trim(), h=document.getElementById('fh').value.trim(), c=document.getElementById('fc').value.trim(), ci=document.getElementById('fci').value.trim();
+// جعل النطق عالمياً لتعمل أزرار الكتاب والألعاب
+window.speak = function(t, l) { return Z.speak(t, l); };
+// ================== التسجيل في المنصة ==================
+Z.register = function() {
+  var n = document.getElementById('fn').value.trim(), p = document.getElementById('fp').value.trim(), s = document.getElementById('fs').value.trim();
+  var e = document.getElementById('fe').value.trim(), h = document.getElementById('fh').value.trim(), c = document.getElementById('fc').value.trim(), ci = document.getElementById('fci').value.trim();
   
   if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل'); return; }
   if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول'); return; }
@@ -707,9 +769,9 @@ Z.register=function(){
   if(!db || !auth) { alert('❌ Firebase غير متصل!'); return; }
   
   var newUser = {
-    name:n, prof:p, spec:s, email:e, phone:h, country:c, city:ci,
-    cat:Z.selectedCat, date:new Date().toLocaleDateString('ar-TN'),
-    isSub:false, trialStart:Date.now(), subExpiry:0
+    name: n, prof: p, spec: s, email: e, phone: h, country: c, city: ci,
+    cat: Z.selectedCat, date: new Date().toLocaleDateString('ar-TN'),
+    isSub: false, trialStart: Date.now(), subExpiry: 0
   };
   
   var btn = document.getElementById('btnReg');
@@ -724,7 +786,7 @@ Z.register=function(){
   }).then(function(){
     Z.user = newUser;
     localStorage.setItem('zaid_current_user', JSON.stringify(Z.user));
-    document.getElementById('un').textContent=n;
+    document.getElementById('un').textContent = n;
     if(btn) { btn.disabled = false; btn.textContent = '🚪 دخول'; }
     Z.updateUI(); Z.showPage('pageHome');
     alert('✅ تم التسجيل بنجاح!\n\n⏱️ لديك ' + Z.TRIAL_DAYS + ' أيام تجريبية.');
@@ -736,39 +798,40 @@ Z.register=function(){
   });
 };
 
+// ================== إحصائيات وتصدير المشرف ==================
 Z.showStats = function() {
   if(!Z.admin) return;
-  if(!db){ alert('Firebase غير متصل.'); return; }
-  var m=document.createElement('div'); m.id='statsModal';
-  m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#1e293b;padding:20px;border-radius:15px;color:#fff;width:100%;max-width:600px;text-align:center;"><h2>⏳ جاري تحميل البيانات...</h2></div>';
+  if(!db) { alert('Firebase غير متصل.'); return; }
+  var m = document.createElement('div'); m.id = 'statsModal';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML = '<div style="background:#1e293b;padding:20px;border-radius:15px;color:#fff;width:100%;max-width:600px;text-align:center;"><h2>⏳ جاري تحميل البيانات...</h2></div>';
   document.body.appendChild(m);
   
   db.collection("users").get().then(function(qs){ 
-    var users=[]; 
-    qs.forEach(function(doc){ var u=doc.data(); u._id=doc.id; users.push(u); }); 
+    var users = []; 
+    qs.forEach(function(doc){ var u = doc.data(); u._id = doc.id; users.push(u); }); 
     
     document.getElementById('statsModal').remove();
-    var m2=document.createElement('div'); m2.id='statsModal';
-    m2.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    var m2 = document.createElement('div'); m2.id = 'statsModal';
+    m2.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
     
-    var html='<div style="background:#1e293b;padding:20px;border-radius:15px;max-width:600px;width:100%;color:#fff;max-height:90vh;display:flex;flex-direction:column;">'
+    var html = '<div style="background:#1e293b;padding:20px;border-radius:15px;max-width:600px;width:100%;color:#fff;max-height:90vh;display:flex;flex-direction:column;">'
       + '<h2 style="color:#fbbf24;margin-bottom:15px;text-align:center;">📊 المسجلون ('+users.length+')</h2>'
       + '<div style="overflow-y:auto;flex:1;background:#0f172a;padding:10px;border-radius:10px;text-align:right;">';
       
-    if(users.length===0) html+='<div style="text-align:center;padding:20px;color:#94a3b8;">لا يوجد مسجلون بعد.</div>';
+    if(users.length === 0) html += '<div style="text-align:center;padding:20px;color:#94a3b8;">لا يوجد مسجلون بعد.</div>';
     users.forEach(function(u,i){ 
-      html+='<div style="border-bottom:1px solid #334155;padding:10px;font-size:13px;line-height:1.7;">'
+      html += '<div style="border-bottom:1px solid #334155;padding:10px;font-size:13px;line-height:1.7;">'
         + '<strong style="color:#fbbf24;">'+(i+1)+'. '+(u.name||'—')+'</strong>'
         + '<br>📧 '+(u.email||'—')+' | 📱 '+(u.phone||'—')
         + '<br>💼 '+(u.prof||'—')+' | 🏙️ '+(u.city||'—')
         + '<br><span style="color:#94a3b8;font-size:11px;">📅 '+(u.date||'—')+'</span>'
         + '</div>'; 
     });
-    html+='</div>';
-    html+='<button onclick="ZAID.exportExcel()" style="margin-top:15px;padding:12px;background:#22c55e;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;font-size:16px;">📥 تحميل بيانات المسجلين (Excel)</button>';
-    html+='<button onclick="document.getElementById(\'statsModal\').remove()" style="margin-top:10px;padding:10px;background:#334155;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">إغلاق</button></div>';
-    m2.innerHTML=html; document.body.appendChild(m2);
+    html += '</div>';
+    html += '<button onclick="ZAID.exportExcel()" style="margin-top:15px;padding:12px;background:#22c55e;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;font-size:16px;">📥 تحميل بيانات المسجلين (Excel)</button>';
+    html += '<button onclick="document.getElementById(\'statsModal\').remove()" style="margin-top:10px;padding:10px;background:#334155;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-family:Cairo;">إغلاق</button></div>';
+    m2.innerHTML = html; document.body.appendChild(m2);
   }).catch(function(err){ 
     alert("⚠️ تعذر قراءة البيانات:\n" + err.message);
     document.getElementById('statsModal').remove();
@@ -778,7 +841,7 @@ Z.showStats = function() {
 Z.exportExcel = function() {
   if(!db) return;
   db.collection("users").get().then(function(qs){ 
-    var users=[]; qs.forEach(function(doc){ users.push(doc.data()); });
+    var users = []; qs.forEach(function(doc){ users.push(doc.data()); });
     if(users.length === 0) { alert('لا يوجد مسجلون.'); return; }
     
     let csv = "\uFEFF";
@@ -791,7 +854,7 @@ Z.exportExcel = function() {
   });
 };
 
-Z.clearAllUsers = function(){
+Z.clearAllUsers = function() {
   if(!confirm('⚠️ هل أنت متأكد من حذف جميع المسجلين نهائياً؟')) return;
   db.collection("users").get().then(function(qs){ 
     var batch = db.batch(); 
@@ -804,62 +867,61 @@ Z.clearAllUsers = function(){
   });
 };
 
-/* ============================================================
-   دوال الأقسام الأصلية (لعب، منجد، تربص، ألبوم)
-   ============================================================ */
-Z.openCat = function(cat){
+// ================== دالة التوجيه للأقسام (سيتم توسيعها لاحقاً) ==================
+Z.openCat = function(cat) {
   if(!Z.checkVisitor()) return;
   var map = {
-    'games':'showGames',
-    'lectures':'showLecturesSection',
-    'books':'showBooksSection',
-    'ai':'showAISection',
-    'arabic':'showArabicSection',
-    'arabic_non':'showArabicNonNativeSection',
-    'tech':'showTechSection',
-    'primary':'showStage',
-    'middle':'showStage',
-    'high':'showStage',
-    'univ':'showStage'
+    'games': 'showGames',
+    'lectures': 'showLecturesSection',
+    'books': 'showBooksSection',
+    'ai': 'showAISection',
+    'arabic': 'showArabicSection',
+    'arabic_non': 'showArabicNonNativeSection',
+    'tech': 'showTechSection',
+    'primary': 'showStage',
+    'middle': 'showStage',
+    'high': 'showStage',
+    'univ': 'showStage'
   };
   var fn = map[cat];
-  if(fn && typeof Z[fn] === 'function'){
+  if(fn && typeof Z[fn] === 'function') {
     if(fn === 'showStage') return Z.showStage(cat);
     return Z[fn]();
   }
   Z.comingSoon(cat);
 };
 
-Z.comingSoon = function(cat){
+Z.comingSoon = function(cat) {
   alert('📌 قسم «' + cat + '» قيد الإعداد، سيتم إضافته قريباً.');
 };
 
-Z.showStage = function(stage){
+// ================== الدوال الأساسية للأقسام ==================
+Z.showStage = function(stage) {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
-  var title = { primary:'المرحلة الابتدائية', middle:'المرحلة الإعدادية', high:'المرحلة الثانوية', univ:'المرحلة الجامعية' }[stage];
+  var title = { primary: 'المرحلة الابتدائية', middle: 'المرحلة الإعدادية', high: 'المرحلة الثانوية', univ: 'المرحلة الجامعية' }[stage];
   var html = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>'
     + '<div class="htitle" style="margin-bottom:15px;">🏫 ' + title + '</div>'
     + '<div class="sel"><p style="text-align:center;color:#94a3b8;grid-column:1/-1;">لا توجد دروس متاحة حالياً لهذه المرحلة. سيتم إضافتها قريباً.</p></div>';
   lc.innerHTML = html;
 };
 
-Z.showGames = function(){
+Z.showGames = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageGames');
   var lc = document.getElementById('lcGames');
   lc.innerHTML = '<div class="htitle">🎮 ألعاب وكلمات متقاطعة</div><p style="text-align:center;">سيتم إضافة الألعاب قريباً...</p>';
 };
 
-Z.showDictionary = function(){
+Z.showDictionary = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">📖 المنجد الرباعي</div><p style="text-align:center;">المنجد قيد التطوير...</p>';
 };
 
-Z.openSrv = function(type){
+Z.openSrv = function(type) {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
@@ -867,53 +929,53 @@ Z.openSrv = function(type){
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">' + title + '</div><p style="text-align:center;">العروض قيد التحديث...</p>';
 };
 
-Z.showAISection = function(){
+Z.showAISection = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">🧠 مسارات الذكاء الاصطناعي</div><p style="text-align:center;">مسارات AI قيد الإعداد...</p>';
 };
 
-Z.showAlbum = function(){
+Z.showAlbum = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">📸 ألبوم الصور</div><p style="text-align:center;">الألبوم قيد التحديث...</p>';
 };
 
-Z.showTechSection = function(){
+Z.showTechSection = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">📖 التربية التكنولوجية</div><p style="text-align:center;">قسم التكنولوجيا قيد الإعداد...</p>';
 };
 
-Z.showArabicSection = function(){
+Z.showArabicSection = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">🌙 اللغة العربية</div><p style="text-align:center;">قسم اللغة العربية قيد الإعداد...</p>';
 };
 
-Z.showArabicNonNativeSection = function(){
+Z.showArabicNonNativeSection = function() {
   Z.showArabicSection();
 };
 
-Z.showLecturesSection = function(){
+Z.showLecturesSection = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">🎤 المحاضرات</div><p style="text-align:center;">المحاضرات قيد التحديث...</p>';
 };
 
-Z.showBooksSection = function(){
+Z.showBooksSection = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">📚 الكتب</div><p style="text-align:center;">الكتب قيد التحديث...</p>';
 };
 /* ============================================================
-   الجزء 10: المحتوى الجديد المرفوع (التربية التكنولوجية + اللغة العربية + الأطفال والحاسوب)
+   الجزء 7: إعادة تعريف التوجيه للمراحل الجديدة + درس الإعدادي + اللغة العربية
    ============================================================ */
 
 // حفظ دالة التوجيه القديمة لتجنب مسحها
@@ -923,22 +985,16 @@ var originalOpenCat = Z.openCat || function(){};
 Z.openCat = function(cat){
   if(!Z.checkVisitor()) return;
   
-  // توجيه المرحلة الإعدادية إلى الدرس الجديد
   if(cat === 'middle') {
     return Z.showMiddleTech();
   }
-  
-  // توجيه اللغة العربية إلى الاختبار الجديد
   if(cat === 'arabic') {
     return Z.showArabicLevels();
   }
-  
-  // توجيه المرحلة الابتدائية إلى تطبيق الأطفال والحاسوب
   if(cat === 'primary') {
     return Z.showPrimaryApp();
   }
 
-  // إذا كان القسم آخر، نستخدم الدالة القديمة
   return originalOpenCat(cat);
 };
 
@@ -950,7 +1006,6 @@ Z.showMiddleTech = function() {
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   
-  // إضافة التنسيقات الخاصة بالدرس إذا لم تكن موجودة
   if(!document.getElementById('middleTechStyle')) {
     var style = document.createElement('style');
     style.id = 'middleTechStyle';
@@ -1008,54 +1063,18 @@ Z.showMiddleTech = function() {
     <div class="quiz-area">
         <h2><i class="fas fa-pen-ruler"></i> التمارين التطبيقية (إصلاح فوري + منح النقاط)</h2>
         <form id="quizForm">
-            <div class="question-tech">
-                <p>❶ (1.5 نقطة) عرّف "المنتج التقني":</p>
-                <input type="text" id="q1" placeholder="اكتب تعريفاً دقيقاً..." autocomplete="off">
-            </div>
-            <div class="question-tech">
-                <p>❷ (2 نقطة) اذكر الخطوات الأربع الأساسية لتحليل منتج تقني (مرتبة):</p>
-                <input type="text" id="q2" placeholder="مثال: 1.... , 2.... , 3.... , 4....">
-            </div>
-            <div class="question-tech">
-                <p>❸ (1.5 نقطة) ماذا تقصد بـ "الرسم التعريفي"؟</p>
-                <input type="text" id="q3" placeholder="تعريف الرسم التعريفي...">
-            </div>
-            <div class="question-tech">
-                <p>❹ (1 نقطة) ما هو "كراس الشروط الوظيفي"؟</p>
-                <input type="text" id="q4" placeholder="تعريف كراس الشروط...">
-            </div>
-            <div class="question-tech">
-                <p>❺ (1.5 نقطة) غطاء محرك السيارة : ما هي الوظيفة التقنية؟</p>
-                <select id="q5"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select>
-            </div>
-            <div class="question-tech">
-                <p>❻ (1.5 نقطة) مقود الدراجة الهوائية : وظيفته التقنية؟</p>
-                <select id="q6"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select>
-            </div>
-            <div class="question-tech">
-                <p>❼ (1.5 نقطة) سلك كهربائي يصل المروحة بمقبس الحائط : الوظيفة؟</p>
-                <select id="q7"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select>
-            </div>
-            <div class="question-tech">
-                <p>❽ (1.5 نقطة) برغي يثبت رفاً على الحائط : الوظيفة التقنية؟</p>
-                <select id="q8"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select>
-            </div>
-            <div class="question-tech">
-                <p>❾ (2 نقطة) "الرسم الثلاثي الأبعاد هو الذي يستخدم في المصانع لصنع القطع" :</p>
-                <select id="q9"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select>
-            </div>
-            <div class="question-tech">
-                <p>❿ (2 نقطة) "وظيفة توجيه الحركة تسمح بربط الأجزاء ببعضها" :</p>
-                <select id="q10"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select>
-            </div>
-            <div class="question-tech">
-                <p>⓫ (2 نقطة) "المواد المستعملة في المنتجات التقنية قد تكون معادن أو لدائن" :</p>
-                <select id="q11"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select>
-            </div>
-            <div class="question-tech">
-                <p>⓬ (2 نقطة) "التعبير عن الحاجة يعني تحديد الوظيفة الأساسية للمنتج" :</p>
-                <select id="q12"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select>
-            </div>
+            <div class="question-tech"><p>❶ (1.5 نقطة) عرّف "المنتج التقني":</p><input type="text" id="q1" placeholder="اكتب تعريفاً دقيقاً..." autocomplete="off"></div>
+            <div class="question-tech"><p>❷ (2 نقطة) اذكر الخطوات الأربع الأساسية لتحليل منتج تقني (مرتبة):</p><input type="text" id="q2" placeholder="مثال: 1.... , 2.... , 3.... , 4...."></div>
+            <div class="question-tech"><p>❸ (1.5 نقطة) ماذا تقصد بـ "الرسم التعريفي"؟</p><input type="text" id="q3" placeholder="تعريف الرسم التعريفي..."></div>
+            <div class="question-tech"><p>❹ (1 نقطة) ما هو "كراس الشروط الوظيفي"؟</p><input type="text" id="q4" placeholder="تعريف كراس الشروط..."></div>
+            <div class="question-tech"><p>❺ (1.5 نقطة) غطاء محرك السيارة : ما هي الوظيفة التقنية؟</p><select id="q5"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select></div>
+            <div class="question-tech"><p>❻ (1.5 نقطة) مقود الدراجة الهوائية : وظيفته التقنية؟</p><select id="q6"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select></div>
+            <div class="question-tech"><p>❼ (1.5 نقطة) سلك كهربائي يصل المروحة بمقبس الحائط : الوظيفة؟</p><select id="q7"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select></div>
+            <div class="question-tech"><p>❽ (1.5 نقطة) برغي يثبت رفاً على الحائط : الوظيفة التقنية؟</p><select id="q8"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select></div>
+            <div class="question-tech"><p>❾ (2 نقطة) "الرسم الثلاثي الأبعاد هو الذي يستخدم في المصانع لصنع القطع" :</p><select id="q9"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select></div>
+            <div class="question-tech"><p>❿ (2 نقطة) "وظيفة توجيه الحركة تسمح بربط الأجزاء ببعضها" :</p><select id="q10"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select></div>
+            <div class="question-tech"><p>⓫ (2 نقطة) "المواد المستعملة في المنتجات التقنية قد تكون معادن أو لدائن" :</p><select id="q11"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select></div>
+            <div class="question-tech"><p>⓬ (2 نقطة) "التعبير عن الحاجة يعني تحديد الوظيفة الأساسية للمنتج" :</p><select id="q12"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select></div>
             <button type="button" id="correctionBtn"><i class="fas fa-check-circle"></i> تصحيح وإصلاح تلقائي + احتساب النقاط</button>
         </form>
     </div>
@@ -1068,7 +1087,6 @@ Z.showMiddleTech = function() {
     </div>
   `;
 
-  // ربط حدث التصحيح
   document.getElementById('correctionBtn').addEventListener('click', function() {
     let total = 0;
     const q1 = document.getElementById('q1').value.trim().toLowerCase();
@@ -1113,6 +1131,7 @@ Z.showMiddleTech = function() {
     document.getElementById('resultAreaTech').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 };
+
 // ============================================================
 // 2. محتوى اللغة العربية (المستويات 0 إلى C2)
 // ============================================================
@@ -1234,6 +1253,7 @@ Z.showArabicLevels = function() {
     C2: { name: "المتقن (C2)", required: 4, pointsPerLesson: 20, lessons: [ { title: "الإبداع الأدبي", content: "كتابة إبداعية، إنتاج أدبي", q: "ما هو الإبداع الأدبي؟", opts: ["كتابة أصلية","نسخ النصوص","ترجمة النصوص"], correct: 0 }, { title: "البحث العلمي", content: "منهجية بحث، توثيق", q: "ما هو المنهج العلمي في البحث؟", opts: ["خطوات منظمة","عشوائية","اجتهاد شخصي"], correct: 0 }, { title: "الخطابة", content: "فن الخطابة، إلقاء الخطب", q: "ما هو فن الخطابة؟", opts: ["إلقاء الخطب","كتابة الشعر","سرد القصص"], correct: 0 }, { title: "فقه اللغة", content: "تطور اللغة، اشتقاق", q: "ما هو فقه اللغة؟", opts: ["دراسة تطور اللغة","دراسة النحو","دراسة الصرف"], correct: 0 } ]}
   };
   let student = JSON.parse(localStorage.getItem('arabicStudentComplete')) || { name: "", currentLevel: "0", points: 0, level0: { pronDone: [], writeDone: [] }, advanced: { completedLessons: [] } };
+  
   function renderLevel0() {
       let html = '<div class="letters-grid-app">';
       for (let i = 0; i < letters.length; i++) {
@@ -1244,6 +1264,7 @@ Z.showArabicLevels = function() {
       html += '</div>';
       document.getElementById('levelContent').innerHTML = html;
   }
+  
   function renderAdvancedLevel(level) {
       const data = advancedLevels[level];
       if (!data) { document.getElementById('levelContent').innerHTML = '<p style="text-align:center;">⚠️ هذا المستوى قيد الإعداد</p>'; return; }
@@ -1256,6 +1277,7 @@ Z.showArabicLevels = function() {
       html += '</div>';
       document.getElementById('levelContent').innerHTML = html;
   }
+  
   window.ZAID.checkArabicWriting = function(idx, correctLetter) {
       const input = document.getElementById(`write-${idx}`);
       if (input.value.trim() === correctLetter) {
@@ -1273,6 +1295,7 @@ Z.showArabicLevels = function() {
           document.getElementById(`write-status-${idx}`).className = 'status-app status-fail-app';
       }
   };
+  
   window.ZAID.answerArabicLesson = function(key, selected, correct, points) {
       if (student.advanced.completedLessons.includes(key)) { alert("✅ هذا الدرس مكتمل بالفعل!"); return; }
       if (selected === correct) {
@@ -1284,14 +1307,17 @@ Z.showArabicLevels = function() {
           alert(`🎉 إجابة صحيحة! +${points} نقاط`);
       } else { alert("❌ إجابة خاطئة، حاول مرة أخرى"); }
   };
+  
   function loadCurrentLevel() {
       if (student.currentLevel === "0") renderLevel0();
       else renderAdvancedLevel(student.currentLevel);
   }
+  
   function updateDisplay() {
       document.getElementById('studentName').innerHTML = student.name || "طالب جديد";
       document.getElementById('scoreDisplay').innerHTML = `⭐ ${student.points}`;
   }
+  
   document.getElementById('nextLevelBtn').onclick = function() {
       if (student.currentLevel === "0") {
           if (student.level0.pronDone.length === 28 && student.level0.writeDone.length === 28) {
@@ -1307,15 +1333,18 @@ Z.showArabicLevels = function() {
       }
       updateDisplay();
   };
+  
   document.getElementById('resetBtn').onclick = function() {
       if (confirm("⚠️ هل أنت متأكد؟ سيتم مسح جميع البيانات.")) {
           student = { name: "", currentLevel: "0", points: 0, level0: { pronDone: [], writeDone: [] }, advanced: { completedLessons: [] } };
           localStorage.setItem('arabicStudentComplete', JSON.stringify(student)); loadCurrentLevel(); updateDisplay(); alert("✅ تم مسح جميع البيانات!");
       }
   };
+  
   document.getElementById('tabLevel').onclick = function() { document.getElementById('levelTab').classList.add('active-tab'); document.getElementById('certificateTab').classList.remove('active-tab'); };
   document.getElementById('tabCertificate').onclick = function() { document.getElementById('certificateTab').classList.add('active-tab'); document.getElementById('levelTab').classList.remove('active-tab'); document.getElementById('certificate').classList.add('show'); document.getElementById('certName').innerHTML = student.name || "طالب"; document.getElementById('certLevel').innerHTML = student.currentLevel; document.getElementById('certPoints').innerHTML = student.points; document.getElementById('certDate').innerHTML = new Date().toLocaleDateString('ar-EG'); };
   document.getElementById('printCert').onclick = function() { window.print(); };
+  
   document.querySelectorAll('.level-btn').forEach(btn => {
       btn.onclick = function() {
           student.currentLevel = btn.dataset.level; localStorage.setItem('arabicStudentComplete', JSON.stringify(student)); loadCurrentLevel();
@@ -1323,35 +1352,12 @@ Z.showArabicLevels = function() {
           document.getElementById('levelDisplay').innerHTML = student.currentLevel === "0" ? "المستوى: 0 (الحروف)" : `المستوى: ${advancedLevels[student.currentLevel]?.name || student.currentLevel}`;
       };
   });
+  
   loadCurrentLevel(); updateDisplay();
 };
-// ============================================================
-// 3. محتوى الأطفال والحاسوب (المرحلة الابتدائية)
-// ============================================================
-Z.showPrimaryApp = function() {
-  if(!Z.checkVisitor()) return;
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = `
-    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
-    <div style="max-width:550px; margin:0 auto; background:#1e293b; border-radius:40px; padding:25px; text-align:center; box-shadow:0 25px 45px rgba(0,0,0,0.4);">
-        <div style="position:relative; width:120px; height:120px; margin:0 auto;"><img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" style="width:120px; height:120px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;" alt="logo"></div>
-        <div style="background:#0f172a; padding:10px; border-radius:50px; margin:15px 0; border:2px solid #facc15;"><marquee style="color:#facc15; font-weight:bold; direction:rtl;">🌟🌟🌟 منصة محمد زايد - الأطفال والحاسوب 🌟🌟🌟</marquee></div>
-        <div style="color:#DAA520; font-size:24px; font-weight:bold; margin:10px 0;">📚 الأطفال والحاسوب</div>
-        <div style="color:#cbd5e1;">قصة تفاعلية لتعلم أساسيات الكمبيوتر</div>
-        <button onclick="alert('هذا القسم يتطلب رفع ملف الجافاسكريبت الخاص به.')" style="width:100%; padding:14px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:16px; background:#DAA520; color:#1e293b;">🎁 درس تجريبي (8 شرائح)</button>
-        <button onclick="alert('هذا القسم يتطلب رفع ملف الجافاسكريبت الخاص به.')" style="width:100%; padding:14px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:16px; background:#228B22; color:white;">💰 دروس داعمة (22 شريحة + تمارين)</button>
-        <button class="btn-gray" style="margin-top:20px;" onclick="ZAID.goHome()">🔙 العودة للرئيسية</button>
-    </div>
-  `;
-};
-
-/* ============================================================
-   الجزء 11: إدارة المحتوى ولوحة التحكم (IndexedDB + الكتب + المحاضرات + الفيديو)
-   ============================================================ */
-
+// ================== إعدادات IndexedDB لتخزين الملفات ==================
 let localDB = null;
-const DB_NAME = 'PlatformDB';
+const DB_NAME = 'PlatformDB_V6';
 const BOOKS_STORE = 'books';
 const LECTURES_STORE = 'lectures';
 
@@ -1368,7 +1374,7 @@ Z.initDB = function() {
   });
 };
 
-/* إدارة الكتب */
+// ================== إدارة الكتب (رفع، عرض، حذف) ==================
 Z.uploadBooks = async function() {
   let files = document.getElementById('bookFileInput').files;
   if(!files.length) { alert("اختر ملفات أولاً"); return; }
@@ -1399,7 +1405,7 @@ Z.renderBooksManageList = async function() {
     let html = '<h3 style="color:#fbbf24; margin-bottom:10px;">📚 الكتب المرفوعة</h3>';
     if(books.length === 0) html += '<p style="color:#94a3b8;">لا توجد كتب</p>';
     else books.forEach(book => {
-      html += `<div class="upload-item" style="background:#1e293b; padding:15px; border-radius:15px; margin:10px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><div style="color:#fbbf24; font-weight:bold;">📄 ${book.name}</div><div style="color:#94a3b8; font-size:12px;">${(book.size/1024).toFixed(2)} KB</div></div><button style="background:#dc2626; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer;" onclick="ZAID.deleteBook(${book.id})">🗑️ حذف</button></div>`;
+      html += `<div class="upload-item"><div class="upload-info"><div class="upload-title">📄 ${book.name}</div><div style="color:#94a3b8; font-size:12px;">${(book.size/1024).toFixed(2)} KB</div></div><button style="background:#dc2626; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer;" onclick="ZAID.deleteBook(${book.id})">🗑️ حذف</button></div>`;
     });
     let list = document.getElementById('booksManageList'); if(list) list.innerHTML = html;
   };
@@ -1411,7 +1417,7 @@ Z.deleteBook = async function(id) {
   tx.oncomplete = () => { Z.renderBooksManageList(); alert("✅ تم الحذف"); };
 };
 
-/* إدارة المحاضرات */
+// ================== إدارة المحاضرات (رفع، عرض، حذف) ==================
 Z.uploadLecture = async function() {
   let title = document.getElementById('lectureTitle').value.trim();
   if(!title) { alert("أدخل عنوان المحاضرة"); return; }
@@ -1438,7 +1444,7 @@ Z.renderLecturesManageList = async function() {
     if(lectures.length === 0) html += '<p style="color:#94a3b8;">لا توجد محاضرات</p>';
     else lectures.forEach(lec => {
       let typeLabel = lec.type === 'video' ? '🎬 فيديو' : (lec.type === 'live' ? '🔴 مباشر' : (lec.type === 'pdf' ? '📄 PDF' : '🎓 جامعي'));
-      html += `<div class="upload-item" style="background:#1e293b; padding:15px; border-radius:15px; margin:10px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><div style="color:#fbbf24; font-weight:bold;">${typeLabel} ${lec.title}</div><div style="color:#94a3b8; font-size:12px;">${lec.desc ? lec.desc.substring(0, 50) : ''}</div></div><button style="background:#dc2626; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer;" onclick="ZAID.deleteLecture(${lec.id})">🗑️ حذف</button></div>`;
+      html += `<div class="upload-item"><div class="upload-info"><div class="upload-title">${typeLabel} ${lec.title}</div><div style="color:#94a3b8; font-size:12px;">${lec.desc ? lec.desc.substring(0, 50) : ''}</div></div><button style="background:#dc2626; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer;" onclick="ZAID.deleteLecture(${lec.id})">🗑️ حذف</button></div>`;
     });
     let list = document.getElementById('lecturesManageList'); if(list) list.innerHTML = html;
   };
@@ -1450,9 +1456,9 @@ Z.deleteLecture = async function(id) {
   tx.oncomplete = () => { Z.renderLecturesManageList(); alert("✅ تم الحذف"); };
 };
 
-/* إدارة المنجد */
+// ================== إدارة المنجد (الرباعي) ==================
 let dictionaryData = JSON.parse(localStorage.getItem('dictionaryData')) || {
-  section1: [{ word: "حاسوب", french: "ordinateur", english: "computer", meaning: "جهاز إلكتروني يقوم بمعالجة البيانات وتخزينها واسترجاعها", example: "أستخدم الحاسوب في عملي اليومي" }, { word: "برنامج", french: "logiciel", english: "software", meaning: "مجموعة من الأوامر والتعليمات التي توجه الحاسوب", example: "تم تثبيت برنامج جديد" }],
+  section1: [{ word: "حاسوب", french: "ordinateur", english: "computer", meaning: "جهاز إلكتروني يقوم بمعالجة البيانات وتخزينها واسترجاعها", example: "أستخدم الحاسوب في عملي اليومي" }],
   section2: [{ word: "شبكة", french: "réseau", english: "network", meaning: "مجموعة من الأجهزة المتصلة مع بعضها لتبادل البيانات", example: "الإنترنت هي أكبر شبكة حاسوبية" }],
   section3: [{ word: "قرص", french: "disque", english: "disk", meaning: "وسيط لتخزين البيانات", example: "القرص الصلب يخزن جميع الملفات" }],
   section4: [{ word: "هاتف", french: "téléphone", english: "phone", meaning: "جهاز اتصال يمكنه الاتصال بالإنترنت", example: "الهاتف الذكي أصبح حاسوباً مصغراً" }]
@@ -1460,12 +1466,12 @@ let dictionaryData = JSON.parse(localStorage.getItem('dictionaryData')) || {
 Z.saveDictionaryData = function() { localStorage.setItem('dictionaryData', JSON.stringify(dictionaryData)); };
 
 Z.renderDictionaryManageList = function() {
-  let html = '<h3 style="color:#fbbf24; margin-bottom:10px;">📖 كلمات المنجد الرباعي</h3>';
+  let html = '<h3 style="color:#fbbf24; margin-bottom:10px;">📖 كلمات المنجد</h3>';
   for(let [sid, words] of Object.entries(dictionaryData)) {
     let name = { section1: "أ-ر", section2: "س-غ", section3: "ف-ن", section4: "ه-ي" }[sid];
     html += `<div style="margin-top:15px;"><strong style="color:#f9d423;">📂 القسم ${name}</strong>`;
     words.forEach((w, idx) => {
-      html += `<div class="upload-item" style="background:#1e293b; padding:15px; border-radius:15px; margin:10px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><div style="color:#fbbf24; font-weight:bold;">${w.word}</div><div style="color:#94a3b8; font-size:12px;">🇫🇷 ${w.french || '---'} | 🇬🇧 ${w.english || '---'}</div></div><button style="background:#dc2626; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer;" onclick="ZAID.deleteDictionaryWord('${sid}',${idx})">🗑️ حذف</button></div>`;
+      html += `<div class="upload-item"><div class="upload-info"><div class="upload-title">${w.word}</div><div style="color:#94a3b8; font-size:12px;">🇫🇷 ${w.french || '---'} | 🇬🇧 ${w.english || '---'}</div></div><button style="background:#dc2626; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer;" onclick="ZAID.deleteDictionaryWord('${sid}',${idx})">🗑️ حذف</button></div>`;
     });
     html += `</div>`;
   }
@@ -1485,18 +1491,7 @@ Z.addDictionaryWord = function() {
 Z.deleteDictionaryWord = function(sectionId, index) { if(confirm("حذف الكلمة؟")) { dictionaryData[sectionId].splice(index, 1); Z.saveDictionaryData(); Z.renderDictionaryManageList(); alert("✅ تم الحذف"); } };
 Z.clearDictionaryForm = function() { document.getElementById('dictWord').value = ''; document.getElementById('dictFrench').value = ''; document.getElementById('dictEnglish').value = ''; document.getElementById('dictMeaning').value = ''; document.getElementById('dictExample').value = ''; };
 
-/* التبويبات */
-Z.switchAdminTab = function(tab) {
-  document.querySelectorAll('.tab-btn-admin').forEach(btn => { btn.classList.remove('active'); btn.style.background = '#334155'; btn.style.color = 'white'; });
-  document.querySelectorAll('.tab-content-admin').forEach(content => content.classList.remove('active'));
-  if(tab === 'users') { document.querySelector('.tab-buttons button:nth-child(1)').classList.add('active'); document.querySelector('.tab-buttons button:nth-child(1)').style.background = '#fbbf24'; document.querySelector('.tab-buttons button:nth-child(1)').style.color = '#1e293b'; document.getElementById('adminTabUsers').classList.add('active'); }
-  else if(tab === 'books') { document.querySelector('.tab-buttons button:nth-child(2)').classList.add('active'); document.querySelector('.tab-buttons button:nth-child(2)').style.background = '#fbbf24'; document.querySelector('.tab-buttons button:nth-child(2)').style.color = '#1e293b'; document.getElementById('adminTabBooks').classList.add('active'); Z.renderBooksManageList(); }
-  else if(tab === 'lectures') { document.querySelector('.tab-buttons button:nth-child(3)').classList.add('active'); document.querySelector('.tab-buttons button:nth-child(3)').style.background = '#fbbf24'; document.querySelector('.tab-buttons button:nth-child(3)').style.color = '#1e293b'; document.getElementById('adminTabLectures').classList.add('active'); Z.renderLecturesManageList(); }
-  else if(tab === 'dictionary') { document.querySelector('.tab-buttons button:nth-child(4)').classList.add('active'); document.querySelector('.tab-buttons button:nth-child(4)').style.background = '#fbbf24'; document.querySelector('.tab-buttons button:nth-child(4)').style.color = '#1e293b'; document.getElementById('adminTabDictionary').classList.add('active'); Z.renderDictionaryManageList(); }
-  else if(tab === 'video') { document.querySelector('.tab-buttons button:nth-child(5)').classList.add('active'); document.querySelector('.tab-buttons button:nth-child(5)').style.background = '#fbbf24'; document.querySelector('.tab-buttons button:nth-child(5)').style.color = '#1e293b'; document.getElementById('adminTabVideo').classList.add('active'); }
-};
-
-/* كاميرا المشرف */
+// ================== كاميرا المشرف (تسجيل الفيديو) ==================
 let mediaStream = null, mediaRecorder = null, recordedChunks = [], recordedBlob = null;
 Z.adminStartCamera = function() {
   let videoPreview = document.getElementById('adminVideoPreview'); let startRecordBtn = document.getElementById('adminStartRecordBtn');
@@ -1534,107 +1529,17 @@ Z.adminStartRecording = function() {
 Z.adminStopRecording = function() { if(mediaRecorder && mediaRecorder.state === 'recording') { mediaRecorder.stop(); document.getElementById('adminStartRecordBtn').disabled = false; document.getElementById('adminStopRecordBtn').disabled = true; } };
 Z.adminDownloadVideo = function() { if(recordedBlob) { let a = document.createElement('a'); a.href = URL.createObjectURL(recordedBlob); a.download = `تسجيل_${Date.now()}.webm`; a.click(); } else alert("لا يوجد فيديو مسجل"); };
 
-/* ألبوم الصور */
-Z.showAlbum = function(){
-  if(!Z.checkVisitor()) return;
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle" style="margin-bottom:15px;">📸 ألبوم الصور والورشات</div><div style="text-align:center;padding:30px;color:#fbbf24;font-size:18px;font-weight:bold;">⏳ جاري تحميل الصور من GitHub...</div>';
-  var apiUrl = 'https://api.github.com/repos/zeidoun2021-crypto/zaied/contents';
-  fetch(apiUrl).then(function(response) { if(!response.ok) throw new Error('لم يتم العثور على الصور'); return response.json(); }).then(function(files) {
-    var html = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle" style="margin-bottom:15px;">📸 ألبوم الصور والورشات</div><div class="album-grid">';
-    var count = 0;
-    files.forEach(function(file) { if(file.name.match(/\.(jpg|jpeg|png|webp)$/i)) { count++; html += '<div class="album-item"><img src="' + file.download_url + '" alt="صورة ' + count + '" loading="lazy"><div class="caption">صورة ' + count + '</div></div>'; } });
-    if(count === 0) { html += '<p style="text-align:center;color:#94a3b8;grid-column:1/-1;font-size:18px;">لا توجد صور. تأكد من رفعها.</p>'; }
-    html += '</div>'; lc.innerHTML = html;
-  }).catch(function(error) {
-    lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div style="text-align:center;color:#dc2626;padding:20px;font-size:18px;">❌ حدث خطأ في تحميل الصور. تأكد من اتصالك بالإنترنت.</div>';
-  });
+// ================== التبويبات ولوحة التحكم ==================
+Z.switchAdminTab = function(tab) {
+  document.querySelectorAll('.tab-btn-admin').forEach(btn => { btn.classList.remove('active'); btn.style.background = '#334155'; btn.style.color = 'white'; });
+  document.querySelectorAll('.tab-content-admin').forEach(content => content.classList.remove('active'));
+  if(tab === 'users') { document.querySelector('.tab-btn-admin:nth-child(1)').classList.add('active'); document.querySelector('.tab-btn-admin:nth-child(1)').style.background = '#fbbf24'; document.querySelector('.tab-btn-admin:nth-child(1)').style.color = '#1e293b'; document.getElementById('adminTabUsers').classList.add('active'); }
+  else if(tab === 'books') { document.querySelector('.tab-btn-admin:nth-child(2)').classList.add('active'); document.querySelector('.tab-btn-admin:nth-child(2)').style.background = '#fbbf24'; document.querySelector('.tab-btn-admin:nth-child(2)').style.color = '#1e293b'; document.getElementById('adminTabBooks').classList.add('active'); Z.renderBooksManageList(); }
+  else if(tab === 'lectures') { document.querySelector('.tab-btn-admin:nth-child(3)').classList.add('active'); document.querySelector('.tab-btn-admin:nth-child(3)').style.background = '#fbbf24'; document.querySelector('.tab-btn-admin:nth-child(3)').style.color = '#1e293b'; document.getElementById('adminTabLectures').classList.add('active'); Z.renderLecturesManageList(); }
+  else if(tab === 'dictionary') { document.querySelector('.tab-btn-admin:nth-child(4)').classList.add('active'); document.querySelector('.tab-btn-admin:nth-child(4)').style.background = '#fbbf24'; document.querySelector('.tab-btn-admin:nth-child(4)').style.color = '#1e293b'; document.getElementById('adminTabDictionary').classList.add('active'); Z.renderDictionaryManageList(); }
+  else if(tab === 'video') { document.querySelector('.tab-btn-admin:nth-child(5)').classList.add('active'); document.querySelector('.tab-btn-admin:nth-child(5)').style.background = '#fbbf24'; document.querySelector('.tab-btn-admin:nth-child(5)').style.color = '#1e293b'; document.getElementById('adminTabVideo').classList.add('active'); }
 };
 
-/* المحاضرات والكتب (عرض للزوار) */
-Z.openDynamicBooks = function() {
-  if(!Z.checkVisitor()) return;
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle" style="margin-bottom:15px;">📚 شراء وتحميل الكتب التكنولوجية</div><div class="sel" id="dynamicBooksGrid"><p style="text-align:center;color:#94a3b8;">جاري التحميل...</p></div>';
-  Z.renderDynamicBooks();
-};
-
-Z.openDynamicLectures = function() {
-  if(!Z.checkVisitor()) return;
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle" style="margin-bottom:15px;">🎤 الندوات التكوينية والمحاضرات</div><div class="sel" id="dynamicLecturesGrid"><p style="text-align:center;color:#94a3b8;">جاري التحميل...</p></div>';
-  Z.renderDynamicLectures();
-};
-
-Z.renderDynamicBooks = async function() {
-  await Z.initDB();
-  let store = localDB.transaction([BOOKS_STORE], 'readonly').objectStore(BOOKS_STORE);
-  store.getAll().onsuccess = (e) => {
-    let books = e.target.result;
-    let html = books.length === 0 ? '<div style="text-align:center;color:#94a3b8;padding:20px;">📭 لا توجد كتب مرفوعة حالياً</div>' : books.map(book => `
-      <div class="lcard" style="background:linear-gradient(135deg,#854d0e,#a16207); border-color:#eab308; padding:20px; border-radius:15px; text-align:center;">
-        <div style="font-size:40px; margin-bottom:10px;">📘</div>
-        <div style="font-size:18px; font-weight:900; color:#fbbf24; margin-bottom:6px;">${book.name}</div>
-        <div style="font-size:13px; color:#cbd5e1; margin-bottom:15px;">${(book.size/1024).toFixed(2)} KB</div>
-        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-          <button class="btn" style="background:#22c55e; padding:8px 15px;" onclick="ZAID.buyBook('${book.name}',10)">💰 شراء (10 د.ت)</button>
-          <button class="btn" style="background:#3b82f6; padding:8px 15px;" onclick="ZAID.downloadBookFile(${book.id}, '${book.name}')">📥 معاينة</button>
-        </div>
-      </div>
-    `).join('');
-    let grid = document.getElementById('dynamicBooksGrid');
-    if(grid) grid.innerHTML = html;
-  };
-};
-
-Z.downloadBookFile = async function(id, name) {
-  await Z.initDB();
-  let store = localDB.transaction([BOOKS_STORE], 'readonly').objectStore(BOOKS_STORE);
-  store.get(id).onsuccess = (e) => {
-    let book = e.target.result;
-    if(book && book.data) { let a = document.createElement('a'); a.href = book.data; a.download = name; a.click(); }
-    else alert("تعذر التحميل");
-  };
-};
-
-Z.renderDynamicLectures = async function() {
-  await Z.initDB();
-  let store = localDB.transaction([LECTURES_STORE], 'readonly').objectStore(LECTURES_STORE);
-  store.getAll().onsuccess = (e) => {
-    let lectures = e.target.result;
-    let html = lectures.length === 0 ? '<div style="text-align:center;color:#94a3b8;padding:20px;">📭 لا توجد محاضرات مرفوعة حالياً</div>' : lectures.map(lec => {
-      let action = '';
-      if(lec.type === 'video' || lec.type === 'live') {
-        if(lec.link) action = `<button class="btn" style="background:#3b82f6; padding:8px 15px;" onclick="window.open('${lec.link}','_blank')">▶️ مشاهدة</button>`;
-        else if(lec.fileData) action = `<button class="btn" style="background:#3b82f6; padding:8px 15px;" onclick="ZAID.downloadLectureFile('${lec.fileData}','${lec.fileName || 'video.webm'}')">📥 تحميل الفيديو</button>`;
-      } else if(lec.type === 'pdf') {
-        if(lec.fileData) action = `<button class="btn" style="background:#3b82f6; padding:8px 15px;" onclick="ZAID.downloadLectureFile('${lec.fileData}','${lec.title}.pdf')">📥 تحميل PDF</button>`;
-        else if(lec.link) action = `<button class="btn" style="background:#3b82f6; padding:8px 15px;" onclick="window.open('${lec.link}','_blank')">🔗 فتح الرابط</button>`;
-      } else { action = `<button class="btn" style="background:#e67e22; padding:8px 15px;" onclick="ZAID.registerLecture('${lec.title}',${lec.price})">📝 تسجيل (${lec.price} د.ت)</button>`; }
-      return `<div class="lcard" style="background:linear-gradient(135deg,#1e3a8a,#1e40af); border-color:#3b82f6; padding:20px; border-radius:15px; text-align:center;">
-        <div style="font-size:40px; margin-bottom:10px;">🎤</div>
-        <div style="font-size:18px; font-weight:900; color:#fbbf24; margin-bottom:6px;">${lec.title}</div>
-        <div style="font-size:13px; color:#cbd5e1; margin-bottom:15px;">${lec.desc || 'لا يوجد وصف'}</div>
-        <div style="font-size:12px; color:#94a3b8; margin-bottom:15px;">📅 ${lec.date || 'تاريخ غير محدد'}</div>
-        <div>${action}</div>
-      </div>`;
-    }).join('');
-    let grid = document.getElementById('dynamicLecturesGrid');
-    if(grid) grid.innerHTML = html;
-  };
-};
-
-Z.downloadLectureFile = function(dataUrl, fileName) { let a = document.createElement('a'); a.href = dataUrl; a.download = fileName; a.click(); };
-Z.buyBook = function(bookName, price) { alert(`💰 شراء كتاب: ${bookName}\nالسعر: ${price} د.ت\nرقم الدينار الإلكتروني: 5359401737010807`); };
-Z.registerLecture = function(lectureName, price) { alert(`✅ تسجيل في محاضرة: ${lectureName}\nالسعر: ${price} د.ت\nرقم الدينار الإلكتروني: 5359401737010807`); };
-/* ============================================================
-   الجزء 12: لوحة تحكم المشرف (HTML)
-   ============================================================ */
-
-/* إنشاء صفحة لوحة تحكم المشرف ديناميكياً */
 Z.showAdminPanel = function() {
   let oldPage = document.getElementById('pageAdmin'); if(oldPage) oldPage.remove();
   
@@ -1644,12 +1549,12 @@ Z.showAdminPanel = function() {
     <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
     <div class="htitle" style="margin-bottom:15px;">👑 لوحة تحكم المشرف</div>
     
-    <div class="tab-buttons" style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; justify-content:center;">
-      <button class="tab-btn-admin active" onclick="ZAID.switchAdminTab('users')" style="background:#fbbf24; color:#1e293b; padding:10px 20px; border:none; border-radius:40px; cursor:pointer; font-size:14px; font-family:Cairo;">👥 المستخدمين</button>
-      <button class="tab-btn-admin" onclick="ZAID.switchAdminTab('books')" style="background:#334155; color:white; padding:10px 20px; border:none; border-radius:40px; cursor:pointer; font-size:14px; font-family:Cairo;">📚 الكتب</button>
-      <button class="tab-btn-admin" onclick="ZAID.switchAdminTab('lectures')" style="background:#334155; color:white; padding:10px 20px; border:none; border-radius:40px; cursor:pointer; font-size:14px; font-family:Cairo;">🎥 المحاضرات</button>
-      <button class="tab-btn-admin" onclick="ZAID.switchAdminTab('dictionary')" style="background:#334155; color:white; padding:10px 20px; border:none; border-radius:40px; cursor:pointer; font-size:14px; font-family:Cairo;">📖 المنجد</button>
-      <button class="tab-btn-admin" onclick="ZAID.switchAdminTab('video')" style="background:#334155; color:white; padding:10px 20px; border:none; border-radius:40px; cursor:pointer; font-size:14px; font-family:Cairo;">🎥 تسجيل فيديو</button>
+    <div class="tab-buttons">
+      <button class="tab-btn-admin active" onclick="ZAID.switchAdminTab('users')" style="background:#fbbf24; color:#1e293b;">👥 المستخدمين</button>
+      <button class="tab-btn-admin" onclick="ZAID.switchAdminTab('books')">📚 الكتب</button>
+      <button class="tab-btn-admin" onclick="ZAID.switchAdminTab('lectures')">🎥 المحاضرات</button>
+      <button class="tab-btn-admin" onclick="ZAID.switchAdminTab('dictionary')">📖 المنجد</button>
+      <button class="tab-btn-admin" onclick="ZAID.switchAdminTab('video')">🎥 تسجيل فيديو</button>
     </div>
     
     <div id="adminTabUsers" class="tab-content-admin active" style="display:block;">
@@ -1662,19 +1567,17 @@ Z.showAdminPanel = function() {
     </div>
     
     <div id="adminTabBooks" class="tab-content-admin" style="display:none;">
-      <div style="background:#0f172a; border-radius:20px; padding:20px; margin:20px 0; border:2px dashed #fbbf24;">
+      <div class="admin-upload-area">
         <h3 style="color:#fbbf24; margin-bottom:15px;">📤 رفع كتب جديدة (PDF, DOC, DOCX)</h3>
         <input type="file" id="bookFileInput" accept=".pdf,.doc,.docx" multiple style="width:100%; padding:10px; background:#1e293b; color:#fff; border-radius:10px; margin-bottom:15px;">
-        <div style="width:100%; height:10px; background:#334155; border-radius:10px; overflow:hidden; margin:15px 0;">
-          <div id="bookProgressFill" style="width:0%; height:100%; background:#22c55e; transition:width 0.3s;"></div>
-        </div>
+        <div class="progress-bar"><div id="bookProgressFill" class="progress-fill-bar"></div></div>
         <button onclick="ZAID.uploadBooks()" style="background:#22c55e; color:white; padding:12px 25px; border:none; border-radius:15px; cursor:pointer; font-weight:bold; font-family:Cairo; width:100%;">🚀 رفع الكتب</button>
-        <div id="booksManageList" style="max-height:400px; overflow-y:auto; margin-top:15px;"></div>
+        <div id="booksManageList" class="upload-list"></div>
       </div>
     </div>
     
     <div id="adminTabLectures" class="tab-content-admin" style="display:none;">
-      <div style="background:#0f172a; border-radius:20px; padding:20px; margin:20px 0; border:2px dashed #fbbf24;">
+      <div class="admin-upload-area">
         <h3 style="color:#fbbf24; margin-bottom:15px;">🎥 رفع محاضرات / ندوات</h3>
         <input type="text" id="lectureTitle" placeholder="عنوان المحاضرة *" style="width:100%; padding:10px; border-radius:15px; border:2px solid #475569; background:#1e293b; color:#fff; margin-bottom:10px; font-family:Cairo;">
         <textarea id="lectureDesc" rows="2" placeholder="وصف المحاضرة" style="width:100%; padding:10px; border-radius:15px; border:2px solid #475569; background:#1e293b; color:#fff; margin-bottom:10px; font-family:Cairo;"></textarea>
@@ -1693,12 +1596,12 @@ Z.showAdminPanel = function() {
         </div>
         <input type="file" id="lectureFileInput" accept=".pdf,.doc,.docx,.mp4,.webm" style="width:100%; padding:10px; background:#1e293b; color:#fff; border-radius:10px; margin-bottom:10px;">
         <button onclick="ZAID.uploadLecture()" style="background:#9c27b0; color:white; padding:12px 25px; border:none; border-radius:15px; cursor:pointer; font-weight:bold; font-family:Cairo; width:100%;">📤 رفع المحاضرة</button>
-        <div id="lecturesManageList" style="max-height:400px; overflow-y:auto; margin-top:15px;"></div>
+        <div id="lecturesManageList" class="upload-list"></div>
       </div>
     </div>
     
     <div id="adminTabDictionary" class="tab-content-admin" style="display:none;">
-      <div style="background:#0f172a; border-radius:20px; padding:20px; margin:20px 0; border:2px dashed #fbbf24;">
+      <div class="admin-upload-area">
         <h3 style="color:#fbbf24; margin-bottom:15px;">📖 إدارة المنجد الرباعي</h3>
         <select id="dictSectionSelect" style="width:100%; padding:10px; border-radius:15px; border:2px solid #475569; background:#1e293b; color:#fff; margin-bottom:10px; font-family:Cairo;">
           <option value="section1">القسم الأول: أ - ر</option>
@@ -1715,23 +1618,23 @@ Z.showAdminPanel = function() {
           <button onclick="ZAID.addDictionaryWord()" style="background:#22c55e; color:white; padding:12px 20px; border:none; border-radius:15px; cursor:pointer; font-weight:bold; font-family:Cairo; flex:1;">➕ إضافة كلمة</button>
           <button onclick="ZAID.clearDictionaryForm()" style="background:#dc2626; color:white; padding:12px 20px; border:none; border-radius:15px; cursor:pointer; font-weight:bold; font-family:Cairo; flex:1;">🗑️ مسح الحقول</button>
         </div>
-        <div id="dictionaryManageList" style="max-height:400px; overflow-y:auto; margin-top:15px;"></div>
+        <div id="dictionaryManageList" class="upload-list"></div>
       </div>
     </div>
     
     <div id="adminTabVideo" class="tab-content-admin" style="display:none;">
-      <div style="background:#0f172a; border-radius:20px; padding:20px; margin:20px 0; text-align:center;">
+      <div class="recording-area">
         <h3 style="color:#fbbf24; margin-bottom:15px;">🎥 تسجيل فيديو مباشر (كاميرا المشرف)</h3>
         <video id="adminVideoPreview" autoplay muted style="display:none; width:100%; max-width:800px; border-radius:15px; margin:10px 0; background:#000; border:2px solid #334155;"></video>
         <video id="adminRecordedVideo" controls style="display:none; width:100%; max-width:800px; border-radius:15px; margin:10px 0; background:#000; border:2px solid #334155;"></video>
-        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <div class="recording-buttons">
           <button id="adminStartCameraBtn" onclick="ZAID.adminStartCamera()" style="background:#3b82f6; color:white; padding:12px 20px; border:none; border-radius:25px; cursor:pointer; font-weight:bold; font-family:Cairo;">📷 تشغيل الكاميرا</button>
           <button id="adminStopCameraBtn" onclick="ZAID.adminStopCamera()" disabled style="background:#dc2626; color:white; padding:12px 20px; border:none; border-radius:25px; cursor:pointer; font-weight:bold; font-family:Cairo;">🔴 إغلاق الكاميرا</button>
           <button id="adminStartRecordBtn" onclick="ZAID.adminStartRecording()" disabled style="background:#ef4444; color:white; padding:12px 20px; border:none; border-radius:25px; cursor:pointer; font-weight:bold; font-family:Cairo;">🔴 بدء التسجيل</button>
           <button id="adminStopRecordBtn" onclick="ZAID.adminStopRecording()" disabled style="background:#334155; color:white; padding:12px 20px; border:none; border-radius:25px; cursor:pointer; font-weight:bold; font-family:Cairo;">⏹️ إيقاف التسجيل</button>
           <button id="adminDownloadVideoBtn" onclick="ZAID.adminDownloadVideo()" disabled style="background:#22c55e; color:white; padding:12px 20px; border:none; border-radius:25px; cursor:pointer; font-weight:bold; font-family:Cairo;">💾 تحميل الفيديو</button>
         </div>
-        <div id="adminVideoStatus" style="margin-top:15px; padding:12px; border-radius:10px; background:#1e293b; color:#fbbf24; font-weight:bold;">⏳ جاهز - اضغط "تشغيل الكاميرا" أولاً</div>
+        <div id="adminVideoStatus" class="video-status">⏳ جاهز - اضغط "تشغيل الكاميرا" أولاً</div>
       </div>
     </div>
     
@@ -1774,45 +1677,64 @@ Z.loadAdminPanel = function() {
     if(listEl) listEl.innerHTML = '<div style="color:red; text-align:center;">خطأ: ' + err.message + '</div>';
   });
 };
-
-/* تحديث دالة checkAdmin لتفتح لوحة التحكم */
-Z.checkAdmin = function() {
-  var pwdEl = document.getElementById('adminPwd');
-  if(!pwdEl) return;
-  var pwd = pwdEl.value;
-  if(pwd === Z.ADMIN) {
-    Z.admin = true;
-    document.getElementById('admModal').remove();
-    Z.updateUI();
-    Z.showAdminPanel();
-  } else {
-    alert('كلمة المرور خاطئة');
-  }
-};
-
-/* تحديث زر الإحصائيات في الشريط العلوي ليفتح لوحة التحكم */
-Z.showStats = function() {
-  if(!Z.admin) return;
-  Z.showAdminPanel();
-};
 /* ============================================================
-   الجزء 13: محتوى plateforme94+jeux — منقول حرفياً
+   الجزء 9: محتوى المرحلة الابتدائية والألعاب (من plateforme)
    ============================================================ */
 
-// ===== محرك النطق (من plateforme94 حرفياً) =====
-let currentAudio = null;
-function speak(text, lang) {
-    if (!text || text.trim() === "") return;
-    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-    let code = (lang === 'fr' ? 'fr' : (lang === 'en' ? 'en' : 'ar'));
-    const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${code}&client=tw-ob&ttsspeed=0.9`);
-    currentAudio = audio;
-    audio.onerror = () => { if(window.speechSynthesis) { window.speechSynthesis.cancel(); let u=new SpeechSynthesisUtterance(text); u.lang=code==='fr'?'fr-FR':(code==='en'?'en-US':'ar'); u.rate=0.9; window.speechSynthesis.speak(u); } };
-    audio.play().catch(() => { if(window.speechSynthesis) { let u=new SpeechSynthesisUtterance(text); u.lang=code==='fr'?'fr-FR':(code==='en'?'en-US':'ar'); window.speechSynthesis.speak(u); } });
-}
-window.speak = speak;
+// ================== 1. المرحلة الابتدائية (كتاب الأطفال الكامل) ==================
+const bookSlides = [
+    `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 1</div><div class="image-box"><img src="https://i.postimg.cc/66PRhBhq/haswb2watfal.jpg" style="max-width:100%; border-radius:15px;"></div><div style="font-size:28px; font-weight:bold; margin:20px 0">📚 الأطفال والحاسوب</div><div style="font-size:18px">•  بقلم: محمد زايد خبير دولي في التقنيات الحاسوبية /  •  أستاذ جامعي</div><div class="translation-box"><span class="translation-ar">🖥️ حاسوب</span> | <span class="translation-fr">ordinateur</span> | <span class="translation-en">Computer</span></div><div><button class="btn-speak" onclick="speak('حاسوب', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('ordinateur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Computer', 'en')">🔊 English</button></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 2</div><div class="image-box"><img src="https://i.postimg.cc/CKcnB72y/haswb1.jpg" style="max-width:100%; border-radius:15px;"></div><div class="dialogue"><div class="children">🧒 الأطفال -  هيا بنا نتعرف على الحاسوب لنلعب معه.</div><div class="children">🧒 الأطفال -  ما اسمك أيها الصديق ؟</div><div class="computer">💻 الحاسوب :  لي اسمان الكمبيوتر أو الحاسوب</div><div class="children">🧒 الأطفال:  هل يمكن أن تصف لنا نفسك ؟</div><div class="computer">💻 الحاسوب: انني أتكون من جزئين أساسيين: أ -  جزء مادي وهو مجموعة من العناصر المصنوعة من المعادن (كالحديد والفولاذ ...) وهو الجزء الذي يعبر عنه بالفرنسية (Matériel) أو بالانقليزية (Hardware). ب -  جزء معنوي ويتكون من البرمجيات وهو ما يسمى بالفرنسية (Logiciel) أو بالانقليزية (Software).</div><div class="children">🧒 الأطفال :  هل يمكن للجزئين أن ينفصلا عن بعضهما؟</div><div class="computer">💻 الحاسوب:  لا أبدا.لا يمكن للجزء الأول أن يكون مشتغلا الا اذا تعامل مع الجزء الثاني الذي لا قيمة له اذا كان منفردا عن الجزء الأول.</div></div><div class="translation-box"><span class="translation-ar">🔧 جزء مادي</span> | <span class="translation-fr">Matériel</span> | <span class="translation-en">Hardware</span><br><span class="translation-ar">📀 جزء معنوي</span> | <span class="translation-fr">Logiciel</span> | <span class="translation-en">Software</span></div><div><button class="btn-speak" onclick="speak('جزء مادي', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Matériel', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Hardware', 'en')">🔊 English</button></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 3-4</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/ycZZ66y5/ram-cpu.jpg" alt="المعالج والذاكرة" style="max-height:150px; margin:auto;"></div></div><div class="dialogue"><div class="children">🧒 الأطفال : يقال عنك أنك ذكي وسريع في الرياضيات . هل هذا صحيح وكيف ذلك ؟</div><div class="computer">💻 الحاسوب : قبل أن أجيبكما عن سؤالكما لابد لي أن أواصل حديثي عن تركيبتي الداخلية ثم الخارجية.</div><div class="children">🧒 الأطفال : هل هذا له علاقة بسؤالنا؟</div><div class="computer">💻 الحاسوب : أجل</div><div class="children">🧒 الأطفال : كيف ذلك؟</div><div class="computer">💻 الحاسوب : انني أتكون من الداخل من عناصر أساسية مصنوعة من معادن كما ذكرت (الحديد والفولاذ والبلاستيك) والعناصر هي: «المعالج» والذاكرة وهو ما يناسب عند الانسان بالقلب والدماغ حيث العنصر الأول يقوم بمعالجة المعلومات التي يدخلها لي الانسان لتستقر في الذاكرة الرئيسية التي أستعملها كفضاء لاشتغالي.</div></div><div class="translation-box"><span class="translation-ar">🧠 معالج</span> | <span class="translation-fr">Processeur</span> | <span class="translation-en">Processor</span></div><div><button class="btn-speak" onclick="speak('معالج', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Processeur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('Processor', 'en')">🔊 English</button></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 5-6</div><div class="image-box"><img src="https://iili.io/C9xVKYv.jpg" style="max-width:100%; border-radius:15px;"></div><div class="dialogue"><div class="children">🧒 الأطفال: جوابك غامض جدا . هل لك أن تشرح لنا أكثر ؟</div><div class="computer">💻 الحاسوب: انني أتكون من أربعة أجزاء : الوحدة المركزية ، الذاكرات ، الروابط واللواحق.</div><div class="children">🧒 الأطفال: ما هي الوحدة المركزية ؟</div><div class="computer">💻 الحاسوب: الوحدة المركزية هي قلبي النابض وعقلي المفكر وهي تشتمل على وحدة الأوامر ووحدة معالجة المعطيات الحرفية والرقمية والمنطقية والتي تمثل العقل المفكر حيث أقوم باجناز الأوامر والعمليات الحسابية (وهي الجمع والضرب والقسمة والطرح) والعمليات المنطقية وهي (التقاطع ،الاتحاد وعكس ذلك) وأستعمل الذاكرة الرئيسية للقيام بذلك وتسمى بالذاكرة الحية.</div></div><div class="translation-box"><span class="translation-ar">⚙️ وحدة مركزية</span> | <span class="translation-fr">Unité Centrale</span> | <span class="translation-en">CPU</span></div><div><button class="btn-speak" onclick="speak('وحدة مركزية', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('Unité Centrale', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('CPU', 'en')">🔊 English</button></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 7-8</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/V0XXHmHX/1.jpg" alt="RAM" style="max-height:100px;"><img src="https://i.ibb.co/twfWWJ42/image.jpg" alt="ROM" style="max-height:100px;"><img src="https://i.ibb.co/gFDFKsd5/image.png" alt="الذاكرة" style="max-height:100px;"></div></div><div class="dialogue"><div class="computer">💻 الحاسوب: ذاكرة تدعى بالميتة أستعملها لتخزين البرمجيات التي أحتاجها عند بداية اشتغالي . والفرق بين الذاكرة الرئيسية أو الذاكرة الحية والذاكرة الميتة هي أن الأولى لا تحتفظ بالمعطيات عند انقطاع التيار الكهربائي عني أما الذاكرة الميتة فهي لا تضيع المعطيات عند انقطاع التيار الكهربائي عني ومن سلبيات هذه الأخيرة أنه لا يمكن الكتابة فيها.</div><div class="computer">💻 الحاسوب: الروابط وهي النواقل والقنوات التي تنقل المعطيات والأوامر بين الوحدة الرئيسية والذاكرات وهي روابط من نوعين: روابط للمعطيات وهي تنقل الأوامر والمعطيات وكل ما تنقله الوحدات: الأوامر ووحدة المعالجة. وروابط العناوين وهي تنقل عناوين الأوامر والمعطيات الموجودة بالذاكرة الرئيسية.</div></div><div class="translation-box"><span class="translation-ar">💾 RAM (ذاكرة حية)</span> | <span class="translation-fr">mémoire vive</span> | <span class="translation-en">Random Access Memory</span><br><span class="translation-ar">💾 ROM (ذاكرة ميتة)</span> | <span class="translation-fr">mémoire morte</span> | <span class="translation-en">Read Only Memory</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 9-10</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/CpTk8dfg/camera-numerique.jpg" alt="كاميرا" style="max-height:100px;"><img src="https://i.ibb.co/3mcN7f3K/camescope.jpg" alt="كاميسكوب" style="max-height:100px;"></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك عناصر أخرى ؟</div><div class="computer">💻 الحاسوب: نعم وهي المتممة للعناصر السابقة ذكرها ألا وهي الوسائط.</div><div class="children">🧒 الأطفال: وما هي هذه الوسائط ؟ وما هي مهمتها ؟</div><div class="computer">💻 الحاسوب: هي عناصر موصولة بالروابط وتكون غالبا على شكل بطاقات أو جذاذات الكترونية تختلف عن بعضها البعض لأن كل واحدة منها لإدخال الصورة المتحركة يجب استعمال كاميرا فيديو رقمية أو الكاميسكوب الرقمي.</div></div><div class="translation-box"><span class="translation-ar">📷 كاميرا رقمية</span> | <span class="translation-fr">Caméra numérique</span> | <span class="translation-en">Digital camera</span><br><span class="translation-ar">🎥 كاميسكوب</span> | <span class="translation-fr">Caméscope</span> | <span class="translation-en">Camcorder</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 11-12</div><div class="image-box"><img src="https://i.postimg.cc/7ZkXt82w/fart.jpg" alt="فأرة" style="max-height:150px; margin:auto;"></div><div class="dialogue"><div class="children">🧒 الأطفال: اذا أردنا أن نتحدث معك فيجب أن نستعمل احدى الأدوات أو اللواحق كما تسميها . الفأرة؟ نظر أنها صالحة الدخال المعطيات أيضا ؟</div><div class="computer">💻 الحاسوب : هي أداة قد ألحقت بنا نحن معشر الحواسيب مؤخرا عندما أدخلت برمجية "ويندوز" في نظام تشغيلنا وهي تيسّر التخاطب معنا حيث على المستعمل أن ينقر على البرمجية أو صورة العنصر لتشغيله.</div></div><div class="translation-box"><span class="translation-ar">🖱️ فأرة</span> = <span class="translation-fr">souris</span> = <span class="translation-en">mouse</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 13-14</div><div class="image-box"><div class="image-row"><img src="https://iili.io/C9xPrUx.jpg" alt="لوحة مفاتيح" style="max-height:100px;"><img src="https://i.ibb.co/YFy4WZqQ/image.jpg" alt="قلم ضوئي" style="max-height:100px;"><img src="https://i.ibb.co/XZWmFZSL/image.jpg" alt="شاشة لمسية" style="max-height:100px;"></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك ملحقات أخرى للتقاطب ؟</div><div class="computer">💻 الحاسوب: أجل هناك ملحقات أخرى كلوحة المفاتيح لإدخال الحروف وملحقات خاصة كالقلم الضوئي الذي يستعمل في ادخال المعطيات في شكل شفرات عمودية ولوحة الرسم التي تساعد على الرسم والشاشة اللمسية وهي عبارة عن غشاء حساس يلصق في منطقة في لوحة المفاتيح أو على شاشة العرض وهي تتم وظيفة لوحة المفاتيح وتعوض الفأرة.</div></div><div class="translation-box"><span class="translation-ar">⌨️ لوحة مفاتيح</span> = <span class="translation-fr">clavier</span> = <span class="translation-en">keyboard</span><br><span class="translation-ar">✏️ قلم ضوئي</span> = <span class="translation-fr">crayon optique</span> = <span class="translation-en">digital pen</span><br><span class="translation-ar">👆 شاشة لمسية</span> = <span class="translation-fr">écran tactile</span> = <span class="translation-en">touch screen</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 15-20</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/wT3wRQdz/monitor.jpg" alt="شاشة" style="max-height:100px;"><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة" style="max-height:100px;"><img src="https://i.postimg.cc/cHXcrrD2/microphone-and-speakers.jpg" alt="ميكروفون" style="max-height:100px;"></div></div><div class="dialogue"><div class="children">🧒 الأطفال: ولكن لم توضح كيفية تخاطبك مع الانسان ؟ هل لك أن توضح لنا دور كل ملحق ؟</div><div class="computer">💻 الحاسوب: نعم. لنبدأ بالشاشة فهي وسيلة تخاطب بيني وبين الانسان منذ بداية المعلوماتية. فيدخل الانسان المعطيات وأنا أعالجها وأعرض نتائجها على الشاشة ليستغلها. وكان غالب المعطيات من النوع المكتوب لأن جودة الشاشات في البداية لم تكن كافية للعرض بالألوان والصور ،أما اليوم فقد تطورت الشاشات الى أن أصبحت على مختلف الهيئات والأحجام فهناك شاشات عادية ذات 15 بوصة لطول عرض الشاشة مع امكانية تمثيل عدة ملايين من الألوان وهناك الشاشات ذات 17 بوصة وهناك الشاشات ذات 21 بوصة.</div></div><div class="translation-box"><span class="translation-ar">🖥️ شاشة</span> = <span class="translation-fr">Ecran</span> = <span class="translation-en">Screen</span><br><span class="translation-ar">🖨️ طابعة</span> = <span class="translation-fr">Imprimante</span> = <span class="translation-en">Printer</span><br><span class="translation-ar">🎤 ميكروفون</span> = <span class="translation-fr">microphone</span> = <span class="translation-en">microphone</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 21-24</div><div class="image-box"><img src="https://iili.io/C9xDdb4.jpg" alt="أحجام الشاشات" style="max-height:150px; margin:auto;"></div><div class="dialogue"><div class="computer">💻 الحاسوب: تختلف أحجام الشاشات باختلاف التطبيقات والبرمجيات .فبالنسبة لحجم 15 بوصة فهي تستعمل في التطبيقات وأنظمة التشغيل العادية والجارية .أما حجم 17 بوصة و21 بوصة فهي تستعمل في تطبيقات تحتاج لدقة في العرض ومنها التطبيقات التي تتناول الرسوم والصور ومن التطبيقات نذكر النشر الالكتروني الذي ينتج الجرائد والمجلات.</div><div class="children">🧒 الأطفال: هل يمكن أن نلعب معك بشاشة 15 بوصة.</div><div class="computer">💻 الحاسوب: أجل لأن تقنية الشاشات اليوم تستجيب الى مختلف المعطيات المعالجة أي الصورة والصوت والنص وهو جيل من الحواسيب المسمى بمتعدد الوسائط أو "الملتيميديا".</div></div><div class="translation-box"><span class="translation-ar">📺 مختلف احجام شاشات الحاسوب</span><br><span class="translation-fr">Différents tailles d'écrans pour pc</span><br><span class="translation-en">Different sizes of pc screens</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 25-29</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة" style="max-height:100px;"><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة" style="max-height:100px;"><img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" alt="طابعة" style="max-height:100px;"></div></div><div class="dialogue"><div class="children">🧒 الأطفال: ما هي قنوات الاخراج ؟</div><div class="computer">💻 الحاسوب: هناك الطابعة التي غالبا ما تلازمنا لأنها تعيننا في مد الانسان بالمعلومات والمعطيات التي تنتج عن معالجتنا لها وتلحق بي عبر وصلة وتنشر المعطيات على الورق.</div><div class="children">🧒 الأطفال: كيف تشتغل ؟</div><div class="computer">💻 الحاسوب: لشرح كيفية اشتغالها لابد من توضيح أنواعها فهي على ثلاثة أنواع: الطابعات الإبرية (النوع القديم)، الطابعات ذات النسخ الحبري أو النفاثة للحبر، والطابعات الليزرية.</div></div><div class="translation-box"><span class="translation-ar">🖨️ طابعة إبرية</span> | <span class="translation-fr">Imprimante à aiguilles</span> | <span class="translation-en">Dot matrix printer</span><br><span class="translation-ar">🖨️ طابعة نفاثة للحبر</span> | <span class="translation-fr">Imprimante à jet d'encre</span> | <span class="translation-en">Ink jet printer</span><br><span class="translation-ar">🖨️ طابعة ليزرية</span> | <span class="translation-fr">Imprimante Laser</span> | <span class="translation-en">Laser printer</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 30-34</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/CxTbMGhR/scanner.jpg" alt="ماسح" style="max-height:100px;"><img src="https://i.postimg.cc/DzDvFgFf/rasm.jpg" alt="راسم" style="max-height:100px;"></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك طريقة أخرى لإخراج الصور والبيانات الرسومية ؟</div><div class="computer">💻 الحاسوب: أجل ، هناك الماسح لإخراج الصور والراسم الذي يستعمل لطبع الخرائط أو البيانات الرسومية وغالبا ما يستعمله المهندس المعماري أو المؤسسات الخاصة بالهندسة المعمارية.</div></div><div class="translation-box"><span class="translation-ar">📠 ماسح</span> | <span class="translation-fr">scanner</span> | <span class="translation-en">scanner</span><br><span class="translation-ar">📐 راسم</span> | <span class="translation-fr">traceur</span> | <span class="translation-en">plotter</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 35-37</div><div class="image-box"><img src="https://i.postimg.cc/R0wsVCxv/modem.jpg" alt="مودم" style="max-height:150px; margin:auto;"></div><div class="dialogue"><div class="children">🧒 الأطفال: هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟</div><div class="computer">💻 الحاسوب: أجل انه يمكن لي أن أتخاطب مع حاسوب أو أكثر سواء كانوا يتواجدون معي في نفس الفضاء أو بعيدا عني. يجب أن يتصل بي جهاز آخر يدعى "موديم" كما يمكن أن يندرج بداخلي كالجذاذات الوسائطية وهذا الجهاز يقوم بوظيفة الاتصال ويدعى "موديم" كذلك.ويكون الاتصال عبر شبكة الهاتف أو شبكات أخرى كما يمكن لي أن أتخاطب مع حاسوب آخر عبر وصلة تلحق بفتحة لالخراج عند الحاسوب اآلخر. وفي صورة تخاطبي مع مجموعة من الحواسيب وفي نفس الفضاء فهناك وسائل أخرى تضاف الى هيكلي المادي والمعنوي ألتمكن من التخاطب معهم.</div></div><div class="translation-box"><span class="translation-ar">📡 مودم</span> = <span class="translation-fr">modem</span> = <span class="translation-en">modem</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 38-40</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/FbLdWngL/image.jpg" alt="قرص صلب" style="max-height:100px;"><img src="https://i.ibb.co/DfRFF75T/image.jpg" alt="نظام تشغيل" style="max-height:100px;"></div></div><div class="dialogue"><div class="children">🧒 الأطفال: كيف يمكن أن نلعب معك ؟</div><div class="computer">💻 الحاسوب: لم أنته بعد من سرد بقية العناصر التي يجب أن أتسلح بها كي أتمكن من اللعب معكم. لم يبق لي إلا الجانب المعنوي وهو ما يسمى بالبرمجيات. وتنقسم الى قسمين أساسيين: قسم إجباري وقسم اختياري. القسم الإجباري والأساسي وهو ما يسمى بنظام التشغيل ولابد أن يوضع في داخلي ويحمل في الذاكرة الرئيسية والذاكرة الميتة كي أتمكن من الاشتغال. ومن برمجيات التشغيل المعروفة: نظام "ويندوز Windows" و "يونيكس Unix". القسم الثاني وهو الاختياري هي البرمجيات التطبيقية التي تختلف حسب المجالات والاستعمالات فمنها البرمجيات المكتبية وبرمجيات التصرف وبرمجيات إنتاج البرمجيات وبرمجيات الألعاب وغير ذلك.</div><div class="children">🧒 الأطفال: إذا للعب معك، ماذا يجب أن نفعل؟</div><div class="computer">💻 الحاسوب: عليكم أن تخزنوا برمجية اللعبة على القرص الصلب. وسيقوم نظام التشغيل بمساعدتكم على ذلك. غالبا ما تكون برمجيات اللعب على أقراص ليزرية لأنها تستوجب مساحة كبيرة للتخزين، تضعون القرص في وحدة القراءة ثم تنقرون عليها فينشر نظام التشغيل محتوى القرص.</div></div><div class="translation-box"><span class="translation-ar">💿 قرص صلب</span> | <span class="translation-fr">disque dur</span> | <span class="translation-en">hard disk</span><br><span class="translation-ar">💿 نظام تشغيل</span> | <span class="translation-fr">système d'exploitation</span> | <span class="translation-en">operating system</span><br><span class="translation-ar">🎮 لعبة</span> | <span class="translation-fr">jeu</span> | <span class="translation-en">game</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 41-43</div><div class="note" style="font-size:18px;">🎬 انتهى الدرس - إليكم مراجعته عبر فيديو 1 و 2</div><div class="image-box"><iframe width="100%" height="250" src="https://www.youtube.com/embed/3QCgr6IpuvA" allowfullscreen></iframe></div><div class="image-box"><iframe width="100%" height="250" src="https://www.youtube.com/embed/HB4I2CgkcCo" allowfullscreen></iframe></div><div class="translation-box"><span class="translation-ar">🎬 فيديو 1 و 2</span> | <span class="translation-fr">Vidéo 1 et 2</span> | <span class="translation-en">Video 1 and 2</span></div></div>`,
+    `<div class="slide-card"><div class="note">📖 صفحة 44-50</div><div class="image-box"><div style="font-size:64px;">📝 ✏️ 📚 ⭐</div></div><div class="note" style="font-size:24px; font-weight:bold;">📝 التمارين: 50 سؤالاً - 2 نقاط لكل سؤال - المجموع: 100 نقطة</div><div class="translation-box"><span class="translation-ar">📝 50 سؤالاً</span> | <span class="translation-fr">50 questions</span> | <span class="translation-en">50 questions</span></div><div style="background:#c8e6c9; padding:15px; border-radius:20px; margin:15px 0; text-align:center;">🧠 أجب على الأسئلة الـ50 لتحصل على الشهادة!<br>🌟 حاول أن تحصل على 50/100 فأكثر 🌟</div><div style="text-align:center;"><button id="startExamBtn" style="background:#22c55e; font-size:18px; padding:12px 30px; border:none; border-radius:40px; color:white; font-weight:bold; cursor:pointer;">🚀 ابدأ الاختبار النهائي (50 سؤالاً مرتبة) 🚀</button></div></div>`
+];
 
-// ===== بيانات لعبة البحث عن الكلمات =====
+let currentSlide = 0;
+function renderSlide() {
+    let bc = document.getElementById('bookContent');
+    if(bc) bc.innerHTML = bookSlides[currentSlide];
+    let pf = document.getElementById('progressFill');
+    if(pf) pf.style.width = `${((currentSlide+1)/bookSlides.length)*100}%`;
+    let btn = document.getElementById('startExamBtn');
+    if(btn) btn.onclick = goToExam;
+}
+function nextSlide() { if(currentSlide < bookSlides.length-1) { currentSlide++; renderSlide(); } else alert("📚 نهاية الكتاب!"); }
+function prevSlide() { if(currentSlide > 0) { currentSlide--; renderSlide(); } else alert("📖 هذه هي الصفحة الأولى"); }
+
+Z.showPrimaryApp = function() {
+  if(!Z.checkVisitor()) return;
+  Z.showPage('pageLesson');
+  var lc = document.getElementById('lc');
+  lc.innerHTML = `
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div style="max-width:800px; margin:0 auto;">
+      <div id="bookContent"></div>
+      <div class="nav-buttons" style="display:flex; gap:15px; justify-content:center; margin:20px 0;">
+        <button class="nav-btn prev" id="prevBtn">▶ السابق</button>
+        <button class="nav-btn next" id="nextBtn">التالي ◀</button>
+      </div>
+      <div class="progress-container"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  `;
+  currentSlide = 0;
+  renderSlide();
+  document.getElementById('prevBtn').onclick = prevSlide;
+  document.getElementById('nextBtn').onclick = nextSlide;
+};
+
+// ================== 2. الألعاب (من plateforme94) ==================
 const GAME_WORDS = {
     ar: ["انترنت", "متصفح", "خادم", "معالج", "ذاكرة", "طابعة", "شبكة", "فيروس"],
     en: ["INTERNET", "BROWSER", "SERVER", "PROCESSOR", "MEMORY", "PRINTER", "NETWORK", "VIRUS"],
@@ -1959,7 +1881,7 @@ function showGameMessage(text, type) {
     setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
 }
 
-// ===== بيانات الكلمات المتقاطعة =====
+// ================== الكلمات المتقاطعة ==================
 const crosswordQuestions = [
     { q: "ما هي الشبكة العالمية التي تربط ملايين الأجهزة؟", correct: "الإنترنت", options: ["الإنترنت", "المتصفح", "الخادم", "الشبكة"] },
     { q: "ما هو البرنامج المستخدم لعرض صفحات الويب؟", correct: "المتصفح", options: ["المتصفح", "نظام التشغيل", "البريد", "المعالج"] },
@@ -2040,34 +1962,16 @@ function showCrossMessage(text, type) {
     setTimeout(() => { if (fb.innerHTML === text) fb.innerHTML = ''; }, 3000);
 }
 
-// ===== كتاب الأطفال (4 شرائح حرفياً من plateforme94) =====
-const bookSlides = [
-    `<div class="slide-card"><h2>📚 صفحة 1: مقدمة</h2><p>مرحباً بكم في كتاب "الأطفال والحاسوب"</p><div class="image-box" style="text-align:center;">🖥️ 📚 ⭐</div><div><button class="btn-speak" onclick="speak('مرحباً بكم في كتاب الأطفال والحاسوب', 'ar')">🔊 استماع</button></div></div>`,
-    `<div class="slide-card"><h2>💻 ما هو الحاسوب؟</h2><p>الحاسوب هو جهاز إلكتروني يمكنه تخزين ومعالجة البيانات.</p><div class="translation-box"><span class="translation-ar">حاسوب</span> | <span class="translation-fr">ordinateur</span> | <span class="translation-en">computer</span></div><div><button class="btn-speak" onclick="speak('حاسوب', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="speak('ordinateur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="speak('computer', 'en')">🔊 English</button></div></div>`,
-    `<div class="slide-card"><h2>🧠 مكونات الحاسوب</h2><p>يتكون الحاسوب من جزئين: المادي (Hardware) والبرمجي (Software)</p><div><button class="btn-speak" onclick="speak('مكونات الحاسوب', 'ar')">🔊 استماع</button></div></div>`,
-    `<div class="slide-card"><h2>🎮 ختاماً</h2><p>استمتع بتعلم التكنولوجيا! يمكنك الآن الانتقال إلى الألعاب الفكرية.</p><div><button class="btn-speak" onclick="speak('استمتع بتعلم التكنولوجيا', 'ar')">🔊 استماع</button></div></div>`
-];
-
-let currentSlide = 0;
-function renderSlide() {
-    let bc = document.getElementById('bookContent');
-    if(bc) bc.innerHTML = bookSlides[currentSlide];
-    let pf = document.getElementById('progressFill');
-    if(pf) pf.style.width = `${((currentSlide+1)/bookSlides.length)*100}%`;
-}
-function nextSlide() { if(currentSlide < bookSlides.length-1) { currentSlide++; renderSlide(); } else alert("📚 نهاية الكتاب!"); }
-function prevSlide() { if(currentSlide > 0) { currentSlide--; renderSlide(); } else alert("📖 هذه هي الصفحة الأولى"); }
-
-// ===== عرض صفحة الألعاب الكاملة (البحث + الكلمات المتقاطعة) =====
+// ================== عرض صفحة الألعاب ==================
 Z.showGamesFull = function(){
   if(!Z.checkVisitor()) return;
   Z.showPage('pageGames');
   var lc = document.getElementById('lcGames');
   lc.innerHTML = `
     <div class="htitle" style="margin-bottom:15px;">🎮 الألعاب الفكرية</div>
-    <div style="display:flex; gap:10px; margin-bottom:20px; justify-content:center; flex-wrap:wrap;">
-      <button id="tabSearchGame" onclick="ZAID.switchGameTab('search')" style="background:linear-gradient(135deg,#7e22ce,#6b21a8); color:white; padding:10px 25px; border-radius:40px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🔍 البحث عن الكلمات</button>
-      <button id="tabCrossGame" onclick="ZAID.switchGameTab('cross')" style="background:rgba(255,255,255,0.15); color:white; padding:10px 25px; border-radius:40px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🔐 الكلمات المتقاطعة</button>
+    <div class="tabs-app">
+      <button id="tabSearchGame" onclick="ZAID.switchGameTab('search')" style="background:linear-gradient(135deg,#7e22ce,#6b21a8); color:white;">🔍 البحث عن الكلمات</button>
+      <button id="tabCrossGame" onclick="ZAID.switchGameTab('cross')" style="background:rgba(255,255,255,0.15); color:white;">🔐 الكلمات المتقاطعة</button>
     </div>
 
     <div id="searchGamePanel" style="display:block;">
@@ -2086,7 +1990,7 @@ Z.showGamesFull = function(){
         <div id="gameWordsList" class="game-words-list"></div>
       </div>
       <div id="gameGrid" class="game-grid"></div>
-      <div class="game-controls" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;">
+      <div class="game-controls">
         <button id="gameCheckBtn" style="background:#22c55e; color:white; padding:12px 25px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">✅ تحقق</button>
         <button id="gameClearBtn" style="background:#f97316; color:white; padding:12px 25px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">🗑️ مسح</button>
         <button id="gameHintBtn" style="background:#3b82f6; color:white; padding:12px 25px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo;">💡 تلميحة</button>
@@ -2154,58 +2058,312 @@ Z.switchGameTab = function(tab) {
   }
 };
 
-// ===== عرض صفحة كتاب الأطفال =====
-Z.showChildrenBook = function() {
-  if(!Z.checkVisitor()) return;
-  Z.showPage('pageLesson');
-  let lc = document.getElementById('lc');
-  lc.innerHTML = `
-    <div style="max-width:800px; margin:0 auto;">
-      <button class="back" onclick="ZAID.showPrimaryApp()">🔙 العودة</button>
-      <div id="bookContent"></div>
-      <div class="nav-buttons" style="display:flex; gap:15px; justify-content:center; margin:20px 0;">
-        <button class="nav-btn prev" id="prevBtn">▶ السابق</button>
-        <button class="nav-btn next" id="nextBtn">التالي ◀</button>
-      </div>
-      <div class="progress-container"><div class="progress-fill" id="progressFill"></div></div>
-      <div style="text-align:center; margin-top:15px;">
-        <button class="btn" style="background:#334155; color:white; padding:12px 25px; border-radius:20px; border:none; cursor:pointer; font-family:Cairo; font-weight:bold;" onclick="ZAID.goHome()">🔙 العودة إلى المحاور</button>
-      </div>
-    </div>
-  `;
-  currentSlide = 0;
-  renderSlide();
-  document.getElementById('prevBtn').onclick = prevSlide;
-  document.getElementById('nextBtn').onclick = nextSlide;
-};
-
-// ===== عرض صفحة الابتدائي =====
-Z.showPrimaryApp = function() {
-  if(!Z.checkVisitor()) return;
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = `
-    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
-    <div style="max-width:550px; margin:0 auto; background:#1e293b; border-radius:40px; padding:25px; text-align:center; box-shadow:0 25px 45px rgba(0,0,0,0.4);">
-        <div style="position:relative; width:120px; height:120px; margin:0 auto;">
-          <img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" style="width:120px; height:120px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;" alt="logo">
-        </div>
-        <div style="background:#0f172a; padding:10px; border-radius:50px; margin:15px 0; border:2px solid #facc15;">
-          <marquee style="color:#facc15; font-weight:bold; direction:rtl;">🌟🌟🌟 منصة محمد زايد - الأطفال والحاسوب 🌟🌟🌟</marquee>
-        </div>
-        <div style="color:#DAA520; font-size:24px; font-weight:bold; margin:10px 0;">📚 الأطفال والحاسوب</div>
-        <div style="color:#cbd5e1; margin-bottom:15px;">قصة تفاعلية لتعلم أساسيات الكمبيوتر</div>
-        <button onclick="ZAID.showChildrenBook()" style="width:100%; padding:16px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:18px; background:#DAA520; color:#1e293b; font-family:Cairo;">📚 كتاب الأطفال والحاسوب</button>
-        <button style="margin-top:15px; width:100%; padding:12px; background:#334155; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:bold; font-family:Cairo;" onclick="ZAID.goHome()">🔙 العودة للرئيسية</button>
-    </div>
-  `;
-};
-
 // ربط دالة الألعاب
 Z.showGames = Z.showGamesFull;
 /* ============================================================
-   تشغيل التطبيق وإغلاق الملف
+   الجزء 10: المحاضرات العلمية، المنجد، وتشغيل التطبيق
    ============================================================ */
+
+// ================== 1. المحاضرات العلمية (البحث العلمي) ==================
+Z.lecturesData = [
+  {
+    id: 'lecture1',
+    title: 'تأثير تكنولوجيا الذكاء الاصطناعي في البحث العلمي',
+    icon: '🔬',
+    slides: [
+      { title: 'المقدمة', content: 'الذكاء الاصطناعي (IA) غزا جميع مجالات حياتنا. يعود أصل الذكاء الاصطناعي إلى عام 1950 على يد آلان تورينج، فترة ظهور أول أجهزة كمبيوتر قابلة للبرمجة.' },
+      { title: 'تعريف الذكاء الاصطناعي', content: 'الذكاء الاصطناعي هو مجموعة التقنيات التي تسمح للآلة (الكمبيوتر) بالتفكير عبر محاكاة الدماغ البشري: التعلم، أداء المهام التي يمكن للإنسان فقط القيام بها، معالجة كميات كبيرة من البيانات بدقة وسرعة، واتخاذ القرارات. (تعريف البرلمان الأوروبي).' },
+      { title: 'الذكاء الاصطناعي مقابل الذكاء البشري', content: 'الذكاء الاصطناعي: يفتقر إلى الوعي والعواطف والفهم العميق والإبداع والأخلاق. يتفوق في المهام المتكررة وتحليل البيانات الضخمة. الذكاء البشري: لديه وعي ذاتي، عواطف، حدس، فهم النوايا والقضايا المعقدة.' },
+      { title: 'تقنيات الذكاء الاصطناعي', content: '1. الذكاء الاصطناعي الضيق (Narrow AI): مهام محددة (التعرف على الوجه، السيارات ذاتية القيادة، المساعدات الصوتية).\n2. الذكاء الاصطناعي العام (AGI): نظام كمبيوتر قادر على أداء جميع المهام البشرية.\n3. الذكاء الاصطناعي الرمزي: يعتمد على الرموز والمفاهيم والقواعد المنطقية (قاعدة المعرفة + محرك الاستدلال).\n4. الذكاء الاصطناعي الاتصالي: يعتمد على الشبكات العصبية لمحاكاة الدماغ.\n5. الذكاء الاصطناعي التوليدي: ينشئ نصوصاً وصوراً وفيديوهات (ChatGPT).' },
+      { title: 'تطبيقات في البحث العلمي (التكنولوجيا الحيوية)', content: 'الصحة، الغذاء، البيئة. تسمح أنظمة الذكاء الاصطناعي بتحليل كميات هائلة من البيانات الطبية الحيوية، مما يؤدي إلى اكتشاف الجزيئات الحيوية وفهم العمليات البيولوجية المعقدة، مما يساهم في الطب الشخصي، تطوير الأدوية، ونمذجة الظواهر المناخية.' },
+      { title: 'التأثيرات الإيجابية', content: 'تسريع تحليل البيانات، زيادة كفاءة المعالجة، تحسين دقة النتائج، تسهيل الوصول إلى البيانات، المحاكاة والنمذجة، توليد الفرضيات (العصف الذهني)، المساعدة في كتابة التقارير، تحسين التكاليف.' },
+      { title: 'التأثيرات السلبية والتحديات', content: 'أخطاء الذكاء الاصطناعي، الافتقار إلى الشفافية والأخلاق، تحيز الذكاء الاصطناعي (في البيانات التدريبية)، سرية البيانات، الانتحال، تعرض الأمن للخطر، التضليل والجرائم الإلكترونية، التزييف العميق، التحيز والتمييز.' },
+      { title: 'الحلول', content: 'تدريب الموظفين على استخدام أدوات الذكاء الاصطناعي، إجراء تقييمات مخاطر شاملة من قبل الخبراء البشريين، تنفيذ ممارسات قوية لحماية البيانات، المراقبة المستمرة، وإنشاء إطار أخلاقي وفقاً للقواعد الدولية.' }
+    ]
+  },
+  {
+    id: 'lecture2',
+    title: 'الذكاء الاصطناعي والجرائم الإلكترونية',
+    icon: '🛡️',
+    slides: [
+      { title: 'مفهوم الجريمة الإلكترونية', content: 'هي مصطلح عام يحدد مجموعة من الأفعال الإجرامية التي تتم باستخدام الكمبيوتر أو الشبكة أو أي جهاز رقمي. تشمل القرصنة، التصيد، انتحال الشخصية، طلب الفدية، البرمجيات الخبيثة.' },
+      { title: 'أنواع الجرائم السيبرانية', content: 'هجمات حجب الخدمة الموزعة (DDoS)، التصيد والاحتيال، البرمجيات الخبيثة (Malware)، فيروسات الفدية (Ransomware)، هجمات الرجل في المنتصف (MITM)، حقن SQL، البرمجة النصية عبر المواقع (XSS).' },
+      { title: 'الذكاء الاصطناعي في جرائم إلكترونية', content: 'توظيف الذكاء الاصطناعي لتطوير هجمات أكثر دقة (التصيد بالذكاء الاصطناعي)، التزييف العميق (Deepfakes) لانتحال الشخصية، أتمتة الهجمات، وتخصيص الهجمات بناءً على ضحايا محددين.' },
+      { title: 'الذكاء الاصطناعي كأداة دفاعية', content: 'كشف التهديدات (منظومات كشف الاختراق IDS)، تحليل السلوك (UEBA)، الاستجابة الآلية للحوادث، التشفير المتقدم، وتحسين إدارة الثغرات الأمنية.' },
+      { title: 'عناصر الأمن السيبراني', content: 'التعريف (Identification)، التثبت/التوثيق (Authentication)، الترخيص (Authorization)، التكامل (Integrity)، السرية (Confidentiality)، التوفر (Availability)، عدم التنصل (Non-Repudiation).' },
+      { title: 'التحديات المستقبلية', content: 'تطور الهجمات باستخدام الذكاء الاصطناعي التوليدي، صعوبة كشف التزييف العميق، حماية البيانات الضخمة (Big Data)، الحاجة إلى كوادر بشرية متخصصة في الأمن السيبراني.' }
+    ]
+  },
+  {
+    id: 'lecture3',
+    title: 'شبكات الاتصال والتواصل',
+    icon: '🌐',
+    slides: [
+      { title: 'التعريف', content: 'هي تكنولوجيات رقمية تربط الأجهزة الرقمية بكل أنواعها بواسطة كوابل سلكية أو تقنيات لاسلكية وأجهزة مختصة في الاتصال والتواصل لنقل البيانات والمعلومات وتبادلها بين كل تلك الأجهزة.' },
+      { title: 'أنواع الشبكات', content: 'تنقسم الشبكات حسب:\n1. أنواع الربط: سلكي ولاسلكي.\n2. أنواع المعلومات المنقولة: هاتفية أو/و حاسوبية.\n3. النطاق الجغرافي: محلية (LAN)، حضرية (MAN)، واسعة (WAN).' },
+      { title: 'مكونات الشبكات', content: 'الشبكات السلكية: الكوابل (مجوزة، محورية، ألياف بصرية)، الأجهزة الاتصالية (الموجهات، المجمعات).\nالشبكات اللاسلكية: الذبذبات والترددات الهرتزية، الأجهزة اللاسلكية (نقاط الوصول).' },
+      { title: 'المعايير الدولية', content: 'نموذج OSI (7 طبقات): المادية، ربط البيانات، الشبكة، النقل، الجلسة، العرض، التطبيقات.\nنموذج الإنترنت (4 طبقات): الوصول للشبكة، الإنترنت، النقل، التطبيقات.' },
+      { title: 'الإنترنت', content: 'الهيكلة، البروتوكولات (TCP/IP)، العناوين (IP)، الخدمات (الويب، البريد الإلكتروني، محركات البحث، مواقع التواصل الاجتماعي مثل فيسبوك، ميسنجر، واتساب).' },
+      { title: 'التطبيقات عن بعد', content: 'التعليم عن بعد، التسوق عن بعد، التبادل التجاري، الاجتماعات عن بعد (Zoom, Teams)، الإدارة الإلكترونية، الطب عن بعد، العمل عن بعد، الإعلام عن بعد.' }
+    ]
+  },
+  {
+    id: 'lecture4',
+    title: 'اللغة العربية والذكاء الاصطناعي',
+    icon: '🗣️',
+    slides: [
+      { title: 'اللغة العربية في العالم', content: 'تعتبر اللغة العربية من بين أكثر اللغات استخداماً. يشير إحصاء 2021 إلى وجود حوالي 237 مليون مستخدم للإنترنت ناطقين بالعربية، وهو ما يعادل 5.2% من إجمالي مستخدمي الإنترنت في العالم.' },
+      { title: 'اللسانيات الرقمية (Digital Linguistics)', content: 'فرع من اللسانيات يستخدم التكنولوجيا الرقمية لدراسة وتحليل اللغة، ويتعلق بالمعالجة الحاسوبية للغات الطبيعية (NLP). الهدف: تطوير أنظمة تقنية تعتمد على فهم اللغة (الترجمة الآلية، التصحيح التلقائي، تحليل المشاعر).' },
+      { title: 'تحديات معالجة اللغة العربية', content: 'التعقيد النحوي والصرفي، اختلاف اللهجات، التشكيل، تعدد المعاني، ندرة البيانات المخصصة (قواعد بيانات نصوص وأصوات).' },
+      { title: 'تطبيقات التعليم العميق (Deep Learning)', content: 'تحسين جودة الترجمة (Google Translate, DeepL).\nالتعرف على الكلام وتحويل النص إلى كلام (Speech-to-Text, Text-to-Speech).\nتحليل المشاعر (AraBERT).\nتوليد المحتوى (ChatGPT).\nالواقع المعزز والافتراضي (AR/VR) لتعليم الحروف.' },
+      { title: 'أدوات تعليم اللغة العربية', content: 'منصات تفاعلية (Duolingo, Edraak).\nتصحيح تلقائي (Grammarly, Qalam.ai).\nتطبيقات تصريف الأفعال (قطرب).\nمنصات تعليمية للأطفال (نهلة وناهل).' },
+      { title: 'مستقبل اللغة العربية رقمياً', content: 'الاستثمار في التكنولوجيا (تطوير نماذج متقدمة).\nزيادة المحتوى العربي الرقمي.\nتطوير التعليم الإلكتروني.\nدعم الابتكار والتعاون بين الدول العربية.\nرقمنة التراث العربي (المخطوطات).' }
+    ]
+  }
+];
+
+Z.showLecturesSection = function() {
+  if(!Z.checkVisitor()) return;
+  Z.showPage('pageLesson');
+  var lc = document.getElementById('lc');
+  
+  let html = `<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div class="htitle" style="margin-bottom:20px;">🎤 المحاضرات والندوات العلمية</div>
+    <div class="sel" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">`;
+    
+  Z.lecturesData.forEach(lec => {
+    html += `
+      <div class="lcard" style="background:linear-gradient(135deg,#1e3a8a,#1e40af); border-color:#3b82f6;" onclick="ZAID.openLecture('${lec.id}')">
+        <div style="font-size:50px; margin-bottom:10px;">${lec.icon}</div>
+        <div style="font-size:18px; font-weight:900; color:#fbbf24; margin-bottom:6px;">${lec.title}</div>
+        <div style="font-size:13px; color:#cbd5e1;">اضغط لعرض المحاضرة</div>
+      </div>
+    `;
+  });
+  
+  html += `</div>`;
+  lc.innerHTML = html;
+};
+
+let currentLectureId = null;
+let currentLectureSlide = 0;
+
+Z.openLecture = function(id) {
+  let lec = Z.lecturesData.find(l => l.id === id);
+  if(!lec) return;
+  currentLectureId = id;
+  currentLectureSlide = 0;
+  
+  Z.showPage('pageLesson');
+  let lc = document.getElementById('lc');
+  lc.innerHTML = `
+    <button class="back" onclick="ZAID.showLecturesSection()">🔙 العودة للمحاضرات</button>
+    <div style="max-width:900px; margin:0 auto;">
+      <h2 style="color:#fbbf24; text-align:center; margin-bottom:20px;">${lec.icon} ${lec.title}</h2>
+      <div id="lectureContent" style="background:#f8fafc; border-radius:20px; padding:30px; min-height:200px; color:#1e293b; font-size:18px; line-height:1.8; box-shadow:0 10px 20px rgba(0,0,0,0.2);"></div>
+      <div class="nav-buttons" style="display:flex; gap:15px; justify-content:center; margin:20px 0;">
+        <button class="nav-btn prev" id="lecPrevBtn">▶ السابق</button>
+        <button class="nav-btn next" id="lecNextBtn">التالي ◀</button>
+      </div>
+      <div class="progress-container"><div class="progress-fill" id="lecProgressFill"></div></div>
+      <div style="text-align:center; margin-top:20px;">
+        <button class="btn" style="background:#22c55e; padding:12px 25px; border-radius:20px; border:none; cursor:pointer; font-weight:bold; font-family:Cairo; font-size:16px;" onclick="speak('${lec.title}', 'ar')">🔊 استماع للعنوان</button>
+      </div>
+    </div>
+  `;
+  
+  renderLectureSlide();
+  
+  document.getElementById('lecPrevBtn').onclick = () => {
+    if(currentLectureSlide > 0) { currentLectureSlide--; renderLectureSlide(); }
+  };
+  document.getElementById('lecNextBtn').onclick = () => {
+    let l = Z.lecturesData.find(l => l.id === currentLectureId);
+    if(currentLectureSlide < l.slides.length - 1) { currentLectureSlide++; renderLectureSlide(); }
+    else alert("🎉 نهاية المحاضرة!");
+  };
+};
+
+function renderLectureSlide() {
+  let lec = Z.lecturesData.find(l => l.id === currentLectureId);
+  if(!lec) return;
+  let slide = lec.slides[currentLectureSlide];
+  let contentEl = document.getElementById('lectureContent');
+  if(contentEl) {
+    contentEl.innerHTML = `<h3 style="color:#1e40af; margin-bottom:15px; border-bottom:2px solid #cbd5e1; padding-bottom:10px;">${slide.title}</h3>
+      <div style="white-space:pre-wrap;">${slide.content}</div>
+      <div style="text-align:left; margin-top:20px; color:#64748b; font-size:14px;">الشريحة ${currentLectureSlide + 1} من ${lec.slides.length}</div>`;
+  }
+  let pf = document.getElementById('lecProgressFill');
+  if(pf) pf.style.width = `${((currentLectureSlide + 1) / lec.slides.length) * 100}%`;
+}
+
+// ================== 2. المنجد التفاعلي ==================
+Z.showDictionary = function() {
+  if(!Z.checkVisitor()) return;
+  Z.showPage('pageLesson');
+  var lc = document.getElementById('lc');
+  
+  // تجميع كل الكلمات من المنجد
+  let allWords = [];
+  for(let [sid, words] of Object.entries(dictionaryData)) {
+    words.forEach(w => allWords.push(w));
+  }
+  
+  let html = `<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div class="htitle" style="margin-bottom:20px;">📖 المنجد الرباعي التفاعلي</div>
+    <div class="dict-box" style="background: #0f172a; border: 2px solid #facc15;">
+      <input type="text" id="dictSearchInput" placeholder="🔍 ابحث عن مصطلح..." style="width:100%; padding:12px; border-radius:15px; border:none; margin-bottom:20px; text-align:right; font-family:Cairo;">
+      <div id="dictResults" style="max-height:500px; overflow-y:auto;">`;
+      
+  if(allWords.length === 0) {
+    html += '<p style="color:#94a3b8; text-align:center;">لا توجد كلمات في المنجد حالياً.</p>';
+  } else {
+    allWords.forEach(w => {
+      html += `
+        <div class="dict-word-card" style="background:#1e293b; margin-bottom:15px; padding:15px; border-radius:15px; border-right:4px solid #facc15;">
+          <div class="dict-word" style="color:#facc15; font-size:20px; font-weight:bold;">${w.word}</div>
+          <div class="dict-translation" style="display:flex; gap:15px; flex-wrap:wrap; margin:10px 0; color:#cbd5e1; font-size:14px;">
+            <span>🇫🇷 ${w.french || '---'}</span>
+            <span>🇬🇧 ${w.english || '---'}</span>
+          </div>
+          <div class="dict-meaning" style="color:#fff; margin-bottom:10px;">📖 ${w.meaning}</div>
+          ${w.example ? `<div style="color:#94a3b8; font-size:13px; font-style:italic;">📝 مثال: ${w.example}</div>` : ''}
+          <div style="margin-top:10px; display:flex; gap:8px;">
+            <button class="dict-btn" style="background:#dc2626; color:white; padding:6px 12px; border-radius:15px; border:none; cursor:pointer; font-family:Cairo;" onclick="speak('${w.word}', 'ar')">🔊 نطق عربي</button>
+            ${w.french ? `<button class="dict-btn" style="background:#3b82f6; color:white; padding:6px 12px; border-radius:15px; border:none; cursor:pointer; font-family:Cairo;" onclick="speak('${w.french}', 'fr')">🔊 Français</button>` : ''}
+            ${w.english ? `<button class="dict-btn" style="background:#22c55e; color:white; padding:6px 12px; border-radius:15px; border:none; cursor:pointer; font-family:Cairo;" onclick="speak('${w.english}', 'en')">🔊 English</button>` : ''}
+          </div>
+        </div>
+      `;
+    });
+  }
+  
+  html += `</div></div>`;
+  lc.innerHTML = html;
+  
+  // ربط البحث
+  let searchInput = document.getElementById('dictSearchInput');
+  if(searchInput) {
+    searchInput.oninput = function() {
+      let val = this.value.trim().toLowerCase();
+      let cards = document.querySelectorAll('.dict-word-card');
+      cards.forEach(card => {
+        let text = card.textContent.toLowerCase();
+        card.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    };
+  }
+};
+
+// ================== 3. دوال أخرى (البث المباشر - تسجيل الفيديو) ==================
+Z.openLive = function() { Z.showPage('pageLive'); };
+Z.startLiveRoom = function() {
+  let room = 'zaid-room-' + Date.now();
+  let link = 'https://meet.jit.si/' + room;
+  let shareInput = document.getElementById('liveShareLink');
+  if(shareInput) shareInput.value = link;
+  
+  let container = document.getElementById('jitsiContainer');
+  if(container) {
+    container.innerHTML = `<iframe src="${link}" style="width:100%; height:100%; border:none;" allow="camera; microphone; fullscreen; display-capture; autoplay"></iframe>`;
+  }
+};
+Z.closeLiveRoom = function() {
+  let container = document.getElementById('jitsiContainer');
+  if(container) container.innerHTML = '';
+  let shareInput = document.getElementById('liveShareLink');
+  if(shareInput) shareInput.value = '';
+};
+Z.copyLiveLink = function() {
+  let input = document.getElementById('liveShareLink');
+  if(input && input.value) { input.select(); document.execCommand('copy'); alert('✅ تم نسخ الرابط!'); }
+};
+
+Z.openVideoRecord = function() { Z.showPage('pageVideoRecord'); };
+
+// كاميرا التسجيل المحلي (للمستخدم)
+let userMediaStream = null;
+let userMediaRecorder = null;
+let userRecordedChunks = [];
+let userRecordedBlob = null;
+
+Z.startCamera = function() {
+  let videoPreview = document.getElementById('videoPreview');
+  let startRecordBtn = document.getElementById('startRecordBtn');
+  let stopCameraBtn = document.getElementById('stopCameraBtn');
+  let videoStatus = document.getElementById('videoStatus');
+  
+  navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+    userMediaStream = stream;
+    videoPreview.srcObject = stream;
+    videoPreview.style.display = 'block';
+    if(startRecordBtn) startRecordBtn.disabled = false;
+    if(stopCameraBtn) stopCameraBtn.disabled = false;
+    if(videoStatus) { videoStatus.innerHTML = '✅ الكاميرا تعمل - يمكنك بدء التسجيل'; videoStatus.style.color = '#22c55e'; }
+  }).catch(err => {
+    if(videoStatus) { videoStatus.innerHTML = '❌ لا يمكن الوصول إلى الكاميرا'; videoStatus.style.color = '#dc2626'; }
+  });
+};
+
+Z.stopCamera = function() {
+  let videoPreview = document.getElementById('videoPreview');
+  if(userMediaRecorder && userMediaRecorder.state === 'recording') userMediaRecorder.stop();
+  if(userMediaStream) userMediaStream.getTracks().forEach(t => t.stop());
+  userMediaStream = null;
+  if(videoPreview) { videoPreview.style.display = 'none'; videoPreview.srcObject = null; }
+  document.getElementById('startRecordBtn').disabled = true;
+  document.getElementById('stopRecordBtn').disabled = true;
+  document.getElementById('stopCameraBtn').disabled = true;
+  document.getElementById('downloadVideoBtn').disabled = true;
+  userRecordedChunks = []; userRecordedBlob = null;
+  let status = document.getElementById('videoStatus'); if(status) { status.innerHTML = '⏳ الكاميرا مغلقة'; status.style.color = '#fbbf24'; }
+};
+
+Z.startRecording = function() {
+  if(!userMediaStream) { alert("يرجى تشغيل الكاميرا أولاً"); return; }
+  userRecordedChunks = [];
+  userMediaRecorder = new MediaRecorder(userMediaStream);
+  userMediaRecorder.ondataavailable = e => { if(e.data.size > 0) userRecordedChunks.push(e.data); };
+  userMediaRecorder.onstop = () => {
+    if(userRecordedChunks.length > 0) {
+      userRecordedBlob = new Blob(userRecordedChunks, { type: 'video/webm' });
+      let recordedVideo = document.getElementById('recordedVideo');
+      recordedVideo.src = URL.createObjectURL(userRecordedBlob);
+      recordedVideo.style.display = 'block';
+      recordedVideo.controls = true;
+      document.getElementById('downloadVideoBtn').disabled = false;
+      let status = document.getElementById('videoStatus'); if(status) { status.innerHTML = '✅ تم التسجيل!'; status.style.color = '#22c55e'; }
+    }
+  };
+  userMediaRecorder.start(1000);
+  document.getElementById('startRecordBtn').disabled = true;
+  document.getElementById('stopRecordBtn').disabled = false;
+  let status = document.getElementById('videoStatus'); if(status) { status.innerHTML = '🔴 جاري التسجيل...'; status.style.color = '#dc2626'; }
+};
+
+Z.stopRecording = function() {
+  if(userMediaRecorder && userMediaRecorder.state === 'recording') {
+    userMediaRecorder.stop();
+    document.getElementById('startRecordBtn').disabled = false;
+    document.getElementById('stopRecordBtn').disabled = true;
+  }
+};
+
+Z.downloadVideo = function() {
+  if(userRecordedBlob) {
+    let a = document.createElement('a');
+    a.href = URL.createObjectURL(userRecordedBlob);
+    a.download = `تسجيل_${Date.now()}.webm`;
+    a.click();
+  } else alert("لا يوجد فيديو مسجل");
+};
+
+Z.showSub = function() {
+  alert('💳 للاشتراك، يرجى التواصل مع الإدارة عبر الواتساب: +21655335477\n\nأو تحويل المبلغ إلى:\nرقم الدينار الإلكتروني: 5359401737010807');
+};
+
+// ================== التشغيل النهائي ==================
 (function initApp(){
   try {
     var savedUser = localStorage.getItem('zaid_current_user');
@@ -2223,7 +2381,8 @@ Z.showGames = Z.showGamesFull;
   }
 })();
 
-})();
+})(); // إغلاق دالة IIFE
 </script>
 </body>
 </html>
+
