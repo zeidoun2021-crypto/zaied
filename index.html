@@ -9,6 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Cairo,sans-serif}
 html,body{height:100%;width:100%;overflow:hidden}
@@ -207,9 +208,6 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 @keyframes rt{100%{transform:rotate(360deg)}}
 @keyframes blinkImg{0%,70%{opacity:1}85%,100%{opacity:0}}
 @keyframes blinkTxt{0%,70%{opacity:0}85%,100%{opacity:1}}
-</style>
-</head>
-<body>
 <div id="top">
 <span id="ti" style="font-size:22px;">🎭</span>
 <span id="tt">مرحباً — أنت زائر</span>
@@ -276,28 +274,160 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     </div>
   </div>
 </div>
+<!-- الصفحة الرئيسية (الأقسام) -->
 <div id="pageHome" class="hide">
 <div class="htitle">🌟 مرحباً <span id="un"></span> 🌟</div>
 <div class="secs">
-  <div class="card c-stage"><div class="ci">🏫</div><div class="ct">المراحل التعليمية</div><ul><li onclick="ZAID.openCat('primary')">🎒 الابتدائي (3-6)</li><li onclick="ZAID.openCat('middle')">📘 الإعدادي</li><li onclick="ZAID.openCat('high')">🎓 الثانوي</li><li onclick="ZAID.openCat('univ')">🏛️ الجامعي</li></ul></div>
-  <div class="card c-arabic"><div class="ci">🌙</div><div class="ct">اللغة العربية</div><ul><li onclick="ZAID.openCat('arabic')">🇹🇳 للناطقين بها</li><li onclick="ZAID.openCat('arabic_non')">🌍 للناطقين بغيرها</li></ul></div>
-  <div class="card c-games"><div class="ci">🎮</div><div class="ct">الألعاب الفكرية</div><ul><li onclick="ZAID.openCat('games')">🧩 العاب الذكاء والكلمات</li></ul></div>
-  <div class="card c-res"><div class="ci">🔬</div><div class="ct">البحث العلمي</div><ul><li onclick="ZAID.openCat('lectures')">🎤 المحاضرات</li><li onclick="ZAID.openCat('books')">📚 الكتب</li></ul></div>
-  <div class="card c-ai"><div class="ci">🧠</div><div class="ct">الذكاء الاصطناعي</div><ul><li onclick="ZAID.openCat('ai')">🤖 مسارات AI</li></ul></div>
-  <div class="card c-dict"><div class="ci">📖</div><div class="ct">المنجد الرباعي</div><ul><li onclick="ZAID.showDictionary()">🔍 قاموس المصطلحات</li></ul></div>
-  <div class="card c-job"><div class="ci">💼</div><div class="ct">البحث عن تربص وشغل</div><ul><li onclick="ZAID.openSrv('internship')">📄 طلب تربص</li><li onclick="ZAID.openSrv('job')">💼 طلب شغل</li></ul></div>
-  <div class="card c-live"><div class="ci">🔴</div><div class="ct">البث المباشر</div><ul><li onclick="ZAID.openLive()">🎥 بث محاضرة</li></ul></div>
+  
+  <!-- 1. المراحل التعليمية (تم ربطها بالمحتوى الجديد) -->
+  <div class="card c-stage">
+    <div class="ci">🏫</div>
+    <div class="ct">المراحل التعليمية</div>
+    <ul>
+      <li onclick="ZAID.openCat('primary')">🎒 الابتدائي (3-6)</li>
+      <li onclick="ZAID.openCat('middle')">📘 الإعدادي</li>
+      <li onclick="ZAID.openCat('high')">🎓 الثانوي</li>
+      <li onclick="ZAID.openCat('univ')">🏛️ الجامعي</li>
+    </ul>
+  </div>
+
+  <!-- 2. اللغة العربية (تم ربطها بالمحتوى الجديد) -->
+  <div class="card c-arabic">
+    <div class="ci">🌙</div>
+    <div class="ct">اللغة العربية</div>
+    <ul>
+      <li onclick="ZAID.openCat('arabic')">🇹🇳 للناطقين بها</li>
+      <li onclick="ZAID.openCat('arabic_non')">🌍 للناطقين بغيرها</li>
+    </ul>
+  </div>
+
+  <!-- 3. الألعاب الفكرية -->
+  <div class="card c-games">
+    <div class="ci">🎮</div>
+    <div class="ct">الألعاب الفكرية</div>
+    <ul>
+      <li onclick="ZAID.openCat('games')">🧩 العاب الذكاء والكلمات</li>
+    </ul>
+  </div>
+
+  <!-- 4. البحث العلمي -->
+  <div class="card c-res">
+    <div class="ci">🔬</div>
+    <div class="ct">البحث العلمي</div>
+    <ul>
+      <li onclick="ZAID.openCat('lectures')">🎤 المحاضرات</li>
+      <li onclick="ZAID.openCat('books')">📚 الكتب</li>
+    </ul>
+  </div>
+
+  <!-- 5. الذكاء الاصطناعي -->
+  <div class="card c-ai">
+    <div class="ci">🧠</div>
+    <div class="ct">الذكاء الاصطناعي</div>
+    <ul>
+      <li onclick="ZAID.openCat('ai')">🤖 مسارات AI</li>
+    </ul>
+  </div>
+
+  <!-- 6. المنجد الرباعي -->
+  <div class="card c-dict">
+    <div class="ci">📖</div>
+    <div class="ct">المنجد الرباعي</div>
+    <ul>
+      <li onclick="ZAID.showDictionary()">🔍 قاموس المصطلحات</li>
+    </ul>
+  </div>
+
+  <!-- 7. البحث عن تربص وشغل -->
+  <div class="card c-job">
+    <div class="ci">💼</div>
+    <div class="ct">البحث عن تربص وشغل</div>
+    <ul>
+      <li onclick="ZAID.openSrv('internship')">📄 طلب تربص</li>
+      <li onclick="ZAID.openSrv('job')">💼 طلب شغل</li>
+    </ul>
+  </div>
+
+  <!-- 8. البث المباشر والاجتماعات -->
+  <div class="card c-live">
+    <div class="ci">🔴</div>
+    <div class="ct">البث المباشر والاجتماعات</div>
+    <ul>
+      <li onclick="ZAID.openLive()">🎥 بث محاضرة / اجتماع مباشر</li>
+      <li onclick="ZAID.openVideoRecord()">📹 تسجيل فيديو محلي</li>
+    </ul>
+  </div>
+
 </div>
-<div class="hbtns"><button class="btn bg" onclick="ZAID.showSub()">💳 اشترك</button><button class="btn bgr" onclick="ZAID.logout()">🚪 خروج</button></div>
+<div class="hbtns">
+<button class="btn bg" onclick="ZAID.showSub()">💳 اشترك</button>
+<button class="btn bgr" onclick="ZAID.logout()">🚪 خروج</button>
+</div>
 </div>
 
-<div id="pageLesson" class="hide"><div id="lesson"><div id="lc"></div></div></div>
-<div id="pageLive" class="hide"><div id="lesson"><button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle" style="margin-bottom:15px;">🎥 بث مباشر - محاضرات / لقاءات / اجتماعات</div><div id="jitsiContainer"></div></div></div>
-<div id="pageVideoRecord" class="hide"><div id="lesson"><button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle" style="margin-bottom:15px;">📹 تسجيل فيديو محلي</div><div id="videoStatus">⏳ جاهز</div></div></div>
-<div id="pageGames" class="hide"><div id="lesson"><button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div id="lcGames"></div></div></div>
+<!-- صفحة الدروس (بدون زر عودة ثابت لمنع التكرار) -->
+<div id="pageLesson" class="hide">
+<div id="lesson">
+<div id="lc"></div>
+</div>
 </div>
 
-<div id="bottomNav">
+<!-- صفحة البث المباشر -->
+<div id="pageLive" class="hide">
+  <div id="lesson">
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div class="htitle" style="margin-bottom:15px;">🎥 بث مباشر - محاضرات / لقاءات / اجتماعات</div>
+    <div class="live-info-bar">
+      <div class="live-link-box">
+        <label>🔗 رابط الغرفة (أرسله للمدعوين):</label>
+        <input type="text" id="liveShareLink" readonly>
+        <button onclick="ZAID.copyLiveLink()">📋 نسخ الرابط</button>
+      </div>
+      <div class="live-tips">
+        📌 <b>للمشرف:</b> اضغط على زر "التسجيل" أو "البث المباشر" في شريط الأدوات داخل الغرفة.<br>
+        📌 <b>للمدعوين:</b> افتح الرابط وسينضمون للغرفة مباشرة.
+      </div>
+    </div>
+    <div id="jitsiContainer"></div>
+    <div style="text-align:center; margin-top:15px;">
+      <button class="btn" style="background:#3b82f6; padding:12px 25px;" onclick="ZAID.startLiveRoom()">🔄 غرفة جديدة</button>
+      <button class="btn" style="background:#dc2626; padding:12px 25px;" onclick="ZAID.closeLiveRoom()">🚪 إنهاء البث</button>
+    </div>
+  </div>
+</div>
+
+<!-- صفحة تسجيل الفيديو المحلي -->
+<div id="pageVideoRecord" class="hide">
+  <div id="lesson">
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div class="htitle" style="margin-bottom:15px;">📹 تسجيل فيديو محلي</div>
+    <div class="recording-area">
+      <video id="videoPreview" autoplay muted style="display:none;"></video>
+      <video id="recordedVideo" controls style="display:none;"></video>
+      <div class="recording-buttons">
+        <button class="btn-camera-on" id="startCameraBtn" onclick="ZAID.startCamera()">📷 تشغيل الكاميرا</button>
+        <button class="btn-camera-off" id="stopCameraBtn" onclick="ZAID.stopCamera()" disabled>🔴 إغلاق الكاميرا</button>
+        <button class="btn-record-start" id="startRecordBtn" onclick="ZAID.startRecording()" disabled>🔴 بدء التسجيل</button>
+        <button class="btn-record-stop" id="stopRecordBtn" onclick="ZAID.stopRecording()" disabled>⏹️ إيقاف التسجيل</button>
+        <button class="btn-download-video" id="downloadVideoBtn" onclick="ZAID.downloadVideo()" disabled>💾 تحميل الفيديو</button>
+      </div>
+      <div class="video-status" id="videoStatus">⏳ جاهز - اضغط "تشغيل الكاميرا" أولاً</div>
+    </div>
+  </div>
+</div>
+
+<!-- صفحة الألعاب -->
+<div id="pageGames" class="hide">
+  <div id="lesson">
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div id="lcGames"></div>
+  </div>
+</div>
+
+</div>
+
+<!-- شريط التنقل السفلي -->
+<div id="bottomNav" style="display:none;">
   <button id="btnNavHome" class="bn-home" onclick="ZAID.goHome()">🏠 الأقسام</button>
   <button id="btnNavReg" class="bn-reg" onclick="ZAID.logout()">🔑 العودة للتسجيل</button>
   <button id="btnNavExit" class="bn-exit" onclick="ZAID.exitPlatform()">🚪 مغادرة المنصة</button>
@@ -555,233 +685,819 @@ Z.clearAllUsers = function(){
     Z.loadAdminPanel(); 
   });
 };
+/* ============================================================
+   الجزء 10: ربط الأقسام الجديدة + محتوى المرحلة الإعدادية (التحليل البنيوي)
+   ============================================================ */
+
+// حفظ دالة التوجيه القديمة لكي لا نمسحها
+var originalOpenCat = Z.openCat || function(){};
+
+// تحديث دالة التوجيه لتشمل المحتوى الجديد المرفوع
 Z.openCat = function(cat){
   if(!Z.checkVisitor()) return;
+  
+  // توجيه المرحلة الإعدادية إلى الدرس الجديد
+  if(cat === 'middle') {
+    return Z.showMiddleTech();
+  }
+  
+  // توجيه اللغة العربية إلى الاختبار الجديد
+  if(cat === 'arabic') {
+    return Z.showArabicLevels();
+  }
+  
+  // توجيه المرحلة الابتدائية إلى تطبيق الأطفال والحاسوب
   if(cat === 'primary') {
-    Z.showPrimaryStage();
-  } else if (cat === 'middle' || cat === 'high' || cat === 'univ') {
-    Z.showStage(cat);
-  } else {
-    alert('قسم قيد الإعداد');
+    return Z.showPrimaryApp();
   }
-};
 
-// دالة عرض المراحل (للإعدادي والثانوي والجامعي)
-Z.showStage = function(stage){
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  var title = { middle:'المرحلة الإعدادية', high:'المرحلة الثانوية', univ:'المرحلة الجامعية' }[stage];
-  var html = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>'
-    + '<div class="htitle" style="margin-bottom:15px;">🏫 ' + title + '</div>'
-    + '<div class="sel"><p style="text-align:center;color:#94a3b8;grid-column:1/-1;">لا توجد دروس متاحة حالياً لهذه المرحلة. سيتم إضافتها قريباً.</p></div>';
-  lc.innerHTML = html;
+  // إذا كان القسم آخر، نستخدم الدالة القديمة
+  return originalOpenCat(cat);
 };
 
 // ============================================================
-// دمج درس الأطفال والحاسوب داخل المرحلة الابتدائية (مع الإصلاحات)
+// محتوى المرحلة الإعدادية: التحليل البنيوي للمنتج التقني
 // ============================================================
-Z.showPrimaryStage = function() {
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  
-  Z.lessons['kids_computer'] = {
-    meta: { title: '📚 كتاب الأطفال والحاسوب', icon: '📚', desc: 'القصة الكاملة + الاختبار' },
-    slides: [
-      { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 1</div><div class="image-box"><img src="https://i.postimg.cc/FHPdYxrn/alhaswb-walatfal.jpg"></div><div style="font-size:28px; font-weight:bold; margin:20px 0">📚 الأطفال والحاسوب</div><div style="font-size:18px">•  بقلم: محمد زايد خبير دولي في التقنيات الحديثة /  •  أستاذ جامعي</div><div class="translation-box"><span class="translation-ar">🖥️ حاسوب</span> | <span class="translation-fr">ordinateur</span> | <span class="translation-en">Computer</span></div></div>` },
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 2</div><div class="image-box"><img src="https://i.postimg.cc/CKcnB72y/haswb1.jpg"></div><div class="dialogue"><div class="children">🧒 الأطفال -  هيا بنا نتعرف على الحاسوب لنلعب معه.</div><div class="children">🧒 الأطفال -  ما اسمك أيها الصديق ؟</div><div class="computer">💻 الحاسوب :  لي اسمان الكمبيوتر أو الحاسوب</div><div class="children">🧒 الأطفال:  هل يمكن أن تصف لنا نفسك ؟</div><div class="computer">💻 الحاسوب: انني أتكون من جزئين أساسيين: أ -  جزء مادي وهو مجموعة من العناصر المصنوعة من المعادن وهو الجزء الذي يعبر عنه بالفرنسية (Matériel) أو بالانقليزية (Hardware). ب -  جزء معنوي ويتكون من البرمجيات وهو ما يسمى بالفرنسية (Logiciel) أو بالانقليزية (Software).</div><div class="children">🧒 الأطفال :  هل يمكن للجزئين أن ينفصلا عن بعضهما؟</div><div class="computer">💻 الحاسوب:  لا أبدا.لا يمكن للجزء الأول أن يكون مشتغلا إلا إذا تعامل مع الجزء الثاني الذي لا قيمة له إذا كان منفردا عن الجزء الأول.</div></div><div class="translation-box"><span class="translation-ar">🔧 جزء مادي</span> | <span class="translation-fr">Matériel</span> | <span class="translation-en">Hardware</span><br><span class="translation-ar">📀 جزء معنوي</span> | <span class="translation-fr">Logiciel</span> | <span class="translation-en">Software</span></div><div><button class="btn-speak" onclick="ZAID.speak('جزء مادي', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Matériel', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Hardware', 'en')">🔊 English</button></div></div>` },
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 3-4</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/ycZZ66y5/ram-cpu.jpg" alt="المعالج والذاكرة"><button class="btn-speak" onclick="ZAID.speak('صورة المعالج والذاكرة', 'ar')">🔊 وصف الصورة</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال : يقال عنك أنك ذكي وسريع في الرياضيات . هل هذا صحيح وكيف ذلك ؟</div><div class="computer">💻 الحاسوب : قبل أن أجيبكما عن سؤالكما لابد لي أن أواصل حديثي عن تركيبتي الداخلية ثم الخارجية.</div><div class="children">🧒 الأطفال : هل هذا له علاقة بسؤالنا؟</div><div class="computer">💻 الحاسوب : أجل</div><div class="children">🧒 الأطفال : كيف ذلك؟</div><div class="computer">💻 الحاسوب : انني أتكون من الداخل من عناصر أساسية مصنوعة من معادن كما ذكرت والعناصر هي: «المعالج» والذاكرة وهو ما يناسب عند الانسان بالقلب والدماغ حيث العنصر الأول يقوم بمعالجة المعلومات التي يدخلها لي الانسان لتستقر في الذاكرة الرئيسية التي أستعملها كفضاء لاشتغالي.</div></div><div class="translation-box"><span class="translation-ar">🧠 معالج</span> | <span class="translation-fr">Processeur</span> | <span class="translation-en">Processor</span><br><span class="translation-ar">💾 ذاكرة</span> | <span class="translation-fr">mémoire</span> | <span class="translation-en">memory</span></div><div><button class="btn-speak" onclick="ZAID.speak('معالج', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Processeur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Processor', 'en')">🔊 English</button></div></div>` },
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 5-6</div><div class="image-box"><img src="https://iili.io/C9xVKYv.jpg"></div><div class="dialogue"><div class="children">🧒 الأطفال: جوابك غامض جدا . هل لك أن تشرح لنا أكثر ؟</div><div class="computer">💻 الحاسوب: انني أتكون من أربعة أجزاء : الوحدة المركزية ، الذاكرات ، الروابط واللواحق.</div><div class="children">🧒 الأطفال: ما هي الوحدة المركزية ؟</div><div class="computer">💻 الحاسوب: الوحدة المركزية هي قلبي النابض وعقلي المفكر وهي تشتمل على وحدة الأوامر ووحدة معالجة المعطيات الحرفية والرقمية والمنطقية والتي تمثل العقل المفكر حيث أقوم بإنجاز الأوامر والعمليات الحسابية والعمليات المنطقية وأستعمل الذاكرة الرئيسية للقيام بذلك وتسمى بالذاكرة الحية.</div></div><div class="translation-box"><span class="translation-ar">⚙️ وحدة مركزية</span> | <span class="translation-fr">Unité Centrale</span> | <span class="translation-en">CPU</span></div><div><button class="btn-speak" onclick="ZAID.speak('وحدة مركزية', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Unité Centrale', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('CPU', 'en')">🔊 English</button></div></div>` },
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 7-8</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/V0XXHmHX/1.jpg" alt="RAM"><button class="btn-speak" onclick="ZAID.speak('صورة ذاكرة RAM', 'ar')">🔊 وصف RAM</button><img src="https://i.ibb.co/twfWWJ42/image.jpg" alt="ROM"><button class="btn-speak" onclick="ZAID.speak('صورة ذاكرة ROM', 'ar')">🔊 وصف ROM</button><img src="https://i.ibb.co/gFDFKsd5/image.png" alt="الذاكرة"><button class="btn-speak" onclick="ZAID.speak('صورة الذاكرة', 'ar')">🔊 وصف الذاكرة</button></div></div><div class="dialogue"><div class="computer">💻 الحاسوب: ذاكرة تدعى بالميتة أستعملها لتخزين البرمجيات التي أحتاجها عند بداية اشتغالي . والفرق بين الذاكرة الرئيسية أو الذاكرة الحية والذاكرة الميتة هي أن الأولى لا تحتفظ بالمعطيات عند انقطاع التيار الكهربائي عني أما الذاكرة الميتة فهي لا تضيع المعطيات عند انقطاع التيار الكهربائي عني ومن سلبيات هذه الأخيرة أنه لا يمكن الكتابة فيها.</div><div class="children">🧒 الأطفال: وماذا أيضا ؟</div><div class="computer">💻 الحاسوب: الروابط وهي النواقل والقنوات التي تنقل المعطيات والأوامر بين الوحدة الرئيسية والذاكرات وهي روابط من نوعين: روابط للمعطيات وهي تنقل الأوامر والمعطيات وكل ما تنقله الوحدات: الأوامر ووحدة المعالجة. وروابط العناوين وهي تنقل عناوين الأوامر والمعطيات الموجودة بالذاكرة الرئيسية.</div></div><div class="translation-box"><span class="translation-ar">💾 RAM (ذاكرة حية)</span> | <span class="translation-fr">mémoire vive</span> | <span class="translation-en">Random Access Memory</span><br><span class="translation-ar">💾 ROM (ذاكرة ميتة)</span> | <span class="translation-fr">mémoire morte</span> | <span class="translation-en">Read Only Memory</span><br><span class="translation-ar">🔌 روابط (نواقل)</span> | <span class="translation-fr">Bus</span> | <span class="translation-en">Bus</span></div><div><button class="btn-speak" onclick="ZAID.speak('RAM', 'en')">🔊 RAM</button> <button class="btn-speak" onclick="ZAID.speak('ROM', 'en')">🔊 ROM</button> <button class="btn-speak" onclick="ZAID.speak('روابط', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Bus', 'fr')">🔊 Bus</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Bus', 'en')">🔊 Bus</button></div></div>` },
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 9-10</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/CpTk8dfg/camera-numerique.jpg" alt="كاميرا"><button class="btn-speak" onclick="ZAID.speak('صورة كاميرا رقمية', 'ar')">🔊 وصف الكاميرا</button><img src="https://i.ibb.co/3mcN7f3K/camescope.jpg" alt="كاميسكوب"><button class="btn-speak" onclick="ZAID.speak('صورة الكاميسكوب', 'ar')">🔊 وصف الكاميسكوب</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك عناصر أخرى ؟</div><div class="computer">💻 الحاسوب: نعم وهي المتممة للعناصر السابقة ذكرها ألا وهي الوسائط.</div><div class="children">🧒 الأطفال: وما هي هذه الوسائط ؟ وما هي مهمتها ؟</div><div class="computer">💻 الحاسوب: هي عناصر موصولة بالروابط وتكون غالبا على شكل بطاقات أو جذاذات الكترونية تختلف عن بعضها البعض لأن كل واحدة منها لإدخال الصورة المتحركة يجب استعمال كاميرا فيديو رقمية أو الكاميسكوب الرقمي.</div></div><div class="translation-box"><span class="translation-ar">📷 كاميرا رقمية</span> | <span class="translation-fr">Caméra numérique</span> | <span class="translation-en">Digital camera</span><br><span class="translation-ar">🎥 كاميسكوب</span> | <span class="translation-fr">Caméscope</span> | <span class="translation-en">Camcorder</span></div><div><button class="btn-speak" onclick="ZAID.speak('كاميرا', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Caméra numérique', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Digital camera', 'en')">🔊 English</button></div></div>` },
-      { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 11-12</div><div class="image-box"><img src="https://i.postimg.cc/7ZkXt82w/fart.jpg" alt="فأرة"><button class="btn-speak" onclick="ZAID.speak('صورة الفأرة', 'ar')">🔊 وصف الفأرة</button></div><div class="dialogue"><div class="children">🧒 الأطفال: اذا أردنا أن نتحدث معك فيجب أن نستعمل احدى الأدوات أو اللواحق كما تسميها . الفأرة ؟ نظر أنها صالحة الدخال المعطيات أيضا ؟</div><div class="computer">💻 الحاسوب : هي أداة قد ألحقت بنا نحن معشر الحواسيب مؤخرا عندما أدخلت برمجية "ويندوز" في نظام تشغيلنا وهي تيسّر التخاطب معنا حيث على المستعمل أن ينقر على البرمجية أو صورة العنصر لتشغيله.</div></div><div class="translation-box"><span class="translation-ar">🖱️ فأرة</span> = <span class="translation-fr">souris</span> = <span class="translation-en">mouse</span></div><div><button class="btn-speak" onclick="ZAID.speak('فأرة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('souris', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('mouse', 'en')">🔊 English</button></div></div>` },
-      { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 13-14</div><div class="image-box"><div class="image-row"><img src="https://iili.io/C9xPrUx.jpg" alt="لوحة مفاتيح"><button class="btn-speak" onclick="ZAID.speak('صورة لوحة المفاتيح', 'ar')">🔊 وصف لوحة المفاتيح</button><img src="https://i.ibb.co/YFy4WZqQ/image.jpg" alt="قلم ضوئي"><button class="btn-speak" onclick="ZAID.speak('صورة القلم الضوئي', 'ar')">🔊 وصف القلم الضوئي</button><img src="https://i.ibb.co/XZWmFZSL/image.jpg" alt="شاشة لمسية"><button class="btn-speak" onclick="ZAID.speak('صورة الشاشة اللمسية', 'ar')">🔊 وصف الشاشة اللمسية</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك ملحقات أخرى للتقاطب ؟</div><div class="computer">💻 الحاسوب: أجل هناك ملحقات أخرى كلوحة المفاتيح لإدخال الحروف وملحقات خاصة كالقلم الضوئي الذي يستعمل في ادخال المعطيات في شكل شفرات عمودية ولوحة الرسم التي تساعد على الرسم والشاشة اللمسية وهي عبارة عن غشاء حساس يلصق في منطقة في لوحة المفاتيح أو على شاشة العرض وهي تتم وظيفة لوحة المفاتيح وتعوض الفأرة.</div></div><div class="translation-box"><span class="translation-ar">⌨️ لوحة مفاتيح</span> = <span class="translation-fr">clavier</span> = <span class="translation-en">keyboard</span><br><span class="translation-ar">✏️ قلم ضوئي</span> = <span class="translation-fr">crayon optique</span> = <span class="translation-en">digital pen</span><br><span class="translation-ar">👆 شاشة لمسية</span> = <span class="translation-fr">écran tactile</span> = <span class="translation-en">touch screen</span></div><div><button class="btn-speak" onclick="ZAID.speak('لوحة مفاتيح', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('clavier', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('keyboard', 'en')">🔊 English</button></div></div>` },
-      
-      // تم إصلاح هذه الصفحة (15-20) لتكون كل صورة مع زرها
-      { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 15-20</div>
-        <div class="image-box" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
-            <div style="display:flex; flex-direction:column; align-items:center; background:white; padding:10px; border-radius:15px;">
-                <img src="https://i.postimg.cc/wT3wRQdz/monitor.jpg" style="width:150px; height:150px; object-fit:contain;">
-                <button class="btn-speak" style="margin-top:10px;" onclick="ZAID.speak('صورة الشاشة', 'ar')">🔊 وصف الشاشة</button>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; background:white; padding:10px; border-radius:15px;">
-                <img src="https://i.postimg.cc/ZRFMjbwj/laser-jet-d-encre.jpg" style="width:150px; height:150px; object-fit:contain;">
-                <button class="btn-speak" style="margin-top:10px;" onclick="ZAID.speak('صورة الطابعة', 'ar')">🔊 وصف الطابعة</button>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; background:white; padding:10px; border-radius:15px;">
-                <img src="https://i.postimg.cc/cHXcrrD2/microphone-and-speakers.jpg" style="width:150px; height:150px; object-fit:contain;">
-                <button class="btn-speak" style="margin-top:10px;" onclick="ZAID.speak('صورة الميكروفون', 'ar')">🔊 وصف الميكروفون</button>
-            </div>
-        </div>
-        <div class="dialogue"><div class="children">🧒 الأطفال: ولكن لم توضح كيفية تخاطبك مع الانسان ؟ هل لك أن توضح لنا دور كل ملحق ؟</div><div class="computer">💻 الحاسوب: نعم. لنبدأ بالشاشة فهي وسيلة تخاطب بيني وبين الانسان منذ بداية المعلوماتية. فيدخل الانسان المعطيات وأنا أعالجها وأعرض نتائجها على الشاشة ليستغلها. وكان غالب المعطيات من النوع المكتوب لأن جودة الشاشات في البداية لم تكن كافية للعرض بالألوان والصور ،أما اليوم فقد تطورت الشاشات الى أن أصبحت على مختلف الهيئات والأحجام.</div></div><div class="translation-box"><span class="translation-ar">🖥️ شاشة</span> = <span class="translation-fr">Ecran</span> = <span class="translation-en">Screen</span><br><span class="translation-ar">🖨️ طابعة</span> = <span class="translation-fr">Imprimante</span> = <span class="translation-en">Printer</span><br><span class="translation-ar">🎤 ميكروفون</span> = <span class="translation-fr">microphone</span> = <span class="translation-en">microphone</span></div><div><button class="btn-speak" onclick="ZAID.speak('شاشة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Ecran', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Screen', 'en')">🔊 English</button></div></div>` },
-      
-      { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 21-24</div><div class="image-box"><img src="https://iili.io/C9xDdb4.jpg" alt="أحجام الشاشات"><button class="btn-speak" onclick="ZAID.speak('صورة أحجام الشاشات', 'ar')">🔊 وصف أحجام الشاشات</button></div><div class="dialogue"><div class="computer">💻 الحاسوب: تختلف أحجام الشاشات باختلاف التطبيقات والبرمجيات .فبالنسبة لحجم 15 بوصة فهي تستعمل في التطبيقات وأنظمة التشغيل العادية والجارية .أما حجم 17 بوصة و21 بوصة فهي تستعمل في تطبيقات تحتاج لدقة في العرض ومنها التطبيقات التي تتناول الرسوم والصور ومن التطبيقات نذكر النشر الالكتروني الذي ينتج الجرائد والمجلات.</div><div class="children">🧒 الأطفال: هل يمكن أن نلعب معك بشاشة 15 بوصة.</div><div class="computer">💻 الحاسوب: أجل لأن تقنية الشاشات اليوم تستجيب الى مختلف المعطيات المعالجة أي الصورة والصوت والنص وهو جيل من الحواسيب المسمى بمتعدد الوسائط أو "الملتيميديا".</div></div><div class="translation-box"><span class="translation-ar">📺 مختلف احجام شاشات الحاسوب</span><br><span class="translation-fr">Différents tailles d'écrans pour pc</span><br><span class="translation-en">Different sizes of pc screens</span></div><div><button class="btn-speak" onclick="ZAID.speak('أحجام شاشات الحاسوب', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('Différentes tailles d\'écrans', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('Different screen sizes', 'en')">🔊 English</button></div></div>` },
-      
-      // تم إصلاح هذه الصفحة (25-29) بوضع 3 صور مختلفة للطابعات
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 25-29</div>
-        <div class="image-box" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
-            <div style="display:flex; flex-direction:column; align-items:center; background:white; padding:10px; border-radius:15px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Epson_LX-300_%2B_1.jpg/640px-Epson_LX-300_%2B_1.jpg" style="width:150px; height:150px; object-fit:contain;">
-                <button class="btn-speak" style="margin-top:10px;" onclick="ZAID.speak('طابعة إبرية', 'ar')">🔊 وصف طابعة إبرية</button>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; background:white; padding:10px; border-radius:15px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Epson_Stylus_Photo_R300_%28open%29.jpg/640px-Epson_Stylus_Photo_R300_%28open%29.jpg" style="width:150px; height:150px; object-fit:contain;">
-                <button class="btn-speak" style="margin-top:10px;" onclick="ZAID.speak('طابعة نفاثة للحبر', 'ar')">🔊 وصف طابعة نفاثة</button>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; background:white; padding:10px; border-radius:15px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/HP_LaserJet_1020.jpg/640px-HP_LaserJet_1020.jpg" style="width:150px; height:150px; object-fit:contain;">
-                <button class="btn-speak" style="margin-top:10px;" onclick="ZAID.speak('طابعة ليزرية', 'ar')">🔊 وصف طابعة ليزرية</button>
-            </div>
-        </div>
-        <div class="dialogue"><div class="children">🧒 الأطفال: ما هي قنوات الاخراج ؟</div><div class="computer">💻 الحاسوب: هناك الطابعة التي غالبا ما تلازمنا لأنها تعيننا في مد الانسان بالمعلومات والمعطيات التي تنتج عن معالجتنا لها وتلحق بي عبر وصلة وتنشر المعطيات على الورق.</div><div class="children">🧒 الأطفال: كيف تشتغل ؟</div><div class="computer">💻 الحاسوب: لشرح كيفية اشتغالها لابد من توضيح أنواعها فهي على ثلاثة أنواع: الطابعات الإبرية، الطابعات ذات النسخ الحبري أو النفاثة للحبر، والطابعات الليزرية.</div></div><div class="translation-box"><span class="translation-ar">🖨️ طابعة إبرية</span> | <span class="translation-fr">Imprimante à aiguilles</span> | <span class="translation-en">Dot matrix printer</span><br><span class="translation-ar">🖨️ طابعة نفاثة للحبر</span> | <span class="translation-fr">Imprimante à jet d'encre</span> | <span class="translation-en">Ink jet printer</span><br><span class="translation-ar">🖨️ طابعة ليزرية</span> | <span class="translation-fr">Imprimante Laser</span> | <span class="translation-en">Laser printer</span></div><div><button class="btn-speak" onclick="ZAID.speak('طابعة', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('imprimante', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('printer', 'en')">🔊 English</button></div></div>` },
-      
-      { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 30-34</div><div class="image-box"><div class="image-row"><img src="https://i.postimg.cc/CxTbMGhR/scanner.jpg" alt="ماسح"><button class="btn-speak" onclick="ZAID.speak('صورة الماسح', 'ar')">🔊 وصف الماسح</button><img src="https://i.postimg.cc/DzDvFgFf/rasm.jpg" alt="راسم"><button class="btn-speak" onclick="ZAID.speak('صورة الراسم', 'ar')">🔊 وصف الراسم</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: هل هناك طريقة أخرى لإخراج الصور والبيانات الرسومية ؟</div><div class="computer">💻 الحاسوب: أجل ، هناك الماسح لإخراج الصور والراسم الذي يستعمل لطبع الخرائط أو البيانات الرسومية وغالبا ما يستعمله المهندس المعماري أو المؤسسات الخاصة بالهندسة المعمارية.</div></div><div class="translation-box"><span class="translation-ar">📠 ماسح</span> | <span class="translation-fr">scanner</span> | <span class="translation-en">scanner</span><br><span class="translation-ar">📐 راسم</span> | <span class="translation-fr">traceur</span> | <span class="translation-en">plotter</span></div><div><button class="btn-speak" onclick="ZAID.speak('ماسح', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('scanner', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('scanner', 'en')">🔊 English</button></div></div>` },
-      { html: `<div class="slide-card" style="text-align:center"><div class="note">📖 صفحة 35-37</div><div class="image-box"><img src="https://i.postimg.cc/R0wsVCxv/modem.jpg" alt="مودم"><button class="btn-speak" onclick="ZAID.speak('صورة المودم', 'ar')">🔊 وصف المودم</button></div><div class="dialogue"><div class="children">🧒 الأطفال: هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟</div><div class="computer">💻 الحاسوب: أجل انه يمكن لي أن أتخاطب مع حاسوب أو أكثر سواء كانوا يتواجدون معي في نفس الفضاء أو بعيدا عني. يجب أن يتصل بي جهاز آخر يدعى "موديم" كما يمكن أن يندرج بداخلي كالجذاذات الوسائطية وهذا الجهاز يقوم بوظيفة الاتصال ويدعى "موديم" كذلك.ويكون الاتصال عبر شبكة الهاتف أو شبكات أخرى كما يمكن لي أن أتخاطب مع حاسوب آخر عبر وصلة تلحق بفتحة لالخراج عند الحاسوب الآخر. وفي صورة تخاطبي مع مجموعة من الحواسيب وفي نفس الفضاء فهناك وسائل أخرى تضاف الى هيكلي المادي والمعنوي لأتمكن من التخاطب معهم.</div></div><div class="translation-box"><span class="translation-ar">📡 مودم</span> = <span class="translation-fr">modem</span> = <span class="translation-en">modem</span></div><div><button class="btn-speak" onclick="ZAID.speak('مودم', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('modem', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('modem', 'en')">🔊 English</button></div></div>` },
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 38-40</div><div class="image-box"><div class="image-row"><img src="https://i.ibb.co/FbLdWngL/image.jpg" alt="قرص صلب"><button class="btn-speak" onclick="ZAID.speak('صورة القرص الصلب', 'ar')">🔊 وصف القرص الصلب</button><img src="https://i.ibb.co/DfRFF75T/image.jpg" alt="نظام تشغيل"><button class="btn-speak" onclick="ZAID.speak('صورة نظام التشغيل', 'ar')">🔊 وصف نظام التشغيل</button></div></div><div class="dialogue"><div class="children">🧒 الأطفال: كيف يمكن أن نلعب معك ؟</div><div class="computer">💻 الحاسوب: لم أنته بعد من سرد بقية العناصر التي يجب أن أتسلح بها كي أتمكن من اللعب معكم. لم يبق لي إلا الجانب المعنوي وهو ما يسمى بالبرمجيات. وتنقسم الى قسمين أساسيين: قسم إجباري وقسم اختياري. القسم الإجباري والأساسي وهو ما يسمى بنظام التشغيل ولابد أن يوضع في داخلي ويحمل في الذاكرة الرئيسية والذاكرة الميتة كي أتمكن من الاشتغال. ومن برمجيات التشغيل المعروفة: نظام "ويندوز Windows" و "يونيكس Unix". القسم الثاني وهو الاختياري هي البرمجيات التطبيقية التي تختلف حسب المجالات والاستعمالات فمنها البرمجيات المكتبية وبرمجيات التصرف وبرمجيات إنتاج البرمجيات وبرمجيات الألعاب وغير ذلك.</div><div class="children">🧒 الأطفال: إذا للعب معك، ماذا يجب أن نفعل؟</div><div class="computer">💻 الحاسوب: عليكم أن تخزنوا برمجية اللعبة على القرص الصلب. وسيقوم نظام التشغيل بمساعدتكم على ذلك. غالبا ما تكون برمجيات اللعب على أقراص ليزرية لأنها تستوجب مساحة كبيرة للتخزين، تضعون القرص في وحدة القراءة ثم تنقرون عليها فينشر نظام التشغيل محتوى القرص.</div><div class="children">🧒 الأطفال: ثم ماذا بعد ذلك؟</div><div class="computer">💻 الحاسوب: تنقرون عليها فيقوم نظام التشغيل بتركيز برمجية اللعبة على القرص الصلب، وذلك بنقل كل البرمجيات الإضافية لتشغيل برمجية اللعبة.</div><div class="children">🧒 الأطفال: ثم ماذا؟</div><div class="computer">💻 الحاسوب: عليكم بالنقر على اسم البرمجية التي تريدون استعمالها، وهكذا يمكن لكم الشروع في اللعب.</div><div class="children">🧒 الأطفال: حسنا وعند الانتهاء ماذا نفعل؟</div><div class="computer">💻 الحاسوب: في غالب الأحيان، ترشدكم برمجية اللعبة على كيفية إنهاء اللعبة بعبارة "خروج" (Quit).</div></div><div class="translation-box"><span class="translation-ar">💿 قرص صلب</span> | <span class="translation-fr">disque dur</span> | <span class="translation-en">hard disk</span><br><span class="translation-ar">💿 نظام تشغيل</span> | <span class="translation-fr">système d'exploitation</span> | <span class="translation-en">operating system</span><br><span class="translation-ar">🎮 لعبة</span> | <span class="translation-fr">jeu</span> | <span class="translation-en">game</span></div><div><button class="btn-speak" onclick="ZAID.speak('قرص صلب', 'ar')">🔊 عربي</button> <button class="btn-speak btn-speak-fr" onclick="ZAID.speak('disque dur', 'fr')">🔊 Français</button> <button class="btn-speak btn-speak-en" onclick="ZAID.speak('hard disk', 'en')">🔊 English</button></div></div>` },
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 41-43</div><div class="note" style="font-size:18px;">🎬 انتهى الدرس - إليكم مراجعته عبر فيديو 1 و 2</div><div class="image-box"><iframe width="100%" height="250" src="https://www.youtube.com/embed/3QCgr6IpuvA" allowfullscreen></iframe></div><div class="image-box"><iframe width="100%" height="250" src="https://www.youtube.com/embed/HB4I2CgkcCo" allowfullscreen></iframe></div></div>` },
-      { html: `<div class="slide-card"><div class="note">📖 صفحة 44-50</div><div class="image-box"><div style="font-size:64px;">📝 ✏️ 📚 ⭐</div></div><div class="note" style="font-size:24px; font-weight:bold;">📝 التمارين: 25 سؤالاً - 4 نقاط لكل سؤال - المجموع: 100 نقطة</div><div style="background:#c8e6c9; padding:15px; border-radius:20px; margin:15px 0; text-align:center;">🧠 أجب على الأسئلة الـ25 لتحصل على الشهادة!<br>🌟 حاول أن تحصل على 50/100 فأكثر 🌟</div><div style="text-align:center;"><button id="startExamBtn" style="background:#22c55e; font-size:18px; padding:12px 30px; border:none; border-radius:40px; color:white; font-weight:bold; cursor:pointer;" onclick="ZAID.startPrimaryExam()">🚀 ابدأ الاختبار النهائي (25 سؤالاً) 🚀</button></div></div>` }
-    ]
-  };
-
-  var html = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>'
-    + '<div class="htitle" style="margin-bottom:15px;">🎒 المرحلة الابتدائية</div>'
-    + '<div class="sel">'
-    + '<div class="lcard" onclick="ZAID.openLesson(\'kids_computer\')">'
-    + '<div class="li">📚</div><div class="lt">كتاب الأطفال والحاسوب</div><div class="ld">القصة الكاملة + الاختبار</div>'
-    + '</div></div>';
-    
-  lc.innerHTML = html;
-};
-// دوال عرض الدروس
-Z.openLesson = function(key){
+Z.showMiddleTech = function() {
   if(!Z.checkVisitor()) return;
-  if(!Z.lessons[key]) { alert('الدرس غير موجود.'); return; }
-  Z.cur = { key: key, idx: 0 };
-  Z.showPage('pageLesson');
-  Z.renderSlide();
-};
-
-Z.renderSlide = function(){
-  var lc = document.getElementById('lc');
-  var lesson = Z.lessons[Z.cur.key];
-  var slides = lesson.slides;
-  var idx = Z.cur.idx;
-  var slide = slides[idx];
-
-  var html = '<button class="back" onclick="ZAID.showPrimaryStage()">🔙 عودة للقائمة</button>'
-    + '<div class="slide">'
-    + '<div class="sn">الشريحة ' + (idx+1) + ' من ' + slides.length + '</div>'
-    + (slide.html ? '<div class="glossary-wrapper">' + slide.html + '</div>' : '')
-    + '<div class="prog"><div class="progf" style="width:' + Math.round(((idx + 1) / slides.length) * 100) + '%"></div></div>'
-    + '<div class="nav">';
-  if(idx > 0) html += '<button class="nbtn np" onclick="ZAID.prevSlide()">⬅️ السابق</button>';
-  if(idx < slides.length - 1) html += '<button class="nbtn nn" onclick="ZAID.nextSlide()">التالي ➡️</button>';
-  html += '</div></div>';
-  lc.innerHTML = html;
-  Z.stopSpeak();
-};
-
-Z.nextSlide = function(){ var lesson = Z.lessons[Z.cur.key]; if(Z.cur.idx < lesson.slides.length - 1) { Z.cur.idx++; Z.renderSlide(); window.scrollTo(0,0); } };
-Z.prevSlide = function(){ if(Z.cur.idx > 0) { Z.cur.idx--; Z.renderSlide(); window.scrollTo(0,0); } };
-
-// الاختبار النهائي (25 سؤالاً)
-Z.startPrimaryExam = function() {
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
-  var exercisesList = [
-    "تمرين 1 (4 نقاط)\n1) ماهي مكونات الحاسوب؟\n2) ما هي المواد التي صنعت منها أجزاء الحاسوب؟",
-    "تمرين 2 (4 نقاط)\n1) ماهي تركيبة الحاسوب الداخلية؟\n2) ما هي وظيفة كل جزء داخلي في الحاسوب؟",
-    "تمرين 3 (4 نقاط)\n1) ما هي الذاكرة الرئيسية؟\n2) ما دور الذاكرة الرئيسية ؟",
-    "تمرين 4 (4 نقاط)\n1) ماهي أنواع الذاكرات عند الحاسوب؟\n2) ما هو الفرق بينها؟",
-    "تمرين 5 (4 نقاط)\n1) ما هي الروابط في الحاسوب؟\n2) كيف نسمي الروابط أيضا وما دورها؟",
-    "تمرين 6 (4 نقاط)\n1) ما هي اللواحق؟\n2) ما هي مهمة كل لاحق ؟",
-    "تمرين 7 (4 نقاط)\n1) ماهي اللواحق التي تمكننا التفاعل مع الحاسوب؟\n2) كيف نستخدم الفارة؟",
-    "تمرين 8 (4 نقاط)\n1) ماهي اللواحق الأخرى ؟\n2) ما دور لوحة المفاتيح？",
-    "تمرين 9 (4 نقاط)\n1) ما هو القلم الالكتروني؟ ما هو اسمه الثاني？\n2) متى نستخدم القلم الضوئي؟",
-    "تمرين 10 (4 نقاط)\n1) متى نستخدم اللوحة الرسومية؟\n2) كيف شكلها؟",
-    "تمرين 11 (4 نقاط)\n1) ما هي الشاشة اللمسية؟\n2) كيف تشتغل ومتى نستخدمها ؟\n3) اين نجدها؟",
-    "تمرين 12 (4 نقاط)\n1) ماهو دور الشاشات في الحاسوب؟\n2) هل هناك نوع واحد وماهي؟",
-    "تمرين 13 (4 نقاط)\n1) ما دور الطابعة ؟ وما هي أنواعها？\n2) متى نستخدم الطابعة؟",
-    "تمرين 14 (4 نقاط)\n1) كيف نكلم الحاسوب؟\n2) كيف نسمع ما يقول الحاسوب عندما يجيب؟",
-    "تمرين 15 (4 نقاط)\n1) ما هي العلاقة بين شاشة التلفزة والحاسوب؟\n2) متى نحتاج لشاشة التلفزة عندما نتعامل مع الحاسوب؟",
-    "تمرين 16 (4 نقاط)\n1) ماهي مختلف ملحقات الحاسوب؟\n2) ما دور كل واحد منها？",
-    "تمرين 17 (4 نقاط)\n1) الطابعات هي لواحق اخراج ؟ كيف؟\n2) ما هي أنواع المعلومات التي تخرجها الطابعات؟",
-    "تمرين 18 (4 نقاط)\n1) ما هو الماسح\n2) متى نستخدم الماسح？",
-    "تمرين 19 (4 نقاط)\n1) ما هو الراسم？\n2) متى نستخدم الراسم؟ ما هي وظيفته？",
-    "تمرين 20 (4 نقاط)\n1) هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟ كيف؟\n2) ما هو الجهاز الذي يمكنه من ذلك؟",
-    "تمرين 21 (4 نقاط)\n1) كيف يستطيع الحاسوب التحاور مع الانسان؟\n2) ما هي العناصر الضرورية التي تمكنه من ذلك؟",
-    "تمرين 22 (4 نقاط)\n1) ما دور الأقراص الليزرية؟\n2) ماذا تحتوي تلك الأقراص؟",
-    "تمرين 23 (4 نقاط)\n1) ماهو المكون داخل الحاسوب يشغله\n2) كيف نغذي الحاسوب بالطاقة كي يبقى مشتغلا",
-    "تمرين 24 (4 نقاط)\n1) ماهي التعليمة لرفع برمجية الى الحاسوب\n2) ماهي التعليمة لتثبيت برمجية على الحاسوب",
-    "تمرين 25 (4 نقاط)\n1) ماهي المراحل التي تتبعها لتلعب مع الحاسوب\n2) ماهو الملحق الذي يمكنك من التمكن في اللعبة"
-  ];
-  var html = '<button class="back" onclick="ZAID.openLesson(\'kids_computer\')">🔙 العودة إلى الدرس</button>'
-    + '<div class="htitle" style="margin-bottom:15px;">📝 اختبار المرحلة الابتدائية (25 سؤالاً)</div>'
-    + '<div class="glossary-wrapper">';
-  for(var i = 0; i < exercisesList.length; i++) {
-    html += '<div class="exercise-card" style="background:#f8fafc; padding:15px; border-radius:20px; margin-bottom:15px; border-right:4px solid #facc15;">'
-      + '<p style="font-weight:bold; color:#1e293b; white-space:pre-line;">' + exercisesList[i] + '</p>'
-      + '<textarea id="primary_ans_' + i + '" rows="3" style="width:100%; padding:10px; border-radius:15px; border:1px solid #ccc; margin-top:10px;" placeholder="اكتب إجابتك هنا..."></textarea>'
-      + '</div>';
-  }
-  html += '</div><div style="text-align:center; margin-top:20px;">'
-    + '<button class="btn" style="background:#22c55e; padding:15px 40px; font-size:18px; border-radius:50px;" onclick="ZAID.submitPrimaryExam()">✅ إنهاء الاختبار والتصحيح</button>'
-    + '</div>';
-  lc.innerHTML = html;
-};
-
-Z.submitPrimaryExam = function() {
-  var score = 0; var details = '';
-  for(var i = 0; i < 25; i++) {
-    var answer = document.getElementById('primary_ans_' + i)?.value || '';
-    var trimmed = answer.trim();
-    if(trimmed.length > 40) { score += 4; details += '<div class="feedback-correct" style="background:#166534; color:white; padding:10px; border-radius:15px; margin:5px 0;">✅ تمرين ' + (i+1) + ': إجابة ممتازة (+4 نقاط)</div>'; }
-    else if(trimmed.length > 25) { score += 3; details += '<div class="feedback-correct" style="background:#166534; color:white; padding:10px; border-radius:15px; margin:5px 0;">✅ تمرين ' + (i+1) + ': إجابة جيدة (+3 نقاط)</div>'; }
-    else if(trimmed.length > 15) { score += 2; details += '<div class="feedback-correct" style="background:#166534; color:white; padding:10px; border-radius:15px; margin:5px 0;">✅ تمرين ' + (i+1) + ': إجابة مقبولة (+2 نقاط)</div>'; }
-    else if(trimmed.length > 5) { score += 1; details += '<div class="feedback-correct" style="background:#166534; color:white; padding:10px; border-radius:15px; margin:5px 0;">✅ تمرين ' + (i+1) + ': إجابة ناقصة (+1 نقطة)</div>'; }
-    else { details += '<div class="feedback-wrong" style="background:#991b1b; color:white; padding:10px; border-radius:15px; margin:5px 0;">❌ تمرين ' + (i+1) + ': إجابة غير كافية (0 نقطة)</div>'; }
-  }
   
-  var passed = score >= 50; 
-  var lc = document.getElementById('lc');
-  
-  // إظهار زر الشهادة فقط في حالة النجاح
-  var certBtn = '';
-  if (passed) {
-      certBtn = '<button class="btn" style="background:#22c55e; padding:12px 25px;" onclick="ZAID.showPrimaryCert(' + score + ')">🎓 استلام الشهادة</button>';
+  // إضافة التنسيقات الخاصة بالدرس إذا لم تكن موجودة
+  if(!document.getElementById('middleTechStyle')) {
+    var style = document.createElement('style');
+    style.id = 'middleTechStyle';
+    style.innerHTML = `
+      .lesson-text { background: #f8fafc; padding: 20px; border-radius: 28px; line-height: 1.7; font-size: 1.05rem; margin: 15px 0; box-shadow: inset 0 1px 3px #0001, 0 2px 4px #fff8; color: #1e2a3e; text-align:right; }
+      .image-gallery { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 25px 0; }
+      .card-img { background: white; border-radius: 24px; padding: 15px; text-align: center; width: 220px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+      .card-img i { font-size: 70px; color: #2c7da0; }
+      .card-img p { margin-top: 12px; font-weight: bold; color: #1e2a3e; }
+      .video-container-tech { background: #00000010; border-radius: 32px; padding: 15px; margin: 20px 0; text-align: center; }
+      .video-container-tech iframe { width: 100%; max-width: 560px; height: 315px; border-radius: 20px; border: none; }
+      .quiz-area { background: #f1f5f9; border-radius: 32px; padding: 25px; margin: 35px 0; }
+      .question-tech { background: white; margin-bottom: 25px; padding: 15px 20px; border-radius: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+      .question-tech p { font-weight: bold; margin-bottom: 10px; font-size: 1.1rem; color: #1e2a3e; }
+      .question-tech input, .question-tech select { width: 100%; padding: 12px 15px; border: 2px solid #cbd5e1; border-radius: 60px; font-size: 1rem; font-family: inherit; transition: 0.2s; color: #1e2a3e; }
+      .question-tech input:focus { border-color: #2c7da0; outline: none; box-shadow: 0 0 0 3px #2c7da030; }
+      .question-tech button { background: #2c7da0; color: white; border: none; padding: 14px 28px; font-size: 1.2rem; font-weight: bold; border-radius: 60px; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 15px; box-shadow: 0 4px 6px #0001; }
+      .question-tech button:hover { background: #1f5068; transform: scale(0.98); }
+      .result-box-tech { background: #0f172a; color: white; border-radius: 32px; padding: 25px; margin-top: 30px; text-align: center; display: none; }
+      .score-tech { font-size: 3rem; font-weight: bold; background: gold; display: inline-block; padding: 10px 25px; border-radius: 60px; color: #1e293b; margin: 15px 0; }
+      .advice-tech { font-size: 1.2rem; background: #334155; padding: 15px; border-radius: 40px; margin-top: 15px; }
+    `;
+    document.head.appendChild(style);
   }
 
-  var html = '<button class="back" onclick="ZAID.goHome()">🔙 العودة للرئيسية</button>'
-    + '<div class="glossary-wrapper" style="text-align:center;">'
-    + '<div class="' + (passed ? 'score-high' : 'score-low') + '" style="font-size:48px; font-weight:bold; color:' + (passed ? '#16a34a' : '#dc2626') + ';">' + score + '/100</div>'
-    + '<div style="background:#1e293b; color:white; padding:15px; border-radius:20px; margin:15px 0;"><h3>' + (passed ? '🎉 مبروك! لقد نجحت' : '❌ للأسف، لم تنجح') + '</h3></div>'
-    + '<div style="max-height:300px; overflow-y:auto; background:#0f172a; padding:15px; border-radius:20px; text-align:right;">' + details + '</div>'
-    + '<div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">'
-    + '<button class="btn" style="background:#3b82f6; padding:12px 25px;" onclick="ZAID.startPrimaryExam()">🔄 إعادة</button>'
-    + certBtn
-    + '</div></div>';
-  lc.innerHTML = html;
-};
+  lc.innerHTML = `
+    <button class="back" onclick="ZAID.openCat('middle')">🔙 العودة</button>
+    <h2 style="color:#dc2626; text-align:center; margin-bottom:15px;"><i class="fas fa-microchip"></i> التربية التكنولوجية – التحليل البنيوي للمنتج التقني</h2>
+    <p style="font-size:1.1rem; color:#2d3e50; margin-bottom:15px; text-align:center;">✔️ متوافق مع البرامج الرسمية التونسية | تقييم ذاتي + إصلاح فوري + توجيه ذكي</p>
+    
+    <div class="lesson-text">
+        <h3><i class="fas fa-cogs"></i> 1. نص الدرس : التحليل البنيوي</h3>
+        <p><strong>المنتج التقني:</strong> هو كل شيء صممه وصنعه الإنسان لتلبية حاجة (كرسي، هاتف، ثلاجة...).<br>
+        <strong>التحليل البنيوي:</strong> تفكيك المنتج إلى أجزاء ودراسة تركيبها ووظائفها.<br>
+        <strong>خطوات التحليل:</strong> ① التعبير عن الحاجة ② التعبير الوظيفي ③ التحليل الوظيفي ④ التحليل البنيوي (التركيبي).<br>
+        <strong>الوظائف التقنية:</strong> حماية / توجيه / ربط / نقل الطاقة.<br>
+        <strong>الرسم التقني:</strong> ثلاثي الأبعاد، مفكك، تعريفي (ثنائي الأبعاد بالمساقط).<br>
+        <strong>كراس الشروط الوظيفي:</strong> وثيقة تجمع كل المتطلبات التي يجب أن يحترمها المنتج.</p>
+    </div>
 
-Z.showPrimaryCert = function(score) {
-  var name = Z.user ? Z.user.name : 'الطالب';
-  var date = new Date().toLocaleDateString('ar-TN');
-  var lc = document.getElementById('lc');
-  var html = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button>'
-    + '<div class="cert" style="background:linear-gradient(135deg,#fff8e7,#fff0d0); border:15px double #d4af37; border-radius:20px; padding:30px 25px; margin:20px 0; text-align:center; color:#1e293b;">'
-    + '<div style="width:80px; height:80px; border-radius:50%; border:3px solid #d4af37; margin:0 auto 15px; overflow:hidden; background:white;"><img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" style="width:100%; height:100%; object-fit:cover;"></div>'
-    + '<h1 style="font-size:28px; font-weight:bold; color:#8B4513;">شهادة إتمام دورة</h1>'
-    + '<div style="font-size:18px; color:#666;">منصة محمد زايد للتكنولوجيات الحاسوبية - تونس</div>'
-    + '<div style="font-size:24px; font-weight:bold; background:linear-gradient(135deg,#facc15,#ffd700); display:inline-block; padding:8px 30px; border-radius:50px; margin:15px 0;">' + name + '</div>'
-    + '<div style="font-size:18px; margin:15px 0;">قد أتم بنجاح دورة <strong>📚 الأطفال والحاسوب</strong></div>'
-    + '<div style="font-size:16px;">النتيجة النهائية: <strong>' + score + '/100</strong></div>'
-    + '<div style="font-size:14px; margin:10px 0;">التاريخ: ' + date + '</div>'
-    + '<div style="margin-top:30px; padding-top:20px; border-top:1px dashed #d4af37;"><div style="width:200px; height:1px; background:#d4af37; margin:5px auto;"></div>'
-    + '<div style="font-size:16px; font-weight:bold;">محمد زايد</div><div style="font-size:12px;">أستاذ تعليم عالي وخبير دولي في التكنولوجيات الحاسوبية<br>مؤسس منصة محمد زايد - تونس</div></div></div>'
-    + '<div style="text-align:center; margin-top:20px;"><button class="btn" style="background:#3b82f6; padding:12px 30px; margin:5px;" onclick="window.print()">🖨️ طباعة الشهادة</button></div>';
-  lc.innerHTML = html;
+    <h2><i class="fas fa-image"></i> صور توضيحية (قراءة الرسم التقني)</h2>
+    <div class="image-gallery">
+        <div class="card-img"><i class="fas fa-cube"></i><p>رسم ثلاثي الأبعاد</p><small>الشكل الحجمي</small></div>
+        <div class="card-img"><i class="fas fa-puzzle-piece"></i><p>رسم مفكك</p><small>يوضح التركيب</small></div>
+        <div class="card-img"><i class="fas fa-drafting-compass"></i><p>رسم تعريفي (مساقط)</p><small>أمامي – جانبي – علوي</small></div>
+        <div class="card-img"><i class="fas fa-list-check"></i><p>كراس الشروط</p><small>المواصفات الوظيفية</small></div>
+    </div>
+
+    <h2><i class="fab fa-youtube"></i> فيديو شرح (مصادر تونسية)</h2>
+    <div class="video-container-tech">
+        <iframe src="https://www.youtube.com/embed/ifJMY1sk_Lw" title="ملخص تربية تكنولوجية 7 أساسي" allowfullscreen></iframe>
+        <p style="margin-top:10px;"><a href="https://www.youtube.com/playlist?list=PLEOeeU-FBikOqQ8aaG6bsPjPLjRhphJRE" target="_blank">📺 قائمة تشغيل دروس تاسعة أساسي (اضغط هنا)</a></p>
+    </div>
+
+    <div class="quiz-area">
+        <h2><i class="fas fa-pen-ruler"></i> التمارين التطبيقية (إصلاح فوري + منح النقاط)</h2>
+        <form id="quizForm">
+            <div class="question-tech">
+                <p>❶ (1.5 نقطة) عرّف "المنتج التقني":</p>
+                <input type="text" id="q1" placeholder="اكتب تعريفاً دقيقاً..." autocomplete="off">
+            </div>
+            <div class="question-tech">
+                <p>❷ (2 نقطة) اذكر الخطوات الأربع الأساسية لتحليل منتج تقني (مرتبة):</p>
+                <input type="text" id="q2" placeholder="مثال: 1.... , 2.... , 3.... , 4....">
+            </div>
+            <div class="question-tech">
+                <p>❸ (1.5 نقطة) ماذا تقصد بـ "الرسم التعريفي"؟</p>
+                <input type="text" id="q3" placeholder="تعريف الرسم التعريفي...">
+            </div>
+            <div class="question-tech">
+                <p>❹ (1 نقطة) ما هو "كراس الشروط الوظيفي"؟</p>
+                <input type="text" id="q4" placeholder="تعريف كراس الشروط...">
+            </div>
+            <div class="question-tech">
+                <p>❺ (1.5 نقطة) غطاء محرك السيارة : ما هي الوظيفة التقنية؟</p>
+                <select id="q5"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select>
+            </div>
+            <div class="question-tech">
+                <p>❻ (1.5 نقطة) مقود الدراجة الهوائية : وظيفته التقنية؟</p>
+                <select id="q6"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select>
+            </div>
+            <div class="question-tech">
+                <p>❼ (1.5 نقطة) سلك كهربائي يصل المروحة بمقبس الحائط : الوظيفة؟</p>
+                <select id="q7"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select>
+            </div>
+            <div class="question-tech">
+                <p>❽ (1.5 نقطة) برغي يثبت رفاً على الحائط : الوظيفة التقنية؟</p>
+                <select id="q8"><option value="">-- اختر --</option><option value="حماية">حماية</option><option value="توجيه">توجيه</option><option value="ربط">ربط</option><option value="نقل طاقة">نقل طاقة</option></select>
+            </div>
+            <div class="question-tech">
+                <p>❾ (2 نقطة) "الرسم الثلاثي الأبعاد هو الذي يستخدم في المصانع لصنع القطع" :</p>
+                <select id="q9"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select>
+            </div>
+            <div class="question-tech">
+                <p>❿ (2 نقطة) "وظيفة توجيه الحركة تسمح بربط الأجزاء ببعضها" :</p>
+                <select id="q10"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select>
+            </div>
+            <div class="question-tech">
+                <p>⓫ (2 نقطة) "المواد المستعملة في المنتجات التقنية قد تكون معادن أو لدائن" :</p>
+                <select id="q11"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select>
+            </div>
+            <div class="question-tech">
+                <p>⓬ (2 نقطة) "التعبير عن الحاجة يعني تحديد الوظيفة الأساسية للمنتج" :</p>
+                <select id="q12"><option value="">-- اختر --</option><option value="صواب">صواب</option><option value="خطأ">خطأ</option></select>
+            </div>
+            <button type="button" id="correctionBtn"><i class="fas fa-check-circle"></i> تصحيح وإصلاح تلقائي + احتساب النقاط</button>
+        </form>
+    </div>
+
+    <div class="result-box-tech" id="resultAreaTech">
+        <h3><i class="fas fa-chart-line"></i> نتيجة التقييم</h3>
+        <div class="score-tech" id="scoreDisplayTech">0 / 20</div>
+        <div id="adviceMsgTech" class="advice-tech"></div>
+        <div id="nextActionTech" style="margin-top: 15px; font-weight: bold;"></div>
+    </div>
+  `;
+
+  // ربط حدث التصحيح
+  document.getElementById('correctionBtn').addEventListener('click', function() {
+    let total = 0;
+    const q1 = document.getElementById('q1').value.trim().toLowerCase();
+    if (q1.includes("صممه") || q1.includes("صنعه") || (q1.includes("حاجة") && q1.includes("إنسان"))) total += 1.5;
+    else if (q1.length > 5) total += 0.75;
+
+    const q2 = document.getElementById('q2').value.trim().toLowerCase();
+    const steps = ["تعبير عن الحاجة", "تعبير وظيفي", "تحليل وظيفي", "تحليل بنيوي"];
+    let stepFound = 0;
+    steps.forEach(step => { if (q2.includes(step)) stepFound++; });
+    total += (stepFound === 4) ? 2 : (stepFound === 3) ? 1.5 : (stepFound === 2) ? 1 : 0;
+
+    const q3 = document.getElementById('q3').value.trim().toLowerCase();
+    if (q3.includes("ثنائي الأبعاد") || (q3.includes("مساقط") && q3.includes("قياسات"))) total += 1.5;
+    else if (q3.includes("رسم") && q3.includes("صنع")) total += 0.75;
+
+    const q4 = document.getElementById('q4').value.trim().toLowerCase();
+    if (q4.includes("شروط") && (q4.includes("متطلبات") || q4.includes("مواصفات"))) total += 1;
+    else if (q4.length > 8) total += 0.5;
+
+    const correctFunc = { q5: "حماية", q6: "توجيه", q7: "نقل طاقة", q8: "ربط" };
+    for (let i=5; i<=8; i++) { if (document.getElementById(`q${i}`).value === correctFunc[`q${i}`]) total += 1.5; }
+
+    const correctTF = { q9: "خطأ", q10: "خطأ", q11: "صواب", q12: "صواب" };
+    for (let i=9; i<=12; i++) { if (document.getElementById(`q${i}`).value === correctTF[`q${i}`]) total += 2; }
+
+    document.getElementById('resultAreaTech').style.display = 'block';
+    document.getElementById('scoreDisplayTech').innerHTML = `${total.toFixed(1)} / 20`;
+    
+    const adviceDiv = document.getElementById('adviceMsgTech');
+    const nextDiv = document.getElementById('nextActionTech');
+    if (total >= 16) {
+        adviceDiv.innerHTML = "🎉 ممتاز! مستوى عالٍ جداً. ✅ إجاباتك دقيقة وتدل على فهم عميق للمنهاج التونسي.";
+        nextDiv.innerHTML = "🚀 الارتقاء للدرجة الموالية: أنت جاهز لدرس 'الطاقة المستعملة' و'تصنيع المنتج التقني'.";
+    } else if (total >= 12) {
+        adviceDiv.innerHTML = "👍 مستوى جيد، لكن هناك بعض الأخطاء البسيطة. راجع الإجابات الخاطئة.";
+        nextDiv.innerHTML = "🔄 إعادة الدرس الحالي: ركز على الخطوات الأربع، والوظائف التقنية.";
+    } else {
+        adviceDiv.innerHTML = "⚠️ المستوى يحتاج إلى تحسين كبير.";
+        nextDiv.innerHTML = "📚 إعادة الدرس من الصفر: شاهد الفيديو المرفق.";
+    }
+    document.getElementById('resultAreaTech').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 };
 /* ============================================================
-   الجزء 10: لوحة تحكم المشرف وإدارة المحتوى (IndexedDB)
+   الجزء 11: محتوى اللغة العربية + تطبيق الأطفال والحاسوب
+   ============================================================ */
+
+// ============ 1. قسم اللغة العربية (المستويات من 0 إلى C2) ============
+Z.showArabicLevels = function() {
+  if(!Z.checkVisitor()) return;
+  Z.showPage('pageLesson');
+  var lc = document.getElementById('lc');
+
+  // إضافة التنسيقات الخاصة بقسم اللغة العربية
+  if(!document.getElementById('arabicStyle')) {
+    var style = document.createElement('style');
+    style.id = 'arabicStyle';
+    style.innerHTML = `
+      .main-header-app { text-align: center; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 50px; margin-bottom: 20px; }
+      .main-header-app h1 { font-size: 1.5rem; background: linear-gradient(135deg, #f9d423, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+      .stats-panel-app { background: rgba(30,60,114,0.9); border-radius: 50px; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+      .stat-item-app { background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 40px; color: white; }
+      .level-badge-app { background: linear-gradient(135deg, #f39c12, #e67e22); color: #1e2a3a; padding: 5px 15px; border-radius: 40px; font-weight: bold; }
+      .score-badge-app { background: #2ecc71; padding: 5px 15px; border-radius: 40px; font-weight: bold; color: white; }
+      .reset-btn-app { background: #e74c3c; border: none; padding: 5px 15px; border-radius: 40px; color: white; cursor: pointer; width: auto; }
+      .level-selector-app { background: rgba(0,0,0,0.3); border-radius: 50px; padding: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+      .level-selector-app button { background: rgba(255,255,255,0.15); border: none; padding: 8px 18px; border-radius: 40px; color: white; cursor: pointer; transition: 0.3s; font-size: 0.85rem; width: auto; }
+      .level-selector-app button.active { background: #f39c12; color: #1e2a3a; }
+      .tabs-app { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+      .tab-btn-app { background: rgba(255,255,255,0.1); border: none; padding: 8px 25px; border-radius: 40px; color: white; cursor: pointer; width: auto; }
+      .tab-btn-app.active { background: linear-gradient(135deg, #f39c12, #e67e22); }
+      .tab-content-app { display: none; background: rgba(255,255,255,0.08); border-radius: 40px; padding: 25px; }
+      .tab-content-app.active-tab { display: block; animation: fadeIn 0.4s; }
+      .letters-grid-app { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+      .letter-card-app { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 15px; border-right: 4px solid #f39c12; }
+      .letter-card-app.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.15); }
+      .big-letter-app { font-size: 2.5rem; font-weight: bold; color: #f9d423; text-align: center; }
+      .section-app { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 10px; margin: 8px 0; }
+      .section-title-app { font-weight: bold; margin-bottom: 8px; color: #f9d423; font-size: 0.85rem; }
+      .btn-group-app { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; justify-content: center; }
+      .btn-app { border: none; padding: 5px 12px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.8rem; width: auto; }
+      .btn-teacher-app { background: #3498db; color: white; }
+      .btn-record-app { background: #e74c3c; color: white; }
+      .btn-stop-app { background: #95a5a6; color: white; }
+      .btn-play-app { background: #2ecc71; color: white; }
+      .btn-check-app { background: #f39c12; color: #1e2a3a; }
+      .btn-primary-app { background: linear-gradient(135deg, #f39c12, #e67e22); padding: 10px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; width: auto;}
+      .writing-input-app { width: 100%; padding: 8px; border-radius: 20px; border: none; text-align: center; margin-top: 8px; }
+      .status-app { margin-top: 6px; padding: 5px; border-radius: 10px; font-size: 0.7rem; text-align: center; }
+      .status-recording-app { background: #e74c3c; animation: pulse 0.5s infinite; }
+      .status-success-app { background: #2ecc71; }
+      .status-fail-app { background: #e74c3c; }
+      .lessons-grid-app { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+      .lesson-card-app { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 15px; border-right: 4px solid #f39c12; }
+      .lesson-card-app.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.15); }
+      .lesson-title-app { color: #f9d423; font-weight: bold; margin-bottom: 8px; }
+      .exercise-item-app { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 10px; margin-top: 8px; }
+      .certificate-container-app { background: #1a3a2a; border-radius: 40px; padding: 25px; text-align: center; margin-top: 20px; }
+      .certificate-app { background: linear-gradient(135deg, #fff, #fef9e6); color: #1e2a3a; padding: 25px; border-radius: 20px; display: none; border: 5px double #b8860b; }
+      .certificate-app.show { display: block; }
+      .signature-line-app { margin-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  lc.innerHTML = `
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div class="main-header-app">
+        <h1>🏆 منصة محمد زايد للتكنولوجيات الحاسوبية 🏆</h1>
+        <p>قسم تعليم اللغة العربية - تونس | المستوى 0 → A1 → A2 → B1 → B2 → C1 → C2</p>
+    </div>
+    <div class="stats-panel-app">
+        <div class="stat-item-app">👤 <strong id="studentName">طالب جديد</strong></div>
+        <div class="stat-item-app level-badge-app" id="levelDisplay">المستوى: 0 (الحروف)</div>
+        <div class="stat-item-app score-badge-app" id="scoreDisplay">⭐ 0</div>
+        <button class="reset-btn-app" id="resetBtn">🗑️ جديد - مسح الكل</button>
+    </div>
+    <div class="level-selector-app" id="levelSelector">
+        <button data-level="0" class="level-btn active">🎯 المستوى 0 - الحروف</button>
+        <button data-level="A1" class="level-btn">🔤 A1 - مبتدئ</button>
+        <button data-level="A2" class="level-btn">📖 A2 - أساسي</button>
+        <button data-level="B1" class="level-btn">📚 B1 - متوسط</button>
+        <button data-level="B2" class="level-btn">🏛️ B2 - فوق متوسط</button>
+        <button data-level="C1" class="level-btn">🎓 C1 - متقدم</button>
+        <button data-level="C2" class="level-btn">👨‍🎓 C2 - متقن</button>
+    </div>
+    <div class="tabs-app">
+        <button class="tab-btn-app active" id="tabLevel">📖 المستوى الحالي</button>
+        <button class="tab-btn-app" id="tabCertificate">🎓 الشهادة</button>
+    </div>
+    <div id="levelTab" class="tab-content-app active-tab">
+        <div id="levelContent"></div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="btn-primary-app" id="nextLevelBtn">🎯 اجتياز المستوى الحالي والانتقال للتالي</button>
+        </div>
+        <div id="levelFeedback" style="margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 30px; display: none;"></div>
+    </div>
+    <div id="certificateTab" class="tab-content-app">
+        <div class="certificate-container-app">
+            <div id="certificate" class="certificate-app">
+                <h3>منصة محمد زايد للتكنولوجيات الحاسوبية</h3>
+                <h3>قسم تعليم اللغة العربية - تونس</h3>
+                <div id="certName" style="font-size:1.2rem; font-weight:bold; border-bottom:2px solid #b8860b; display:inline-block; margin:10px;">............</div>
+                <p>المستوى: <strong id="certLevel">0</strong></p>
+                <p>مجموع النقاط: <strong id="certPoints">0</strong></p>
+                <div id="certMsg" style="background:#f0f0f0; padding:10px; border-radius:15px; margin:10px;"></div>
+                <div>التاريخ: <span id="certDate"></span></div>
+                <div class="signature-line-app"><div>المدير والمشرف: <strong>محمد زايد</strong></div><div>الختم: _________</div></div>
+            </div>
+            <button class="btn-primary-app" id="printCert" style="background:#2ecc71;">🖨️ طباعة الشهادة</button>
+        </div>
+    </div>
+  `;
+
+  // ============ كود JavaScript لتشغيل قسم اللغة العربية ============
+  const letters = ["أ","ب","ت","ث","ج","ح","خ","د","ذ","ر","ز","س","ش","ص","ض","ط","ظ","ع","غ","ف","ق","ك","ل","م","ن","ه","و","ي"];
+  const words = ["أرنب","باب","تاج","ثعلب","جمل","حوت","خبز","ديك","ذئب","رجل","زهرة","سفينة","شمس","صقر","ضفدع","طائرة","ظل","عين","غابة","فيل","قمر","كتاب","ليمون","مسجد","نجم","هلال","وردة","يد"];
+  
+  const advancedLevels = {
+    A1: { name: "المبتدئ (A1)", required: 4, pointsPerLesson: 10, lessons: [ { title: "التحيات", content: "السلام عليكم، كيف حالك؟", q: "التحية الإسلامية الصحيحة؟", opts: ["مرحباً","السلام عليكم","أهلاً"], correct: 1 }, { title: "الألوان", content: "أحمر، أزرق، أصفر", q: "ما لون التفاح الأحمر؟", opts: ["أحمر","أزرق","أصفر"], correct: 0 }, { title: "الأرقام", content: "واحد، اثنان، ثلاثة", q: "ما الرقم الذي يأتي بعد اثنين؟", opts: ["واحد","ثلاثة","أربعة"], correct: 1 }, { title: "الأسرة", content: "أب، أم، أخ، أخت", q: "من هو والد الأب؟", opts: ["الجد","العم","الخال"], correct: 0 } ]},
+    A2: { name: "الأساسي (A2)", required: 4, pointsPerLesson: 10, lessons: [ { title: "وصف الأشخاص", content: "طويل، قصير، جميل", q: "ما هو ضد كلمة 'طويل'؟", opts: ["جميل","قصير","كبير"], correct: 1 }, { title: "التسوق", content: "كم سعر هذا؟ أريد شراء...", q: "كيف تسأل عن السعر؟", opts: ["أين","كم","متى"], correct: 1 }, { title: "الوقت", content: "الساعة الثالثة، يوم الاثنين", q: "كم شهراً في السنة؟", opts: ["12","10","8"], correct: 0 }, { title: "الطقس", content: "مشمس، ممطر، بارد، حار", q: "كيف يكون الطقس في فصل الصيف؟", opts: ["بارد","حار","ممطر"], correct: 1 } ]},
+    B1: { name: "المتوسط (B1)", required: 4, pointsPerLesson: 15, lessons: [ { title: "السفر", content: "تذكرة، مطار، قطار، فندق", q: "أين نركب الطائرة؟", opts: ["مطار","محطة قطار","محطة باص"], correct: 0 }, { title: "العمل", content: "طبيب، مهندس، معلم", q: "من يعالج المرضى؟", opts: ["مهندس","معلم","طبيب"], correct: 2 }, { title: "الرأي", content: "أعتقد أن...، من وجهة نظري", q: "أي عبارة تعبر عن الرأي الشخصي؟", opts: ["أنا آكل","أعتقد أن","أنا أنام"], correct: 1 }, { title: "الماضي", content: "الأسبوع الماضي، قبل سنة", q: "كيف نقول 'أكل' في زمن الماضي؟", opts: ["آكل","أكل","سآكل"], correct: 1 } ]},
+    B2: { name: "فوق المتوسط (B2)", required: 4, pointsPerLesson: 15, lessons: [ { title: "البيئة", content: "تلوث، إعادة تدوير، بيئة نظيفة", q: "ما هي أخطر مشكلة تواجه البيئة؟", opts: ["تلوث","تعليم","صحة"], correct: 0 }, { title: "الكتابة الرسمية", content: "بريد إلكتروني، خطاب رسمي", q: "كيف تبدأ بريداً إلكترونياً رسمياً؟", opts: ["مرحباً","عزيزي","السلام"], correct: 1 }, { title: "الأخبار", content: "سياسة، اقتصاد، رياضة", q: "أين نتابع الأخبار اليومية؟", opts: ["فيلم","قناة إخبارية","مسلسل"], correct: 1 }, { title: "الحوار", content: "مناظرة، إقناع، حوار بناء", q: "ما هو فن إقناع الآخرين بالحجج؟", opts: ["جدال","مناظرة","شجار"], correct: 1 } ]},
+    C1: { name: "المتقدم (C1)", required: 4, pointsPerLesson: 20, lessons: [ { title: "التحليل الأدبي", content: "نقد أدبي، تحليل نصوص", q: "ما هو علم البلاغة؟", opts: ["تحسين الكلام","علم الأرقام","علم النبات"], correct: 0 }, { title: "النحو المتقدم", content: "إعراب، بناء جملة", q: "ما هو النحو في اللغة العربية؟", opts: ["قواعد اللغة","مفردات اللغة","أصوات اللغة"], correct: 0 }, { title: "البلاغة", content: "تشبيه، استعارة، كناية", q: "ما هي الاستعارة في البلاغة؟", opts: ["تشبيه بليغ","تعبير حقيقي","تعبير مجازي"], correct: 0 }, { title: "النقد", content: "اتجاهات نقدية، مدارس أدبية", q: "ما هي المدرسة الكلاسيكية في النقد؟", opts: ["تتبع القدماء","تهتم بالجديد","ترفض القواعد"], correct: 0 } ]},
+    C2: { name: "المتقن (C2)", required: 4, pointsPerLesson: 20, lessons: [ { title: "الإبداع الأدبي", content: "كتابة إبداعية، إنتاج أدبي", q: "ما هو الإبداع الأدبي؟", opts: ["كتابة أصلية","نسخ النصوص","ترجمة النصوص"], correct: 0 }, { title: "البحث العلمي", content: "منهجية بحث، توثيق", q: "ما هو المنهج العلمي في البحث؟", opts: ["خطوات منظمة","عشوائية","اجتهاد شخصي"], correct: 0 }, { title: "الخطابة", content: "فن الخطابة، إلقاء الخطب", q: "ما هو فن الخطابة؟", opts: ["إلقاء الخطب","كتابة الشعر","سرد القصص"], correct: 0 }, { title: "فقه اللغة", content: "تطور اللغة، اشتقاق", q: "ما هو فقه اللغة؟", opts: ["دراسة تطور اللغة","دراسة النحو","دراسة الصرف"], correct: 0 } ]}
+  };
+
+  let student = JSON.parse(localStorage.getItem('arabicStudentComplete')) || { name: "", currentLevel: "0", points: 0, level0: { pronDone: [], writeDone: [] }, advanced: { completedLessons: [] } };
+  
+  function renderLevel0() {
+      let html = '<div class="letters-grid-app">';
+      for (let i = 0; i < letters.length; i++) {
+          const pronDone = student.level0.pronDone.includes(i);
+          const writeDone = student.level0.writeDone.includes(i);
+          html += `
+              <div class="letter-card-app" id="card-${i}">
+                  <div class="big-letter-app">${letters[i]}</div>
+                  <div class="section-title-app" style="text-align:center">📖 ${words[i]}</div>
+                  <div class="section-app">
+                      <div class="section-title-app">🎓 الخطوة 1: سجل نطقك</div>
+                      <div class="btn-group-app">
+                          <button class="btn-app btn-record-app" onclick="alert('يرجى تسجيل صوتك عبر الميكروفون في النسخة الكاملة')">🎙️ سجل نطقك</button>
+                      </div>
+                      <div class="status-app">${pronDone ? '✅ نطق صحيح +10 نقاط' : '⏳ لم يسجل الطالب بعد'}</div>
+                  </div>
+                  <div class="section-app">
+                      <div class="section-title-app">✍️ الخطوة 2: كتابة الحرف</div>
+                      <input type="text" class="writing-input-app" id="write-${i}" placeholder="اكتب الحرف هنا" ${writeDone ? 'disabled' : ''}>
+                      <button class="btn-app btn-check-app" onclick="ZAID.checkArabicWriting(${i}, '${letters[i]}')" ${writeDone ? 'disabled' : ''}>✍️ تحقق</button>
+                      <div id="write-status-${i}" class="status-app">${writeDone ? '✅ كتابة صحيحة +5 نقاط' : '⏳ لم يكتب الطالب بعد'}</div>
+                  </div>
+                  <div id="card-status-${i}" class="status-app" style="background:rgba(0,0,0,0.3);">
+                      ${pronDone && writeDone ? '✅✅ تم إتقان هذا الحرف' : (pronDone ? '✅ تم إتقان النطق، تبقى الكتابة' : (writeDone ? '✅ تم إتقان الكتابة، يبقى النطق' : '⏳ لم يتم إتقان الحرف بعد'))}
+                  </div>
+              </div>
+          `;
+      }
+      html += '</div>';
+      document.getElementById('levelContent').innerHTML = html;
+  }
+
+  function renderAdvancedLevel(level) {
+      const data = advancedLevels[level];
+      if (!data) { document.getElementById('levelContent').innerHTML = '<p style="text-align:center;">⚠️ هذا المستوى قيد الإعداد</p>'; return; }
+      let html = `<h2 style="margin-bottom:15px;">📚 ${data.name}</h2><div class="lessons-grid-app">`;
+      data.lessons.forEach((lesson, idx) => {
+          const key = `${level}-${idx}`;
+          const done = student.advanced.completedLessons.includes(key);
+          html += `
+              <div class="lesson-card-app ${done ? 'completed' : ''}">
+                  <div class="lesson-title-app">📖 ${lesson.title}</div>
+                  <div class="section-title-app">${lesson.content}</div>
+                  <div class="exercise-item-app">
+                      <div class="section-title-app">❓ ${lesson.q}</div>
+                      <div class="btn-group-app">
+                          ${lesson.opts.map((opt, oi) => `<button class="btn-app ${done ? 'btn-stop-app' : 'btn-teacher-app'}" onclick="ZAID.answerArabicLesson('${key}', ${oi}, ${lesson.correct}, ${data.pointsPerLesson})" ${done ? 'disabled' : ''}>${opt}</button>`).join('')}
+                      </div>
+                  </div>
+              </div>
+          `;
+      });
+      html += '</div>';
+      document.getElementById('levelContent').innerHTML = html;
+  }
+
+  window.ZAID.checkArabicWriting = function(idx, correctLetter) {
+      const input = document.getElementById(`write-${idx}`);
+      if (input.value.trim() === correctLetter) {
+          if (!student.level0.writeDone.includes(idx)) {
+              student.level0.writeDone.push(idx);
+              student.points += 5;
+              localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+              document.getElementById(`write-status-${idx}`).innerHTML = '✅ كتابة صحيحة! +5 نقاط';
+              document.getElementById(`write-status-${idx}`).className = 'status-app status-success-app';
+              alert(`🎉 كتابة صحيحة! +5 نقاط`);
+              updateDisplay();
+          }
+      } else {
+          document.getElementById(`write-status-${idx}`).innerHTML = `❌ خطأ. الحرف الصحيح هو: ${correctLetter}`;
+          document.getElementById(`write-status-${idx}`).className = 'status-app status-fail-app';
+      }
+  };
+
+  window.ZAID.answerArabicLesson = function(key, selected, correct, points) {
+      if (student.advanced.completedLessons.includes(key)) { alert("✅ هذا الدرس مكتمل بالفعل!"); return; }
+      if (selected === correct) {
+          student.advanced.completedLessons.push(key);
+          student.points += points;
+          localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+          renderAdvancedLevel(student.currentLevel);
+          updateDisplay();
+          alert(`🎉 إجابة صحيحة! +${points} نقاط`);
+      } else { alert("❌ إجابة خاطئة، حاول مرة أخرى"); }
+  };
+
+  function loadCurrentLevel() {
+      if (student.currentLevel === "0") renderLevel0();
+      else renderAdvancedLevel(student.currentLevel);
+  }
+
+  function updateDisplay() {
+      document.getElementById('studentName').innerHTML = student.name || "طالب جديد";
+      document.getElementById('scoreDisplay').innerHTML = `⭐ ${student.points}`;
+  }
+
+  // ربط الأحداث
+  document.getElementById('nextLevelBtn').onclick = function() {
+      if (student.currentLevel === "0") {
+          if (student.level0.pronDone.length === 28 && student.level0.writeDone.length === 28) {
+              student.currentLevel = "A1";
+              localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+              document.getElementById('levelDisplay').innerHTML = `المستوى: ${advancedLevels.A1.name}`;
+              loadCurrentLevel();
+          } else {
+              alert(`⚠️ لم تكمل جميع الحروف!\n✍️ الكتابة: ${student.level0.writeDone.length}/28`);
+          }
+      } else {
+          const data = advancedLevels[student.currentLevel];
+          const done = student.advanced.completedLessons.filter(k => k.startsWith(student.currentLevel)).length;
+          if (done >= data.required) {
+              const levels = ["A1", "A2", "B1", "B2", "C1", "C2"];
+              const currentIndex = levels.indexOf(student.currentLevel);
+              if (currentIndex < levels.length - 1) {
+                  student.currentLevel = levels[currentIndex + 1];
+                  localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+                  loadCurrentLevel();
+              } else {
+                  alert('🎉🎉🎉 مبروك! لقد أكملت جميع المستويات!');
+              }
+          } else {
+              alert(`📊 تقدمك: ${done}/${data.required} درساً`);
+          }
+      }
+      updateDisplay();
+  };
+
+  document.getElementById('resetBtn').onclick = function() {
+      if (confirm("⚠️ هل أنت متأكد؟ سيتم مسح جميع البيانات.")) {
+          student = { name: "", currentLevel: "0", points: 0, level0: { pronDone: [], writeDone: [] }, advanced: { completedLessons: [] } };
+          localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+          loadCurrentLevel();
+          updateDisplay();
+          alert("✅ تم مسح جميع البيانات!");
+      }
+  };
+
+  document.getElementById('tabLevel').onclick = function() { document.getElementById('levelTab').classList.add('active-tab'); document.getElementById('certificateTab').classList.remove('active-tab'); };
+  document.getElementById('tabCertificate').onclick = function() { document.getElementById('certificateTab').classList.add('active-tab'); document.getElementById('levelTab').classList.remove('active-tab'); document.getElementById('certificate').classList.add('show'); document.getElementById('certName').innerHTML = student.name || "طالب"; document.getElementById('certLevel').innerHTML = student.currentLevel; document.getElementById('certPoints').innerHTML = student.points; document.getElementById('certDate').innerHTML = new Date().toLocaleDateString('ar-EG'); };
+  document.getElementById('printCert').onclick = function() { window.print(); };
+
+  document.querySelectorAll('.level-btn').forEach(btn => {
+      btn.onclick = function() {
+          student.currentLevel = btn.dataset.level;
+          localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+          loadCurrentLevel();
+          document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('levelDisplay').innerHTML = student.currentLevel === "0" ? "المستوى: 0 (الحروف)" : `المستوى: ${advancedLevels[student.currentLevel]?.name || student.currentLevel}`;
+      };
+  });
+
+  loadCurrentLevel();
+  updateDisplay();
+};
+
+// ============ 2. قسم الأطفال والحاسوب (المرحلة الابتدائية) ============
+Z.showPrimaryApp = function() {
+  if(!Z.checkVisitor()) return;
+  Z.showPage('pageLesson');
+  var lc = document.getElementById('lc');
+
+  lc.innerHTML = `
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div style="max-width:550px; margin:0 auto; background:#1e293b; border-radius:40px; padding:25px; text-align:center; box-shadow:0 25px 45px rgba(0,0,0,0.4);">
+        <div style="position:relative; width:120px; height:120px; margin:0 auto;">
+            <img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" style="width:120px; height:120px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;" alt="logo">
+        </div>
+        <div style="background:#0f172a; padding:10px; border-radius:50px; margin:15px 0; border:2px solid #facc15;">
+            <marquee style="color:#facc15; font-weight:bold; direction:rtl;">🌟🌟🌟 منصة محمد زايد - الأطفال والحاسوب 🌟🌟🌟</marquee>
+        </div>
+        <div style="color:#DAA520; font-size:24px; font-weight:bold; margin:10px 0;">📚 الأطفال والحاسوب</div>
+        <div style="color:#cbd5e1;">قصة تفاعلية لتعلم أساسيات الكمبيوتر</div>
+        <button onclick="alert('هذا القسم يتطلب رفع ملف الجافاسكريبت الخاص به.')" style="width:100%; padding:14px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:16px; background:#DAA520; color:#1e293b;">🎁 درس تجريبي (8 شرائح)</button>
+        <button onclick="alert('هذا القسم يتطلب رفع ملف الجافاسكريبت الخاص به.')" style="width:100%; padding:14px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:16px; background:#228B22; color:white;">💰 دروس داعمة (22 شريحة + تمارين)</button>
+        <button class="btn-gray" style="margin-top:20px;" onclick="ZAID.goHome()">🔙 العودة للرئيسية</button>
+    </div>
+  `;
+};
+/* ============================================================
+   الجزء 11: محتوى اللغة العربية + تطبيق الأطفال والحاسوب
+   ============================================================ */
+
+// ============ 1. قسم اللغة العربية (المستويات من 0 إلى C2) ============
+Z.showArabicLevels = function() {
+  if(!Z.checkVisitor()) return;
+  Z.showPage('pageLesson');
+  var lc = document.getElementById('lc');
+
+  // إضافة التنسيقات الخاصة بقسم اللغة العربية
+  if(!document.getElementById('arabicStyle')) {
+    var style = document.createElement('style');
+    style.id = 'arabicStyle';
+    style.innerHTML = `
+      .main-header-app { text-align: center; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 50px; margin-bottom: 20px; }
+      .main-header-app h1 { font-size: 1.5rem; background: linear-gradient(135deg, #f9d423, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+      .stats-panel-app { background: rgba(30,60,114,0.9); border-radius: 50px; padding: 10px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+      .stat-item-app { background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 40px; color: white; }
+      .level-badge-app { background: linear-gradient(135deg, #f39c12, #e67e22); color: #1e2a3a; padding: 5px 15px; border-radius: 40px; font-weight: bold; }
+      .score-badge-app { background: #2ecc71; padding: 5px 15px; border-radius: 40px; font-weight: bold; color: white; }
+      .reset-btn-app { background: #e74c3c; border: none; padding: 5px 15px; border-radius: 40px; color: white; cursor: pointer; width: auto; }
+      .level-selector-app { background: rgba(0,0,0,0.3); border-radius: 50px; padding: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+      .level-selector-app button { background: rgba(255,255,255,0.15); border: none; padding: 8px 18px; border-radius: 40px; color: white; cursor: pointer; transition: 0.3s; font-size: 0.85rem; width: auto; }
+      .level-selector-app button.active { background: #f39c12; color: #1e2a3a; }
+      .tabs-app { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+      .tab-btn-app { background: rgba(255,255,255,0.1); border: none; padding: 8px 25px; border-radius: 40px; color: white; cursor: pointer; width: auto; }
+      .tab-btn-app.active { background: linear-gradient(135deg, #f39c12, #e67e22); }
+      .tab-content-app { display: none; background: rgba(255,255,255,0.08); border-radius: 40px; padding: 25px; }
+      .tab-content-app.active-tab { display: block; animation: fadeIn 0.4s; }
+      .letters-grid-app { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+      .letter-card-app { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 15px; border-right: 4px solid #f39c12; }
+      .letter-card-app.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.15); }
+      .big-letter-app { font-size: 2.5rem; font-weight: bold; color: #f9d423; text-align: center; }
+      .section-app { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 10px; margin: 8px 0; }
+      .section-title-app { font-weight: bold; margin-bottom: 8px; color: #f9d423; font-size: 0.85rem; }
+      .btn-group-app { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; justify-content: center; }
+      .btn-app { border: none; padding: 5px 12px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 0.8rem; width: auto; }
+      .btn-teacher-app { background: #3498db; color: white; }
+      .btn-record-app { background: #e74c3c; color: white; }
+      .btn-stop-app { background: #95a5a6; color: white; }
+      .btn-play-app { background: #2ecc71; color: white; }
+      .btn-check-app { background: #f39c12; color: #1e2a3a; }
+      .btn-primary-app { background: linear-gradient(135deg, #f39c12, #e67e22); padding: 10px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; width: auto;}
+      .writing-input-app { width: 100%; padding: 8px; border-radius: 20px; border: none; text-align: center; margin-top: 8px; }
+      .status-app { margin-top: 6px; padding: 5px; border-radius: 10px; font-size: 0.7rem; text-align: center; }
+      .status-recording-app { background: #e74c3c; animation: pulse 0.5s infinite; }
+      .status-success-app { background: #2ecc71; }
+      .status-fail-app { background: #e74c3c; }
+      .lessons-grid-app { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+      .lesson-card-app { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 15px; border-right: 4px solid #f39c12; }
+      .lesson-card-app.completed { border-right-color: #2ecc71; background: rgba(46,204,113,0.15); }
+      .lesson-title-app { color: #f9d423; font-weight: bold; margin-bottom: 8px; }
+      .exercise-item-app { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 10px; margin-top: 8px; }
+      .certificate-container-app { background: #1a3a2a; border-radius: 40px; padding: 25px; text-align: center; margin-top: 20px; }
+      .certificate-app { background: linear-gradient(135deg, #fff, #fef9e6); color: #1e2a3a; padding: 25px; border-radius: 20px; display: none; border: 5px double #b8860b; }
+      .certificate-app.show { display: block; }
+      .signature-line-app { margin-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  lc.innerHTML = `
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div class="main-header-app">
+        <h1>🏆 منصة محمد زايد للتكنولوجيات الحاسوبية 🏆</h1>
+        <p>قسم تعليم اللغة العربية - تونس | المستوى 0 → A1 → A2 → B1 → B2 → C1 → C2</p>
+    </div>
+    <div class="stats-panel-app">
+        <div class="stat-item-app">👤 <strong id="studentName">طالب جديد</strong></div>
+        <div class="stat-item-app level-badge-app" id="levelDisplay">المستوى: 0 (الحروف)</div>
+        <div class="stat-item-app score-badge-app" id="scoreDisplay">⭐ 0</div>
+        <button class="reset-btn-app" id="resetBtn">🗑️ جديد - مسح الكل</button>
+    </div>
+    <div class="level-selector-app" id="levelSelector">
+        <button data-level="0" class="level-btn active">🎯 المستوى 0 - الحروف</button>
+        <button data-level="A1" class="level-btn">🔤 A1 - مبتدئ</button>
+        <button data-level="A2" class="level-btn">📖 A2 - أساسي</button>
+        <button data-level="B1" class="level-btn">📚 B1 - متوسط</button>
+        <button data-level="B2" class="level-btn">🏛️ B2 - فوق متوسط</button>
+        <button data-level="C1" class="level-btn">🎓 C1 - متقدم</button>
+        <button data-level="C2" class="level-btn">👨‍🎓 C2 - متقن</button>
+    </div>
+    <div class="tabs-app">
+        <button class="tab-btn-app active" id="tabLevel">📖 المستوى الحالي</button>
+        <button class="tab-btn-app" id="tabCertificate">🎓 الشهادة</button>
+    </div>
+    <div id="levelTab" class="tab-content-app active-tab">
+        <div id="levelContent"></div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="btn-primary-app" id="nextLevelBtn">🎯 اجتياز المستوى الحالي والانتقال للتالي</button>
+        </div>
+        <div id="levelFeedback" style="margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 30px; display: none;"></div>
+    </div>
+    <div id="certificateTab" class="tab-content-app">
+        <div class="certificate-container-app">
+            <div id="certificate" class="certificate-app">
+                <h3>منصة محمد زايد للتكنولوجيات الحاسوبية</h3>
+                <h3>قسم تعليم اللغة العربية - تونس</h3>
+                <div id="certName" style="font-size:1.2rem; font-weight:bold; border-bottom:2px solid #b8860b; display:inline-block; margin:10px;">............</div>
+                <p>المستوى: <strong id="certLevel">0</strong></p>
+                <p>مجموع النقاط: <strong id="certPoints">0</strong></p>
+                <div id="certMsg" style="background:#f0f0f0; padding:10px; border-radius:15px; margin:10px;"></div>
+                <div>التاريخ: <span id="certDate"></span></div>
+                <div class="signature-line-app"><div>المدير والمشرف: <strong>محمد زايد</strong></div><div>الختم: _________</div></div>
+            </div>
+            <button class="btn-primary-app" id="printCert" style="background:#2ecc71;">🖨️ طباعة الشهادة</button>
+        </div>
+    </div>
+  `;
+
+  // ============ كود JavaScript لتشغيل قسم اللغة العربية ============
+  const letters = ["أ","ب","ت","ث","ج","ح","خ","د","ذ","ر","ز","س","ش","ص","ض","ط","ظ","ع","غ","ف","ق","ك","ل","م","ن","ه","و","ي"];
+  const words = ["أرنب","باب","تاج","ثعلب","جمل","حوت","خبز","ديك","ذئب","رجل","زهرة","سفينة","شمس","صقر","ضفدع","طائرة","ظل","عين","غابة","فيل","قمر","كتاب","ليمون","مسجد","نجم","هلال","وردة","يد"];
+  
+  const advancedLevels = {
+    A1: { name: "المبتدئ (A1)", required: 4, pointsPerLesson: 10, lessons: [ { title: "التحيات", content: "السلام عليكم، كيف حالك؟", q: "التحية الإسلامية الصحيحة؟", opts: ["مرحباً","السلام عليكم","أهلاً"], correct: 1 }, { title: "الألوان", content: "أحمر، أزرق، أصفر", q: "ما لون التفاح الأحمر؟", opts: ["أحمر","أزرق","أصفر"], correct: 0 }, { title: "الأرقام", content: "واحد، اثنان، ثلاثة", q: "ما الرقم الذي يأتي بعد اثنين؟", opts: ["واحد","ثلاثة","أربعة"], correct: 1 }, { title: "الأسرة", content: "أب، أم، أخ، أخت", q: "من هو والد الأب؟", opts: ["الجد","العم","الخال"], correct: 0 } ]},
+    A2: { name: "الأساسي (A2)", required: 4, pointsPerLesson: 10, lessons: [ { title: "وصف الأشخاص", content: "طويل، قصير، جميل", q: "ما هو ضد كلمة 'طويل'؟", opts: ["جميل","قصير","كبير"], correct: 1 }, { title: "التسوق", content: "كم سعر هذا؟ أريد شراء...", q: "كيف تسأل عن السعر؟", opts: ["أين","كم","متى"], correct: 1 }, { title: "الوقت", content: "الساعة الثالثة، يوم الاثنين", q: "كم شهراً في السنة؟", opts: ["12","10","8"], correct: 0 }, { title: "الطقس", content: "مشمس، ممطر، بارد، حار", q: "كيف يكون الطقس في فصل الصيف؟", opts: ["بارد","حار","ممطر"], correct: 1 } ]},
+    B1: { name: "المتوسط (B1)", required: 4, pointsPerLesson: 15, lessons: [ { title: "السفر", content: "تذكرة، مطار، قطار، فندق", q: "أين نركب الطائرة؟", opts: ["مطار","محطة قطار","محطة باص"], correct: 0 }, { title: "العمل", content: "طبيب، مهندس، معلم", q: "من يعالج المرضى؟", opts: ["مهندس","معلم","طبيب"], correct: 2 }, { title: "الرأي", content: "أعتقد أن...، من وجهة نظري", q: "أي عبارة تعبر عن الرأي الشخصي؟", opts: ["أنا آكل","أعتقد أن","أنا أنام"], correct: 1 }, { title: "الماضي", content: "الأسبوع الماضي، قبل سنة", q: "كيف نقول 'أكل' في زمن الماضي؟", opts: ["آكل","أكل","سآكل"], correct: 1 } ]},
+    B2: { name: "فوق المتوسط (B2)", required: 4, pointsPerLesson: 15, lessons: [ { title: "البيئة", content: "تلوث، إعادة تدوير، بيئة نظيفة", q: "ما هي أخطر مشكلة تواجه البيئة؟", opts: ["تلوث","تعليم","صحة"], correct: 0 }, { title: "الكتابة الرسمية", content: "بريد إلكتروني، خطاب رسمي", q: "كيف تبدأ بريداً إلكترونياً رسمياً؟", opts: ["مرحباً","عزيزي","السلام"], correct: 1 }, { title: "الأخبار", content: "سياسة، اقتصاد، رياضة", q: "أين نتابع الأخبار اليومية؟", opts: ["فيلم","قناة إخبارية","مسلسل"], correct: 1 }, { title: "الحوار", content: "مناظرة، إقناع، حوار بناء", q: "ما هو فن إقناع الآخرين بالحجج؟", opts: ["جدال","مناظرة","شجار"], correct: 1 } ]},
+    C1: { name: "المتقدم (C1)", required: 4, pointsPerLesson: 20, lessons: [ { title: "التحليل الأدبي", content: "نقد أدبي، تحليل نصوص", q: "ما هو علم البلاغة؟", opts: ["تحسين الكلام","علم الأرقام","علم النبات"], correct: 0 }, { title: "النحو المتقدم", content: "إعراب، بناء جملة", q: "ما هو النحو في اللغة العربية؟", opts: ["قواعد اللغة","مفردات اللغة","أصوات اللغة"], correct: 0 }, { title: "البلاغة", content: "تشبيه، استعارة، كناية", q: "ما هي الاستعارة في البلاغة؟", opts: ["تشبيه بليغ","تعبير حقيقي","تعبير مجازي"], correct: 0 }, { title: "النقد", content: "اتجاهات نقدية، مدارس أدبية", q: "ما هي المدرسة الكلاسيكية في النقد؟", opts: ["تتبع القدماء","تهتم بالجديد","ترفض القواعد"], correct: 0 } ]},
+    C2: { name: "المتقن (C2)", required: 4, pointsPerLesson: 20, lessons: [ { title: "الإبداع الأدبي", content: "كتابة إبداعية، إنتاج أدبي", q: "ما هو الإبداع الأدبي؟", opts: ["كتابة أصلية","نسخ النصوص","ترجمة النصوص"], correct: 0 }, { title: "البحث العلمي", content: "منهجية بحث، توثيق", q: "ما هو المنهج العلمي في البحث؟", opts: ["خطوات منظمة","عشوائية","اجتهاد شخصي"], correct: 0 }, { title: "الخطابة", content: "فن الخطابة، إلقاء الخطب", q: "ما هو فن الخطابة؟", opts: ["إلقاء الخطب","كتابة الشعر","سرد القصص"], correct: 0 }, { title: "فقه اللغة", content: "تطور اللغة، اشتقاق", q: "ما هو فقه اللغة؟", opts: ["دراسة تطور اللغة","دراسة النحو","دراسة الصرف"], correct: 0 } ]}
+  };
+
+  let student = JSON.parse(localStorage.getItem('arabicStudentComplete')) || { name: "", currentLevel: "0", points: 0, level0: { pronDone: [], writeDone: [] }, advanced: { completedLessons: [] } };
+  
+  function renderLevel0() {
+      let html = '<div class="letters-grid-app">';
+      for (let i = 0; i < letters.length; i++) {
+          const pronDone = student.level0.pronDone.includes(i);
+          const writeDone = student.level0.writeDone.includes(i);
+          html += `
+              <div class="letter-card-app" id="card-${i}">
+                  <div class="big-letter-app">${letters[i]}</div>
+                  <div class="section-title-app" style="text-align:center">📖 ${words[i]}</div>
+                  <div class="section-app">
+                      <div class="section-title-app">🎓 الخطوة 1: سجل نطقك</div>
+                      <div class="btn-group-app">
+                          <button class="btn-app btn-record-app" onclick="alert('يرجى تسجيل صوتك عبر الميكروفون في النسخة الكاملة')">🎙️ سجل نطقك</button>
+                      </div>
+                      <div class="status-app">${pronDone ? '✅ نطق صحيح +10 نقاط' : '⏳ لم يسجل الطالب بعد'}</div>
+                  </div>
+                  <div class="section-app">
+                      <div class="section-title-app">✍️ الخطوة 2: كتابة الحرف</div>
+                      <input type="text" class="writing-input-app" id="write-${i}" placeholder="اكتب الحرف هنا" ${writeDone ? 'disabled' : ''}>
+                      <button class="btn-app btn-check-app" onclick="ZAID.checkArabicWriting(${i}, '${letters[i]}')" ${writeDone ? 'disabled' : ''}>✍️ تحقق</button>
+                      <div id="write-status-${i}" class="status-app">${writeDone ? '✅ كتابة صحيحة +5 نقاط' : '⏳ لم يكتب الطالب بعد'}</div>
+                  </div>
+                  <div id="card-status-${i}" class="status-app" style="background:rgba(0,0,0,0.3);">
+                      ${pronDone && writeDone ? '✅✅ تم إتقان هذا الحرف' : (pronDone ? '✅ تم إتقان النطق، تبقى الكتابة' : (writeDone ? '✅ تم إتقان الكتابة، يبقى النطق' : '⏳ لم يتم إتقان الحرف بعد'))}
+                  </div>
+              </div>
+          `;
+      }
+      html += '</div>';
+      document.getElementById('levelContent').innerHTML = html;
+  }
+
+  function renderAdvancedLevel(level) {
+      const data = advancedLevels[level];
+      if (!data) { document.getElementById('levelContent').innerHTML = '<p style="text-align:center;">⚠️ هذا المستوى قيد الإعداد</p>'; return; }
+      let html = `<h2 style="margin-bottom:15px;">📚 ${data.name}</h2><div class="lessons-grid-app">`;
+      data.lessons.forEach((lesson, idx) => {
+          const key = `${level}-${idx}`;
+          const done = student.advanced.completedLessons.includes(key);
+          html += `
+              <div class="lesson-card-app ${done ? 'completed' : ''}">
+                  <div class="lesson-title-app">📖 ${lesson.title}</div>
+                  <div class="section-title-app">${lesson.content}</div>
+                  <div class="exercise-item-app">
+                      <div class="section-title-app">❓ ${lesson.q}</div>
+                      <div class="btn-group-app">
+                          ${lesson.opts.map((opt, oi) => `<button class="btn-app ${done ? 'btn-stop-app' : 'btn-teacher-app'}" onclick="ZAID.answerArabicLesson('${key}', ${oi}, ${lesson.correct}, ${data.pointsPerLesson})" ${done ? 'disabled' : ''}>${opt}</button>`).join('')}
+                      </div>
+                  </div>
+              </div>
+          `;
+      });
+      html += '</div>';
+      document.getElementById('levelContent').innerHTML = html;
+  }
+
+  window.ZAID.checkArabicWriting = function(idx, correctLetter) {
+      const input = document.getElementById(`write-${idx}`);
+      if (input.value.trim() === correctLetter) {
+          if (!student.level0.writeDone.includes(idx)) {
+              student.level0.writeDone.push(idx);
+              student.points += 5;
+              localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+              document.getElementById(`write-status-${idx}`).innerHTML = '✅ كتابة صحيحة! +5 نقاط';
+              document.getElementById(`write-status-${idx}`).className = 'status-app status-success-app';
+              alert(`🎉 كتابة صحيحة! +5 نقاط`);
+              updateDisplay();
+          }
+      } else {
+          document.getElementById(`write-status-${idx}`).innerHTML = `❌ خطأ. الحرف الصحيح هو: ${correctLetter}`;
+          document.getElementById(`write-status-${idx}`).className = 'status-app status-fail-app';
+      }
+  };
+
+  window.ZAID.answerArabicLesson = function(key, selected, correct, points) {
+      if (student.advanced.completedLessons.includes(key)) { alert("✅ هذا الدرس مكتمل بالفعل!"); return; }
+      if (selected === correct) {
+          student.advanced.completedLessons.push(key);
+          student.points += points;
+          localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+          renderAdvancedLevel(student.currentLevel);
+          updateDisplay();
+          alert(`🎉 إجابة صحيحة! +${points} نقاط`);
+      } else { alert("❌ إجابة خاطئة، حاول مرة أخرى"); }
+  };
+
+  function loadCurrentLevel() {
+      if (student.currentLevel === "0") renderLevel0();
+      else renderAdvancedLevel(student.currentLevel);
+  }
+
+  function updateDisplay() {
+      document.getElementById('studentName').innerHTML = student.name || "طالب جديد";
+      document.getElementById('scoreDisplay').innerHTML = `⭐ ${student.points}`;
+  }
+
+  // ربط الأحداث
+  document.getElementById('nextLevelBtn').onclick = function() {
+      if (student.currentLevel === "0") {
+          if (student.level0.pronDone.length === 28 && student.level0.writeDone.length === 28) {
+              student.currentLevel = "A1";
+              localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+              document.getElementById('levelDisplay').innerHTML = `المستوى: ${advancedLevels.A1.name}`;
+              loadCurrentLevel();
+          } else {
+              alert(`⚠️ لم تكمل جميع الحروف!\n✍️ الكتابة: ${student.level0.writeDone.length}/28`);
+          }
+      } else {
+          const data = advancedLevels[student.currentLevel];
+          const done = student.advanced.completedLessons.filter(k => k.startsWith(student.currentLevel)).length;
+          if (done >= data.required) {
+              const levels = ["A1", "A2", "B1", "B2", "C1", "C2"];
+              const currentIndex = levels.indexOf(student.currentLevel);
+              if (currentIndex < levels.length - 1) {
+                  student.currentLevel = levels[currentIndex + 1];
+                  localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+                  loadCurrentLevel();
+              } else {
+                  alert('🎉🎉🎉 مبروك! لقد أكملت جميع المستويات!');
+              }
+          } else {
+              alert(`📊 تقدمك: ${done}/${data.required} درساً`);
+          }
+      }
+      updateDisplay();
+  };
+
+  document.getElementById('resetBtn').onclick = function() {
+      if (confirm("⚠️ هل أنت متأكد؟ سيتم مسح جميع البيانات.")) {
+          student = { name: "", currentLevel: "0", points: 0, level0: { pronDone: [], writeDone: [] }, advanced: { completedLessons: [] } };
+          localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+          loadCurrentLevel();
+          updateDisplay();
+          alert("✅ تم مسح جميع البيانات!");
+      }
+  };
+
+  document.getElementById('tabLevel').onclick = function() { document.getElementById('levelTab').classList.add('active-tab'); document.getElementById('certificateTab').classList.remove('active-tab'); };
+  document.getElementById('tabCertificate').onclick = function() { document.getElementById('certificateTab').classList.add('active-tab'); document.getElementById('levelTab').classList.remove('active-tab'); document.getElementById('certificate').classList.add('show'); document.getElementById('certName').innerHTML = student.name || "طالب"; document.getElementById('certLevel').innerHTML = student.currentLevel; document.getElementById('certPoints').innerHTML = student.points; document.getElementById('certDate').innerHTML = new Date().toLocaleDateString('ar-EG'); };
+  document.getElementById('printCert').onclick = function() { window.print(); };
+
+  document.querySelectorAll('.level-btn').forEach(btn => {
+      btn.onclick = function() {
+          student.currentLevel = btn.dataset.level;
+          localStorage.setItem('arabicStudentComplete', JSON.stringify(student));
+          loadCurrentLevel();
+          document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('levelDisplay').innerHTML = student.currentLevel === "0" ? "المستوى: 0 (الحروف)" : `المستوى: ${advancedLevels[student.currentLevel]?.name || student.currentLevel}`;
+      };
+  });
+
+  loadCurrentLevel();
+  updateDisplay();
+};
+
+// ============ 2. قسم الأطفال والحاسوب (المرحلة الابتدائية) ============
+Z.showPrimaryApp = function() {
+  if(!Z.checkVisitor()) return;
+  Z.showPage('pageLesson');
+  var lc = document.getElementById('lc');
+
+  lc.innerHTML = `
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div style="max-width:550px; margin:0 auto; background:#1e293b; border-radius:40px; padding:25px; text-align:center; box-shadow:0 25px 45px rgba(0,0,0,0.4);">
+        <div style="position:relative; width:120px; height:120px; margin:0 auto;">
+            <img src="https://i.postimg.cc/FKM4M1Hc/150620252.jpg" style="width:120px; height:120px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;" alt="logo">
+        </div>
+        <div style="background:#0f172a; padding:10px; border-radius:50px; margin:15px 0; border:2px solid #facc15;">
+            <marquee style="color:#facc15; font-weight:bold; direction:rtl;">🌟🌟🌟 منصة محمد زايد - الأطفال والحاسوب 🌟🌟🌟</marquee>
+        </div>
+        <div style="color:#DAA520; font-size:24px; font-weight:bold; margin:10px 0;">📚 الأطفال والحاسوب</div>
+        <div style="color:#cbd5e1;">قصة تفاعلية لتعلم أساسيات الكمبيوتر</div>
+        <button onclick="alert('هذا القسم يتطلب رفع ملف الجافاسكريبت الخاص به.')" style="width:100%; padding:14px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:16px; background:#DAA520; color:#1e293b;">🎁 درس تجريبي (8 شرائح)</button>
+        <button onclick="alert('هذا القسم يتطلب رفع ملف الجافاسكريبت الخاص به.')" style="width:100%; padding:14px; margin:8px 0; border:none; border-radius:35px; font-weight:bold; cursor:pointer; font-size:16px; background:#228B22; color:white;">💰 دروس داعمة (22 شريحة + تمارين)</button>
+        <button class="btn-gray" style="margin-top:20px;" onclick="ZAID.goHome()">🔙 العودة للرئيسية</button>
+    </div>
+  `;
+};
+/* ============================================================
+   الجزء 12: لوحة تحكم المشرف + إدارة المحتوى (IndexedDB) + التشغيل
    ============================================================ */
 
 /* متغيرات قاعدة البيانات المحلية (IndexedDB) */
