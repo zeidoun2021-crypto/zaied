@@ -974,9 +974,9 @@ Z.showBooksSection = function() {
   var lc = document.getElementById('lc');
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">📚 الكتب</div><p style="text-align:center;">الكتب قيد التحديث...</p>';
 };
-/* ============================================================
-   الجزء 7: إعادة تعريف التوجيه للمراحل الجديدة + درس الإعدادي + اللغة العربية
-   ============================================================ */
+// ============================================================
+// الجزء 7: إعادة تعريف التوجيه للمراحل الجديدة + درس الإعدادي + اللغة العربية
+// ============================================================
 
 // حفظ دالة التوجيه القديمة لتجنب مسحها
 var originalOpenCat = Z.openCat || function(){};
@@ -992,7 +992,7 @@ Z.openCat = function(cat){
     return Z.showArabicLevels();
   }
   if(cat === 'primary') {
-    return Z.showPrimaryApp();
+    return Z.showPrimaryApp(); // سيتم تعريفها في الجزء 9
   }
 
   return originalOpenCat(cat);
@@ -1678,7 +1678,7 @@ Z.loadAdminPanel = function() {
   });
 };
 /* ============================================================
-   الجزء 9: محتوى المرحلة الابتدائية والألعاب (من plateforme)
+   الجزء 9: محتوى المرحلة الابتدائية والألعاب
    ============================================================ */
 
 // ================== 1. المرحلة الابتدائية (كتاب الأطفال الكامل) ==================
@@ -1734,7 +1734,129 @@ Z.showPrimaryApp = function() {
   document.getElementById('nextBtn').onclick = nextSlide;
 };
 
-// ================== 2. الألعاب (من plateforme94) ==================
+// ================== 2. الاختبار النهائي لكتاب الأطفال ==================
+const examQuestions = [
+    "1. تمرين 1: ماهي مكونات الحاسوب؟","2. تمرين 1: ما هي المواد التي صنعت منها أجزاء الحاسوب؟","3. تمرين 2: ماهي تركيبة الحاسوب الداخلية؟","4. تمرين 2: ما هي وظيفة كل جزء داخلي في الحاسوب؟","5. تمرين 3: ما هي الذاكرة الرئيسية؟","6. تمرين 3: ما دور الذاكرة الرئيسية؟","7. تمرين 4: ماهي أنواع الذاكرات عند الحاسوب؟","8. تمرين 4: ما هو الفرق بين الذاكرة الحية والذاكرة الميتة؟","9. تمرين 5: ما هي الروابط في الحاسوب؟","10. تمرين 5: كيف نسمي الروابط أيضا وما دورها؟","11. تمرين 6: ما هي اللواحق؟","12. تمرين 6: ما هي مهمة كل لاحق؟","13. تمرين 7: ماهي اللواحق التي تمكننا التفاعل مع الحاسوب؟","14. تمرين 7: كيف نستخدم الفأرة؟","15. تمرين 8: ماهي اللواحق الأخرى؟","16. تمرين 8: ما دور لوحة المفاتيح؟","17. تمرين 9: ما هو القلم الإلكتروني؟ ما هو اسمه الثاني؟","18. تمرين 9: متى نستخدم القلم الضوئي؟","19. تمرين 10: متى نستخدم اللوحة الرسومية؟","20. تمرين 10: كيف شكل اللوحة الرسومية؟","21. تمرين 11: ما هي الشاشة اللمسية؟","22. تمرين 11: كيف تشتغل الشاشة اللمسية ومتى نستخدمها؟","23. تمرين 11: أين نجد الشاشات اللمسية؟","24. تمرين 12: ماهو دور الشاشات في الحاسوب؟","25. تمرين 12: هل هناك نوع واحد من الشاشات؟ وما هي أحجامها؟","26. تمرين 13: ما دور الطابعة؟ وما هي أنواعها؟","27. تمرين 13: متى نستخدم الطابعة؟","28. تمرين 14: كيف نكلم الحاسوب؟","29. تمرين 14: كيف نسمع ما يقول الحاسوب عندما يجيب؟","30. تمرين 15: ما هي العلاقة بين شاشة التلفزة والحاسوب؟","31. تمرين 15: متى نحتاج لشاشة التلفزة عندما نتعامل مع الحاسوب؟","32. تمرين 16: ماهي مختلف ملحقات الحاسوب؟","33. تمرين 16: ما دور كل واحد من ملحقات الحاسوب؟","34. تمرين 17: الطابعات هي لواحق إخراج؟ كيف ذلك؟","35. تمرين 17: ما هي أنواع المعلومات التي تخرجها الطابعات؟","36. تمرين 18: ما هو الماسح؟","37. تمرين 18: متى نستخدم الماسح؟","38. تمرين 19: ما هو الراسم؟","39. تمرين 19: متى نستخدم الراسم؟ ما هي وظيفته؟","40. تمرين 20: هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟ كيف؟","41. تمرين 20: ما هو الجهاز الذي يمكنه من التخاطب مع حواسيب أخرى؟","42. تمرين 21: كيف يستطيع الحاسوب التحاور مع الإنسان؟","43. تمرين 21: ما هي العناصر الضرورية التي تمكن الحاسوب من التحاور مع الإنسان؟","44. تمرين 22: ما دور الأقراص الليزرية؟","45. تمرين 22: ماذا تحتوي الأقراص الليزرية؟","46. سؤال إضافي 1: ما هو نظام التشغيل؟ اذكر مثالاً عليه.","47. سؤال إضافي 2: ما الفرق بين البرمجيات (Software) والنظام المادي (Hardware)؟","48. سؤال إضافي 3: كيف يتم تثبيت برنامج على الحاسوب؟","49. سؤال إضافي 4: ما هي وظيفة المعالج (CPU)؟","50. سؤال إضافي 5: ما الفرق بين RAM و ROM?"
+];
+
+let currentExamPage = 0;
+let userAnswersExam = Array(50).fill("");
+const QUESTIONS_PER_PAGE = 5;
+
+function goToExam() {
+    Z.showPage('pageLesson');
+    var lc = document.getElementById('lc');
+    lc.innerHTML = `
+        <button class="back" onclick="ZAID.showPrimaryApp()">🔙 العودة للكتاب</button>
+        <div class="htitle" style="margin-bottom:15px;">📝 الاختبار النهائي - 50 سؤالاً</div>
+        <div id="examContainer" style="max-width:900px; margin:0 auto;"></div>
+        <div style="display:flex; gap:15px; justify-content:center; margin:20px 0;">
+            <button class="btn" style="background:#3b82f6; color:white; flex:1; max-width:200px;" onclick="examPrevPage()">▶ السابق</button>
+            <button class="btn" style="background:#facc15; color:#1e293b; flex:1; max-width:200px;" onclick="examNextPage()">التالي ◀</button>
+        </div>
+        <div style="text-align:center; margin-top:20px;">
+            <button class="btn" style="background:#22c55e; color:white; padding:15px 40px; font-size:18px; border-radius:30px;" onclick="submitExam()">✅ إنهاء الاختبار والتصحيح</button>
+        </div>
+    `;
+    currentExamPage = 0;
+    renderExam();
+}
+
+function renderExam() {
+    let start = currentExamPage * QUESTIONS_PER_PAGE;
+    let end = Math.min(start + QUESTIONS_PER_PAGE, 50);
+    let html = '';
+    for (let i = start; i < end; i++) {
+        html += `<div class="exercise-box" style="background:#f8fafc; padding:15px; border-radius:15px; margin-bottom:15px; color:#1e293b; border-right:4px solid #3b82f6;">
+            <strong style="display:block; margin-bottom:10px;">📝 ${examQuestions[i]}</strong>
+            <textarea id="ans_${i}" rows="3" style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbd5e1; font-family:Cairo;" placeholder="اكتب إجابتك هنا...">${userAnswersExam[i] || ''}</textarea>
+        </div>`;
+    }
+    let container = document.getElementById('examContainer');
+    if (container) container.innerHTML = html;
+}
+
+function examPrevPage() {
+    if (currentExamPage > 0) {
+        saveCurrentPageAnswers();
+        currentExamPage--;
+        renderExam();
+    }
+}
+
+function examNextPage() {
+    if ((currentExamPage + 1) * QUESTIONS_PER_PAGE < 50) {
+        saveCurrentPageAnswers();
+        currentExamPage++;
+        renderExam();
+    } else {
+        alert("📌 هذه هي الصفحة الأخيرة. يرجى الضغط على 'إنهاء الاختبار والتصحيح'.");
+    }
+}
+
+function saveCurrentPageAnswers() {
+    let start = currentExamPage * QUESTIONS_PER_PAGE;
+    let end = Math.min(start + QUESTIONS_PER_PAGE, 50);
+    for (let i = start; i < end; i++) {
+        let ta = document.getElementById(`ans_${i}`);
+        if (ta) userAnswersExam[i] = ta.value.trim();
+    }
+}
+
+function submitExam() {
+    saveCurrentPageAnswers();
+    let score = 0;
+    let feedback = [];
+    for (let i = 0; i < 50; i++) {
+        let ans = userAnswersExam[i] || '';
+        let points = ans.length > 10 ? 2 : (ans.length > 3 ? 1 : 0);
+        score += points;
+        if (points === 0) feedback.push(`⚠️ السؤال ${i+1}: إجابة غير كافية`);
+    }
+    
+    let passed = score >= 50;
+    let html = `
+        <div class="htitle" style="margin-bottom:15px;">🏆 نتيجة الاختبار</div>
+        <div style="text-align:center; padding:30px; background:#0f172a; border-radius:20px; margin-bottom:20px;">
+            <div style="font-size:60px; font-weight:bold; color:${passed ? '#22c55e' : '#dc2626'};">${score}/100</div>
+            <p style="font-size:20px; color:white; margin:15px 0;">${passed ? '🎉 مبروك! لقد نجحت في الاختبار.' : '📝 للأسف، لم تحصل على 50 نقطة. حاول مرة أخرى.'}</p>
+        </div>
+    `;
+    
+    if (passed) {
+        html += `
+            <div class="certificate" style="background:linear-gradient(135deg,#fff9e6,#ffe6b3); border:8px double #f59e0b; padding:25px; text-align:center; border-radius:20px; color:#1e293b; margin-bottom:20px;">
+                <h1 style="color:#b8860b;">🏆 شهادة تقدير 🏆</h1>
+                <p>تشهد منصة محمد زايد بأن الطالب/ة قد أتم بنجاح</p>
+                <p style="font-size:20px; font-weight:bold;">كتاب الأطفال والحاسوب</p>
+                <p>بتقدير ${score}/100</p>
+                <div style="margin-top:20px; display:flex; justify-content:space-between;">
+                    <div>📅 ${new Date().toLocaleDateString()}</div>
+                    <div>✍️ محمد زايد</div>
+                </div>
+            </div>
+        `;
+    }
+    
+    html += `
+        <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+            <button class="btn" style="background:#facc15; color:#1e293b; padding:12px 25px;" onclick="restartExam()">🔄 إعادة الاختبار</button>
+            <button class="btn" style="background:#3b82f6; color:white; padding:12px 25px;" onclick="ZAID.showPrimaryApp()">📚 العودة للكتاب</button>
+            <button class="btn" style="background:#334155; color:white; padding:12px 25px;" onclick="ZAID.goHome()">🏠 الرئيسية</button>
+        </div>
+    `;
+    
+    let lc = document.getElementById('lc');
+    lc.innerHTML = html;
+}
+
+function restartExam() {
+    userAnswersExam = Array(50).fill("");
+    currentExamPage = 0;
+    goToExam();
+}
+
+// ================== 3. الألعاب (البحث عن الكلمات والكلمات المتقاطعة) ==================
 const GAME_WORDS = {
     ar: ["انترنت", "متصفح", "خادم", "معالج", "ذاكرة", "طابعة", "شبكة", "فيروس"],
     en: ["INTERNET", "BROWSER", "SERVER", "PROCESSOR", "MEMORY", "PRINTER", "NETWORK", "VIRUS"],
@@ -2385,4 +2507,3 @@ Z.showSub = function() {
 </script>
 </body>
 </html>
-
