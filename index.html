@@ -13,7 +13,7 @@
 <style>
 /* ================== التنسيقات الأساسية ================== */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Cairo,sans-serif}
-html,body{height:100%;width:100%;overflow:hidden}
+html,body{height:100%;width:100%;overflow-x:hidden;max-width:100vw;}
 body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;display:flex;flex-direction:column;height:100dvh;overflow-x:hidden}
 .hide{display:none!important}
 #top{background:linear-gradient(135deg,#64748b,#475569);padding:10px;text-align:center;font-size:14px;border-bottom:3px solid #fbbf24;flex-shrink:0;display:none;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;z-index:100}
@@ -21,7 +21,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
 #top.adm{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
 #top button{padding:5px 15px;border-radius:15px;border:none;cursor:pointer;font-weight:900;font-size:13px;font-family:Cairo}
 #ti{font-size:22px!important}
-#main{flex:1;overflow-y:auto;overflow-x:hidden;padding:15px 20px 150px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:0;width:100%}
+#main{flex:1;overflow-y:auto;overflow-x:hidden;padding:15px 20px 150px 20px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:0;width:100%;max-width:100%;box-sizing:border-box;}
 #main::-webkit-scrollbar{width:6px}
 #main::-webkit-scrollbar-track{background:#1e293b}
 #main::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}
@@ -929,11 +929,32 @@ Z.openSrv = function(type) {
   lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">' + title + '</div><p style="text-align:center;">العروض قيد التحديث...</p>';
 };
 
+// ================== تعديل قسم الذكاء الاصطناعي (إضافة محتوى) ==================
 Z.showAISection = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
-  lc.innerHTML = '<button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div class="htitle">🧠 مسارات الذكاء الاصطناعي</div><p style="text-align:center;">مسارات AI قيد الإعداد...</p>';
+  lc.innerHTML = `
+    <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
+    <div class="htitle" style="margin-bottom:20px;">🧠 مسارات الذكاء الاصطناعي</div>
+    <div class="sel">
+        <div class="lcard" style="background:linear-gradient(135deg,#4c1d95,#6d28d9);">
+            <div style="font-size:40px;">🤖</div>
+            <div class="lt">مقدمة في AI</div>
+            <div class="ld">تعرف على مفهوم الذكاء الاصطناعي وتطبيقاته في التعليم والبحث العلمي.</div>
+        </div>
+        <div class="lcard" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);">
+            <div style="font-size:40px;">🧬</div>
+            <div class="lt">التعلم الآلي (ML)</div>
+            <div class="ld">كيف تتعلم الآلات من البيانات دون برمجة صريحة؟</div>
+        </div>
+        <div class="lcard" style="background:linear-gradient(135deg,#065f46,#064e3b);">
+            <div style="font-size:40px;">🗣️</div>
+            <div class="lt">معالجة اللغة الطبيعية</div>
+            <div class="ld">تفاعل الحواسيب مع اللغة البشرية (مثل ChatGPT).</div>
+        </div>
+    </div>
+  `;
 };
 
 Z.showAlbum = function() {
@@ -1013,7 +1034,7 @@ Z.showMiddleTech = function() {
       .lesson-text { background: #f8fafc; padding: 20px; border-radius: 28px; line-height: 1.7; font-size: 1.05rem; margin: 15px 0; box-shadow: inset 0 1px 3px #0001, 0 2px 4px #fff8; color: #1e2a3e; text-align:right; }
       .image-gallery { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 25px 0; }
       .card-img { background: white; border-radius: 24px; padding: 15px; text-align: center; width: 220px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-      .card-img i { font-size: 70px; color: #2c7da0; }
+      .card-img img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 10px; }
       .card-img p { margin-top: 12px; font-weight: bold; color: #1e2a3e; }
       .video-container-tech { background: #00000010; border-radius: 32px; padding: 15px; margin: 20px 0; text-align: center; }
       .video-container-tech iframe { width: 100%; max-width: 560px; height: 315px; border-radius: 20px; border: none; }
@@ -1048,10 +1069,10 @@ Z.showMiddleTech = function() {
 
     <h2><i class="fas fa-image"></i> صور توضيحية (قراءة الرسم التقني)</h2>
     <div class="image-gallery">
-        <div class="card-img"><i class="fas fa-cube"></i><p>رسم ثلاثي الأبعاد</p><small>الشكل الحجمي</small></div>
-        <div class="card-img"><i class="fas fa-puzzle-piece"></i><p>رسم مفكك</p><small>يوضح التركيب</small></div>
-        <div class="card-img"><i class="fas fa-drafting-compass"></i><p>رسم تعريفي (مساقط)</p><small>أمامي – جانبي – علوي</small></div>
-        <div class="card-img"><i class="fas fa-list-check"></i><p>كراس الشروط</p><small>المواصفات الوظيفية</small></div>
+        <div class="card-img"><img src="https://cdn-icons-png.flaticon.com/512/3575/3575835.png" alt="3D"><p>رسم ثلاثي الأبعاد</p><small>الشكل الحجمي</small></div>
+        <div class="card-img"><img src="https://cdn-icons-png.flaticon.com/512/2950/2950741.png" alt="Exploded"><p>رسم مفكك</p><small>يوضح التركيب</small></div>
+        <div class="card-img"><img src="https://cdn-icons-png.flaticon.com/512/1670/1670859.png" alt="Orthographic"><p>رسم تعريفي (مساقط)</p><small>أمامي – جانبي – علوي</small></div>
+        <div class="card-img"><img src="https://cdn-icons-png.flaticon.com/512/3159/3159445.png" alt="Specs"><p>كراس الشروط</p><small>المواصفات الوظيفية</small></div>
     </div>
 
     <h2><i class="fab fa-youtube"></i> فيديو شرح (مصادر تونسية)</h2>
@@ -1456,12 +1477,29 @@ Z.deleteLecture = async function(id) {
   tx.oncomplete = () => { Z.renderLecturesManageList(); alert("✅ تم الحذف"); };
 };
 
-// ================== إدارة المنجد (الرباعي) ==================
+// ================== إدارة المنجد (الرباعي) - معدل بـ 12 كلمة ==================
 let dictionaryData = JSON.parse(localStorage.getItem('dictionaryData')) || {
-  section1: [{ word: "حاسوب", french: "ordinateur", english: "computer", meaning: "جهاز إلكتروني يقوم بمعالجة البيانات وتخزينها واسترجاعها", example: "أستخدم الحاسوب في عملي اليومي" }],
-  section2: [{ word: "شبكة", french: "réseau", english: "network", meaning: "مجموعة من الأجهزة المتصلة مع بعضها لتبادل البيانات", example: "الإنترنت هي أكبر شبكة حاسوبية" }],
-  section3: [{ word: "قرص", french: "disque", english: "disk", meaning: "وسيط لتخزين البيانات", example: "القرص الصلب يخزن جميع الملفات" }],
-  section4: [{ word: "هاتف", french: "téléphone", english: "phone", meaning: "جهاز اتصال يمكنه الاتصال بالإنترنت", example: "الهاتف الذكي أصبح حاسوباً مصغراً" }]
+  section1: [
+    { word: "حاسوب", french: "ordinateur", english: "computer", meaning: "جهاز إلكتروني يقوم بمعالجة البيانات وتخزينها واسترجاعها", example: "أستخدم الحاسوب في عملي اليومي" },
+    { word: "برنامج", french: "logiciel", english: "software", meaning: "مجموعة من الأوامر والتعليمات التي توجه الحاسوب", example: "تم تثبيت برنامج جديد" },
+    { word: "معالج", french: "processeur", english: "processor", meaning: "عقل الحاسوب الذي ينفذ الأوامر", example: "المعالج i7 سريع جداً" },
+    { word: "ذاكرة", french: "mémoire", english: "memory", meaning: "مكان تخزين البيانات بشكل مؤقت أو دائم", example: "الذاكرة العشوائية RAM" }
+  ],
+  section2: [
+    { word: "شبكة", french: "réseau", english: "network", meaning: "مجموعة من الأجهزة المتصلة مع بعضها لتبادل البيانات", example: "الإنترنت هي أكبر شبكة حاسوبية" },
+    { word: "خادم", french: "serveur", english: "server", meaning: "جهاز يقدم خدمات للأجهزة الأخرى", example: "خادم الويب يستضيف المواقع" },
+    { word: "موجه", french: "routeur", english: "router", meaning: "جهاز يوجه البيانات بين الشبكات", example: "الموجه يوزع الإنترنت في المنزل" }
+  ],
+  section3: [
+    { word: "قرص صلب", french: "disque dur", english: "hard disk", meaning: "وسيط لتخزين البيانات بشكل دائم", example: "القرص الصلب يخزن جميع الملفات" },
+    { word: "شاشة", french: "écran", english: "screen", meaning: "جهاز عرض المعلومات للمستخدم", example: "شاشة اللمس سهلة الاستخدام" },
+    { word: "طابعة", french: "imprimante", english: "printer", meaning: "جهاز يطبع البيانات على الورق", example: "طابعة ليزر سريعة" }
+  ],
+  section4: [
+    { word: "هاتف", french: "téléphone", english: "phone", meaning: "جهاز اتصال يمكنه الاتصال بالإنترنت", example: "الهاتف الذكي أصبح حاسوباً مصغراً" },
+    { word: "فأرة", french: "souris", english: "mouse", meaning: "أداة لتوجيه المؤشر والنقر", example: "الفأرة اللاسلكية أفضل" },
+    { word: "لوحة مفاتيح", french: "clavier", english: "keyboard", meaning: "أداة لإدخال الحروف والأرقام", example: "لوحة المفاتيح الميكانيكية" }
+  ]
 };
 Z.saveDictionaryData = function() { localStorage.setItem('dictionaryData', JSON.stringify(dictionaryData)); };
 
@@ -1734,7 +1772,7 @@ Z.showPrimaryApp = function() {
   document.getElementById('nextBtn').onclick = nextSlide;
 };
 
-// ================== 2. الاختبار النهائي لكتاب الأطفال ==================
+// ================== 2. الاختبار النهائي لكتاب الأطفال (مع إصلاح الأزرار) ==================
 const examQuestions = [
     "1. تمرين 1: ماهي مكونات الحاسوب؟","2. تمرين 1: ما هي المواد التي صنعت منها أجزاء الحاسوب؟","3. تمرين 2: ماهي تركيبة الحاسوب الداخلية؟","4. تمرين 2: ما هي وظيفة كل جزء داخلي في الحاسوب؟","5. تمرين 3: ما هي الذاكرة الرئيسية؟","6. تمرين 3: ما دور الذاكرة الرئيسية؟","7. تمرين 4: ماهي أنواع الذاكرات عند الحاسوب؟","8. تمرين 4: ما هو الفرق بين الذاكرة الحية والذاكرة الميتة؟","9. تمرين 5: ما هي الروابط في الحاسوب؟","10. تمرين 5: كيف نسمي الروابط أيضا وما دورها؟","11. تمرين 6: ما هي اللواحق؟","12. تمرين 6: ما هي مهمة كل لاحق؟","13. تمرين 7: ماهي اللواحق التي تمكننا التفاعل مع الحاسوب؟","14. تمرين 7: كيف نستخدم الفأرة؟","15. تمرين 8: ماهي اللواحق الأخرى؟","16. تمرين 8: ما دور لوحة المفاتيح؟","17. تمرين 9: ما هو القلم الإلكتروني؟ ما هو اسمه الثاني؟","18. تمرين 9: متى نستخدم القلم الضوئي؟","19. تمرين 10: متى نستخدم اللوحة الرسومية؟","20. تمرين 10: كيف شكل اللوحة الرسومية؟","21. تمرين 11: ما هي الشاشة اللمسية؟","22. تمرين 11: كيف تشتغل الشاشة اللمسية ومتى نستخدمها؟","23. تمرين 11: أين نجد الشاشات اللمسية؟","24. تمرين 12: ماهو دور الشاشات في الحاسوب؟","25. تمرين 12: هل هناك نوع واحد من الشاشات؟ وما هي أحجامها؟","26. تمرين 13: ما دور الطابعة؟ وما هي أنواعها؟","27. تمرين 13: متى نستخدم الطابعة؟","28. تمرين 14: كيف نكلم الحاسوب؟","29. تمرين 14: كيف نسمع ما يقول الحاسوب عندما يجيب؟","30. تمرين 15: ما هي العلاقة بين شاشة التلفزة والحاسوب؟","31. تمرين 15: متى نحتاج لشاشة التلفزة عندما نتعامل مع الحاسوب؟","32. تمرين 16: ماهي مختلف ملحقات الحاسوب؟","33. تمرين 16: ما دور كل واحد من ملحقات الحاسوب؟","34. تمرين 17: الطابعات هي لواحق إخراج؟ كيف ذلك؟","35. تمرين 17: ما هي أنواع المعلومات التي تخرجها الطابعات؟","36. تمرين 18: ما هو الماسح؟","37. تمرين 18: متى نستخدم الماسح؟","38. تمرين 19: ما هو الراسم؟","39. تمرين 19: متى نستخدم الراسم؟ ما هي وظيفته؟","40. تمرين 20: هل يمكن للحاسوب التخاطب مع حواسيب أخرى بعيدة؟ كيف؟","41. تمرين 20: ما هو الجهاز الذي يمكنه من التخاطب مع حواسيب أخرى؟","42. تمرين 21: كيف يستطيع الحاسوب التحاور مع الإنسان؟","43. تمرين 21: ما هي العناصر الضرورية التي تمكن الحاسوب من التحاور مع الإنسان؟","44. تمرين 22: ما دور الأقراص الليزرية؟","45. تمرين 22: ماذا تحتوي الأقراص الليزرية؟","46. سؤال إضافي 1: ما هو نظام التشغيل؟ اذكر مثالاً عليه.","47. سؤال إضافي 2: ما الفرق بين البرمجيات (Software) والنظام المادي (Hardware)؟","48. سؤال إضافي 3: كيف يتم تثبيت برنامج على الحاسوب؟","49. سؤال إضافي 4: ما هي وظيفة المعالج (CPU)؟","50. سؤال إضافي 5: ما الفرق بين RAM و ROM?"
 ];
@@ -1751,11 +1789,11 @@ function goToExam() {
         <div class="htitle" style="margin-bottom:15px;">📝 الاختبار النهائي - 50 سؤالاً</div>
         <div id="examContainer" style="max-width:900px; margin:0 auto;"></div>
         <div style="display:flex; gap:15px; justify-content:center; margin:20px 0;">
-            <button class="btn" style="background:#3b82f6; color:white; flex:1; max-width:200px;" onclick="examPrevPage()">▶ السابق</button>
-            <button class="btn" style="background:#facc15; color:#1e293b; flex:1; max-width:200px;" onclick="examNextPage()">التالي ◀</button>
+            <button class="btn" style="background:#3b82f6; color:white; flex:1; max-width:200px;" onclick="window.examPrevPage()">▶ السابق</button>
+            <button class="btn" style="background:#facc15; color:#1e293b; flex:1; max-width:200px;" onclick="window.examNextPage()">التالي ◀</button>
         </div>
         <div style="text-align:center; margin-top:20px;">
-            <button class="btn" style="background:#22c55e; color:white; padding:15px 40px; font-size:18px; border-radius:30px;" onclick="submitExam()">✅ إنهاء الاختبار والتصحيح</button>
+            <button class="btn" style="background:#22c55e; color:white; padding:15px 40px; font-size:18px; border-radius:30px;" onclick="window.submitExam()">✅ إنهاء الاختبار والتصحيح</button>
         </div>
     `;
     currentExamPage = 0;
@@ -1776,15 +1814,16 @@ function renderExam() {
     if (container) container.innerHTML = html;
 }
 
-function examPrevPage() {
+// تعريف الدوال عالمياً لتتمكن الأزرار من الوصول إليها
+window.examPrevPage = function() {
     if (currentExamPage > 0) {
         saveCurrentPageAnswers();
         currentExamPage--;
         renderExam();
     }
-}
+};
 
-function examNextPage() {
+window.examNextPage = function() {
     if ((currentExamPage + 1) * QUESTIONS_PER_PAGE < 50) {
         saveCurrentPageAnswers();
         currentExamPage++;
@@ -1792,7 +1831,7 @@ function examNextPage() {
     } else {
         alert("📌 هذه هي الصفحة الأخيرة. يرجى الضغط على 'إنهاء الاختبار والتصحيح'.");
     }
-}
+};
 
 function saveCurrentPageAnswers() {
     let start = currentExamPage * QUESTIONS_PER_PAGE;
@@ -1803,7 +1842,7 @@ function saveCurrentPageAnswers() {
     }
 }
 
-function submitExam() {
+window.submitExam = function() {
     saveCurrentPageAnswers();
     let score = 0;
     let feedback = [];
@@ -1840,7 +1879,7 @@ function submitExam() {
     
     html += `
         <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
-            <button class="btn" style="background:#facc15; color:#1e293b; padding:12px 25px;" onclick="restartExam()">🔄 إعادة الاختبار</button>
+            <button class="btn" style="background:#facc15; color:#1e293b; padding:12px 25px;" onclick="window.restartExam()">🔄 إعادة الاختبار</button>
             <button class="btn" style="background:#3b82f6; color:white; padding:12px 25px;" onclick="ZAID.showPrimaryApp()">📚 العودة للكتاب</button>
             <button class="btn" style="background:#334155; color:white; padding:12px 25px;" onclick="ZAID.goHome()">🏠 الرئيسية</button>
         </div>
@@ -1850,7 +1889,7 @@ function submitExam() {
     lc.innerHTML = html;
 }
 
-function restartExam() {
+window.restartExam = function() {
     userAnswersExam = Array(50).fill("");
     currentExamPage = 0;
     goToExam();
