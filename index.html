@@ -616,26 +616,21 @@ Z.updateStatusBadge = function() {
   }
 };
 
-// ================== تهيئة التصنيفات في التسجيل ==================
-var cats = ['طفل', 'ولي', 'طالب', 'أستاذ', 'باحث', 'خبير'];
-var cg = document.getElementById('cats');
-if(cg) {
-  cats.forEach(function(c, index){
-    var b = document.createElement('div');
-    b.className = 'cat'; b.textContent = c;
-    b.onclick = function(){ 
-      document.querySelectorAll('.cat').forEach(function(x){ x.classList.remove('on'); }); 
-      b.classList.add('on'); 
-      Z.selectedCat = c; 
-    };
-    cg.appendChild(b);
-    if(index === 0) { b.classList.add('on'); Z.selectedCat = c; }
-  });
-}
-// ================== التنقل بين الصفحات ==================
+// ================== التنقل بين الصفحات ودالة الخروج المحدثة ==================
 Z.exitPlatform = function() { 
-  if(!confirm('هل تريد المغادرة نهائياً من المنصة؟')) return; 
-  document.body.innerHTML = '<div style="text-align:center;padding:50px;background:#0f172a;color:#fff;height:100vh;display:flex;flex-direction:column;justify-content:center;font-family:Cairo;"><h1 style="color:#22c55e;font-size:40px;">👋 تم الخروج بنجاح</h1><button onclick="location.reload()" style="margin-top:20px;padding:12px 30px;background:#3b82f6;color:#fff;border:none;border-radius:25px;cursor:pointer;font-weight:bold;font-family:Cairo;">الدخول مجدداً</button></div>'; 
+  if(!confirm('هل تريد المغادرة نهائياً وإغلاق المنصة؟')) return; 
+  
+  localStorage.removeItem('zaid_current_user');
+  sessionStorage.clear();
+  Z.user = null; Z.admin = false;
+  Z.stopSpeak();
+  
+  window.open('', '_self', '');
+  window.close();
+  
+  setTimeout(() => {
+    window.location.replace('https://www.google.com');
+  }, 500);
 };
 
 Z.checkVisitor = function() { 
@@ -716,11 +711,15 @@ Z.checkAdmin = function() {
 };
 
 Z.logout = function() { 
+  if(!confirm('هل تريد تسجيل الخروج والعودة لصفحة التسجيل؟')) return;
+  
   Z.user = null; Z.admin = false; Z.stopSpeak(); 
   localStorage.removeItem('zaid_current_user'); 
-  Z.updateUI(); Z.showPage('pageWelcome'); 
+  sessionStorage.clear();
+  
+  Z.updateUI(); 
+  Z.showPage('pageWelcome'); 
 };
-
 // ================== محرك النطق ==================
 Z.stopSpeak = function() {
   if(Z.audio) { try { Z.audio.pause(); } catch(e) {} Z.audio = null; }
@@ -877,8 +876,8 @@ Z.openCat = function(cat) {
   
   if(cat === 'primary') return Z.showPrimaryApp();
   if(cat === 'middle') return Z.showMiddleTech();
-  if(cat === 'high') return Z.showSecondarySection(); // سيتم إضافته في الجزء 7
-  if(cat === 'univ') return Z.showUniversitySection(); // سيتم إضافته في الجزء 8
+  if(cat === 'high') return Z.showSecondarySection(); 
+  if(cat === 'univ') return Z.showUniversitySection(); // سيتم إضافتها في الجزء 8
   if(cat === 'arabic') return Z.showArabicSection();
   if(cat === 'arabic_non') return Z.showArabicLevels();
   if(cat === 'tech') return Z.showTechSection();
@@ -1167,7 +1166,6 @@ Z.openBacLesson = function(track) {
   if(track === 'lettres') Z.showBacLettres();
 };
 
-// درس شعبة العلوم/رياضيات/تقنية
 Z.showBacSciences = function() {
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
@@ -1214,7 +1212,6 @@ Z.checkBacSciences = function() {
   document.getElementById('bac_sc_result').innerHTML = `نتيجتك: ${score} / 20. ${score >= 10 ? '🎉 ممتاز!' : '❌ راجع الدرس.'}`;
 };
 
-// درس شعبة علوم الإعلامية
 Z.showBacInfo = function() {
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
@@ -1255,7 +1252,6 @@ Z.checkBacInfo = function() {
   document.getElementById('bac_inf_result').innerHTML = `نتيجتك: ${score} / 20. ${score >= 10 ? '🎉 ممتاز!' : '❌ راجع الدرس.'}`;
 };
 
-// درس شعبة الاقتصاد
 Z.showBacEco = function() {
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
@@ -1294,7 +1290,6 @@ Z.checkBacEco = function() {
   document.getElementById('bac_eco_result').innerHTML = `نتيجتك: ${score} / 20. ${score >= 10 ? '🎉 ممتاز!' : '❌ راجع الدرس.'}`;
 };
 
-// درس شعبة الآداب
 Z.showBacLettres = function() {
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
@@ -1507,7 +1502,7 @@ Z.showArabicLevels = function() {
   loadCurrentLevel(); updateDisplay();
 };
 
-// ================== محاضرات البحث العلمي (Data) ==================
+// ================== بيانات المحاضرات (الجزء الأول) ==================
 Z.lecturesData = [
   {
     id: 'lecture1',
@@ -1983,9 +1978,13 @@ Z.startLiveRoom = function() {
 };
 Z.closeLiveRoom = function() {
   let container = document.getElementById('jitsiContainer');
-  if(container) container.innerHTML = '';
+  if(container) {
+    container.innerHTML = ''; // مسح الإطار لإيقاف الكاميرا والميكروفون
+  }
   let shareInput = document.getElementById('liveShareLink');
   if(shareInput) shareInput.value = '';
+  
+  alert('✅ تم إنهاء البث وإغلاق الكاميرا والميكروفون بنجاح.');
 };
 Z.copyLiveLink = function() {
   let input = document.getElementById('liveShareLink');
@@ -2522,223 +2521,37 @@ Z.adminDownloadVideo = function() {
   } else alert("لا يوجد فيديو مسجل"); 
 };
 
-// ================== إعادة تعريف دالة التوجيه للشعب ==================
-Z.showSecondarySection = function() {
+// ============================================================
+// إصلاح قسم الجامعي (عرض المحاضرات)
+// ============================================================
+Z.showUniversitySection = function() {
   if(!Z.checkVisitor()) return;
   Z.showPage('pageLesson');
   var lc = document.getElementById('lc');
   
   let html = `
     <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
-    <div class="htitle" style="margin-bottom:20px;">🎓 الثانوي (الباكالوريا) - مادة الإعلامية</div>
-    <p style="text-align:center;color:#cbd5e1;margin-bottom:20px;font-size:14px;">دروس واختبارات متوافقة مع البرامج الرسمية التونسية (4ème année secondaire).</p>
+    <div class="htitle" style="margin-bottom:20px;">🏛️ المرحلة الجامعية - المحاضرات العلمية</div>
+    <p style="text-align:center;color:#cbd5e1;margin-bottom:20px;font-size:14px;">محاضرات وورشات علمية متخصصة في الذكاء الاصطناعي، الشبكات، والبحث العلمي.</p>
     
     <div class="sel" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:20px;">
-      
-      <!-- 1. العلوم / رياضيات / تقنية -->
-      <div class="lcard" style="background:linear-gradient(135deg,#1e3a8a,#1e40af); border-color:#3b82f6;" onclick="ZAID.openBacLesson('sciences')">
-          <div style="font-size:50px;">💻</div>
-          <div class="lt">شعبة العلوم، الرياضيات، التقنية</div>
-          <div class="ld">الخوارزميات، هياكل التحكم، والبرمجة (Pascal / Python).</div>
-      </div>
-
-      <!-- 2. علوم الإعلامية -->
-      <div class="lcard" style="background:linear-gradient(135deg,#4c1d95,#6d28d9); border-color:#fbbf24;" onclick="ZAID.openBacLesson('info')">
-          <div style="font-size:50px;">🗄️</div>
-          <div class="lt">شعبة علوم الإعلامية</div>
-          <div class="ld">قواعد البيانات، SQL، والخوارزميات المتقدمة.</div>
-      </div>
-
-      <!-- 3. اقتصاد وتصرف -->
-      <div class="lcard" style="background:linear-gradient(135deg,#065f46,#064e3b); border-color:#10b981;" onclick="ZAID.openBacLesson('eco')">
-          <div style="font-size:50px;">📊</div>
-          <div class="lt">شعبة الاقتصاد والتصرف</div>
-          <div class="ld">الجداول الممتدة (Excel)، الدوال المالية، والرسوم البيانية.</div>
-      </div>
-
-      <!-- 4. آداب / رياضة -->
-      <div class="lcard" style="background:linear-gradient(135deg,#831843,#9d174d); border-color:#f97316;" onclick="ZAID.openBacLesson('lettres')">
-          <div style="font-size:50px;">📝</div>
-          <div class="lt">شعبة الآداب والرياضة</div>
-          <div class="ld">معالجة النصوص (Word)، الإنترنت، والبحث الوثائقي.</div>
-      </div>
-
-    </div>
   `;
+  
+  // عرض المحاضرات الستة الخاصة بالجامعة
+  const uniLectures = Z.lecturesData.filter(l => ['lecture1', 'lecture2', 'lecture3', 'lecture4', 'lecture5', 'lecture6'].includes(l.id));
+  
+  uniLectures.forEach(lec => {
+    html += `
+      <div class="lcard" style="background:linear-gradient(135deg,#1e3a8a,#1e40af); border-color:#3b82f6;" onclick="ZAID.openLecture('${lec.id}')">
+        <div style="font-size:50px; margin-bottom:10px;">${lec.icon}</div>
+        <div class="lt">${lec.title}</div>
+        <div class="ld">اضغط لعرض المحاضرة</div>
+      </div>
+    `;
+  });
+  
+  html += `</div>`;
   lc.innerHTML = html;
-};
-
-Z.openBacLesson = function(track) {
-  if(track === 'sciences') Z.showBacSciences();
-  if(track === 'info') Z.showBacInfo();
-  if(track === 'eco') Z.showBacEco();
-  if(track === 'lettres') Z.showBacLettres();
-};
-
-Z.showBacSciences = function() {
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = `
-    <button class="back" onclick="ZAID.showSecondarySection()">🔙 العودة للشعب</button>
-    <div class="htitle">💻 الإعلامية - شعبة العلوم / الرياضيات / التقنية</div>
-    
-    <div class="lesson-text">
-      <h3>1. مقدمة في الخوارزميات</h3>
-      <p>الخوارزمية هي مجموعة من الخطوات المنطقية والمتسلسلة لحل مشكلة معينة. في الباكالوريا التونسية، تعتمد هذه الشعب على لغة Pascal أو Python.</p>
-      
-      <h3>2. هياكل التحكم (Structures de contrôle)</h3>
-      <p><strong>أ. الجمل الشرطية (Si / If):</strong><br>
-      تستخدم لاتخاذ قرار بناءً على شرط.<br>
-      <code>Si (Condition) Alors [Instructions] Sinon [Instructions] FinSi</code></p>
-      
-      <p><strong>ب. الحلقات التكرارية (Boucles):</strong><br>
-      - <strong>لـ (Pour / For):</strong> تستخدم عندما نعرف عدد التكرارات مسبقاً.<br>
-      - <strong>بينما (TantQue / While):</strong> تستخدم عندما لا نعرف عدد التكرارات، ونكرر طالما الشرط محقق.<br>
-      - <strong>كرر...حتى (Répéter...Jusqu'à / Do...While):</strong> نكرر حتى يتحقق الشرط (تنفذ على الأقل مرة واحدة).</p>
-      
-      <h3>3. الجداول (Tableaux)</h3>
-      <p>هي متغيرات تحتوي على عدة عناصر من نفس النوع، يتم الوصول إليها عن طريق مؤشر (Indice).</p>
-    </div>
-
-    <div class="quiz-area">
-      <h3>📝 اختبار محاكاة للباكالوريا (علوم)</h3>
-      <div class="question-tech"><p>1. ما هي بنية التحكم المناسبة لطباعة الأرقام من 1 إلى 10؟</p>
-        <select id="bac_sc_q1"><option value="">-- اختر --</option><option value="TantQue">Tant Que</option><option value="Pour">Pour (For)</option><option value="Si">Si</option></select>
-      </div>
-      <div class="question-tech"><p>2. في المصفوفة Taille=5، ما هو المؤشر الأخير؟</p>
-        <select id="bac_sc_q2"><option value="">-- اختر --</option><option value="5">5</option><option value="4">4</option><option value="6">6</option></select>
-      </div>
-      <button onclick="ZAID.checkBacSciences()" style="background:#22c55e; color:white; padding:10px 20px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; margin-top:10px;">✅ تصحيح</button>
-      <div id="bac_sc_result" style="margin-top:15px; font-weight:bold; color:#1e293b;"></div>
-    </div>
-  `;
-};
-
-Z.checkBacSciences = function() {
-  let score = 0;
-  if(document.getElementById('bac_sc_q1').value === 'Pour') score += 10;
-  if(document.getElementById('bac_sc_q2').value === '4') score += 10;
-  document.getElementById('bac_sc_result').innerHTML = `نتيجتك: ${score} / 20. ${score >= 10 ? '🎉 ممتاز!' : '❌ راجع الدرس.'}`;
-};
-
-Z.showBacInfo = function() {
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = `
-    <button class="back" onclick="ZAID.showSecondarySection()">🔙 العودة للشعب</button>
-    <div class="htitle">🗄️ الإعلامية - شعبة علوم الإعلامية</div>
-    
-    <div class="lesson-text">
-      <h3>1. قواعد البيانات العلائقية (Bases de données)</h3>
-      <p>قاعدة البيانات هي مجموعة من الجداول المترابطة. كل جدول يتكون من حقول (Colonnes) وسجلات (Lignes).</p>
-      <p><strong>المفتاح الأساسي (Clé primaire):</strong> حقل يميز كل سجل بشكل فريد (مثل رقم التسجيل).<br>
-      <strong>المفتاح الأجنبي (Clé étrangère):</strong> حقل يربط جدولاً بجدول آخر.</p>
-      
-      <h3>2. لغة الاستعلامات SQL</h3>
-      <p>تستخدم لاسترجاع البيانات من قاعدة البيانات.<br>
-      <code>SELECT * FROM Eleves WHERE Note > 10;</code><br>
-      (استرجع كل بيانات التلاميذ الذين معدلهم أكبر من 10).</p>
-    </div>
-
-    <div class="quiz-area">
-      <h3>📝 اختبار محاكاة للباكالوريا (علوم إعلامية)</h3>
-      <div class="question-tech"><p>1. ما هو الأمر الصحيح لاسترجاع كل البيانات من جدول "Clients"؟</p>
-        <select id="bac_inf_q1"><option value="">-- اختر --</option><option value="SELECT ALL FROM Clients">SELECT ALL FROM Clients</option><option value="SELECT * FROM Clients">SELECT * FROM Clients</option><option value="GET * FROM Clients">GET * FROM Clients</option></select>
-      </div>
-      <div class="question-tech"><p>2. ما هو المفتاح الذي يميز كل سجل بشكل فريد؟</p>
-        <select id="bac_inf_q2"><option value="">-- اختر --</option><option value="المفتاح الأجنبي">المفتاح الأجنبي</option><option value="المفتاح الأساسي">المفتاح الأساسي</option><option value="الحقل">الحقل</option></select>
-      </div>
-      <button onclick="ZAID.checkBacInfo()" style="background:#22c55e; color:white; padding:10px 20px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; margin-top:10px;">✅ تصحيح</button>
-      <div id="bac_inf_result" style="margin-top:15px; font-weight:bold; color:#1e293b;"></div>
-    </div>
-  `;
-};
-
-Z.checkBacInfo = function() {
-  let score = 0;
-  if(document.getElementById('bac_inf_q1').value === 'SELECT * FROM Clients') score += 10;
-  if(document.getElementById('bac_inf_q2').value === 'المفتاح الأساسي') score += 10;
-  document.getElementById('bac_inf_result').innerHTML = `نتيجتك: ${score} / 20. ${score >= 10 ? '🎉 ممتاز!' : '❌ راجع الدرس.'}`;
-};
-
-Z.showBacEco = function() {
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = `
-    <button class="back" onclick="ZAID.showSecondarySection()">🔙 العودة للشعب</button>
-    <div class="htitle">📊 الإعلامية - شعبة الاقتصاد والتصرف</div>
-    
-    <div class="lesson-text">
-      <h3>1. الجداول الممتدة (Excel)</h3>
-      <p>تعتبر أداة أساسية في شعبة الاقتصاد لتحليل البيانات المالية.</p>
-      <p><strong>الدوال الأساسية:</strong><br>
-      - <code>SOMME()</code>: لحساب المجموع.<br>
-      - <code>MOYENNE()</code>: لحساب المعدل.<br>
-      - <code>SI()</code>: الدالة الشرطية (مثال: إذا كان المبلغ > 1000، اكتب "مرتفع").<br>
-      - <code>RECHERCHEV()</code>: للبحث عن قيمة في جدول آخر.</p>
-    </div>
-
-    <div class="quiz-area">
-      <h3>📝 اختبار محاكاة للباكالوريا (اقتصاد)</h3>
-      <div class="question-tech"><p>1. ما هي الدالة المستخدمة لحساب معدل المبيعات؟</p>
-        <select id="bac_eco_q1"><option value="">-- اختر --</option><option value="SOMME">SOMME</option><option value="MOYENNE">MOYENNE</option><option value="SI">SI</option></select>
-      </div>
-      <div class="question-tech"><p>2. ماذا تفعل الدالة RECHERCHEV؟</p>
-        <select id="bac_eco_q2"><option value="">-- اختر --</option><option value="تجمع الأرقام">تجمع الأرقام</option><option value="تبحث عن قيمة في جدول">تبحث عن قيمة في جدول</option><option value="تحسب المعدل">تحسب المعدل</option></select>
-      </div>
-      <button onclick="ZAID.checkBacEco()" style="background:#22c55e; color:white; padding:10px 20px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; margin-top:10px;">✅ تصحيح</button>
-      <div id="bac_eco_result" style="margin-top:15px; font-weight:bold; color:#1e293b;"></div>
-    </div>
-  `;
-};
-
-Z.checkBacEco = function() {
-  let score = 0;
-  if(document.getElementById('bac_eco_q1').value === 'MOYENNE') score += 10;
-  if(document.getElementById('bac_eco_q2').value === 'تبحث عن قيمة في جدول') score += 10;
-  document.getElementById('bac_eco_result').innerHTML = `نتيجتك: ${score} / 20. ${score >= 10 ? '🎉 ممتاز!' : '❌ راجع الدرس.'}`;
-};
-
-Z.showBacLettres = function() {
-  Z.showPage('pageLesson');
-  var lc = document.getElementById('lc');
-  lc.innerHTML = `
-    <button class="back" onclick="ZAID.showSecondarySection()">🔙 العودة للشعب</button>
-    <div class="htitle">📝 الإعلامية - شعبة الآداب والرياضة</div>
-    
-    <div class="lesson-text">
-      <h3>1. معالجة النصوص (Word)</h3>
-      <p>يُطلب في امتحان الباكالوريا (شعبة آداب) إتقان تنسيق الوثائق:</p>
-      <p>- إدراج الجداول والصور.<br>
-      - استخدام المراسلات (Publipostage).<br>
-      - تنسيق الفقرات والخطوط.<br>
-      - إعداد الصفحات (الهوامش، الترويسة، التذييل).</p>
-      
-      <h3>2. الإنترنت والبحث الوثائقي</h3>
-      <p>- محركات البحث المتقدمة.<br>
-      - تقييم الموثوقية.<br>
-      - تنظيم المعلومات في شكل جداول.</p>
-    </div>
-
-    <div class="quiz-area">
-      <h3>📝 اختبار محاكاة للباكالوريا (آداب)</h3>
-      <div class="question-tech"><p>1. أي خاصية في Word تستخدم لإرسال نفس الخطاب لعدة أشخاص بأسمائهم؟</p>
-        <select id="bac_let_q1"><option value="">-- اختر --</option><option value="Publipostage">Publipostage (المراسلات)</option><option value="Table des matières">Table des matières</option><option value="Format">Format</option></select>
-      </div>
-      <div class="question-tech"><p>2. لتقييم موثوقية موقع إنترنت، يجب التأكد من:</p>
-        <select id="bac_let_q2"><option value="">-- اختر --</option><option value="الألوان">الألوان</option><option value="المصدر والمؤلف">المصدر والمؤلف</option><option value="عدد الصور">عدد الصور</option></select>
-      </div>
-      <button onclick="ZAID.checkBacLettres()" style="background:#22c55e; color:white; padding:10px 20px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; margin-top:10px;">✅ تصحيح</button>
-      <div id="bac_let_result" style="margin-top:15px; font-weight:bold; color:#1e293b;"></div>
-    </div>
-  `;
-};
-
-Z.checkBacLettres = function() {
-  let score = 0;
-  if(document.getElementById('bac_let_q1').value === 'Publipostage') score += 10;
-  if(document.getElementById('bac_let_q2').value === 'المصدر والمؤلف') score += 10;
-  document.getElementById('bac_let_result').innerHTML = `نتيجتك: ${score} / 20. ${score >= 10 ? '🎉 ممتاز!' : '❌ راجع الدرس.'}`;
 };
 // ================== 1. المرحلة الابتدائية (كتاب الأطفال الكامل) ==================
 Z.bookSlides = [
