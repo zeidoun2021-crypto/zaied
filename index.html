@@ -2773,8 +2773,8 @@ ZAID.startLiveRoom = function() {
   var linkBox = document.getElementById('liveLinkBox');
   var recordPanel = document.getElementById('liveRecordPanel');
   
-  container.style.display = 'block';
-  waitingMsg.style.display = 'none';
+  container.style.display = 'none'; // نخفي الحاوية لأننا سنفتح النافذة الجديدة
+  waitingMsg.style.display = 'block';
   linkBox.style.display = 'block';
   recordPanel.style.display = 'block';
   
@@ -2785,49 +2785,26 @@ ZAID.startLiveRoom = function() {
   ZAID.joinLiveRoom(roomName);
 };
 
-// ================== الانضمام إلى غرفة Jitsi Meet ==================
+// ================== الانضمام إلى غرفة Jitsi Meet (معدلة: فتح في نافذة مستقلة) ==================
 ZAID.joinLiveRoom = function(roomName) {
-  var container = document.getElementById('jitsiContainer');
-  var waitingMsg = document.getElementById('liveWaitingMsg');
+  var url = 'https://meet.jit.si/' + roomName;
   
-  if(container) container.style.display = 'block';
-  if(waitingMsg) waitingMsg.style.display = 'none';
+  // فتح الغرفة في نافذة جديدة (بهذا الشكل تعمل الكاميرا ومشاركة الشاشة بامتياز)
+  var jitsiWindow = window.open(url, '_blank', 'width=1200,height=800');
   
-  // إزالة أي غرفة سابقة
-  if(ZAID.jitsiApi) {
-    try { ZAID.jitsiApi.dispose(); } catch(e) {}
-    ZAID.jitsiApi = null;
-  }
-  container.innerHTML = '';
-  
-  var domain = 'meet.jit.si';
-  var options = {
-    roomName: roomName,
-    width: '100%',
-    height: 500,
-    parentNode: container,
-    configOverwrite: {
-      startWithAudioMuted: true,
-      startWithVideoMuted: false,
-      prejoinPageEnabled: false
-    },
-    interfaceConfigOverwrite: {
-      SHOW_JITSI_WATERMARK: false,
-      SHOW_BRAND_WATERMARK: false
-    }
-  };
-  
-  // استخدام Jitsi Meet External API إذا كان متاحاً
-  if(window.JitsiMeetExternalAPI) {
-    ZAID.jitsiApi = new JitsiMeetExternalAPI(domain, options);
+  if (!jitsiWindow) {
+    alert('⚠️ يرجى السماح للنوافذ المنبثقة (Pop-ups) في المتصفح ليتم فتح غرفة البث.');
   } else {
-    // تحميل Jitsi API إذا لم يكن موجوداً
-    var script = document.createElement('script');
-    script.src = 'https://meet.jit.si/external_api.js';
-    script.onload = function() {
-      ZAID.jitsiApi = new JitsiMeetExternalAPI(domain, options);
-    };
-    document.head.appendChild(script);
+    // إخفاء رسالة الانتظار وإظهار رسالة أن البث بدأ في النافذة الأخرى
+    var waitingMsg = document.getElementById('liveWaitingMsg');
+    waitingMsg.innerHTML = `
+        <div style="font-size:60px; margin-bottom:15px;">🎥</div>
+        <h3 style="color:#22c55e;">تم فتح غرفة البث في نافذة جديدة!</h3>
+        <p style="color:#cbd5e1; font-size:14px; margin-top:10px;">إذا لم تظهر النافذة تلقائياً، اضغط على الزر أدناه للدخول.</p>
+        <a href="${url}" target="_blank" style="display:inline-block; margin-top:15px; background:#3b82f6; color:white; padding:12px 25px; border-radius:15px; text-decoration:none; font-weight:bold;">🔗 فتح الغرفة مباشرة</a>
+    `;
+    waitingMsg.style.display = 'block';
+    document.getElementById('jitsiContainer').style.display = 'none';
   }
   
   // تحديث الرابط في العنوان
@@ -2838,10 +2815,6 @@ ZAID.joinLiveRoom = function(roomName) {
 
 // ================== إغلاق غرفة البث ==================
 ZAID.closeLiveRoom = function() {
-  if(ZAID.jitsiApi) {
-    try { ZAID.jitsiApi.dispose(); } catch(e) {}
-    ZAID.jitsiApi = null;
-  }
   ZAID.currentLiveRoom = null;
   
   var container = document.getElementById('jitsiContainer');
@@ -2853,7 +2826,14 @@ ZAID.closeLiveRoom = function() {
     container.innerHTML = '';
     container.style.display = 'none';
   }
-  if(waitingMsg) waitingMsg.style.display = 'block';
+  if(waitingMsg) {
+      waitingMsg.innerHTML = `
+        <div style="font-size:60px; margin-bottom:15px;">📡</div>
+        <h3 style="color:#cbd5e1;">لم يتم بدء أي بث حالياً.</h3>
+        <p style="color:#94a3b8; font-size:14px; margin-top:10px;">إذا كان لديك رابط دعوة، يرجى فتحه مباشرة، أو الصق الرابط في شريط العنوان في المتصفح.</p>
+      `;
+      waitingMsg.style.display = 'block';
+  }
   if(linkBox) linkBox.style.display = 'none';
   if(recordPanel) recordPanel.style.display = 'none';
   
@@ -3081,17 +3061,6 @@ window.addEventListener('hashchange', function() {
     }
   }
 });
-
-// ================== تحميل Jitsi API مسبقاً ==================
-(function() {
-  if(!window.JitsiMeetExternalAPI && !document.getElementById('jitsi-api-script')) {
-    var script = document.createElement('script');
-    script.id = 'jitsi-api-script';
-    script.src = 'https://meet.jit.si/external_api.js';
-    script.async = true;
-    document.head.appendChild(script);
-  }
-})();
 </script>
 <script>
 // ================== التهيئة النهائية عند تحميل الصفحة ==================
@@ -3216,12 +3185,6 @@ ZAID.setupGlobalListeners = function() {
     resizeTimer = setTimeout(function() {
       // أي تعديلات مطلوبة عند تغيير الحجم
     }, 200);
-  });
-  
-  // منع فقدان البيانات عند إغلاق الصفحة (تحذير اختياري)
-  window.addEventListener('beforeunload', function(e) {
-    // لا نريد تحذير المستخدم في كل مرة، فقط إذا كان هناك شيء مهم
-    // يمكن تفعيله لاحقاً إذا لزم
   });
   
   // التحقق من حالة الاتصال بالإنترنت
