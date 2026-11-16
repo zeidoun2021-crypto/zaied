@@ -223,13 +223,13 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
         <div class="welcome-left">
             <div id="gw">
                 <h2>🔑 استمارة التسجيل</h2>
-                <input class="inp" id="fn" placeholder="👤 الاسم الكامل *" autocomplete="new-password" name="field_n_xyz">
-                <input class="inp" id="fp" placeholder="💼 المهنة *" autocomplete="new-password" name="field_p_xyz">
-                <input class="inp" id="fs" placeholder="🎯 الاختصاص *" autocomplete="new-password" name="field_s_xyz">
-                <input class="inp" id="fe" type="email" placeholder="📧 البريد الإلكتروني *" autocomplete="new-password" name="field_e_xyz">
-                <input class="inp" id="fh" type="tel" placeholder="📱 رقم الواتساب *" autocomplete="new-password" name="field_h_xyz">
-                <input class="inp" id="fc" placeholder="🌍 بلد الإقامة *" value="تونس" autocomplete="new-password" name="field_c_xyz">
-                <input class="inp" id="fci" placeholder="🏙️ المدينة *" autocomplete="new-password" name="field_ci_xyz">
+                <input class="inp" id="fn" placeholder="👤 الاسم الكامل *" autocomplete="new-password" name="field_n_xyz" required>
+                <input class="inp" id="fp" placeholder="💼 المهنة *" autocomplete="new-password" name="field_p_xyz" required>
+                <input class="inp" id="fs" placeholder="🎯 الاختصاص *" autocomplete="new-password" name="field_s_xyz" required>
+                <input class="inp" id="fe" type="email" placeholder="📧 البريد الإلكتروني *" autocomplete="new-password" name="field_e_xyz" required>
+                <input class="inp" id="fh" type="tel" placeholder="📱 رقم الواتساب *" autocomplete="new-password" name="field_h_xyz" required>
+                <input class="inp" id="fc" placeholder="🌍 بلد الإقامة *" value="تونس" autocomplete="new-password" name="field_c_xyz" required>
+                <input class="inp" id="fci" placeholder="🏙️ المدينة *" autocomplete="new-password" name="field_ci_xyz" required>
                 <div style="text-align:center;font-weight:900;color:#dc2626;margin-bottom:5px;font-size:14px;">⬇️ يرجى اختيار التصنيف ⬇️</div>
                 <div class="cats">
                     <div class="cat on" onclick="ZAID.selectCat(this, 'طفل')">طفل</div>
@@ -539,7 +539,7 @@ ZAID.checkAdminHtml = function() {
     }
 };
 
-// ================== التسجيل مع إصلاح رقم الهاتف (نسخة محسنة) ==================
+// ================== التسجيل الصارم (يرفض أي حقل فارغ) ==================
 ZAID.register = function() {
   var n = document.getElementById('fn').value.trim();
   var p = document.getElementById('fp').value.trim();
@@ -549,12 +549,32 @@ ZAID.register = function() {
   var c = document.getElementById('fc').value.trim();
   var ci = document.getElementById('fci').value.trim();
   
-  if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم واللقب (كلمتين على الأقل)'); return; }
-  if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول الإجبارية'); return; }
+  // 1. التحقق من أن جميع الحقول ممتلئة
+  if(!n || !p || !s || !e || !h || !c || !ci) {
+      alert('❌ يجب ملء جميع الحقول الإجبارية (الاسم، المهنة، الاختصاص، البريد، الهاتف، البلد، المدينة)');
+      return;
+  }
+
+  // 2. التحقق من أن الاسم مكون من كلمتين على الأقل
+  if(n.split(/\s+/).length < 2) { 
+      alert('❌ يرجى كتابة الاسم واللقب (كلمتين على الأقل)'); 
+      return; 
+  }
   
+  // 3. التحقق من رقم الهاتف
   var cleanPhone = h.replace(/\D/g, ''); 
-  if(cleanPhone.length < 8) { alert('❌ يرجى إدخال رقم واتساب صحيح (8 أرقام على الأقل)'); return; }
+  if(cleanPhone.length < 8) { 
+      alert('❌ يرجى إدخال رقم واتساب صحيح (8 أرقام على الأقل)'); 
+      return; 
+  }
   h = cleanPhone; 
+
+  // 4. التحقق من صيغة البريد الإلكتروني
+  var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailPattern.test(e)) {
+      alert('❌ يرجى إدخال بريد إلكتروني صحيح (مثال: name@domain.com)');
+      return;
+  }
   
   var newUser = {
     name: n, prof: p, spec: s, email: e, phone: h, country: c, city: ci,
@@ -2772,8 +2792,8 @@ ZAID.startLiveRoom = function() {
   var linkBox = document.getElementById('liveLinkBox');
   var recordPanel = document.getElementById('liveRecordPanel');
   
-  container.style.display = 'none'; // نخفي الحاوية لأننا سنفتح النافذة الجديدة
-  waitingMsg.style.display = 'block';
+  container.style.display = 'block'; // نعرض الحاوية لأننا سنستخدم الشاشة المدمجة
+  waitingMsg.style.display = 'none';
   linkBox.style.display = 'block';
   recordPanel.style.display = 'block';
   
@@ -2784,30 +2804,54 @@ ZAID.startLiveRoom = function() {
   ZAID.joinLiveRoom(roomName);
 };
 
-// ================== الانضمام إلى غرفة Jitsi Meet (معدلة: خادم بدون قيود + نافذة مستقلة) ==================
+// ================== الانضمام إلى غرفة Jitsi Meet (مدمجة داخل المنصة - شاشة واحدة) ==================
 ZAID.joinLiveRoom = function(roomName) {
-  // استخدام خادم ffmuc.net الألماني الذي لا يفرض قيوداً زمنية (بدلاً من meet.jit.si)
-  var url = 'https://meet.ffmuc.net/' + roomName;
+  var container = document.getElementById('jitsiContainer');
+  var waitingMsg = document.getElementById('liveWaitingMsg');
   
-  // فتح الغرفة في نافذة جديدة (بهذا الشكل تعمل الكاميرا ومشاركة الشاشة بامتياز)
-  var jitsiWindow = window.open(url, '_blank', 'width=1200,height=800');
+  if(container) container.style.display = 'block';
+  if(waitingMsg) waitingMsg.style.display = 'none';
   
-  if (!jitsiWindow) {
-    alert('⚠️ يرجى السماح للنوافذ المنبثقة (Pop-ups) في المتصفح ليتم فتح غرفة البث.');
+  // إزالة أي غرفة سابقة
+  if(ZAID.jitsiApi) {
+    try { ZAID.jitsiApi.dispose(); } catch(e) {}
+    ZAID.jitsiApi = null;
+  }
+  container.innerHTML = '';
+  
+  // استخدام خادم ffmuc.net (بدون قيود زمنية)
+  var domain = 'meet.ffmuc.net';
+  var options = {
+    roomName: roomName,
+    width: '100%',
+    height: 500, // ارتفاع نافذة الفيديو
+    parentNode: container,
+    configOverwrite: {
+      startWithAudioMuted: true,
+      startWithVideoMuted: false,
+      prejoinPageEnabled: false,
+      // هذه الإعدادات تسمح بمشاركة الشاشة من داخل الإطار
+      disableThirdPartyRequests: true
+    },
+    interfaceConfigOverwrite: {
+      SHOW_JITSI_WATERMARK: false,
+      SHOW_BRAND_WATERMARK: false
+    }
+  };
+  
+  // تحميل API الخاص بـ Jitsi إذا لم يكن موجوداً
+  if(window.JitsiMeetExternalAPI) {
+    ZAID.jitsiApi = new JitsiMeetExternalAPI(domain, options);
   } else {
-    // إخفاء رسالة الانتظار وإظهار رسالة أن البث بدأ في النافذة الأخرى
-    var waitingMsg = document.getElementById('liveWaitingMsg');
-    waitingMsg.innerHTML = `
-        <div style="font-size:60px; margin-bottom:15px;">🎥</div>
-        <h3 style="color:#22c55e;">تم فتح غرفة البث في نافذة جديدة!</h3>
-        <p style="color:#cbd5e1; font-size:14px; margin-top:10px;">إذا لم تظهر النافذة تلقائياً، اضغط على الزر أدناه للدخول.</p>
-        <a href="${url}" target="_blank" style="display:inline-block; margin-top:15px; background:#3b82f6; color:white; padding:12px 25px; border-radius:15px; text-decoration:none; font-weight:bold;">🔗 فتح الغرفة مباشرة</a>
-    `;
-    waitingMsg.style.display = 'block';
-    document.getElementById('jitsiContainer').style.display = 'none';
+    var script = document.createElement('script');
+    script.src = 'https://meet.ffmuc.net/external_api.js';
+    script.onload = function() {
+      ZAID.jitsiApi = new JitsiMeetExternalAPI(domain, options);
+    };
+    document.head.appendChild(script);
   }
   
-  // تحديث الرابط في العنوان
+  // تحديث الرابط في العنوان (حتى يتمكن المتابعون من نسخه والانضمام)
   if(window.history && window.history.replaceState) {
     window.history.replaceState(null, '', '#live=' + roomName);
   }
@@ -2815,6 +2859,10 @@ ZAID.joinLiveRoom = function(roomName) {
 
 // ================== إغلاق غرفة البث ==================
 ZAID.closeLiveRoom = function() {
+  if(ZAID.jitsiApi) {
+    try { ZAID.jitsiApi.dispose(); } catch(e) {}
+    ZAID.jitsiApi = null;
+  }
   ZAID.currentLiveRoom = null;
   
   var container = document.getElementById('jitsiContainer');
