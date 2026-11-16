@@ -314,7 +314,8 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
             <button onclick="ZAID.logout()" style="background:#dc2626; color:white; padding:12px 30px; border-radius:25px; border:2px solid #fbbf24; font-family:Cairo; font-weight:900; font-size:16px; cursor:pointer; box-shadow:0 4px 10px rgba(220,38,38,0.4);">🔑 العودة لصفحة التسجيل</button>
         </div>
     </div>
-	    <div id="pageLesson" class="hide"><div id="lesson"><div id="lc"></div></div></div>
+	
+    <div id="pageLesson" class="hide"><div id="lesson"><div id="lc"></div></div></div>
     <div id="pageGames" class="hide"><div id="lesson"><button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div id="lcGames"></div></div></div>
     
     <!-- صفحة البث المباشر والتسجيل (مدمجة) -->
@@ -455,6 +456,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <button onclick="document.getElementById('htmlAdminModal').style.display='none'" style="width:100%; padding:12px; background:#334155; color:#fff; border:none; border-radius:15px; cursor:pointer; font-size:16px;">إلغاء</button>
   </div>
 </div>
+
 <script>
 window.ZAID = window.ZAID || {};
 ZAID.ADMIN = '012345';
@@ -692,6 +694,7 @@ ZAID.isSubscribed = function() {
     return false;
 };
 </script>
+
 <script>
 // ================== لوحة تحكم المشرف (جلب البيانات، الاشتراكات، رفع الملفات) ==================
 ZAID.loadAdminData = function() {
@@ -872,6 +875,7 @@ document.addEventListener('change', function(e) {
     }
 });
 </script>
+
 <script>
 // ================== محرك النطق ==================
 ZAID.speak = function(t, l) {
@@ -1138,6 +1142,7 @@ ZAID.correctMiddleTech = function() {
     document.getElementById('resultAreaTech').scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 </script>
+
 <script>
 // ================== قسم اللغة العربية للناطقين بغيرها ==================
 ZAID.showArabicLevels = function() {
@@ -1619,6 +1624,7 @@ ZAID.checkCertificateApp = function() {
   }
 };
 </script>
+
 <script>
 // ================== بيانات المحاضرات ==================
 ZAID.lecturesData = {
@@ -1965,6 +1971,7 @@ ZAID.showBooksSection = function() {
   }
 };
 </script>
+
 <script>
 // ================== قسم الابتدائي ==================
 ZAID.showPrimaryApp = function() {
@@ -2336,6 +2343,7 @@ ZAID.submitJobOffer = function() {
   });
 };
 </script>
+
 <script>
 // ================== الألعاب الفكرية ==================
 ZAID.gamesWordsData = {
@@ -2730,6 +2738,7 @@ ZAID.showGamesFull = function() {
   }, 50);
 };
 </script>
+
 <script>
 // ================== البث المباشر والتسجيل ==================
 ZAID.currentLiveRoom = null;
@@ -2792,8 +2801,8 @@ ZAID.startLiveRoom = function() {
   var linkBox = document.getElementById('liveLinkBox');
   var recordPanel = document.getElementById('liveRecordPanel');
   
-  container.style.display = 'block'; // نعرض الحاوية لأننا سنستخدم الشاشة المدمجة
-  waitingMsg.style.display = 'none';
+  container.style.display = 'none'; // نخفي الحاوية لأننا سنفتح النافذة الجديدة
+  waitingMsg.style.display = 'block';
   linkBox.style.display = 'block';
   recordPanel.style.display = 'block';
   
@@ -2804,54 +2813,30 @@ ZAID.startLiveRoom = function() {
   ZAID.joinLiveRoom(roomName);
 };
 
-// ================== الانضمام إلى غرفة Jitsi Meet (مدمجة داخل المنصة - شاشة واحدة) ==================
+// ================== الانضمام إلى غرفة Jitsi Meet (معدلة: خادم بدون قيود + نافذة مستقلة) ==================
 ZAID.joinLiveRoom = function(roomName) {
-  var container = document.getElementById('jitsiContainer');
-  var waitingMsg = document.getElementById('liveWaitingMsg');
+  // استخدام خادم ffmuc.net الألماني الذي لا يفرض قيوداً زمنية (بدلاً من meet.jit.si)
+  var url = 'https://meet.ffmuc.net/' + roomName;
   
-  if(container) container.style.display = 'block';
-  if(waitingMsg) waitingMsg.style.display = 'none';
+  // فتح الغرفة في نافذة جديدة (بهذا الشكل تعمل الكاميرا ومشاركة الشاشة بامتياز)
+  var jitsiWindow = window.open(url, '_blank', 'width=1200,height=800');
   
-  // إزالة أي غرفة سابقة
-  if(ZAID.jitsiApi) {
-    try { ZAID.jitsiApi.dispose(); } catch(e) {}
-    ZAID.jitsiApi = null;
-  }
-  container.innerHTML = '';
-  
-  // استخدام خادم ffmuc.net (بدون قيود زمنية)
-  var domain = 'meet.ffmuc.net';
-  var options = {
-    roomName: roomName,
-    width: '100%',
-    height: 500, // ارتفاع نافذة الفيديو
-    parentNode: container,
-    configOverwrite: {
-      startWithAudioMuted: true,
-      startWithVideoMuted: false,
-      prejoinPageEnabled: false,
-      // هذه الإعدادات تسمح بمشاركة الشاشة من داخل الإطار
-      disableThirdPartyRequests: true
-    },
-    interfaceConfigOverwrite: {
-      SHOW_JITSI_WATERMARK: false,
-      SHOW_BRAND_WATERMARK: false
-    }
-  };
-  
-  // تحميل API الخاص بـ Jitsi إذا لم يكن موجوداً
-  if(window.JitsiMeetExternalAPI) {
-    ZAID.jitsiApi = new JitsiMeetExternalAPI(domain, options);
+  if (!jitsiWindow) {
+    alert('⚠️ يرجى السماح للنوافذ المنبثقة (Pop-ups) في المتصفح ليتم فتح غرفة البث.');
   } else {
-    var script = document.createElement('script');
-    script.src = 'https://meet.ffmuc.net/external_api.js';
-    script.onload = function() {
-      ZAID.jitsiApi = new JitsiMeetExternalAPI(domain, options);
-    };
-    document.head.appendChild(script);
+    // إخفاء رسالة الانتظار وإظهار رسالة أن البث بدأ في النافذة الأخرى
+    var waitingMsg = document.getElementById('liveWaitingMsg');
+    waitingMsg.innerHTML = `
+        <div style="font-size:60px; margin-bottom:15px;">🎥</div>
+        <h3 style="color:#22c55e;">تم فتح غرفة البث في نافذة جديدة!</h3>
+        <p style="color:#cbd5e1; font-size:14px; margin-top:10px;">إذا لم تظهر النافذة تلقائياً، اضغط على الزر أدناه للدخول.</p>
+        <a href="${url}" target="_blank" style="display:inline-block; margin-top:15px; background:#3b82f6; color:white; padding:12px 25px; border-radius:15px; text-decoration:none; font-weight:bold;">🔗 فتح الغرفة مباشرة</a>
+    `;
+    waitingMsg.style.display = 'block';
+    document.getElementById('jitsiContainer').style.display = 'none';
   }
   
-  // تحديث الرابط في العنوان (حتى يتمكن المتابعون من نسخه والانضمام)
+  // تحديث الرابط في العنوان
   if(window.history && window.history.replaceState) {
     window.history.replaceState(null, '', '#live=' + roomName);
   }
@@ -2859,10 +2844,6 @@ ZAID.joinLiveRoom = function(roomName) {
 
 // ================== إغلاق غرفة البث ==================
 ZAID.closeLiveRoom = function() {
-  if(ZAID.jitsiApi) {
-    try { ZAID.jitsiApi.dispose(); } catch(e) {}
-    ZAID.jitsiApi = null;
-  }
   ZAID.currentLiveRoom = null;
   
   var container = document.getElementById('jitsiContainer');
@@ -3110,6 +3091,7 @@ window.addEventListener('hashchange', function() {
   }
 });
 </script>
+
 <script>
 // ================== التهيئة النهائية عند تحميل الصفحة ==================
 ZAID.init = function() {
@@ -3301,5 +3283,6 @@ if(document.readyState === 'loading') {
   ZAID.init();
 }
 </script>
+
 </body>
 </html>
