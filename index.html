@@ -539,7 +539,7 @@ ZAID.checkAdminHtml = function() {
     }
 };
 
-// ================== التسجيل مع إصلاح رقم الهاتف ==================
+// ================== التسجيل مع إصلاح رقم الهاتف (نسخة محسنة) ==================
 ZAID.register = function() {
   var n = document.getElementById('fn').value.trim();
   var p = document.getElementById('fp').value.trim();
@@ -549,14 +549,12 @@ ZAID.register = function() {
   var c = document.getElementById('fc').value.trim();
   var ci = document.getElementById('fci').value.trim();
   
-  if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم الكامل'); return; }
-  if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول'); return; }
+  if(n.split(/\s+/).length < 2) { alert('❌ يرجى كتابة الاسم واللقب (كلمتين على الأقل)'); return; }
+  if(!p || !s || !e || !c || !ci) { alert('❌ يرجى ملء جميع الحقول الإجبارية'); return; }
   
   var cleanPhone = h.replace(/\D/g, ''); 
   if(cleanPhone.length < 8) { alert('❌ يرجى إدخال رقم واتساب صحيح (8 أرقام على الأقل)'); return; }
   h = cleanPhone; 
-  
-  if(!confirm('📋 راجع بياناتك قبل الإرسال:\n\n👤 الاسم: '+n+'\n💼 المهنة: '+p+'\n🎯 الاختصاص: '+s+'\n📧 البريد: '+e+'\n📱 الواتساب: '+h+'\n🏙️ المدينة: '+ci)) return;
   
   var newUser = {
     name: n, prof: p, spec: s, email: e, phone: h, country: c, city: ci,
@@ -591,12 +589,13 @@ ZAID.register = function() {
     document.getElementById('fh').value = ''; document.getElementById('fci').value = '';
     
     ZAID.showPage('pageHome');
-    alert('✅ تم التسجيل بنجاح!');
+    ZAID.toast('✅ تم التسجيل بنجاح! مرحباً بك في منصة زايد', 'success');
+    
   }).catch(function(err){
     btn.disabled = false; btn.textContent = '🚪 دخول';
     let errorDiv = document.createElement('div');
     errorDiv.style.cssText = 'background:#fee2e2; color:#991b1b; border:2px solid #dc2626; padding:10px; border-radius:10px; margin-top:10px; font-weight:bold; text-align:center; font-size:14px;';
-    errorDiv.innerHTML = '❌ فشل التسجيل: ' + err.message + '<br><small style="font-weight:normal;">يرجى إرسال صورة لهذه الرسالة للمشرف.</small>';
+    errorDiv.innerHTML = '❌ فشل التسجيل: ' + err.message;
     let form = document.getElementById('gw');
     if(form) form.appendChild(errorDiv);
   });
@@ -2785,9 +2784,10 @@ ZAID.startLiveRoom = function() {
   ZAID.joinLiveRoom(roomName);
 };
 
-// ================== الانضمام إلى غرفة Jitsi Meet (معدلة: فتح في نافذة مستقلة) ==================
+// ================== الانضمام إلى غرفة Jitsi Meet (معدلة: خادم بدون قيود + نافذة مستقلة) ==================
 ZAID.joinLiveRoom = function(roomName) {
-  var url = 'https://meet.jit.si/' + roomName;
+  // استخدام خادم ffmuc.net الألماني الذي لا يفرض قيوداً زمنية (بدلاً من meet.jit.si)
+  var url = 'https://meet.ffmuc.net/' + roomName;
   
   // فتح الغرفة في نافذة جديدة (بهذا الشكل تعمل الكاميرا ومشاركة الشاشة بامتياز)
   var jitsiWindow = window.open(url, '_blank', 'width=1200,height=800');
