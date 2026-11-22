@@ -844,10 +844,11 @@ ZAID.uploadContent = function() {
         // رفع الملف إلى Supabase Storage
         var fileName = 'platform_content/' + Date.now() + '_' + file.name;
         
-        supabaseClient.storage.from('uploads').upload(fileName, file)
+                file.arrayBuffer().then(function(buffer) {
+            return supabaseClient.storage.from('uploads').upload(fileName, buffer);
+        })
         .then(function(result) {
             if (result.error) throw result.error;
-            // بما أن الحاوية خاصة (Private)، نحتاج لإنشاء رابط موقّع صالح لمدة سنة (31536000 ثانية)
             return supabaseClient.storage.from('uploads').createSignedUrl(result.data.path, 31536000);
         })
         .then(function(urlResult) {
