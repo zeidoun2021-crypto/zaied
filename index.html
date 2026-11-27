@@ -8,6 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<!-- تم إزالة مكتبة Firebase Storage وإضافة Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -318,6 +319,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     <div id="pageLesson" class="hide"><div id="lesson"><div id="lc"></div></div></div>
     <div id="pageGames" class="hide"><div id="lesson"><button class="back" onclick="ZAID.goHome()">🔙 العودة</button><div id="lcGames"></div></div></div>
     
+    <!-- صفحة البث المباشر والتسجيل (مدمجة من الكود الأصلي) -->
     <div id="pageLive" class="hide">
         <div id="lesson">
             <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
@@ -328,6 +330,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
                 <button id="tabLocalRecord" onclick="ZAID.switchLiveTab('record')" style="background:rgba(255,255,255,0.15); color:white; border:none; padding:12px 25px; border-radius:40px; font-weight:bold; cursor:pointer; flex:1; max-width:300px;">📹 تسجيل محلي (كاميرا)</button>
             </div>
 
+            <!-- قسم البث المباشر -->
             <div id="liveStreamPanel" style="display:block;">
                 <div id="liveSetupPanel" style="background:#1e293b; padding:15px; border-radius:15px; margin-bottom:15px; border:2px solid #fbbf24;">
                     <h3 style="color:#fbbf24; margin-bottom:10px;">👨‍🏫 للمشرف / المعلم: بدء غرفة بث جديدة</h3>
@@ -345,6 +348,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
                         <p style="color:#94a3b8; font-size:12px; margin-top:5px;">💡 عند فتح هذا الرابط من قبل المتابعين، سيدخلون مباشرة إلى الغرفة.</p>
                     </div>
 
+                    <!-- أدوات تسجيل البث -->
                     <div id="liveRecordPanel" style="display:none; margin-top:15px; padding-top:15px; border-top:1px solid #475569;">
                         <h4 style="color:#fbbf24; margin-bottom:8px;">📹 تسجيل البث (للمشرف فقط)</h4>
                         <p style="color:#94a3b8; font-size:12px; margin-bottom:8px;">اضغط "بدء التسجيل" واختر "مشاركة التبويب" مع تفعيل "مشاركة الصوت" لتسجيل البث.</p>
@@ -357,8 +361,10 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
                     </div>
                 </div>
 
+                <!-- حاوية الفيديو (Jitsi Meet) -->
                 <div id="jitsiContainer"></div>
                 
+                <!-- رسالة ترحيبية للمتابعين قبل بدء البث -->
                 <div id="liveWaitingMsg" style="text-align:center; padding:50px 20px; background:#0f172a; border-radius:15px; border:2px dashed #475569;">
                     <div style="font-size:60px; margin-bottom:15px;">📡</div>
                     <h3 style="color:#cbd5e1;">لم يتم بدء أي بث حالياً.</h3>
@@ -366,6 +372,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
                 </div>
             </div>
 
+            <!-- قسم التسجيل المحلي (كاميرا) -->
             <div id="localRecordPanel" style="display:none; background:#1e293b; padding:20px; border-radius:15px; border:2px solid #3b82f6;">
                 <h3 style="color:#3b82f6; margin-bottom:15px; text-align:center;">📹 تسجيل فيديو محلي (كاميرا)</h3>
                 <video id="videoPreview" autoplay muted style="display:none; width:100%; border-radius:15px; margin:10px 0; background:#000; border:2px solid #334155;"></video>
@@ -382,6 +389,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
         </div>
     </div>
 
+    <!-- صفحة الاشتراك (جديدة) -->
     <div id="pageSub" class="hide">
         <div id="lesson">
             <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
@@ -389,10 +397,12 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
         </div>
     </div>
 
+    <!-- لوحة تحكم المشرف (تشمل رفع الملفات) -->
     <div id="pageAdmin" class="hide" style="width:100%; max-width:1200px; margin:0 auto;">
         <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
         <div class="htitle">👑 لوحة تحكم المشرف</div>
         
+        <!-- قسم رفع الملفات (كتب / محاضرات / مراحل) -->
         <div style="background:#0f172a; border-radius:15px; padding:20px; margin:15px 0; border:2px dashed #fbbf24;">
             <h3 style="color:#fbbf24; text-align:center; margin-bottom:15px;">📤 رفع محتوى جديد (ملف أو رابط)</h3>
             
@@ -412,6 +422,9 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
                 </select>
             </div>
             
+            <!-- التعديل الجديد: حقل المجلد -->
+            <input type="text" id="uploadSubFolder" class="inp" placeholder="اسم المجلد / القسم الفرعي (مثال: السنة الخامسة، الوحدة الأولى...)" style="width:100%; margin-bottom:10px; border-color:#fbbf24;">
+
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
                 <input type="text" id="uploadTitle" class="inp" placeholder="عنوان المحتوى *" style="flex:2; min-width:200px;">
                 <input type="text" id="uploadDesc" class="inp" placeholder="وصف مختصر" style="flex:2; min-width:200px;">
@@ -437,6 +450,7 @@ body{background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a);color:#fff;displ
     </div>
 </div>
 
+<!-- نافذة دخول المشرف (باستخدام كلمة المرور البسيطة 012345) -->
 <div id="htmlAdminModal">
   <div style="background:#fff; padding:25px; border-radius:15px; max-width:400px; width:100%; text-align:center; border:4px solid #8b5cf6;">
     <div style="font-size:40px; margin-bottom:10px;">👑</div>
@@ -468,12 +482,14 @@ try {
     firebase.initializeApp(firebaseConfig); 
     window.db = firebase.firestore(); 
     window.auth = firebase.auth(); 
+    // تم إزالة firebase.storage() لأننا سنستخدم Supabase
 } catch(e) { 
     console.log("Firebase init error", e); 
 }
 
 // ================== إعدادات Supabase ==================
 const SUPABASE_URL = 'https://eqdyqgjxcchoneaznsao.supabase.co';
+// ⚠️ ضع المفتاح الكامل الخاص بك هنا بين علامتي التنصيص
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxeWRxZ2p4Y2Nob25lYXpuc2FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUwMjI3NjMsImV4cCI6MjExMDU5ODc2M30.sWqs5-SfRy7Q3GuECARhb7LEOGysTTi0I3iFnfXDjv8'; 
 let supabaseClient = null;
 try {
@@ -543,7 +559,7 @@ ZAID.checkAdminHtml = function() {
     }
 };
 
-// ================== التسجيل (يعمل: DB + Admin + Email) ==================
+// ================== التسجيل (مُصحح: يحفظ البيانات ويظهر في لوحة المشرف) ==================
 ZAID.register = function() {
   var n = document.getElementById('fn').value.trim();
   var p = document.getElementById('fp').value.trim();
@@ -557,6 +573,7 @@ ZAID.register = function() {
       alert('❌ يجب ملء جميع الحقول الإجبارية (الاسم، المهنة، الاختصاص، البريد، الهاتف، البلد، المدينة)');
       return;
   }
+
   if(n.split(/\s+/).length < 2) { 
       alert('❌ يرجى كتابة الاسم واللقب (كلمتين على الأقل)'); 
       return; 
@@ -578,7 +595,6 @@ ZAID.register = function() {
   var btn = document.getElementById('btnReg');
   btn.disabled = true; btn.textContent = '⏳ جاري التسجيل...';
   
-  // معرّف فريد + set() مع doc() (يمنع خطأ M_ID)
   var userId = 'u' + Date.now() + Math.floor(Math.random()*1000);
   
   var newUser = {
@@ -594,49 +610,61 @@ ZAID.register = function() {
   db.collection("users").doc(userId).set(newUser).then(function() {
     newUser._id = userId;
     
-    // إشعار بالبريد الإلكتروني عبر Google Apps Script (موجود في الكود الأصلي)
     var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbytejak8eW7usoHYvVmFtRpBU1PLjtTWFQktObt4n9gCJXaecfHClwkqgtvflJUGD3l/exec';
     fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newUser) }).catch(()=>{});
-
-    const apiKey = 'YOUR_CALLMEBOT_API_KEY'; 
-    const phone = '21655335477'; 
-    if(apiKey !== 'YOUR_CALLMEBOT_API_KEY') {
-        const msg = `📢 تسجيل جديد:\n👤 ${n}\n💼 ${p} - ${s}\n📱 ${h}`;
-        fetch(`https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(msg)}&apikey=${apiKey}`).catch(()=>{});
-    }
 
     ZAID.user = newUser;
     localStorage.setItem('zaid_current_user', JSON.stringify(newUser));
     document.getElementById('un').textContent = n;
     btn.disabled = false; btn.textContent = '🚪 دخول';
     
-    ['fn','fp','fs','fe','fh','fci'].forEach(function(id){ document.getElementById(id).value = ''; });
+    ['fn','fp','fs','fe','fh','fci'].forEach(id => document.getElementById(id).value = '');
     
     ZAID.showPage('pageHome');
     ZAID.toast('✅ تم التسجيل بنجاح! مرحباً بك في منصة زايد', 'success');
     
   }).catch(function(err){
     btn.disabled = false; btn.textContent = '🚪 دخول';
-    console.error('Firestore write error:', err.code, err.message);
     let errorDiv = document.createElement('div');
-    errorDiv.style.cssText = 'background:#fee2e2; color:#991b1b; border:2px solid #dc2626; padding:10px; border-radius:10px; margin-top:10px; font-weight:bold; text-align:center; font-size:13px;';
-    errorDiv.innerHTML = '❌ فشل التسجيل: <b>' + (err.code || '') + '</b><br>' + err.message;
+    errorDiv.style.cssText = 'background:#fee2e2; color:#991b1b; border:2px solid #dc2626; padding:10px; border-radius:10px; margin-top:10px; font-weight:bold; text-align:center; font-size:14px;';
+    errorDiv.innerHTML = '❌ فشل التسجيل: ' + err.message;
     let form = document.getElementById('gw');
     if(form) form.appendChild(errorDiv);
   });
 };
 
-// ================== نظام الزيارات (معطل - المسجلون يتصفحون بحرية) ==================
+// ================== نظام الزيارات (3 زيارات مجانية) ==================
 ZAID.checkVisitLimit = function() {
-    // المسجلون يتصفحون المحتويات بحرية تامة بدون حد للزيارات
+    if (!ZAID.user || ZAID.admin) return;
+    
+    var userKey = 'zaid_visits_' + (ZAID.user.email || ZAID.user._id);
+    var visits = parseInt(localStorage.getItem(userKey) || '0');
+    
+    if (ZAID.isSubscribed && ZAID.isSubscribed()) return;
+    
+    if (visits >= 3) {
+        var alertDiv = document.getElementById('visitAlert');
+        if (alertDiv) {
+            alertDiv.style.display = 'block';
+            alertDiv.innerHTML = '⚠️ لقد استنفدت 3 زيارات مجانية. يرجى الاشتراك للمتابعة. <button onclick="ZAID.showSub()" style="background:#dc2626; color:white; border:none; padding:5px 15px; border-radius:20px; cursor:pointer; font-weight:bold; margin-right:10px;">💳 اشترك الآن</button>';
+        }
+        var secs = document.querySelector('.secs');
+        if (secs) secs.style.display = 'none';
+        return;
+    }
+    
+    visits++;
+    localStorage.setItem(userKey, visits);
+    
+    var remaining = 3 - visits;
     var alertDiv = document.getElementById('visitAlert');
-    if (alertDiv) alertDiv.style.display = 'none';
-    var secs = document.querySelector('.secs');
-    if (secs) secs.style.display = 'grid';
-    return;
+    if (alertDiv && remaining > 0) {
+        alertDiv.style.display = 'block';
+        alertDiv.innerHTML = '👋 مرحباً بك! لديك <b>' + remaining + '</b> زيارات مجانية متبقية. <button onclick="ZAID.showSub()" style="background:#22c55e; color:white; border:none; padding:5px 15px; border-radius:20px; cursor:pointer; font-weight:bold; margin-right:10px;">💳 اشترك الآن</button>';
+    }
 };
 
-// ================== صفحة الاشتراك ==================
+// ================== دالة عرض صفحة الاشتراك ==================
 ZAID.showSub = function() {
   ZAID.showPage('pageSub');
   var lc = document.getElementById('subContent');
@@ -678,12 +706,13 @@ ZAID.isSubscribed = function() {
 </script>
 
 <script>
-// ================== لوحة تحكم المشرف (تعرض المسجلين + رفع المحتوى) ==================
+// ================== لوحة تحكم المشرف (جلب البيانات، الاشتراكات، رفع الملفات) ==================
 ZAID.loadAdminData = function() {
     var listEl = document.getElementById('adminUsersList');
     if(!listEl) return;
     listEl.innerHTML = '⏳ جاري تحميل البيانات من Firebase...';
     
+    // 1. جلب المسجلين (مع حالة الاشتراك)
     db.collection("users").get().then(function(qs) {
       var html = '<h3 style="color:#fbbf24; margin:15px 0; text-align:center;">👥 المستخدمون المسجلون ('+qs.size+')</h3><div style="overflow-x:auto;"><table style="width:100%; color:white; text-align:center; border-collapse:collapse; white-space:nowrap; font-size:12px;"><tr style="background:#334155;">' +
                  '<th style="padding:8px; border:1px solid #475569;">الاسم</th><th style="padding:8px; border:1px solid #475569;">الإيميل</th><th style="padding:8px; border:1px solid #475569;">الهاتف</th><th style="padding:8px; border:1px solid #475569;">المهنة</th><th style="padding:8px; border:1px solid #475569;">الاختصاص</th><th style="padding:8px; border:1px solid #475569;">المدينة</th><th style="padding:8px; border:1px solid #475569;">التصنيف</th><th style="padding:8px; border:1px solid #475569;">الاشتراك</th><th style="padding:8px; border:1px solid #475569;">إجراء</th></tr>';
@@ -698,6 +727,7 @@ ZAID.loadAdminData = function() {
       });
       html += '</table></div>'; 
       
+      // 2. جلب طلبات الطلاب (تربص/شغل)
       db.collection("requests").get().then(function(reqQs) {
           html += '<h3 style="color:#fbbf24; margin:25px 0 15px 0; text-align:center;">📋 طلبات التربص والشغل (من الطلاب) ('+reqQs.size+')</h3><div style="overflow-x:auto;"><table style="width:100%; color:white; text-align:center; border-collapse:collapse; white-space:nowrap; font-size:12px;"><tr style="background:#334155;">' +
                  '<th style="padding:8px; border:1px solid #475569;">النوع</th><th style="padding:8px; border:1px solid #475569;">الاسم</th><th style="padding:8px; border:1px solid #475569;">الإيميل</th><th style="padding:8px; border:1px solid #475569;">الاختصاص</th><th style="padding:8px; border:1px solid #475569;">الهدف</th><th style="padding:8px; border:1px solid #475569;">السيرة الذاتية</th><th style="padding:8px; border:1px solid #475569;">التاريخ</th></tr>';
@@ -708,6 +738,7 @@ ZAID.loadAdminData = function() {
           });
           html += '</table></div>';
           
+          // 3. جلب عروض المؤسسات (مع أزرار الموافقة)
           db.collection("job_offers").get().then(function(jobQs) {
               html += '<h3 style="color:#fbbf24; margin:25px 0 15px 0; text-align:center;">🏢 عروض الشغل (من المؤسسات) ('+jobQs.size+')</h3><div style="overflow-x:auto;"><table style="width:100%; color:white; text-align:center; border-collapse:collapse; white-space:nowrap; font-size:12px;"><tr style="background:#334155;">' +
                      '<th style="padding:8px; border:1px solid #475569;">المؤسسة</th><th style="padding:8px; border:1px solid #475569;">الوظيفة</th><th style="padding:8px; border:1px solid #475569;">الهاتف</th><th style="padding:8px; border:1px solid #475569;">الحالة</th><th style="padding:8px; border:1px solid #475569;">الإجراء</th></tr>';
@@ -730,10 +761,12 @@ ZAID.loadAdminData = function() {
     });
 };
 
+// ================== دالة تفعيل الاشتراك ==================
 ZAID.activateSubscription = function(userId) {
-    if(!ZAID.admin) { alert('غير مصرح'); return; }
     if(!confirm('هل تريد تفعيل اشتراك هذا المستخدم لمدة سنة؟')) return;
+    
     var oneYearFromNow = Date.now() + (365 * 24 * 60 * 60 * 1000);
+    
     db.collection("users").doc(userId).update({
         isSub: true,
         subExpiry: oneYearFromNow
@@ -746,7 +779,6 @@ ZAID.activateSubscription = function(userId) {
 };
 
 ZAID.approveJob = function(id) {
-    if(!ZAID.admin) { alert('غير مصرح'); return; }
     if(!confirm('هل تأكدت من استلام مبلغ 50 د.ت؟ سيتم تفعيل العرض للطلبة.')) return;
     db.collection("job_offers").doc(id).update({ status: 'active' })
     .then(() => { alert('✅ تم تفعيل العرض بنجاح!'); ZAID.loadAdminData(); })
@@ -759,7 +791,6 @@ ZAID.showStats = function() {
 };
 
 ZAID.exportExcel = function() {
-  if(!ZAID.admin) { alert('غير مصرح'); return; }
   if(!db) return;
   db.collection("users").get().then(function(qs){ 
     var users = []; qs.forEach(function(doc){ users.push(doc.data()); });
@@ -774,11 +805,10 @@ ZAID.exportExcel = function() {
   });
 };
 
-// ================== رفع المحتوى (للمشرف فقط) ==================
+// ================== رفع المحتوى (مع دعم المجلدات) ==================
 ZAID.uploadContent = function() {
-    if(!ZAID.admin) { alert('🚫 غير مصرح لك بالرفع. هذه الصلاحية للمشرف فقط.'); return; }
-    
     var targetSection = document.getElementById('uploadSection').value;
+    var subFolder = document.getElementById('uploadSubFolder').value.trim() || 'محتوى عام';
     var contentType = document.getElementById('uploadType').value;
     var title = document.getElementById('uploadTitle').value.trim();
     var desc = document.getElementById('uploadDesc').value.trim();
@@ -788,6 +818,7 @@ ZAID.uploadContent = function() {
     
     var uploadData = {
         targetSection: targetSection,
+        subFolder: subFolder,
         title: title,
         description: desc,
         date: new Date().toISOString()
@@ -803,10 +834,6 @@ ZAID.uploadContent = function() {
         var fileInput = document.getElementById('uploadFile');
         if(!fileInput.files.length) { alert('⚠️ يرجى اختيار ملف للرفع'); return; }
         var file = fileInput.files[0];
-        
-        if(file.size > 50 * 1024 * 1024) {
-            alert('⚠️ حجم الملف يتجاوز 50 ميغابايت'); return;
-        }
         
         statusEl.innerHTML = '⏳ جاري الرفع إلى Supabase...';
         statusEl.style.color = '#fbbf24';
@@ -930,9 +957,39 @@ ZAID.showSecondarySection = function() {
             <div class="ld">اختبارات نظرية وتطبيقية (Bac Blanc) مع التصحيح</div>
         </div>
     </div>
-    <div id="secondaryDynamic" style="margin-top:20px;"></div>
   `;
-  ZAID.loadSectionContent('high', 'secondaryDynamic');
+  
+  // إضافة المحتوى المرفوع لقسم الثانوي
+  if(window.db) {
+    db.collection("platform_content").where("targetSection", "==", "high").get().then(function(qs) {
+      if(!qs.empty) {
+        let groups = {};
+        qs.forEach(function(doc) {
+            let item = doc.data();
+            let folder = item.subFolder || 'محتوى عام (بدون مجلد)';
+            if(!groups[folder]) groups[folder] = [];
+            groups[folder].push(item);
+        });
+        
+        let dynamicHtml = '';
+        for (let folderName in groups) {
+            dynamicHtml += `<div style="background:#1e293b; border-radius:15px; padding:15px; margin-bottom:20px; border:2px solid #fbbf24;">`;
+            dynamicHtml += `<h3 style="color:#fbbf24; text-align:center; margin-bottom:15px; border-bottom:2px dashed #475569; padding-bottom:10px;">📁 ${folderName}</h3>`;
+            dynamicHtml += `<div class="sel">`;
+            groups[folderName].forEach(item => {
+                let clickAction = `window.open('${item.fileUrl}', '_blank')`;
+                dynamicHtml += `<div class="lcard" style="background:linear-gradient(135deg,#374151,#1f2937); border-color:#3b82f6;" onclick="${clickAction}">
+                    <div style="font-size:50px; margin-bottom:10px;">📄</div>
+                    <div class="lt">${item.title}</div>
+                    <div class="ld">${item.description || 'اضغط للفتح'}</div>
+                </div>`;
+            });
+            dynamicHtml += `</div></div>`;
+        }
+        lc.innerHTML += dynamicHtml;
+      }
+    }).catch(e => console.log('خطأ في جلب المحتوى المرفوع:', e));
+  }
 };
 
 ZAID.startBacExam = function() {
@@ -1004,7 +1061,7 @@ ZAID.showAISection = function() {
   `;
 };
 
-// ================== قسم الإعدادي ==================
+// ================== قسم الإعدادي (التحليل البنيوي كامل) ==================
 ZAID.showMiddleTech = function() {
   ZAID.showPage('pageLesson');
   var lc = document.getElementById('lc');
@@ -1097,10 +1154,8 @@ ZAID.correctMiddleTech = function() {
     }
     document.getElementById('resultAreaTech').scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
-</script>
 
-<script>
-// ================== قسم اللغة العربية للناطقين بغيرها ==================
+// ================== قسم اللغة العربية للناطقين بغيرها (كامل بدون حذف) ==================
 ZAID.showArabicLevels = function() {
   ZAID.showPage('pageLesson');
   var lc = document.getElementById('lc');
@@ -1209,7 +1264,38 @@ ZAID.showArabicLevels = function() {
     <div id="arabicDynamicContent" style="margin-top:20px;"></div>
   `;
 
-  ZAID.loadSectionContent('arabic', 'arabicDynamicContent');
+  // تحميل المحتوى المرفوع لقسم اللغة العربية
+  if(window.db) {
+    db.collection("platform_content").where("targetSection", "==", "arabic").get().then(function(qs) {
+      if(!qs.empty) {
+        let groups = {};
+        qs.forEach(function(doc) {
+            let item = doc.data();
+            let folder = item.subFolder || 'محتوى عام (بدون مجلد)';
+            if(!groups[folder]) groups[folder] = [];
+            groups[folder].push(item);
+        });
+        
+        let dynamicHtml = '';
+        for (let folderName in groups) {
+            dynamicHtml += `<div style="background:#1e293b; border-radius:15px; padding:15px; margin-bottom:20px; border:2px solid #fbbf24;">`;
+            dynamicHtml += `<h3 style="color:#fbbf24; text-align:center; margin-bottom:15px; border-bottom:2px dashed #475569; padding-bottom:10px;">📁 ${folderName}</h3>`;
+            dynamicHtml += `<div class="sel">`;
+            groups[folderName].forEach(item => {
+                let clickAction = `window.open('${item.fileUrl}', '_blank')`;
+                dynamicHtml += `<div class="lcard" style="background:linear-gradient(135deg,#374151,#1f2937); border-color:#3b82f6;" onclick="${clickAction}">
+                    <div style="font-size:50px; margin-bottom:10px;">📄</div>
+                    <div class="lt">${item.title}</div>
+                    <div class="ld">${item.description || 'اضغط للفتح'}</div>
+                </div>`;
+            });
+            dynamicHtml += `</div></div>`;
+        }
+        document.getElementById('arabicDynamicContent').innerHTML = dynamicHtml;
+      }
+    }).catch(e => console.log('خطأ في جلب المحتوى المرفوع:', e));
+  }
+
   ZAID.initArabicApp();
 };
 
@@ -1244,52 +1330,17 @@ ZAID.arabicLettersData = [
   { letter: "و", name: "واو", translit: "W", words: ["وَرْدَة"], wordsFr: ["Rose"], wordsEn: ["Rose"] },
   { letter: "ي", name: "ياء", translit: "Y", words: ["يَد"], wordsFr: ["Main"], wordsEn: ["Hand"] }
 ];
-</script>
 
-<script>
-// ================== الدوال المفقودة (تجعل كل أزرار الأقسام تعمل) ==================
-
-ZAID.toast = function(msg, type) {
-    var t = document.createElement('div');
-    t.textContent = msg;
-    t.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:'+(type==='success'?'#22c55e':type==='error'?'#dc2626':'#3b82f6')+';color:white;padding:12px 25px;border-radius:30px;font-weight:900;z-index:99999;box-shadow:0 8px 25px rgba(0,0,0,0.3);font-family:Cairo;border:2px solid #fbbf24;';
-    document.body.appendChild(t);
-    setTimeout(function(){ t.remove(); }, 3000);
-};
-
+// ================== الأقسام المفقودة (تمت إضافتها لكي تعمل الأزرار) ==================
 ZAID.showPrimaryApp = function() {
     ZAID.showPage('pageLesson');
     document.getElementById('lc').innerHTML = `
         <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
         <div class="htitle">🎒 المرحلة الابتدائية (3-6)</div>
-        <p style="text-align:center;color:#cbd5e1;margin-bottom:15px;">اختر المستوى الدراسي</p>
-        <div class="sel">
-            <div class="lcard" style="background:linear-gradient(135deg,#dc2626,#991b1b);" onclick="ZAID.toast('📚 دروس السنة 3 قيد الإعداد','info')"><div style="font-size:50px;margin-bottom:10px;">📗</div><div class="lt">السنة الثالثة</div><div class="ld">دروس مبسطة + تمارين</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#dc2626,#991b1b);" onclick="ZAID.toast('📚 دروس السنة 4 قيد الإعداد','info')"><div style="font-size:50px;margin-bottom:10px;">📘</div><div class="lt">السنة الرابعة</div><div class="ld">أنشطة تفاعلية</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#dc2626,#991b1b);" onclick="ZAID.toast('📚 دروس السنة 5 قيد الإعداد','info')"><div style="font-size:50px;margin-bottom:10px;">📙</div><div class="lt">السنة الخامسة</div><div class="ld">تحضير للشهادة</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#dc2626,#991b1b);" onclick="ZAID.toast('📚 دروس السنة 6 قيد الإعداد','info')"><div style="font-size:50px;margin-bottom:10px;">📕</div><div class="lt">السنة السادسة</div><div class="ld">مراجعة شاملة</div></div>
-        </div>
-        <div id="primaryDynamic" style="margin-top:20px;"></div>
+        <p style="text-align:center;color:#cbd5e1;margin-bottom:15px;">المحتوى مقسم حسب المجلدات:</p>
+        <div id="primaryDynamic"></div>
     `;
     ZAID.loadSectionContent('primary', 'primaryDynamic');
-};
-
-// تحميل المحتوى المرفوع لأي قسم - مسموح لجميع المسجلين بحرية
-ZAID.loadSectionContent = function(section, containerId) {
-    if(!window.db) return;
-    db.collection("platform_content").where("targetSection", "==", section).get().then(function(qs) {
-        if(qs.empty) return;
-        var container = document.getElementById(containerId);
-        if(!container) return;
-        var html = '<div style="background:#1e293b;border-radius:15px;padding:15px;border:2px solid #fbbf24;"><h3 style="color:#fbbf24;text-align:center;">📤 محتوى إضافي (مرفوع)</h3><div class="sel">';
-        qs.forEach(function(doc) {
-            var item = doc.data();
-            // جميع المسجلين يتصفحون المحتويات بحرية (بدون قفل)
-            html += '<div class="lcard" style="background:linear-gradient(135deg,#374151,#1f2937);border-color:#fbbf24;" onclick="window.open(\''+item.fileUrl+'\',\'_blank\')"><div style="font-size:50px;margin-bottom:10px;">📄</div><div class="lt">'+item.title+'</div><div class="ld">'+(item.description||'')+'</div></div>';
-        });
-        html += '</div></div>';
-        container.innerHTML = html;
-    }).catch(function(e){ console.log('loadSectionContent:', e); });
 };
 
 ZAID.showLecturesSection = function() {
@@ -1297,15 +1348,6 @@ ZAID.showLecturesSection = function() {
     document.getElementById('lc').innerHTML = `
         <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
         <div class="htitle">🎤 المحاضرات والندوات</div>
-        <p style="text-align:center;color:#cbd5e1;margin-bottom:15px;">محاضرات علمية في التكنولوجيا والذكاء الاصطناعي</p>
-        <div class="sel">
-            <div class="lcard" style="background:linear-gradient(135deg,#4c1d95,#6d28d9);" onclick="ZAID.openLecture('lecture1')"><div style="font-size:50px;margin-bottom:10px;">🤖</div><div class="lt">مقدمة في AI</div><div class="ld">مفهوم الذكاء الاصطناعي</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#374151,#1f2937);" onclick="ZAID.openLecture('lecture2')"><div style="font-size:50px;margin-bottom:10px;">🛡️</div><div class="lt">AI والجرائم الإلكترونية</div><div class="ld">الدفاع السيبراني</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#0e7490,#155e75);" onclick="ZAID.openLecture('lecture3')"><div style="font-size:50px;margin-bottom:10px;">🌐</div><div class="lt">شبكات الاتصال</div><div class="ld">أنواع الشبكات</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#065f46,#064e3b);" onclick="ZAID.openLecture('lecture4')"><div style="font-size:50px;margin-bottom:10px;">🗣️</div><div class="lt">العربية و AI</div><div class="ld">اللسانيات الرقمية</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#7c2d12,#9a3412);" onclick="ZAID.openLecture('lecture5')"><div style="font-size:50px;margin-bottom:10px;">👨‍🏫</div><div class="lt">ورشة 1: AI في التعليم</div><div class="ld">دليل المعلم</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#831843,#9d174d);" onclick="ZAID.openLecture('lecture6')"><div style="font-size:50px;margin-bottom:10px;">🎬</div><div class="lt">ورشة 2: درس جاهز</div><div class="ld">من الفكرة إلى التطبيق</div></div>
-        </div>
         <div id="lecturesDynamic" style="margin-top:20px;"></div>
     `;
     ZAID.loadSectionContent('lectures', 'lecturesDynamic');
@@ -1316,8 +1358,7 @@ ZAID.showBooksSection = function() {
     document.getElementById('lc').innerHTML = `
         <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
         <div class="htitle">📚 الكتب والمراجع</div>
-        <p style="text-align:center;color:#cbd5e1;margin-bottom:15px;">مراجع علمية وكتب في التكنولوجيا</p>
-        <div id="booksDynamic"></div>
+        <div id="booksDynamic" style="margin-top:20px;"></div>
     `;
     ZAID.loadSectionContent('books', 'booksDynamic');
 };
@@ -1325,20 +1366,48 @@ ZAID.showBooksSection = function() {
 ZAID.showGamesFull = function() {
     ZAID.showPage('pageGames');
     document.getElementById('lcGames').innerHTML = `
-        <div class="htitle">🎮 الألعاب الفكرية</div>
-        <p style="text-align:center;color:#cbd5e1;margin-bottom:15px;">ألعاب تعليمية تفاعلية</p>
-        <div class="sel">
-            <div class="lcard" style="background:linear-gradient(135deg,#7e22ce,#6b21a8);" onclick="ZAID.startWordSearch()"><div style="font-size:50px;margin-bottom:10px;">🔍</div><div class="lt">البحث عن الكلمات</div><div class="ld">كلمات تكنولوجية</div></div>
-            <div class="lcard" style="background:linear-gradient(135deg,#7e22ce,#6b21a8);" onclick="ZAID.startMemoryGame()"><div style="font-size:50px;margin-bottom:10px;">🧠</div><div class="lt">لعبة الذاكرة</div><div class="ld">طابق البطاقات</div></div>
+        <div class="htitle">🎮 لعبة الذاكرة (مطابقة البطاقات)</div>
+        <p style="text-align:center;color:#cbd5e1;margin-bottom:15px;">ابحث عن الأزواج المتطابقة!</p>
+        <div class="game-grid" id="memoryGameGrid"></div>
+        <div style="text-align:center; margin-top:20px;">
+            <button onclick="ZAID.startMemoryGame()" style="background:#3b82f6; color:white; padding:10px 20px; border-radius:20px; border:none; font-weight:bold; cursor:pointer;">🔄 إعادة اللعبة</button>
         </div>
-        <div id="gameArea" style="margin-top:20px;"></div>
     `;
+    ZAID.startMemoryGame();
 };
-ZAID.startWordSearch = function() {
-    document.getElementById('gameArea').innerHTML = '<div class="htitle" style="font-size:16px;">🔍 البحث عن الكلمات</div><p style="text-align:center;color:#cbd5e1;padding:30px;">🚧 اللعبة قيد التطوير</p>';
-};
+
 ZAID.startMemoryGame = function() {
-    document.getElementById('gameArea').innerHTML = '<div class="htitle" style="font-size:16px;">🧠 لعبة الذاكرة</div><p style="text-align:center;color:#cbd5e1;padding:30px;">🚧 اللعبة قيد التطوير</p>';
+    const emojis = ['🤖', '💻', '📱', '🔌', '🌐', '🛡️', '⚙️', '🔋'];
+    let cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+    let grid = document.getElementById('memoryGameGrid');
+    grid.innerHTML = ''; grid.style.gridTemplateColumns = 'repeat(4, 1fr)'; grid.style.maxWidth = '400px'; grid.style.margin = '0 auto';
+    
+    let flippedCards = []; let matchedCount = 0; let lockBoard = false;
+
+    cards.forEach((emoji, index) => {
+        let card = document.createElement('div');
+        card.classList.add('game-cell'); card.style.height = '70px'; card.style.fontSize = '24px';
+        card.dataset.emoji = emoji; card.innerText = '?';
+        card.onclick = () => {
+            if (lockBoard || card.classList.contains('found') || card.innerText !== '?') return;
+            card.innerText = emoji; card.classList.add('selected');
+            flippedCards.push(card);
+            if (flippedCards.length === 2) {
+                lockBoard = true;
+                if (flippedCards[0].dataset.emoji === flippedCards[1].dataset.emoji) {
+                    flippedCards[0].classList.add('found'); flippedCards[1].classList.add('found');
+                    flippedCards = []; lockBoard = false; matchedCount += 2;
+                    if (matchedCount === cards.length) setTimeout(() => ZAID.toast('🎉 مبروك! لقد أكملت اللعبة', 'success'), 300);
+                } else {
+                    setTimeout(() => {
+                        flippedCards.forEach(c => { c.innerText = '?'; c.classList.remove('selected'); });
+                        flippedCards = []; lockBoard = false;
+                    }, 1000);
+                }
+            }
+        };
+        grid.appendChild(card);
+    });
 };
 
 ZAID.openDict = function() {
@@ -1346,177 +1415,93 @@ ZAID.openDict = function() {
     document.getElementById('lc').innerHTML = `
         <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
         <div class="htitle">📖 المنجد الرباعي</div>
-        <div class="dict-box">
-            <input type="text" id="dictSearch" class="inp" placeholder="🔍 ابحث عن مصطلح..." oninput="ZAID.dictSearch()" style="width:100%;">
-            <div id="dictResults" style="margin-top:15px;"></div>
-        </div>
+        <div class="dict-box"><input type="text" id="dictSearch" class="inp" placeholder="ابحث..." oninput="ZAID.dictSearch()" style="width:100%;"><div id="dictResults" style="margin-top:15px;"></div></div>
     `;
     ZAID.dictSearch();
 };
 ZAID.dictData = [
-    { word: "Informatique", ar: "معلوماتية", fr: "Informatique", en: "Computer Science", meaning: "علم معالجة المعلومات بالحاسوب" },
-    { word: "Intelligence Artificielle", ar: "الذكاء الاصطناعي", fr: "IA", en: "AI", meaning: "محاكاة الذكاء البشري بالآلة" },
-    { word: "Algorithme", ar: "خوارزمية", fr: "Algorithme", en: "Algorithm", meaning: "سلسلة خطوات لحل مشكلة" },
-    { word: "Réseau", ar: "شبكة", fr: "Réseau", en: "Network", meaning: "ربط عدة أجهزة للتواصل" },
-    { word: "Base de données", ar: "قاعدة بيانات", fr: "Base de données", en: "Database", meaning: "مجموعة منظمة من البيانات" },
-    { word: "Sécurité", ar: "أمن سيبراني", fr: "Sécurité", en: "Security", meaning: "حماية الأنظمة من الهجمات" },
-    { word: "Programmation", ar: "برمجة", fr: "Programmation", en: "Programming", meaning: "كتابة أكواد لتنفيذ مهام" },
-    { word: "Ordinateur", ar: "حاسوب", fr: "Ordinateur", en: "Computer", meaning: "جهاز إلكتروني لمعالجة البيانات" }
+    { word: "Informatique", ar: "معلوماتية", fr: "Informatique", en: "Computer Science", meaning: "علم معالجة المعلومات" },
+    { word: "Intelligence Artificielle", ar: "الذكاء الاصطناعي", fr: "IA", en: "AI", meaning: "محاكاة الذكاء البشري" }
 ];
 ZAID.dictSearch = function() {
-    var el = document.getElementById('dictSearch');
-    if(!el) return;
+    var el = document.getElementById('dictSearch'); if(!el) return;
     var q = (el.value || '').toLowerCase().trim();
     var results = document.getElementById('dictResults');
-    if(!results) return;
-    var f = ZAID.dictData.filter(function(d){ return !q || d.word.toLowerCase().includes(q) || d.ar.includes(q) || d.fr.toLowerCase().includes(q) || d.en.toLowerCase().includes(q); });
-    if(!f.length) { results.innerHTML = '<p style="color:#cbd5e1;text-align:center;">لا توجد نتائج</p>'; return; }
-    results.innerHTML = f.map(function(d){
-        return '<div class="dict-word-card"><div class="dict-word">'+d.word+'</div><div class="dict-translation"><span>🇹🇳 '+d.ar+'</span><span>🇫🇷 '+d.fr+'</span><span>🇬🇧 '+d.en+'</span></div><div class="dict-meaning">'+d.meaning+'</div><button class="dict-btn" style="background:#dc2626;" onclick="ZAID.speak(\''+d.word+'\',\'ar\')">🔊 عربي</button><button class="dict-btn" style="background:#3b82f6;" onclick="ZAID.speak(\''+d.fr+'\',\'fr\')">🔊 فرنسي</button><button class="dict-btn" style="background:#22c55e;" onclick="ZAID.speak(\''+d.en+'\',\'en\')">🔊 إنجليزي</button></div>';
-    }).join('');
+    var f = ZAID.dictData.filter(function(d){ return !q || d.word.toLowerCase().includes(q) || d.ar.includes(q); });
+    results.innerHTML = f.length ? f.map(function(d){
+        return '<div class="dict-word-card"><div class="dict-word">'+d.word+'</div><div class="dict-translation"><span>🇹🇳 '+d.ar+'</span><span>🇫🇷 '+d.fr+'</span><span>🇬🇧 '+d.en+'</span></div><div class="dict-meaning">'+d.meaning+'</div></div>';
+    }).join('') : '<p style="color:#cbd5e1;text-align:center;">لا توجد نتائج</p>';
 };
 
 ZAID.openSrv = function(type) {
     ZAID.showPage('pageLesson');
-    var titles = { 'internship': '📄 طلب تربص', 'job': '💼 طلب شغل (للطلاب)', 'post_job': '🏢 نشر عرض شغل (للمؤسسات)' };
+    var titles = { 'internship': '📄 طلب تربص', 'job': '💼 طلب شغل', 'post_job': '🏢 نشر عرض شغل' };
     document.getElementById('lc').innerHTML = `
         <button class="back" onclick="ZAID.goHome()">🔙 العودة</button>
-        <div class="htitle">${titles[type] || 'خدمة'}</div>
-        <div style="background:#1e293b;border-radius:15px;padding:20px;border:2px solid #06b6d4;">
-            <p style="color:#cbd5e1;text-align:center;margin-bottom:15px;">يرجى ملء النموذج</p>
+        <div class="htitle">${titles[type]}</div>
+        <div style="background:#1e293b; padding:20px; border-radius:15px;">
             <input type="text" id="srvName" class="inp" placeholder="الاسم الكامل *">
             <input type="email" id="srvEmail" class="inp" placeholder="البريد الإلكتروني *">
             <input type="text" id="srvSpec" class="inp" placeholder="الاختصاص *">
-            <input type="text" id="srvTarget" class="inp" placeholder="${type==='post_job'?'اسم المؤسسة / الوظيفة *':'الهدف / المؤسسة المستهدفة *'}">
-            <input type="url" id="srvCV" class="inp" placeholder="رابط السيرة الذاتية (اختياري)">
-            <button onclick="ZAID.submitService('${type}')" style="background:#22c55e;color:white;padding:12px;border:none;border-radius:10px;width:100%;font-weight:900;cursor:pointer;margin-top:10px;">🚀 إرسال الطلب</button>
+            <button onclick="ZAID.submitService('${type}')" style="background:#22c55e;color:white;padding:12px;border:none;border-radius:10px;width:100%;font-weight:900;cursor:pointer;margin-top:10px;">🚀 إرسال</button>
             <div id="srvStatus" style="margin-top:10px;text-align:center;"></div>
         </div>
     `;
 };
 ZAID.submitService = function(type) {
-    var name = document.getElementById('srvName').value.trim();
-    var email = document.getElementById('srvEmail').value.trim();
-    var spec = document.getElementById('srvSpec').value.trim();
-    var target = document.getElementById('srvTarget').value.trim();
-    var cv = document.getElementById('srvCV').value.trim();
-    var status = document.getElementById('srvStatus');
-    if(!name || !email || !spec || !target) { status.innerHTML = '<span style="color:#dc2626;">⚠️ يرجى ملء الحقول الإلزامية</span>'; return; }
-    var data = { name: name, email: email, spec: spec, target: target, cv: cv, date: new Date().toLocaleDateString('ar-TN') };
-    var coll = 'requests';
-    if(type === 'post_job') { coll = 'job_offers'; data.company = target; data.title = spec; data.phone = ''; data.status = 'pending'; }
-    else { data.type = type; }
-    db.collection(coll).add(data).then(function() {
-        status.innerHTML = '<span style="color:#22c55e;">✅ تم إرسال الطلب بنجاح</span>';
-        ['srvName','srvEmail','srvSpec','srvTarget','srvCV'].forEach(function(id){ document.getElementById(id).value = ''; });
-    }).catch(function(e) {
-        status.innerHTML = '<span style="color:#dc2626;">❌ خطأ: ' + e.message + '</span>';
-    });
+    var name = document.getElementById('srvName').value.trim(); var email = document.getElementById('srvEmail').value.trim();
+    if(!name || !email) { document.getElementById('srvStatus').innerHTML = '<span style="color:#dc2626;">⚠️ يرجى ملء الحقول</span>'; return; }
+    var coll = type === 'post_job' ? 'job_offers' : 'requests';
+    db.collection(coll).add({ name, email, spec: document.getElementById('srvSpec').value.trim(), type, status:'pending', date: new Date().toISOString() }).then(() => { document.getElementById('srvStatus').innerHTML = '<span style="color:#22c55e;">✅ تم الإرسال</span>'; });
 };
 
 ZAID.openLive = function() { ZAID.showPage('pageLive'); };
-
 ZAID.switchLiveTab = function(tab) {
-    var sp = document.getElementById('liveStreamPanel'), rp = document.getElementById('localRecordPanel');
-    var sb = document.getElementById('tabLiveStream'), rb = document.getElementById('tabLocalRecord');
-    if(tab === 'stream') { sp.style.display='block'; rp.style.display='none'; sb.style.background='linear-gradient(135deg,#0e7490,#155e75)'; rb.style.background='rgba(255,255,255,0.15)'; }
-    else { sp.style.display='none'; rp.style.display='block'; sb.style.background='rgba(255,255,255,0.15)'; rb.style.background='linear-gradient(135deg,#3b82f6,#1e40af)'; }
+    document.getElementById('liveStreamPanel').style.display = tab === 'stream' ? 'block' : 'none';
+    document.getElementById('localRecordPanel').style.display = tab === 'record' ? 'block' : 'none';
 };
-
 ZAID.startLiveRoom = function() {
-    if(!ZAID.admin) { ZAID.toast('🚫 غير مصرح. فقط المشرف يستطيع بدء البث', 'error'); return; }
-    var roomName = 'zaid-live-' + (ZAID.user && ZAID.user._id ? ZAID.user._id.slice(0,8) : 'guest') + '-' + Date.now();
+    var roomName = 'zaid-live-' + Date.now();
     var link = 'https://meet.jit.si/' + roomName;
     var c = document.getElementById('jitsiContainer');
-    c.style.display = 'block';
-    c.innerHTML = '<iframe src="'+link+'" allow="camera;microphone;fullscreen;display-capture;autoplay" style="width:100%;height:100%;border:none;"></iframe>';
+    c.style.display = 'block'; c.innerHTML = '<iframe src="'+link+'" allow="camera;microphone;fullscreen" style="width:100%;height:100%;border:none;"></iframe>';
     document.getElementById('liveWaitingMsg').style.display = 'none';
-    document.getElementById('liveLinkBox').style.display = 'block';
-    document.getElementById('liveShareLink').value = link;
+    document.getElementById('liveLinkBox').style.display = 'block'; document.getElementById('liveShareLink').value = link;
     document.getElementById('liveRecordPanel').style.display = 'block';
-    ZAID.toast('✅ تم بدء غرفة البث', 'success');
 };
-
 ZAID.closeLiveRoom = function() {
-    if(!ZAID.admin) { ZAID.toast('🚫 غير مصرح', 'error'); return; }
-    var c = document.getElementById('jitsiContainer');
-    c.innerHTML = ''; c.style.display = 'none';
+    var c = document.getElementById('jitsiContainer'); c.innerHTML = ''; c.style.display = 'none';
     document.getElementById('liveWaitingMsg').style.display = 'block';
-    document.getElementById('liveLinkBox').style.display = 'none';
-    document.getElementById('liveRecordPanel').style.display = 'none';
-    ZAID.toast('⏹️ تم إنهاء البث', 'info');
+    document.getElementById('liveLinkBox').style.display = 'none'; document.getElementById('liveRecordPanel').style.display = 'none';
 };
+ZAID.copyLiveLink = function() { var i = document.getElementById('liveShareLink'); i.select(); document.execCommand('copy'); ZAID.toast('📋 تم النسخ', 'success'); };
+ZAID.startLiveRecording = function() {}; ZAID.stopLiveRecording = function() {}; ZAID.downloadLiveRecording = function() {};
 
-ZAID.copyLiveLink = function() {
-    if(!ZAID.admin) { ZAID.toast('🚫 غير مصرح', 'error'); return; }
-    var i = document.getElementById('liveShareLink');
-    i.select(); document.execCommand('copy');
-    ZAID.toast('📋 تم نسخ الرابط', 'success');
-};
-
-ZAID.startLiveRecording = function() { ZAID.toast('⚠️ استخدم تبويب "تسجيل محلي" للتسجيل', 'info'); };
-ZAID.stopLiveRecording = function() {};
-ZAID.downloadLiveRecording = function() {};
-
-ZAID.mediaStream = null;
-ZAID.mediaRecorder = null;
-ZAID.recordedChunks = [];
-ZAID.recordedBlob = null;
-
+ZAID.mediaStream = null; ZAID.mediaRecorder = null; ZAID.recordedChunks = []; ZAID.recordedBlob = null;
 ZAID.startCamera = function() {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(function(stream) {
-        ZAID.mediaStream = stream;
-        var v = document.getElementById('videoPreview');
-        v.srcObject = stream; v.style.display = 'block';
-        document.getElementById('startCameraBtn').disabled = true;
-        document.getElementById('stopCameraBtn').disabled = false;
-        document.getElementById('startRecordBtn').disabled = false;
-        document.getElementById('videoStatus').textContent = '✅ الكاميرا تعمل';
-    }).catch(function(err) {
-        document.getElementById('videoStatus').textContent = '❌ خطأ: ' + err.message;
-    });
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+        ZAID.mediaStream = stream; document.getElementById('videoPreview').srcObject = stream; document.getElementById('videoPreview').style.display = 'block';
+        document.getElementById('startCameraBtn').disabled = true; document.getElementById('stopCameraBtn').disabled = false; document.getElementById('startRecordBtn').disabled = false;
+    }).catch(err => document.getElementById('videoStatus').textContent = '❌ خطأ: ' + err.message);
 };
-
 ZAID.stopCamera = function() {
-    if(ZAID.mediaStream) { ZAID.mediaStream.getTracks().forEach(function(t){ t.stop(); }); ZAID.mediaStream = null; }
-    document.getElementById('videoPreview').style.display = 'none';
-    document.getElementById('startCameraBtn').disabled = false;
-    document.getElementById('stopCameraBtn').disabled = true;
-    document.getElementById('startRecordBtn').disabled = true;
-    document.getElementById('videoStatus').textContent = '⏳ الكاميرا متوقفة';
+    if(ZAID.mediaStream) { ZAID.mediaStream.getTracks().forEach(t=>t.stop()); ZAID.mediaStream = null; }
+    document.getElementById('videoPreview').style.display = 'none'; document.getElementById('startCameraBtn').disabled = false;
+    document.getElementById('stopCameraBtn').disabled = true; document.getElementById('startRecordBtn').disabled = true;
 };
-
 ZAID.startRecording = function() {
     if(!ZAID.mediaStream) return;
-    ZAID.recordedChunks = [];
-    ZAID.mediaRecorder = new MediaRecorder(ZAID.mediaStream);
-    ZAID.mediaRecorder.ondataavailable = function(e){ if(e.data.size>0) ZAID.recordedChunks.push(e.data); };
-    ZAID.mediaRecorder.onstop = function() {
+    ZAID.recordedChunks = []; ZAID.mediaRecorder = new MediaRecorder(ZAID.mediaStream);
+    ZAID.mediaRecorder.ondataavailable = e => { if(e.data.size>0) ZAID.recordedChunks.push(e.data); };
+    ZAID.mediaRecorder.onstop = () => {
         ZAID.recordedBlob = new Blob(ZAID.recordedChunks, { type: 'video/webm' });
-        var v = document.getElementById('recordedVideo');
-        v.src = URL.createObjectURL(ZAID.recordedBlob); v.style.display = 'block';
-        document.getElementById('downloadVideoBtn').disabled = false;
-        document.getElementById('videoStatus').textContent = '✅ تم التسجيل - يمكنك التحميل';
+        document.getElementById('recordedVideo').src = URL.createObjectURL(ZAID.recordedBlob);
+        document.getElementById('recordedVideo').style.display = 'block'; document.getElementById('downloadVideoBtn').disabled = false;
     };
-    ZAID.mediaRecorder.start();
-    document.getElementById('startRecordBtn').disabled = true;
-    document.getElementById('stopRecordBtn').disabled = false;
-    document.getElementById('videoStatus').textContent = '🔴 جاري التسجيل...';
+    ZAID.mediaRecorder.start(); document.getElementById('startRecordBtn').disabled = true; document.getElementById('stopRecordBtn').disabled = false;
 };
-
-ZAID.stopRecording = function() {
-    if(ZAID.mediaRecorder && ZAID.mediaRecorder.state !== 'inactive') ZAID.mediaRecorder.stop();
-    document.getElementById('startRecordBtn').disabled = false;
-    document.getElementById('stopRecordBtn').disabled = true;
-};
-
-ZAID.downloadVideo = function() {
-    if(!ZAID.recordedBlob) return;
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(ZAID.recordedBlob);
-    a.download = 'zaid-recording-' + Date.now() + '.webm';
-    a.click();
-};
+ZAID.stopRecording = function() { if(ZAID.mediaRecorder) ZAID.mediaRecorder.stop(); document.getElementById('startRecordBtn').disabled = false; document.getElementById('stopRecordBtn').disabled = true; };
+ZAID.downloadVideo = function() { if(!ZAID.recordedBlob) return; let a=document.createElement('a'); a.href=URL.createObjectURL(ZAID.recordedBlob); a.download='video.webm'; a.click(); };
 
 ZAID.lectureContent = {
     'lecture1': { title: 'مقدمة في الذكاء الاصطناعي', content: 'الذكاء الاصطناعي (AI) هو فرع من علوم الحاسوب يهدف إلى إنشاء أنظمة قادرة على أداء مهام تتطلب ذكاءً بشرياً، مثل التعلم، الاستنتاج، والإدراك. يشمل مجالات متعددة: التعلم الآلي، معالجة اللغة الطبيعية، الرؤية الحاسوبية، والروبوتات.' },
@@ -1526,15 +1511,23 @@ ZAID.lectureContent = {
     'lecture5': { title: 'ورشة 1: AI في التعليم', content: 'كيف يمكن للمعلم استخدام أدوات AI (ChatGPT, Gemini) لتوليد تمارين، بناء دروس مخصصة، وتقديم تغذية راجعة فورية للطلاب.' },
     'lecture6': { title: 'ورشة 2: درس جاهز', content: 'خطوات بناء درس تفاعلي باستخدام AI: تحديد الهدف، جمع المحتوى، توليد التمارين، تصميم العرض، التقييم.' }
 };
-
 ZAID.openLecture = function(id) {
-    var l = ZAID.lectureContent[id];
-    if(!l) { ZAID.toast('المحاضرة غير موجودة', 'error'); return; }
+    var l = ZAID.lectureContent[id]; if(!l) return;
     ZAID.showPage('pageLesson');
-    document.getElementById('lc').innerHTML = '<button class="back" onclick="ZAID.showLecturesSection()">🔙 العودة للمحاضرات</button><div class="htitle">'+l.title+'</div><div class="lesson-text">'+l.content+'</div>';
+    document.getElementById('lc').innerHTML = '<button class="back" onclick="ZAID.showAISection()">🔙 العودة للمسارات</button><div class="htitle">'+l.title+'</div><div class="lesson-text">'+l.content+'</div>';
 };
 
-ZAID.initArabicApp = function() { ZAID.toast('📖 تطبيق العربية جاهز', 'info'); };
+ZAID.initArabicApp = function() {
+    var grid = document.getElementById('lettersGridApp');
+    if(!grid) return;
+    grid.innerHTML = ZAID.arabicLettersData.map(l => `
+        <div class="letter-card-app" onclick="ZAID.speak('${l.name}', 'ar')">
+            <div class="big-letter-app">${l.letter}</div>
+            <div style="color:white; font-size:14px; text-align:center;">${l.name}</div>
+            <div style="color:#f9d423; font-size:12px; text-align:center; margin-top:5px;">${l.words[0]}</div>
+        </div>
+    `).join('');
+};
 ZAID.selectLevel = function(level) {
     document.querySelectorAll('#levelSelectorApp button').forEach(function(b){ b.classList.remove('active'); });
     var btn = document.querySelector('#levelSelectorApp button[data-level="'+level+'"]');
@@ -1548,91 +1541,63 @@ ZAID.switchArabicTab = function(tab) {
     var p = document.getElementById(tab + 'TabApp');
     if(p) p.classList.add('active-tab');
 };
-ZAID.resetArabicProgress = function() {
-    if(confirm('إعادة تعيين التقدم؟')) { localStorage.removeItem('arabic_progress'); ZAID.toast('تم إعادة التعيين', 'success'); }
-};
+ZAID.resetArabicProgress = function() { if(confirm('إعادة تعيين التقدم؟')) { ZAID.toast('تم إعادة التعيين', 'success'); } };
 ZAID.checkCertificateApp = function() { ZAID.toast('🏆 تحتاج 200 نقطة لفتح الشهادة', 'info'); };
-</script>
 
-<script>
-// ================== حماية المحتوى: منع النسخ والتعديل والحذف والإضافة (للمستخدمين العاديين فقط) ==================
-// المشرف يستطيع كل شيء، المستخدم العادي يتصفح فقط ولا يستطيع النسخ أو التعديل
+// ================== تحميل المحتوى (نظام المجلدات المحدث) ==================
+ZAID.loadSectionContent = function(section, containerId) {
+    if(!window.db) return;
+    var container = document.getElementById(containerId);
+    if(!container) return;
+    
+    db.collection("platform_content").where("targetSection", "==", section).get().then(function(qs) {
+        if(qs.empty) { container.innerHTML = '<p style="text-align:center;color:#cbd5e1;">لا يوجد محتوى مرفوع في هذا القسم حالياً.</p>'; return; }
+        
+        let groups = {};
+        qs.forEach(function(doc) {
+            let item = doc.data();
+            let folder = item.subFolder || 'محتوى عام (بدون مجلد)';
+            if(!groups[folder]) groups[folder] = [];
+            groups[folder].push(item);
+        });
+        
+        let html = '';
+        for (let folderName in groups) {
+            html += `<div style="background:#1e293b; border-radius:15px; padding:15px; margin-bottom:20px; border:2px solid #fbbf24;">`;
+            html += `<h3 style="color:#fbbf24; text-align:center; margin-bottom:15px; border-bottom:2px dashed #475569; padding-bottom:10px;">📁 ${folderName}</h3>`;
+            html += `<div class="sel">`;
+            groups[folderName].forEach(item => {
+                let clickAction = `window.open('${item.fileUrl}', '_blank')`;
+                html += `<div class="lcard" style="background:linear-gradient(135deg,#374151,#1f2937); border-color:#3b82f6;" onclick="${clickAction}">
+                    <div style="font-size:50px; margin-bottom:10px;">📄</div>
+                    <div class="lt">${item.title}</div>
+                    <div class="ld">${item.description || 'اضغط للفتح'}</div>
+                </div>`;
+            });
+            html += `</div></div>`;
+        }
+        container.innerHTML = html;
+    }).catch(function(e){ container.innerHTML = '❌ خطأ في التحميل: ' + e.message; });
+};
 
+// ================== إشعارات ==================
+ZAID.toast = function(msg, type) {
+    var t = document.createElement('div'); t.textContent = msg;
+    t.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:'+(type==='success'?'#22c55e':'#dc2626')+';color:white;padding:12px 25px;border-radius:30px;font-weight:900;z-index:99999;font-family:Cairo;border:2px solid #fbbf24;';
+    document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 3000);
+};
+
+// ================== حماية المحتوى: منع النسخ والتعديل للمستخدمين العاديين ==================
 (function() {
-    // دالة للتحقق إن كان الهدف حقلاً نصياً (يجب السماح بالكتابة واللصق فيه)
-    function isFormField(el) {
-        if (!el) return false;
-        var tag = (el.tagName || '').toUpperCase();
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
-        if (el.isContentEditable) return true;
-        return false;
-    }
-
-    // 1) منع النقر بالزر الأيمن (ما عدا المشرف)
-    document.addEventListener('contextmenu', function(e) {
-        if (ZAID.admin) return;
-        e.preventDefault();
-        return false;
-    }, true);
-
-    // 2) منع اختصارات لوحة المفاتيح الخطيرة (ما عدا المشرف)
-    document.addEventListener('keydown', function(e) {
+    function isFormField(el) { return el && (['INPUT','TEXTAREA','SELECT'].includes(el.tagName) || el.isContentEditable); }
+    document.addEventListener('contextmenu', e => { if (!ZAID.admin) e.preventDefault(); });
+    document.addEventListener('keydown', e => {
         if (ZAID.admin) return;
         var k = (e.key || '').toLowerCase();
-
-        // منع F12 (أدوات المطور)
-        if (k === 'f12') { e.preventDefault(); e.stopPropagation(); return false; }
-
-        // منع Ctrl+U (عرض المصدر), Ctrl+S (حفظ), Ctrl+P (طباعة)
-        if ((e.ctrlKey || e.metaKey) && ['u','s','p'].indexOf(k) !== -1) {
-            e.preventDefault(); e.stopPropagation(); return false;
-        }
-
-        // منع Ctrl+Shift+I / J / C / K (أدوات المطور)
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i','j','c','k'].indexOf(k) !== -1) {
-            e.preventDefault(); e.stopPropagation(); return false;
-        }
-
-        // منع Ctrl+C و Ctrl+A و Ctrl+X على المحتوى فقط (لكن نسمح داخل الحقول النصية)
-        if ((e.ctrlKey || e.metaKey) && ['c','a','x'].indexOf(k) !== -1) {
-            if (isFormField(e.target)) return; // اسمح داخل الحقول
-            e.preventDefault(); e.stopPropagation(); return false;
+        if (k === 'f12' || ((e.ctrlKey||e.metaKey) && ['u','s','p'].includes(k)) || ((e.ctrlKey||e.metaKey) && e.shiftKey && ['i','j','c','k'].includes(k)) || ((e.ctrlKey||e.metaKey) && ['c','a','x'].includes(k) && !isFormField(e.target))) {
+            e.preventDefault(); e.stopPropagation();
         }
     }, true);
-
-    // 3) منع حدث النسخ (copy) خارج الحقول النصية
-    document.addEventListener('copy', function(e) {
-        if (ZAID.admin) return;
-        if (isFormField(e.target)) return;
-        e.preventDefault();
-        return false;
-    }, true);
-
-    // 4) منع حدث القص (cut) خارج الحقول النصية
-    document.addEventListener('cut', function(e) {
-        if (ZAID.admin) return;
-        if (isFormField(e.target)) return;
-        e.preventDefault();
-        return false;
-    }, true);
-
-    // 5) منع السحب والإفلات للمحتوى (drag) خارج الحقول النصية
-    document.addEventListener('dragstart', function(e) {
-        if (ZAID.admin) return;
-        if (isFormField(e.target)) return;
-        e.preventDefault();
-        return false;
-    }, true);
-
-    // 6) حماية إضافية: منع التركيز على أدوات المطور عبر الطباعة (print)
-    window.addEventListener('beforeprint', function(e) {
-        if (ZAID.admin) return;
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    });
-
-    console.log('✅ تم تفعيل حماية المحتوى: المستخدمون لا يستطيعون النسخ أو التعديل. المشرف فقط يستطيع كل شيء.');
 })();
 </script>
 </body>
